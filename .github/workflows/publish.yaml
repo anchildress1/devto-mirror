@@ -1,0 +1,39 @@
+name: Dev.to Mirror (Static, Hourly)
+
+on:
+  schedule:
+    - cron: "3 * * * *"   # runs hourly at HH:03 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install feedparser jinja2 python-slugify
+
+      - name: Generate site
+        env:
+          DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}  # single variable only
+          PAGES_REPO: ${{ github.repository }}        # "username/repo"
+        run: python scripts/generate_site.py
+
+      - name: Commit & push
+        run: |
+          git config user.name "ci-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: auto-publish dev.to mirror" || echo "No changes"
+          git push
+
+# Generated with the help of ChatGPT
