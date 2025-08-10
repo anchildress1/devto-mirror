@@ -24,6 +24,7 @@
 * Uses a **single repo variable**: `DEVTO_USERNAME` — your Dev.to username
 * Derives everything else (GitHub Pages URL, repository context) automatically
 * Generates: `index.html`, `/posts/*.html`, `robots.txt`, `sitemap.xml`
+* **Comments:** pulls your Dev.to comment URLs and content into dedicated /comments/ pages with your blurb and context (perfect for when a “comment” is basically a mini‑post)
 * `robots.txt` welcomes major AI crawlers (toggle as you like): GPTBot, ClaudeBot, Claude-Web, Google-Extended, PerplexityBot, Bytespider, CCBot (Common Crawl), and more 👍
 
 ---
