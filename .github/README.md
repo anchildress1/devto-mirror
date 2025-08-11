@@ -1,5 +1,7 @@
 # Dev\.to Mirror — The Set-and-Forget AI Crawler
 
+![anchildress1/devto-mirror social card: A colorful crawler](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror-2.jpg)
+
 > [!NOTE]
 >
 > I’m slowly accepting that one or two brave souls might actually read my strong (and usually correct) opinions. 😅 I’m also always looking for ways to improve AI results across the board, because... well, _somebody_ has to. 🧠
