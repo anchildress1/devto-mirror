@@ -1,4 +1,4 @@
-# Dev.to Mirror (Static, Hourly, Zero‑Drama)
+# Dev\.to Mirror — The Set-and-Forget AI Crawler
 
 > [!NOTE]
 >
@@ -12,15 +12,30 @@
 >
 > **Enter the five-minute ChatGPT fix:** a tiny static mirror with canonicals back to **Dev.to** — no domain, no analytics — just (practically) instantly crawlable 😉🐜.
 >
-> P.S. “Five minutes” usually means two hours. Acceptable losses. 😅 And seriously, writing this blurb took longer than the code. 🤨
+> P.S. “Five minutes” usually means two hours. Acceptable losses. 😅 And seriously, writing this blurb took longer than the code. 🤨 Alright.... **3 hours** (it took me an hour to get the picture just right, enough anyway). Still worth it! 😅
 >
 > — Ashley 🦄
 
 ---
 
+# Repo Stuff
+
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-EDC531.svg?logo=apache)](./LICENSE)
+![Repo Size](https://img.shields.io/github/repo-size/anchildress1/devto-mirror)
+![Last Commit](https://img.shields.io/github/last-commit/anchildress1/devto-mirror)
+![Stars](https://img.shields.io/github/stars/anchildress1/devto-mirror)
+<br />
+ [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/anchildress1)
+ [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto\&logoColor=fff)](https://dev.to/anchildress1)
+ [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?logo=linkedin\&logoColor=white)](https://www.linkedin.com/in/anchildress1/)
+
+> **DevTO-Mirror** helps make your dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante’s DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.tx — _that's it_. If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
+
+---
+
 ## How it works 🚀
 
-* Runs **hourly at **`:03`** UTC** so you (almost) never post exactly on the mirror time
+* Runs ~~hourly~~ daily at **`9:15 AM EST`** so you (almost) never post exactly on the mirror time
 * Uses a **single repo variable**: `DEVTO_USERNAME` — your Dev.to username
 * Derives everything else (GitHub Pages URL, repository context) automatically
 * Generates: `index.html`, `/posts/*.html`, `robots.txt`, `sitemap.xml`
@@ -46,8 +61,10 @@
    ```
    https://<github-username>.github.io/<repo>/
    ```
+5. Add a small link to this mirror in **this repo’s README** for discovery.
+  > Like _right here_ 👇
 
-   Example: `https://example.github.io/devto-mirror/`
+   Example: [https://anchildress1.github.io/devto-mirror/](https://anchildress1.github.io/devto-mirror/)
 
 ---
 

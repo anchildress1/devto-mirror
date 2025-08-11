@@ -2,7 +2,7 @@ name: Dev.to Mirror (Static, Hourly)
 
 on:
   schedule:
-    - cron: "3 * * * *"   # runs hourly at HH:03 UTC
+    - cron: "15 14 * * *"   # runs daily at 14:15 UTC, 10:15 AM EDT, 9:15 AM EST
   workflow_dispatch: {}
 
 permissions:
