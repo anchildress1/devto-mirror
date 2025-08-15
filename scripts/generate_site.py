@@ -142,7 +142,13 @@ SITEMAP_TMPL = Template("""<?xml version="1.0" encoding="UTF-8"?>
 # Helpers
 # ----------------------------
 def strip_html(text):
-    return re.sub("<[^>]+>", "", text or "").strip()
+    # Remove HTML tags, collapse internal whitespace (newlines/tabs/extra spaces)
+    # into single spaces, then trim leading/trailing whitespace.
+    if not text:
+        return ""
+    no_tags = re.sub(r"<[^>]+>", "", text)
+    collapsed = re.sub(r"\s+", " ", no_tags)
+    return collapsed.strip()
 
 class Post:
     def __init__(self, entry):
@@ -164,9 +170,13 @@ class Post:
         if desc_match:
             desc_text = strip_html(desc_match.group(1))
         else:
-            desc_text = getattr(entry, "description", "") or strip_html(content_html)
+            # Prefer entry.description if present, otherwise fall back to stripped content_html
+            raw_desc = getattr(entry, "description", "") or content_html
+            desc_text = strip_html(raw_desc)
 
-        self.description = (desc_text or "")[:300]
+        # Ensure description is trimmed and then truncated to 300 chars
+        desc_text = (desc_text or "").strip()
+        self.description = desc_text[:300]
         self.slug = (slugify(self.title)[:80] or slugify(self.link)) or "post"
 
     def to_dict(self):
@@ -244,17 +254,17 @@ def find_new_posts(rss_posts, existing_posts):
     """
     if not existing_posts:
         return rss_posts
-    
+
     # Create a set of existing post links for fast lookup
     existing_links = {post.link for post in existing_posts}
-    
+
     new_posts = []
     for post in rss_posts:
         if post.link in existing_links:
             # Found an existing post, so all posts after this should also exist
             break
         new_posts.append(post)
-    
+
     return new_posts
 
 # ----------------------------
