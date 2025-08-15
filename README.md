@@ -40,8 +40,74 @@ This repository mirrors blog posts from Dev.to using an incremental update syste
 
 ```bash
 export DEVTO_USERNAME="your-username"
-export PAGES_REPO="username/repo"
+# PAGES_REPO is automatically calculated from your repository information
 python scripts/generate_site.py
 ```
 
 The script automatically detects first run vs subsequent runs and behaves accordingly.
+
+## Forking and Using This Mirror
+
+### Quick Setup for Your Own Dev.to Mirror
+
+1. **Fork this repository**
+   ```bash
+   # Click "Fork" on GitHub or use GitHub CLI
+   gh repo fork anchildress1/devto-mirror --clone
+   ```
+
+2. **Configure your Dev.to username**
+   - Go to your forked repository settings
+   - Navigate to Settings → Secrets and variables → Repository variables
+   - Add a new variable:
+     - Name: `DEVTO_USERNAME`
+     - Value: `your-devto-username`
+
+3. **Enable GitHub Pages**
+   - Go to Settings → Pages
+   - Source: Deploy from a branch
+   - Branch: `main` (or your default branch)
+   - Folder: `/ (root)`
+
+4. **Run the initial setup**
+   - Go to Actions tab
+   - Click on "Dev.to Mirror (Static, Hourly)"
+   - Click "Run workflow" → "Run workflow"
+   - Wait for completion
+
+5. **Your mirror is ready!**
+   - Visit `https://yourusername.github.io/devto-mirror`
+   - Posts will auto-update daily at 2:15 PM UTC
+
+### Reset All - Restore to Original State
+
+If you want to completely reset your forked repository back to its original state (useful for troubleshooting or starting fresh):
+
+1. **Trigger the reset workflow**
+   - Go to Actions tab in your forked repository
+   - Click on "Reset All - Restore Repository to Original State"
+   - Click "Run workflow"
+   - In the confirmation field, type exactly: `RESET`
+   - Click "Run workflow"
+
+2. **Review and approve the reset**
+   - The workflow will show you what will be deleted
+   - It will pause and wait for your manual approval
+   - **⚠️ Warning**: This action cannot be undone!
+   - Only the person who started the workflow can approve it
+
+3. **What gets reset:**
+   - 🗂️ All generated blog post HTML files (`posts/` directory)
+   - 📄 Generated `index.html`, `sitemap.xml`, `posts_data.json`
+   - 🔗 GitHub Pages site is disabled
+   - 🎯 Repository returns to clean, original state
+
+4. **After reset:**
+   - Re-run the setup process above to recreate your mirror
+   - All previous blog post content will be regenerated fresh
+
+### Troubleshooting
+
+- **No posts appearing**: Check that `DEVTO_USERNAME` variable is set correctly
+- **Pages not updating**: Verify GitHub Pages is enabled and workflow is running
+- **Want to start fresh**: Use the "Reset All" workflow described above

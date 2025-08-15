@@ -1,13 +1,5 @@
 [
   {
-    "title": "Brand New Test Post",
-    "link": "https://dev.to/anchildress1/brand-new-test-post",
-    "date": "Thu, 15 Aug 2025 12:00:00 +0000",
-    "content_html": "<p>This is a brand new test post content</p>",
-    "description": "This is a brand new test post for testing incremental updates",
-    "slug": "brand-new-test-post"
-  },
-  {
     "title": "Everything I Know About GitHub Copilot Instructions — From Zero to Onboarded (For Real) ⚡",
     "link": "https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-r",
     "date": "Wed, 13 Aug 2025 11:45:00 +0000",

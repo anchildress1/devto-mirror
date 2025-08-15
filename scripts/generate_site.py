@@ -155,7 +155,7 @@ class Post:
         else:
             content_html = ""
         self.content_html = content_html
-        self.description = (getattr(entry, "subtitle", "") or strip_html(content_html))[:300]
+        self.description = (getattr(entry, "description", "") or strip_html(content_html))[:300]
         self.slug = (slugify(self.title)[:80] or slugify(self.link)) or "post"
     
     def to_dict(self):
