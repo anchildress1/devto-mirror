@@ -3,6 +3,8 @@ import feedparser
 from slugify import slugify
 from jinja2 import Template
 from datetime import datetime
+from email.utils import parsedate_to_datetime
+from urllib.parse import urlparse
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
@@ -154,7 +156,26 @@ class Post:
     def __init__(self, entry):
         self.title = getattr(entry, "title", "Untitled")
         self.link = getattr(entry, "link", HOME)
-        self.date = getattr(entry, "published", "")
+        # Normalize date to ISO 8601 if possible; fall back to raw string
+        raw_date = getattr(entry, "published", "") or getattr(entry, "updated", "") or ""
+        iso_date = ""
+        try:
+            # feedparser may provide a parsed time tuple
+            if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                iso_date = datetime(*entry.published_parsed[:6]).isoformat() + "Z"
+            elif raw_date:
+                # Try RFC-style parsing first, then ISO
+                try:
+                    dt = parsedate_to_datetime(raw_date)
+                    iso_date = dt.isoformat()
+                except Exception:
+                    try:
+                        iso_date = datetime.fromisoformat(raw_date).isoformat()
+                    except Exception:
+                        iso_date = raw_date
+        except Exception:
+            iso_date = raw_date
+        self.date = iso_date
         # Prefer full content, then summary, then empty
         if getattr(entry, "content", None):
             content_html = entry.content[0].value
@@ -181,10 +202,14 @@ class Post:
 
     def to_dict(self):
         """Convert Post to dictionary for JSON serialization"""
+        # Ensure date is a string (ISO if possible)
+        date_val = self.date
+        if isinstance(self.date, datetime):
+            date_val = self.date.isoformat()
         return {
             'title': self.title,
             'link': self.link,
-            'date': self.date,
+            'date': date_val,
             'content_html': self.content_html,
             'description': self.description,
             'slug': self.slug
@@ -233,9 +258,36 @@ def load_existing_posts(path="posts_data.json"):
     try:
         with open(p, 'r', encoding='utf-8') as f:
             posts_data = json.load(f)
+            # Convert dicts to Post instances (avoid re-parsing RSS entries)
             return [Post.from_dict(post_dict) for post_dict in posts_data]
     except (json.JSONDecodeError, KeyError):
         return []
+
+
+def _parse_date_str(datestr):
+    """Try to parse a date string from RFC or ISO formats. Returns a timezone-aware
+    datetime when possible, otherwise None."""
+    if not datestr:
+        return None
+    # If it's already a datetime, return
+    if isinstance(datestr, datetime):
+        return datestr
+    s = str(datestr).strip()
+    try:
+        # handle trailing Z
+        if s.endswith('Z'):
+            s2 = s.replace('Z', '+00:00')
+            return datetime.fromisoformat(s2)
+    except Exception:
+        pass
+    try:
+        return parsedate_to_datetime(s)
+    except Exception:
+        pass
+    try:
+        return datetime.fromisoformat(s)
+    except Exception:
+        return None
 
 def save_posts_data(posts, path="posts_data.json"):
     """Save posts to JSON file"""
@@ -252,16 +304,18 @@ def find_new_posts(rss_posts, existing_posts):
     Since RSS posts are ordered by date (newest first), we can stop
     when we find a post that already exists.
     """
+    # If no existing posts, everything is new
     if not existing_posts:
         return rss_posts
 
-    # Create a set of existing post links for fast lookup
-    existing_links = {post.link for post in existing_posts}
+    # Build a map of existing links for fast lookup
+    existing_links = {post.link: post for post in existing_posts}
 
     new_posts = []
     for post in rss_posts:
+        # If this link exists, compare dates and keep the newest in existing_posts
         if post.link in existing_links:
-            # Found an existing post, so all posts after this should also exist
+            # We encountered a post already present; treat remaining RSS items as older
             break
         new_posts.append(post)
 
@@ -276,6 +330,16 @@ rss_posts = [Post(e) for e in entries]
 # Load existing posts from previous runs
 existing_posts = load_existing_posts()
 
+def _key_for_post_obj(post):
+    # Prefer slug, otherwise last path segment of the link
+    slug = getattr(post, 'slug', None)
+    if slug:
+        return slug.lower()
+    link = getattr(post, 'link', '')
+    path = urlparse(link).path
+    last = path.rstrip('/').split('/')[-1]
+    return (last or link).lower()
+
 if is_first_run():
     print("First run: generating all posts from RSS feed")
     new_posts = rss_posts
@@ -283,24 +347,72 @@ if is_first_run():
 else:
     print("Subsequent run: checking for new posts")
     new_posts = find_new_posts(rss_posts, existing_posts)
-    # Combine new posts (at the beginning) with existing posts
-    all_posts = new_posts + existing_posts
+
+    # Merge by normalized key (slug or last path segment). Prefer the newest
+    # post when duplicates exist. existing_posts are treated as older unless
+    # their parsed date is newer.
+    merged = {}
+
+    def _add_candidate(p):
+        key = _key_for_post_obj(p)
+        cand_date = _parse_date_str(getattr(p, 'date', None))
+        existing = merged.get(key)
+        if not existing:
+            merged[key] = {'post': p, 'date': cand_date}
+            return
+        # if existing has no date, prefer candidate if it has one
+        if existing['date'] is None and cand_date is not None:
+            merged[key] = {'post': p, 'date': cand_date}
+            return
+        if cand_date is None:
+            return
+        # prefer newer
+        if existing['date'] is None or cand_date > existing['date']:
+            merged[key] = {'post': p, 'date': cand_date}
+
+    # Add new posts first (RSS newest), then existing posts to fill gaps
+    for p in new_posts:
+        _add_candidate(p)
+    for p in existing_posts:
+        _add_candidate(p)
+
+    # Flatten merged mapping and sort newest-first
+    all_posts = [v['post'] for k, v in sorted(merged.items(), key=lambda kv: kv[1]['date'] or datetime.min, reverse=True)]
     print(f"Found {len(new_posts)} new posts")
 
-# Generate HTML files only for new posts
-for p in new_posts:
+# Generate (or regenerate) HTML files for all posts and ensure the
+# page <link rel="canonical"> matches the feed-provided URL saved in
+# posts_data.json (RSS is source-of-truth).
+for p in all_posts:
+    # Use the feed-provided link as canonical. Fall back to a Dev.to
+    # constructed URL only if link is falsy for some reason.
+    canonical = getattr(p, 'link', None) or f"https://dev.to/{DEVTO_USERNAME}/{p.slug}"
     html_out = PAGE_TMPL.render(
         title=p.title,
-    # Ensure canonical points to Dev.to original link
-    canonical=p.link,
+        canonical=canonical,
         description=p.description,
         date=p.date,
         content=p.content_html
     )
     (POSTS_DIR / f"{p.slug}.html").write_text(html_out, encoding="utf-8")
-    print(f"Generated: {p.slug}.html")
+    print(f"Wrote: {p.slug}.html (canonical: {canonical})")
 
 # Save the updated posts data for next run
+# Do not overwrite feed-provided links. However, preserve existing descriptions
+# when the new feed entry lacks a meaningful description.
+    # Use normalized key mapping to prefer existing descriptions when present
+existing_key_map = { _key_for_post_obj(ep): ep for ep in existing_posts }
+for i, post in enumerate(all_posts):
+    try:
+        key = _key_for_post_obj(post)
+        existing = existing_key_map.get(key)
+        if existing:
+            new_desc = (post.description or "").strip()
+            if (not new_desc) or (new_desc == post.title):
+                post.description = existing.description
+    except Exception:
+        pass
+
 save_posts_data(all_posts)
 
 # ----------------------------
