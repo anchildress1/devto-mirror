@@ -1,7 +1,8 @@
-import os, pathlib, re, html
+import os, pathlib, re, html, json
 import feedparser
 from slugify import slugify
 from jinja2 import Template
+from datetime import datetime
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
@@ -17,7 +18,20 @@ POSTS_DIR = ROOT / "posts"
 POSTS_DIR.mkdir(parents=True, exist_ok=True)
 
 FEED_URL = f"https://dev.to/feed/{DEVTO_USERNAME}"
-feed = feedparser.parse(FEED_URL)
+try:
+    feed = feedparser.parse(FEED_URL)
+    if hasattr(feed, 'bozo') and feed.bozo:
+        print(f"Warning: RSS feed parsing issue: {getattr(feed, 'bozo_exception', 'Unknown error')}")
+        # For testing purposes, continue with empty feed
+    if not hasattr(feed, 'entries') or not feed.entries:
+        print("No entries found in RSS feed")
+except Exception as e:
+    print(f"Error fetching RSS feed: {e}")
+    # Create an empty feed for testing
+    class MockFeed:
+        def __init__(self):
+            self.entries = []
+    feed = MockFeed()
 
 # ----------------------------
 # Templates (posts + index)
@@ -143,6 +157,29 @@ class Post:
         self.content_html = content_html
         self.description = (getattr(entry, "subtitle", "") or strip_html(content_html))[:300]
         self.slug = (slugify(self.title)[:80] or slugify(self.link)) or "post"
+    
+    def to_dict(self):
+        """Convert Post to dictionary for JSON serialization"""
+        return {
+            'title': self.title,
+            'link': self.link,
+            'date': self.date,
+            'content_html': self.content_html,
+            'description': self.description,
+            'slug': self.slug
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        """Create Post from dictionary loaded from JSON"""
+        post = cls.__new__(cls)
+        post.title = data['title']
+        post.link = data['link']
+        post.date = data['date']
+        post.content_html = data['content_html']
+        post.description = data['description']
+        post.slug = data['slug']
+        return post
 
 def load_comment_manifest(path="comments.txt"):
     """Read lines of: URL | optional context (one line)."""
@@ -167,13 +204,70 @@ def load_comment_manifest(path="comments.txt"):
         items.append({"url": url, "context": context, "local": local, "text": label})
     return items
 
+def load_existing_posts(path="posts_data.json"):
+    """Load existing posts from JSON file"""
+    p = pathlib.Path(path)
+    if not p.exists():
+        return []
+    try:
+        with open(p, 'r', encoding='utf-8') as f:
+            posts_data = json.load(f)
+            return [Post.from_dict(post_dict) for post_dict in posts_data]
+    except (json.JSONDecodeError, KeyError):
+        return []
+
+def save_posts_data(posts, path="posts_data.json"):
+    """Save posts to JSON file"""
+    posts_data = [post.to_dict() for post in posts]
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(posts_data, f, indent=2, ensure_ascii=False)
+
+def is_first_run():
+    """Check if this is the first run by looking for posts_data.json"""
+    return not pathlib.Path("posts_data.json").exists()
+
+def find_new_posts(rss_posts, existing_posts):
+    """Find new posts from RSS that aren't in existing posts.
+    Since RSS posts are ordered by date (newest first), we can stop
+    when we find a post that already exists.
+    """
+    if not existing_posts:
+        return rss_posts
+    
+    # Create a set of existing post links for fast lookup
+    existing_links = {post.link for post in existing_posts}
+    
+    new_posts = []
+    for post in rss_posts:
+        if post.link in existing_links:
+            # Found an existing post, so all posts after this should also exist
+            break
+        new_posts.append(post)
+    
+    return new_posts
+
 # ----------------------------
-# Build posts
+# Build posts (incremental updates)
 # ----------------------------
 entries = feed.entries or []
-posts = [Post(e) for e in entries]
+rss_posts = [Post(e) for e in entries]
 
-for p in posts:
+# Load existing posts from previous runs
+existing_posts = load_existing_posts()
+
+if is_first_run():
+    print("First run: generating all posts from RSS feed")
+    new_posts = rss_posts
+    all_posts = rss_posts
+else:
+    print("Subsequent run: checking for new posts")
+    new_posts = find_new_posts(rss_posts, existing_posts)
+    # Combine new posts (at the beginning) with existing posts
+    all_posts = new_posts + existing_posts
+    print(f"Found {len(new_posts)} new posts")
+
+# Generate HTML files only for new posts
+for p in new_posts:
     html_out = PAGE_TMPL.render(
         title=p.title,
         canonical=p.link,          # Canonical → Dev.to
@@ -182,6 +276,10 @@ for p in posts:
         content=p.content_html
     )
     (POSTS_DIR / f"{p.slug}.html").write_text(html_out, encoding="utf-8")
+    print(f"Generated: {p.slug}.html")
+
+# Save the updated posts data for next run
+save_posts_data(all_posts)
 
 # ----------------------------
 # Build minimal comment pages (optional)
@@ -201,11 +299,11 @@ if comment_items:
         )
         pathlib.Path(c["local"]).write_text(html_page, encoding="utf-8")
 
-index_html = INDEX_TMPL.render(username=DEVTO_USERNAME, posts=posts, comments=comment_items, home=HOME)
+index_html = INDEX_TMPL.render(username=DEVTO_USERNAME, posts=all_posts, comments=comment_items, home=HOME)
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
 pathlib.Path("robots.txt").write_text(ROBOTS_TMPL.format(home=HOME), encoding="utf-8")
 
-smap = SITEMAP_TMPL.render(home=HOME, posts=posts, comments=comment_items)
+smap = SITEMAP_TMPL.render(home=HOME, posts=all_posts, comments=comment_items)
 pathlib.Path("sitemap.xml").write_text(smap, encoding="utf-8")
 
 # Generated with the help of ChatGPT

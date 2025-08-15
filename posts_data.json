@@ -1,0 +1,106 @@
+[
+  {
+    "title": "Brand New Test Post",
+    "link": "https://dev.to/anchildress1/brand-new-test-post",
+    "date": "Thu, 15 Aug 2025 12:00:00 +0000",
+    "content_html": "<p>This is a brand new test post content</p>",
+    "description": "This is a brand new test post for testing incremental updates",
+    "slug": "brand-new-test-post"
+  },
+  {
+    "title": "Everything I Know About GitHub Copilot Instructions — From Zero to Onboarded (For Real) ⚡",
+    "link": "https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-r",
+    "date": "Wed, 13 Aug 2025 11:45:00 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "Everything I Know About GitHub Copilot Instructions — From Zero to Onboarded (For Real) ⚡",
+    "slug": "everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-r"
+  },
+  {
+    "title": "Herding Cats in Pajamas: Teamwork Across Time Zones 🐈‍⬛🕰️🛋️",
+    "link": "https://dev.to/anchildress1/herding-cats-in-pajamas-teamwork-across-time-zones",
+    "date": "Fri, 08 Aug 2025 11:16:00 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "Herding Cats in Pajamas: Teamwork Across Time Zones 🐈‍⬛🕰️🛋️",
+    "slug": "herding-cats-in-pajamas-teamwork-across-time-zones"
+  },
+  {
+    "title": "GitHub Copilot - Reusable Prompts Part 3: More Experiments, More Mayhem 🌀",
+    "link": "https://dev.to/anchildress1/github-copilot-reusable-prompts-part-3-more-experiments-more-mayhem",
+    "date": "Wed, 06 Aug 2025 11:48:00 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "GitHub Copilot - Reusable Prompts Part 3: More Experiments, More Mayhem 🌀",
+    "slug": "github-copilot-reusable-prompts-part-3-more-experiments-more-mayhem"
+  },
+  {
+    "title": "Guess what?! I passed the Pearson VUE GitHub Copilot Certification Exam 🏆✨",
+    "link": "https://dev.to/anchildress1/guess-what-i-passed-the-pearson-vue-github-copilot-certification-exam",
+    "date": "Sat, 02 Aug 2025 22:04:33 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "Guess what?! I passed the Pearson VUE GitHub Copilot Certification Exam 🏆✨",
+    "slug": "guess-what-i-passed-the-pearson-vue-github-copilot-certification-exam"
+  },
+  {
+    "title": "GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples",
+    "link": "https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples",
+    "date": "Wed, 30 Jul 2025 12:00:00 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples",
+    "slug": "github-copilot-reusable-prompts-part-2-walkthrough-real-examples"
+  },
+  {
+    "title": "Reposting, in case you missed it the first time. Because blaming AI is the easy way out — but this post? It goes deeper, cuts sharper, and reminds us that the real issue has always been about people. 🧠✨",
+    "link": "https://dev.to/anchildress1/reposting-in-case-you-missed-it-the-first-time-because-blaming-ai-is-the-easy-wa",
+    "date": "Wed, 30 Jul 2025 09:28:15 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "Reposting, in case you missed it the first time. Because blaming AI is the easy way out — but this post? It goes deeper, cuts sharper, and reminds us that the real issue has always been about people. 🧠✨",
+    "slug": "reposting-in-case-you-missed-it-the-first-time-because-blaming-ai-is-the-easy-wa"
+  },
+  {
+    "title": "So... This Was Just a Test - You Made It a Thing 🫶",
+    "link": "https://dev.to/anchildress1/so-this-was-just-a-test-you-made-it-a-thing",
+    "date": "Wed, 30 Jul 2025 06:49:35 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "So... This Was Just a Test - You Made It a Thing 🫶",
+    "slug": "so-this-was-just-a-test-you-made-it-a-thing"
+  },
+  {
+    "title": "GitHub Copilot: Everything You Wanted to Know About Reusable (and Experimental) Prompts - Part 1",
+    "link": "https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-pro",
+    "date": "Wed, 23 Jul 2025 12:15:00 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "GitHub Copilot: Everything You Wanted to Know About Reusable (and Experimental) Prompts - Part 1",
+    "slug": "github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-pro"
+  },
+  {
+    "title": "Fact-Checking the Fear Behind “The Dark Side of AI”: The Real Story",
+    "link": "https://dev.to/anchildress1/fact-checking-the-fear-behind-the-dark-side-of-ai-the-real-story",
+    "date": "Sun, 20 Jul 2025 10:00:20 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "Fact-Checking the Fear Behind “The Dark Side of AI”: The Real Story",
+    "slug": "fact-checking-the-fear-behind-the-dark-side-of-ai-the-real-story"
+  },
+  {
+    "title": "Is GitHub Copilot Safe? The Fun (and Hard) Truth About Responsible AI 🚦",
+    "link": "https://dev.to/anchildress1/is-github-copilot-safe-the-fun-and-hard-truth-about-responsible-ai",
+    "date": "Wed, 16 Jul 2025 12:05:00 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "Is GitHub Copilot Safe? The Fun (and Hard) Truth About Responsible AI 🚦",
+    "slug": "is-github-copilot-safe-the-fun-and-hard-truth-about-responsible-ai"
+  },
+  {
+    "title": "How I Blog with Bots (But You Can Still Blame Me) 😅",
+    "link": "https://dev.to/anchildress1/how-i-blog-with-bots-but-you-can-still-blame-me",
+    "date": "Sun, 13 Jul 2025 16:48:18 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "How I Blog with Bots (But You Can Still Blame Me) 😅",
+    "slug": "how-i-blog-with-bots-but-you-can-still-blame-me"
+  },
+  {
+    "title": "Name Swap Alert: OCD Strikes Again (But It’s Just the Username)",
+    "link": "https://dev.to/anchildress1/name-swap-alert-ocd-strikes-again-but-its-just-the-username",
+    "date": "Sat, 12 Jul 2025 20:51:53 +0000",
+    "content_html": "<p>Content from existing post</p>",
+    "description": "Name Swap Alert: OCD Strikes Again (But It’s Just the Username)",
+    "slug": "name-swap-alert-ocd-strikes-again-but-its-just-the-username"
+  }
+]
