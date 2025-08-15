@@ -54,6 +54,32 @@ def load_posts_data(path='posts_data.json'):
         return []
 
 
+def save_posts_data(posts, path='posts_data.json'):
+    p = ROOT / path
+    try:
+        with p.open('w', encoding='utf-8') as f:
+            json.dump(posts, f, indent=2, ensure_ascii=False)
+        return True
+    except Exception:
+        return False
+
+
+def merge_posts(existing, new):
+    """Merge two lists of post dicts, preferring items from `new` and
+    preserving order: new posts first, then existing posts that aren't
+    present in `new` (dedupe by 'link')."""
+    new_links = {p.get('link'): p for p in (new or [])}
+    merged = []
+    # Add new posts first
+    for p in (new or []):
+        merged.append(p)
+    # Append existing posts that aren't in new
+    for p in (existing or []):
+        if p.get('link') not in new_links:
+            merged.append(p)
+    return merged
+
+
 def load_comment_manifest(path='comments.txt'):
     items = []
     p = ROOT / path
@@ -76,7 +102,26 @@ def load_comment_manifest(path='comments.txt'):
 
 
 def main():
+    # Load existing posts data from the gh-pages working tree (if present)
     posts = load_posts_data()
+    # If a freshly-generated posts_data.json was provided (posts_data_new.json), merge it
+    new_path = ROOT / 'posts_data_new.json'
+    if new_path.exists():
+        try:
+            with new_path.open('r', encoding='utf-8') as f:
+                new_posts = json.load(f)
+        except Exception:
+            new_posts = []
+        if new_posts:
+            print(f"Merging {len(new_posts)} new posts into existing {len(posts)} posts")
+            merged = merge_posts(posts, new_posts)
+            if save_posts_data(merged):
+                print(f"Wrote merged posts_data.json ({len(merged)} posts)")
+                posts = merged
+            else:
+                print("Warning: Failed to write merged posts_data.json")
+        else:
+            print("No new posts found in posts_data_new.json to merge")
     comments = load_comment_manifest()
 
     # Build HOME from env PAGES_REPO if available

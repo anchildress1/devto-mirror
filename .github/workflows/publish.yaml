@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5.6.0
@@ -40,11 +42,13 @@ jobs:
           set -e
           TMPDIR="$(mktemp -d)"
           echo "Copying generated site to temporary dir: $TMPDIR"
-          # Copy expected generated artifacts (ignore if missing)
-          cp -R index.html robots.txt sitemap.xml posts posts_data.json comments "$TMPDIR/" 2>/dev/null || true
+          # Copy expected generated artifacts (including scripts) into TMPDIR. Fail loudly so CI shows problems.
+          cp -R index.html robots.txt sitemap.xml posts posts_data.json comments scripts "$TMPDIR/"
+          echo "TMPDIR contents:"
+          ls -la "$TMPDIR" || true
 
           # Ensure we have the remote branch info
-          git fetch origin gh-pages || true
+          git fetch --all --prune || true
 
           if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
             echo "gh-pages exists on remote, checking out"
@@ -54,27 +58,28 @@ jobs:
             echo "gh-pages does not exist, creating orphan branch"
             git checkout --orphan gh-pages
             # leave working tree empty for now
-            git rm -rf . || true
+            git rm -rf .
           fi
 
           # Copy the generated posts and comment pages only; do NOT overwrite index.html or sitemap.xml
           # This preserves older posts that no longer appear in the RSS feed.
-          cp -R "$TMPDIR"/posts ./ || true
-          cp -R "$TMPDIR"/comments ./ || true
+          cp -R "$TMPDIR"/posts ./
+          cp -R "$TMPDIR"/comments ./
 
           # Save the freshly-generated posts_data.json as a separate file so we can merge
           if [ -f "$TMPDIR/posts_data.json" ]; then
             cp "$TMPDIR/posts_data.json" posts_data_new.json
           fi
 
-          # Copy the helper script so we can regenerate index/sitemap from merged data
-          cp scripts/render_index_sitemap.py ./ || true
-
-          # Merge posts_data_new.json into existing posts_data.json and regenerate index/sitemap
-          python scripts/render_index_sitemap.py
+          # Run the helper from the TMPDIR copy (this is the same helper used to generate the new data)
+          if [ -f "$TMPDIR/scripts/render_index_sitemap.py" ]; then
+            python "$TMPDIR/scripts/render_index_sitemap.py"
+          else
+            echo "Warning: render_index_sitemap.py not found in TMPDIR; skipping index/sitemap regeneration" >&2
+          fi
 
           git add -A
           git commit -m "chore: publish generated site to gh-pages" || echo "No changes to commit"
           git push origin gh-pages
 
-# Generated with the help of ChatGPT
+# Generated with the help of ChatGPT and Github Copilot.
