@@ -55,7 +55,7 @@ PAGE_TMPL = Template("""<!doctype html><html lang="en"><head>
 INDEX_TMPL = Template("""<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ username }} — Dev.to Mirror</title>
-<link rel="canonical" href="{{ home }}">
+<link rel="canonical" href="{{ canonical }}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head><body>
 <main>
@@ -129,10 +129,11 @@ SITEMAP_TMPL = Template("""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{{ home }}</loc></url>
   {% for p in posts %}
-  <url><loc>{{ home }}posts/{{ p.slug }}.html</loc></url>
+    {# Prefer canonical Dev.to link if available #}
+    <url><loc>{{ p.link or (home + 'posts/' + p.slug + '.html') }}</loc></url>
   {% endfor %}
   {% for c in comments %}
-  <url><loc>{{ home }}{{ c.local }}</loc></url>
+    <url><loc>{{ c.url or (home + c.local) }}</loc></url>
   {% endfor %}
 </urlset>
 """)
@@ -148,6 +149,7 @@ class Post:
         self.title = getattr(entry, "title", "Untitled")
         self.link = getattr(entry, "link", HOME)
         self.date = getattr(entry, "published", "")
+        # Prefer full content, then summary, then empty
         if getattr(entry, "content", None):
             content_html = entry.content[0].value
         elif getattr(entry, "summary", None):
@@ -155,9 +157,18 @@ class Post:
         else:
             content_html = ""
         self.content_html = content_html
-        self.description = (getattr(entry, "description", "") or strip_html(content_html))[:300]
+
+        # Attempt to extract a special HTML comment description from the content
+        # Format: <!-- description: Your description here -->
+        desc_match = re.search(r"<!--\s*description:\s*(.*?)-->", content_html, re.IGNORECASE | re.DOTALL)
+        if desc_match:
+            desc_text = strip_html(desc_match.group(1))
+        else:
+            desc_text = getattr(entry, "description", "") or strip_html(content_html)
+
+        self.description = (desc_text or "")[:300]
         self.slug = (slugify(self.title)[:80] or slugify(self.link)) or "post"
-    
+
     def to_dict(self):
         """Convert Post to dictionary for JSON serialization"""
         return {
@@ -168,7 +179,7 @@ class Post:
             'description': self.description,
             'slug': self.slug
         }
-    
+
     @classmethod
     def from_dict(cls, data):
         """Create Post from dictionary loaded from JSON"""
@@ -270,7 +281,8 @@ else:
 for p in new_posts:
     html_out = PAGE_TMPL.render(
         title=p.title,
-        canonical=p.link,          # Canonical → Dev.to
+    # Ensure canonical points to Dev.to original link
+    canonical=p.link,
         description=p.description,
         date=p.date,
         content=p.content_html
@@ -290,16 +302,19 @@ if comment_items:
     for c in comment_items:
         title = "Comment note"
         desc = (c["context"] or "Comment note").strip()[:300]
+        # For comment notes, canonical should point back to the original Dev.to URL
         html_page = COMMENT_NOTE_TMPL.render(
             title=title,
-            canonical=HOME + c["local"],  # self-canonical (this is your context page)
+            canonical=c["url"],
             description=desc,
             context=html.escape(c["context"]) if c["context"] else "",
             url=c["url"]
         )
         pathlib.Path(c["local"]).write_text(html_page, encoding="utf-8")
 
-index_html = INDEX_TMPL.render(username=DEVTO_USERNAME, posts=all_posts, comments=comment_items, home=HOME)
+# Use Dev.to profile as canonical for the index page
+devto_profile = f"https://dev.to/{DEVTO_USERNAME}"
+index_html = INDEX_TMPL.render(username=DEVTO_USERNAME, posts=all_posts, comments=comment_items, home=HOME, canonical=devto_profile)
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
 pathlib.Path("robots.txt").write_text(ROBOTS_TMPL.format(home=HOME), encoding="utf-8")
 

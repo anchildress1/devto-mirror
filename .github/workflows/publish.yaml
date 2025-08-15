@@ -34,6 +34,47 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add -A
           git commit -m "chore: auto-publish dev.to mirror" || echo "No changes"
-          git push
+          # Safer publish flow: copy generated site to a temp dir, switch to gh-pages
+          # branch (create if missing), copy generated files (only posts/comments),
+          # merge posts_data.json, regenerate index/sitemap, commit and push.
+          set -e
+          TMPDIR="$(mktemp -d)"
+          echo "Copying generated site to temporary dir: $TMPDIR"
+          # Copy expected generated artifacts (ignore if missing)
+          cp -R index.html robots.txt sitemap.xml posts posts_data.json comments "$TMPDIR/" 2>/dev/null || true
+
+          # Ensure we have the remote branch info
+          git fetch origin gh-pages || true
+
+          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+            echo "gh-pages exists on remote, checking out"
+            git checkout gh-pages
+            git reset --hard origin/gh-pages
+          else
+            echo "gh-pages does not exist, creating orphan branch"
+            git checkout --orphan gh-pages
+            # leave working tree empty for now
+            git rm -rf . || true
+          fi
+
+          # Copy the generated posts and comment pages only; do NOT overwrite index.html or sitemap.xml
+          # This preserves older posts that no longer appear in the RSS feed.
+          cp -R "$TMPDIR"/posts ./ || true
+          cp -R "$TMPDIR"/comments ./ || true
+
+          # Save the freshly-generated posts_data.json as a separate file so we can merge
+          if [ -f "$TMPDIR/posts_data.json" ]; then
+            cp "$TMPDIR/posts_data.json" posts_data_new.json
+          fi
+
+          # Copy the helper script so we can regenerate index/sitemap from merged data
+          cp scripts/render_index_sitemap.py ./ || true
+
+          # Merge posts_data_new.json into existing posts_data.json and regenerate index/sitemap
+          python scripts/render_index_sitemap.py
+
+          git add -A
+          git commit -m "chore: publish generated site to gh-pages" || echo "No changes to commit"
+          git push origin gh-pages
 
 # Generated with the help of ChatGPT
