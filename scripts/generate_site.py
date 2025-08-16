@@ -37,6 +37,21 @@ except Exception as e:
     # Use the fallback empty feed
     feed = EmptyFeed()
 
+# Log raw feed entries
+print("--- Raw feed entries ---")
+try:
+    # Attempt to print the raw text if available from the feed object
+    if hasattr(feed, 'text'):
+        print(feed.text)
+    else:
+        # Fallback to printing entries if raw text is not available
+        import json
+        for entry in feed.entries:
+            print(json.dumps(entry, indent=2, default=str))
+except Exception as log_e:
+    print(f"Error logging raw feed data: {log_e}")
+print("--- End raw feed entries ---")
+
 # ----------------------------
 # Templates (posts + index)
 # ----------------------------

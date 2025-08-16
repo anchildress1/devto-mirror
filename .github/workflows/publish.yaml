@@ -30,6 +30,14 @@ jobs:
           PAGES_REPO: ${{ github.repository }}        # "username/repo"
         run: python scripts/generate_site.py
 
+      - name: Fetch latest post from Dev.to API
+        id: test_api
+        run: |
+          # Get slug of the most recent post from the generated data
+          LATEST_SLUG=$(jq -r '.[0].slug' posts_data.json)
+          echo "Fetching post with slug: $LATEST_SLUG"
+          curl -s "https://dev.to/api/articles/${{ vars.DEVTO_USERNAME }}/$LATEST_SLUG"
+
       - name: Commit & push
         run: |
           git config user.name "ci-bot"
