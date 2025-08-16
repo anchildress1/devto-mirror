@@ -16,7 +16,7 @@ INDEX_TMPL = Template("""<!doctype html><html lang="en"><head>
   <h1>{{ username }} — Dev.to Mirror</h1>
   <ul>
   {% for p in posts %}
-    <li><a href="posts/{{ p.slug }}.html">{{ p.title }}</a> — <small>{{ p.date }}</small></li>
+    <li><a href="posts/{{ p.slug }}.html">{{ p.title }}</a>{% if p.description %} — {{ p.description }}{% endif %} — <small>{{ p.date }}</small></li>
   {% endfor %}
   </ul>
   {% if comments %}<h2>Comment Notes</h2>
