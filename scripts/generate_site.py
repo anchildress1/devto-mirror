@@ -19,6 +19,11 @@ ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
 POSTS_DIR.mkdir(parents=True, exist_ok=True)
 
+class EmptyFeed:
+    """A fallback object with an empty .entries list to prevent crashes on network failure."""
+    def __init__(self):
+        self.entries = []
+
 FEED_URL = f"https://dev.to/feed/{DEVTO_USERNAME}"
 try:
     feed = feedparser.parse(FEED_URL)
@@ -29,11 +34,8 @@ try:
         print("No entries found in RSS feed")
 except Exception as e:
     print(f"Error fetching RSS feed: {e}")
-    # Create an empty feed for testing
-    class MockFeed:
-        def __init__(self):
-            self.entries = []
-    feed = MockFeed()
+    # Use the fallback empty feed
+    feed = EmptyFeed()
 
 # ----------------------------
 # Templates (posts + index)

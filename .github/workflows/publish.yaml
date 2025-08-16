@@ -82,4 +82,4 @@ jobs:
           git commit -m "chore: publish generated site to gh-pages" || echo "No changes to commit"
           git push origin gh-pages
 
-# Generated with the help of ChatGPT and Github Copilot.
+# Generated with the help of ChatGPT and GitHub Copilot.
