@@ -8,7 +8,422 @@
 <main>
   <h1><a href="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">🧠 Letting AI Drive: A Month of Building with GitHub Copilot</a></h1>
   <p><em>Published: 2025-06-11T12:15:36Z</em></p>
-  <article></article>
+  <article><blockquote>
+<p>“When the going gets weird, the weird turn pro.”<br><br>
+— Hunter S. Thompson</p>
+</blockquote>
+
+<h2>
+  <a name="what-happens-when-you-stop-writing-code-and-start-managing-your-ai-developer-instead" href="#what-happens-when-you-stop-writing-code-and-start-managing-your-ai-developer-instead">
+  </a>
+  What happens when you stop writing code and start managing your AI developer instead?
+</h2>
+
+
+<hr>
+
+<h2>
+  <a name="tldr" href="#tldr">
+  </a>
+  ⚡ TL;DR;
+</h2>
+
+<p>I gave GitHub Copilot full control of a built-from-scratch NodeJS project for a month.<br><br>
+ChatGPT handled planning, strategy, UX input, and story writing.<br><br>
+I acted as manager, director, and chaos wrangler.</p>
+
+<p>The result:<br><br>
+A working prototype, repeatable prompt patterns, and serious lessons on using AI as your dev partner.</p>
+
+
+<hr>
+
+<h2>
+  <a name="setup" href="#setup">
+  </a>
+  👋 Setup
+</h2>
+
+<p>Built as a personal experiment on a work machine (private, for now).</p>
+
+<p><strong>Toolchain:</strong></p>
+
+<ul>
+<li>
+<strong>VS Code Insiders</strong>, started in Codespaces for safety</li>
+<li>
+<strong>Full access granted</strong> to terminal, extensions, file tree, everything</li>
+<li>
+<strong>Linting + formatting</strong>: ESLint, Prettier, Remark, Commitlint (strictly enforced)</li>
+<li>
+<strong>Testing</strong>: Vitest with 90%+ coverage enforcement</li>
+<li>
+<strong>Copilot handled</strong>: Code, tests, docs, commit messages, pull requests, story <em>implementation</em>
+</li>
+<li>
+<strong>ChatGPT handled</strong>: Story <em>writing</em>, backlog creation, research, branding</li>
+<li>
+<strong>Workflow</strong>: Start with instructions (repo-level + personal) → evolve into structured prompts → iterate and commit</li>
+</ul>
+
+<blockquote>
+<p>Most <code>//human input</code> lines were documentation. Actual code edits? Maybe two — one for manual testing and one was copy/pasted.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="how-i-actually-prompt-github-copilot" href="#how-i-actually-prompt-github-copilot">
+  </a>
+  🧪 How I Actually Prompt (GitHub Copilot)
+</h2>
+
+<h3>
+  <a name="copilot-agent-settings" href="#copilot-agent-settings">
+  </a>
+  🧠 Copilot Agent Settings
+</h3>
+
+<blockquote>
+<p>Note: By default, <code>Ask</code> mode doesn't save historical context</p>
+</blockquote>
+
+<p>Depending on what I’m doing, I pick a specific model under <code>Agent</code> mode:</p>
+
+<ul>
+<li>
+<p>🛠️ <strong>Feature implementation, heavy refactor, full A→Q problem-solving</strong>  </p>
+
+<ul>
+<li>Claude Sonnet 4 or Claude Sonnet 3.7</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<p>🧪 <strong>Testing, docs, explanation, general idea bouncing</strong>  </p>
+
+<ul>
+<li>GPT-4.1 or GPT-4o</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<p>🔍 <strong>Somewhere in between</strong>  </p>
+
+<ul>
+<li>Gemini 2.5 Pro (when it actually works)</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<p>⚙️ <strong>Light scripting, config setup, follow-along patterns</strong>  </p>
+
+<ul>
+<li>o4-mini</li>
+</ul>
+
+
+</li>
+
+</ul>
+
+
+<hr>
+
+<h3>
+  <a name="mostused-contexts" href="#mostused-contexts">
+  </a>
+  🧷 Most-Used Contexts
+</h3>
+
+<ul>
+<li>
+<code>#terminalLastCommand</code>
+</li>
+<li>
+<code>#selection</code>
+</li>
+<li><code>#file</code></li>
+</ul>
+
+
+<hr>
+
+<h3>
+  <a name="my-goto-prompts" href="#my-goto-prompts">
+  </a>
+  🧠 My Go-To Prompts
+</h3>
+
+<h4>
+  <a name="when-im-stuck" href="#when-im-stuck">
+  </a>
+  When I’m Stuck
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="gh">#codebase I want to build a &lt;thing&gt; for &lt;goal&gt;.  </span>
+Given current best practices in <span class="nt">&lt;language&gt;</span>, analyze the top 3 ways to implement it. 
+List 2 pros/cons for each. 
+Rate 1–5 for complexity, ease of use, maintainability. 
+Rank them and explain why.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>Even when the simplest ones didn’t work right away, they always got the ball rolling. If needed, I clarified or reset with <code>/clear</code> and tried again.</p>
+</blockquote>
+
+<h4>
+  <a name="doesnt-compile" href="#doesnt-compile">
+  </a>
+  Doesn't Compile
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code>/fix #the-file-copilot-prob-broke-anyway.js
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<h4>
+  <a name="failing-tests" href="#failing-tests">
+  </a>
+  Failing Tests
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code>/fix #terminalLastCommand
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<h4>
+  <a name="lint-errors" href="#lint-errors">
+  </a>
+  Lint errors
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code>/fix #problems
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h2>
+  <a name="the-copilot-hell-loop-is-real" href="#the-copilot-hell-loop-is-real">
+  </a>
+  ☠️ The Copilot Hell Loop Is Real
+</h2>
+
+<p>It happens: Copilot spirals into broken logic and keeps rewriting working code.</p>
+
+<p>Here’s what works:<br><br>
+<strong>Pause → Redirect → Resume</strong><br><br>
+(But don’t wait too long — or your fix becomes <code>git reset --hard HEAD</code>.)</p>
+
+
+<hr>
+
+<h2>
+  <a name="what-i-learned" href="#what-i-learned">
+  </a>
+  📚 What I Learned
+</h2>
+
+<h3>
+  <a name="models-matter" href="#models-matter">
+  </a>
+  ✅ Models Matter
+</h3>
+
+<p>Pick the right one — it'll save you hours of rework.</p>
+
+<h3>
+  <a name="specific-prompts-win" href="#specific-prompts-win">
+  </a>
+  ✅ Specific Prompts Win
+</h3>
+
+<p>Copilot thrives on intent and clarity, not vague instructions.</p>
+
+<h3>
+  <a name="backandforth-works" href="#backandforth-works">
+  </a>
+  ✅ Back-and-Forth Works
+</h3>
+
+<p><code>#selection I was thinking of doing X here — would you recommend that?</code><br><br>
+Copilot actually responds meaningfully.</p>
+
+<h3>
+  <a name="commit-while-it-works" href="#commit-while-it-works">
+  </a>
+  ✅ Commit While It Works
+</h3>
+
+<p>Don’t wait for perfect. Save progress, iterate fast.</p>
+
+<h3>
+  <a name="no-plan-no-problem-sometimes" href="#no-plan-no-problem-sometimes">
+  </a>
+  ✅ No Plan? No Problem (Sometimes)
+</h3>
+
+<p>Just stay curious and let your Copilot riff with you.</p>
+
+<h3>
+  <a name="-raw-codebase-endraw-for-direct-implementation-doesnt-work-for-me" href="#-raw-codebase-endraw-for-direct-implementation-doesnt-work-for-me">
+  </a>
+  ❌ <code>#codebase</code> for Direct Implementation Doesn't Work (for Me)
+</h3>
+
+<p>I know it's a headline feature, but asking Copilot to <code>/implement-feature JIRA-123 #codebase</code> has <strong>never</strong> worked well for me.<br><br>
+What <em>does</em> work? <strong>Asking targeted questions</strong>, especially during active review or when you’re trying to break down next steps.</p>
+
+<h3>
+  <a name="longrunning-chat-histories-hit-a-wall" href="#longrunning-chat-histories-hit-a-wall">
+  </a>
+  ⚠️ Long-Running Chat Histories Hit a Wall
+</h3>
+
+<p>Even if you think building a giant rolling context will help, Copilot's memory eventually falls off.<br><br>
+What worked better:<br><br>
+<strong>Story → review → refine → commit → /clear</strong><br><br>
+Repeat that and results stayed sharp.</p>
+
+<h3>
+  <a name="try-it-vs-code-speech-for-conversational-prompts" href="#try-it-vs-code-speech-for-conversational-prompts">
+  </a>
+  🎤 Try It: VS Code Speech for Conversational Prompts
+</h3>
+
+<p>VS Code Speech gives you a “hey code!” style interaction with Copilot.<br><br>
+You can speak out goals, requests, or reviews and let it translate to code suggestions.<br><br>
+⚠️ Just watch your token usage — premium-style interactions can balloon into fast rate limits if you're not careful.</p>
+
+<h3>
+  <a name="chatgpt-worth-the-subscription" href="#chatgpt-worth-the-subscription">
+  </a>
+  ✅ ChatGPT = Worth the subscription
+</h3>
+
+<p>Docs, strategies, structure, creative writing, even “Hey, does this make sense?” moments.<br><br>
+We can't always live in code (plus, who can resist playing with pictures and color?)</p>
+
+<blockquote>
+<p>Yes, it helped with this post too!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="lets-talk" href="#lets-talk">
+  </a>
+  ✨ Let’s Talk
+</h2>
+
+<p>Questions? Want to swap prompts, patterns, or war stories? Hit me up — just give me a few weeks to recover.<br><br>
+I’m still prepping for the internal demo and approvals.</p>
+
+
+<hr>
+
+<p><em>This was Part 1 of a 2-part breakdown.</em>  </p>
+
+<p><strong>Next up</strong>: The build, the metrics, and what 600,000+ lines of AI-generated code actually look like in the wild. <a href="https://dev.to/anchildress1/from-hell-loops-to-happy-commits-38c4">Letting AI Drive: From Hell Loops to Happy Commits</a>.</p>
+
+
+<hr>
+
+<blockquote>
+<h3>
+  <a name="rai-disclaimer" href="#rai-disclaimer">
+  </a>
+  🛡️ RAI Disclaimer
+</h3>
+
+<p>Everything I share here is my own perspective—created with the help of AI tools (GitHub Copilot, ChatGPT, and their friends), but always with a human in the loop. I do my best to catch accidental bias and fact-check, but if you ever spot something odd, let me know! AI isn’t perfect, and neither am I.</p>
+
+<p><strong>TL; DR:</strong> AI helped, but you can blame me for the <strong>chaos</strong>! 🫠</p>
+</blockquote>
+
+</article>
   <p><a href="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">Read on Dev.to →</a></p>
 </main>
 </body></html>

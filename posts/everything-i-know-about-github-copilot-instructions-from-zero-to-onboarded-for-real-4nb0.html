@@ -2,13 +2,408 @@
 <meta charset="utf-8">
 <title>Everything I Know About GitHub Copilot Instructions — From Zero to Onboarded (For Real) ⚡</title>
 <link rel="canonical" href="https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0">
-<meta name="description" content="An updated deep dive into GitHub Copilot custom instructions — why your repo needs them, how to write them, and the three fastest ways to get started without un">
+<meta name="description" content="An updated deep dive into GitHub Copilot custom instructions — why your repo needs them, how to write them, and the three fastest ways to get started without unleashing chaos.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head><body>
 <main>
   <h1><a href="https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0">Everything I Know About GitHub Copilot Instructions — From Zero to Onboarded (For Real) ⚡</a></h1>
   <p><em>Published: 2025-08-13T11:45:00Z</em></p>
-  <article></article>
+  <article><blockquote>
+<p><strong>Updated</strong>: Yes — I had to change the banner. It was killing me 🤣 I'm going to get Leonardo trained with this character <em>eventually</em>. In the meantime ChatGPT is doing just fine (after you ignore the personality change and retraining brought on by the v5 upgrade).</p>
+</blockquote>
+
+
+<hr>
+
+<blockquote>
+<p>🦄 I honestly hadn’t planned to write this one until next week, but the post I <em>did</em> write this week... disappeared. And redoing work you’ve already done? <strong>Zero fun.</strong> It’s like reheating French fries — <em>technically</em> edible, but you know it’s not going to be as good. So here we are, skipping the fries, and moving on!</p>
+
+<p>Also, you might want a snack for this one! It's a little more in-depth than usual. And yes — I did rate my own approach higher than Microsoft and GitHub. Obviously. 😛</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="tldr-%F0%9F%AA%BC" href="#tldr-%F0%9F%AA%BC">
+  </a>
+  TL;DR 🪼
+</h2>
+
+<p>Stop tossing Copilot into the deep end without floaties! Write repo instructions, test them, tweak them, build them, repeat. Whether you use Microsoft’s, Coding Agent’s, or my Instructionalist, the goal’s the same: keep Copilot coloring inside <em>your</em> lines.</p>
+
+
+<hr>
+
+<h2>
+  <a name="background" href="#background">
+  </a>
+  Background
+</h2>
+
+<p>This post is one part personal call-out (I <em>really</em> need testers 🙋‍♀️) and one part sequel to my most-read post <a href="https://dev.to/anchildress1/all-ive-learned-about-github-copilot-instructions-so-far-5bm7">All I’ve Learned About GitHub Copilot Instructions (so far)</a>. </p>
+
+<p>If you've never read it or if you missed some of the more recent updates (yes — I always try to go back and call out changes whenever GitHub or VS Code changes something), then go check out the basics first before getting too deep here. If you're already up to speed? Great — hop on in and I'll give you the grand tour! 🏎️</p>
+
+<p>The original post still represents ~95% of how I handle custom instructions. I still use almost everything in it. But a few things have changed — new ways to get started, lessons learned from letting Copilot roam — on a leash — in enterprise codebases, and a sharper focus on making it write what you want instead of what it thinks you might have meant.</p>
+
+<blockquote>
+<p>🦄 Also, yes, <strong>shameless plug:</strong> I started an <a href="https://github.com/anchildress1/awesome-github-copilot" target="_blank" rel="noopener noreferrer">awesome-github-copilot</a> repo. It’s still a WIP, but there are already a few gems in there. If you’re willing to be a guinea pig 🐹, reach out!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="why-repo-instructions-matter" href="#why-repo-instructions-matter">
+  </a>
+  Why Repo Instructions Matter ⚠️👇
+</h2>
+
+<p>Let’s set the scene. You’ve got a legacy monster app sitting in the corner. <em>No one</em> wants to touch it. And now a brand-new senior dev walks in the door. Would you say:</p>
+
+<blockquote>
+<p>“Hey, go refactor something. Good luck!”</p>
+</blockquote>
+
+<p><strong>Of course not!</strong> But that's <em>exactly</em> what's happening every single time you drop Copilot in cold with zero guidance or direction about what you expect. It will produce <em>something</em> — and it will produce it <em>confidently</em> — and based entirely on your repo’s <strong>worst</strong> patterns. You’ll get more code, faster, sure... but not at all better!</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" alt="short dotted divider" loading="lazy" width="221" height="15"></a></p>
+
+<h3>
+  <a name="plan-an-upfront-15-min-%EF%B8%8F" href="#plan-an-upfront-15-min-%EF%B8%8F">
+  </a>
+  Plan an Up-Front 15 Min ⌚️
+</h3>
+
+<p>So instead of sending your golden senior developer off to the trenches on their first day, what if you just took <strong>15 minutes</strong> with them? <em>Explain</em> why half the code is wired together like an escape room puzzle, which systems will blow up if they touch the wrong file, and why that <code>java.io</code> serialization is still hanging around after three Java upgrades.</p>
+
+<p><strong>That’s <em>exactly</em> how you should treat Copilot.</strong> </p>
+
+<p>And you'll see the exact same returns from Copilot as you would any well-trained developer who's capable of reading documentation and making the right call when it matters.</p>
+
+<blockquote>
+<p>🦄 <strong>Be aware:</strong> This is <em>never</em> going to be a "set-and-forget" system. It doesn't need constant care like a newborn (after a solid round of testing), but it's still gonna grow and change with your app. App changes = instructions change. Always!</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" alt="short dotted divider" loading="lazy" width="221" height="15"></a></p>
+
+<h3>
+  <a name="repo-instructions-to-the-rescue-%F0%9F%9B%9F" href="#repo-instructions-to-the-rescue-%F0%9F%9B%9F">
+  </a>
+  Repo Instructions to the Rescue 🚢🛟
+</h3>
+
+<p>Repo instructions are your chance to give Copilot a tour before it starts swinging a hammer. They work everywhere Copilot runs — IDE, GitHub.com, even mobile (according to the docs anyway). Put them in <code>main</code>, and suddenly everyone prompting Copilot is working from the same rules, style, and “don’t touch” list.</p>
+
+<p>If you're thinking about simply listing best coding practices just to show Copilot where commas go? You're not using them correctly. Start thinking of these files as the de facto onboarding for any senior dev and approach them with that level of info and let the auto-formatter handle the commas and new lines.</p>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> Copilot will naturally catch on, but a quick one-liner that says "Follow rules in [eslint.config.js](./eslint.config.js)" is generally all you need to have it start checking the lint commands automatically.</p>
+</blockquote>
+
+<p>Start small and don't get the file get too bloated. If you have a set of similar instructions, you can always break them out into a custom instruction file apart from the primary version. Then use <code>applyTo</code> in the front-matter to define which files they should be applied to. </p>
+
+<p>For example, you have specific database instructions that outline constraints or upcoming planned features and you want to start "forward thinking"? Put them in <code>.github/instructions/database.instructions.md</code> instead of the default file and add the <code>applyTo</code>. Any time Copilot references one of these DAO classes, these instructions would be attached automatically.<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="nn">---</span>
+<span class="na">applyTo</span><span class="pi">:</span> <span class="s">src/main/java/dao/**/*</span>
+<span class="nn">---</span>
+
+<span class="gh"># My Custom Database Instructions</span>
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h2>
+  <a name="the-three-best-ways-to-get-started" href="#the-three-best-ways-to-get-started">
+  </a>
+  The Three Best Ways to Get Started
+</h2>
+
+<h3>
+  <a name="1-microsofts-generate-instructions-in-vs-code-%EF%B8%8F%EF%B8%8F%EF%B8%8F" href="#1-microsofts-generate-instructions-in-vs-code-%EF%B8%8F%EF%B8%8F%EF%B8%8F">
+  </a>
+  1. Microsoft’s “Generate Instructions” in VS Code (⭐️⭐️⭐️)
+</h3>
+
+<p>When this first came out, I’ll be honest — I hated it. I mean, it was <em>bad</em>. “Go read the first line of every file in the repo, copy/paste them into a doc, and call it instructions” bad. It was like your coworker emailing you a Google search link instead of an actual answer.</p>
+
+<p>But I have to be fair — it’s better now. It actually reads your repo, finds the important stuff, maps out project structure, and even calls out workflows and automation. Still not perfect, but you could hand it to a new dev and they wouldn’t immediately run screaming.</p>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> Let your formatter + linter handle style rules so you don’t waste instruction space showing Copilot where commas go. Absolutely <em>no one</em> needs 14 examples of what JavaScript looks like in their instructions file.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" alt="short dotted divider" loading="lazy" width="221" height="15"></a></p>
+
+<h4>
+  <a name="how-to-run-it" href="#how-to-run-it">
+  </a>
+  How to run it:
+</h4>
+
+<p><details>
+  <summary>💻 Expand for screenshots in VS Code for generating Microsoft repo instructions</summary>
+  <p><strong>In VS Code:</strong></p>
+
+<ol>
+<li>Click the gear icon ⚙️ at the top of the chat window.</li>
+<li>Click <code>Generate Instructions</code>
+</li>
+<li>Let it run. </li>
+<li>Then, like any responsible repo owner, <strong>trim the fluff</strong> before committing.</li>
+</ol>
+
+<p><strong>Alternate:</strong></p>
+
+<ol>
+<li>Press <strong>Ctrl+Shift+P</strong> / <strong>Cmd+Shift+P</strong>.</li>
+<li>Search <code>Chat: Generate Workspace Instructions File</code>.</li>
+</ol>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fwtvb1n10qwh8pav7t2j5.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fwtvb1n10qwh8pav7t2j5.png" alt="Two methods for generating Microsoft repo instructions in VS Code — Screenshots" loading="lazy" width="800" height="242"></a></p>
+
+
+</details>
+</p>
+
+
+<hr>
+
+<h3>
+  <a name="2-coding-agent-%EF%B8%8F%EF%B8%8F%EF%B8%8F%C2%BD-creeping-toward-4" href="#2-coding-agent-%EF%B8%8F%EF%B8%8F%EF%B8%8F%C2%BD-creeping-toward-4">
+  </a>
+  2. Coding Agent (⭐️⭐️⭐️½ – creeping toward 4)
+</h3>
+
+<p>This one’s a little different — it runs on <strong>Claude Sonnet 4</strong>, and no, you don’t get to change that. The upside? Claude’s got a good sense of architecture and implementation strategy, so it’s a bit like asking the “big picture” person on your team for a first draft. The downside? If you aren’t <em>specific</em>, it’ll start guessing... and you might get a fully stocked contributor guide when you really just wanted repo setup notes.</p>
+
+<p>Coding Agent is also PR-safe — it <em>always</em> creates a separate branch. You could tell it “go wild,” walk away, and it wouldn’t touch your main branch without a pull request. Bonus — you can prompt it with a mini-series and as long as it fits in the single prompt, it will tackle your whole list for a single premium request.</p>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> The <em>specifics</em> here are key. Think of it like you're leading KT. What are all the important highlights that you'll need to get the basics across? If you're not sure, it's better to <em>omit</em> something than be wrong or mention a <em>maybe</em> that will force Copilot to guess on your behalf.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" alt="short dotted divider" loading="lazy" width="221" height="15"></a></p>
+
+<h4>
+  <a name="how-to-run-it" href="#how-to-run-it">
+  </a>
+  How to run it:
+</h4>
+
+<p><details>
+  <summary>💻 Click for screenshots on GitHub.com for generating repo instructions with Coding Agent</summary>
+  <p><strong>At GitHub.com/Copilot:</strong></p>
+
+<ol>
+<li>Go to <a href="https://github.com/copilot" target="_blank" rel="noopener noreferrer">GitHub.com/Copilot</a>.</li>
+<li>Click <strong>Agents</strong> in the lefthand sidebar.</li>
+<li>Pick your repo + base branch (Copilot will still make its own branch from there).</li>
+<li>Prompt it: “Generate custom repository instructions for this repo” + any important <em>specifics</em>.</li>
+</ol>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F960ch7yi489y4wih18bj.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F960ch7yi489y4wih18bj.png" alt="Coding Agent Screenshot — Access in GitHub" loading="lazy" width="800" height="1038"></a></p>
+
+
+</details>
+</p>
+
+
+<hr>
+
+<h3>
+  <a name="3-my-instructionalist-chat-mode-%EF%B8%8F%EF%B8%8F%EF%B8%8F%EF%B8%8F-with-bias-admitted" href="#3-my-instructionalist-chat-mode-%EF%B8%8F%EF%B8%8F%EF%B8%8F%EF%B8%8F-with-bias-admitted">
+  </a>
+  3. My “Instructionalist” Chat Mode (⭐️⭐️⭐️⭐️, with bias admitted)
+</h3>
+
+<p>Okay, yes, I’m biased. But this thing exists because I got tired of explaining — for the fourth or fifth time — why every repo should have good Copilot instructions.</p>
+
+<p>It’s a Q&amp;A where you (aka the person who actually knows the repo) fill in the stuff Copilot can’t guess: your SLAs, the weird dependencies that no one touches, the “if X happens at 3:15 AM, restart Y or the whole system falls over” kind of lore.</p>
+
+<p>It writes from “where we want to be,” not “where we are,” and builds in things the other methods skip — anti-patterns, testing goals, deployment notes, even gentle nudges like “acknowledge uncertainty” when multiple solutions exist.</p>
+
+<blockquote>
+<p>📢 <strong>Model note:</strong> This one’s running on GPT-4.1 too!</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" alt="short dotted divider" loading="lazy" width="221" height="15"></a></p>
+
+<h4>
+  <a name="how-to-run-it" href="#how-to-run-it">
+  </a>
+  How to run it:
+</h4>
+
+<p><details>
+  <summary>💻 Click for a quick video on loading custom chat modes in VS Code</summary>
+  <p><br><strong>Copy the chat mode:</strong></p>
+
+<ol>
+<li>My repo is at <a href="">github.com/anchildress1/awesome-github-copilot</a>
+</li>
+<li>
+<p>Find <strong>The Instructionalist</strong> chat mode and copy raw content</p>
+
+<blockquote>
+<p>⚠️ <strong>Careful!</strong> Don't grab docs by mistake. You're looking for the file that ends in <code>.chatmode.md</code></p>
+</blockquote>
+</li>
+<li><p>Create a new <strong>chat mode</strong> in VS Code and replace default with pasted Instructionalist</p></li>
+<li><p>Select custom mode from the dropdown</p></li>
+<li>
+<p>Prompt Copilot to begin </p>
+
+<blockquote>
+<p>🦄 Try something like <code>Help me create repo instructions</code> and give it time to scan your setup. Then answer as much as you can — Copilot will filter out what it doesn't need.</p>
+
+<p>🎤 This is a perfect time to try the <strong>Speech</strong> plugin, but check the delay setting first so it doesn't send before you're ready.</p>
+</blockquote>
+</li>
+</ol>
+
+<p>🎥 Check out <a href="https://youtu.be/JkEsZFrHf1U" target="_blank" rel="noopener noreferrer">Loading GitHub Copilot Chat Modes in VS Code</a> on YouTube.</p>
+
+
+</details>
+</p>
+
+
+<hr>
+
+<h2>
+  <a name="the-results" href="#the-results">
+  </a>
+  The Results 🐙
+</h2>
+
+<h3>
+  <a name="microsoft-in-vs-code-%F0%9F%AA%BC" href="#microsoft-in-vs-code-%F0%9F%AA%BC">
+  </a>
+  Microsoft in VS Code 🪼
+</h3>
+
+<p>Microsoft’s instructions were very structure-first. You get a “Welcome to this repository” blurb at the top (which I left out in mine, because <em>why?</em>) and sections like <code>Project Structure</code> and <code>Key Concepts</code>. I was surprised that it even calls out the status badge system. It’s tidy and functional. It works. </p>
+
+<blockquote>
+<p>🦄 It also adds a short “how to turn on custom instructions” note — which you shouldn’t need, unless you’ve gone in and toggled them off on purpose before.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fpxjxlwpnsp76lqhf5v2u.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fpxjxlwpnsp76lqhf5v2u.png" alt="Microsoft's Repo Instructions Intro" loading="lazy" width="800" height="419"></a></p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" alt="short dotted divider" loading="lazy" width="221" height="15"></a></p>
+
+<h3>
+  <a name="coding-agent-via-github" href="#coding-agent-via-github">
+  </a>
+  Coding Agent via GitHub 🧩
+</h3>
+
+<p>Coding Agent’s version swaps the order around a bit and renames a few headers (although, I don’t consider “structure” and “principles” to be interchangeable — so if you use this method, consider renaming that!) It skips the status badge part in the intro but circles back later with its own <code>Status System</code> section. You also get content guidelines, writing style notes, and real markdown link refs for internal docs (which is best practice). </p>
+
+<p>But it also tries to sneak in a whole Contribution Guidelines section... which, let’s be honest, belongs in a <code>CONTRIBUTING.md</code>, not in instructions for Copilot. </p>
+
+<blockquote>
+<p>🦄 This is not the first time Coding Agent has tried to add every possible document GitHub makes available during a PR. It <em>seems</em> to be wired into the fact that if you have a public repo, then you need all of these things to exist. I'm going to dig into this more and report back.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ffuy51ntkl9kj6z7thqyp.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ffuy51ntkl9kj6z7thqyp.png" alt="Coding Agent Repo Instructions Intro" loading="lazy" width="800" height="590"></a></p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Faxrf2duiuwwct24vvarw.png" alt="short dotted divider" loading="lazy" width="221" height="15"></a></p>
+
+<h3>
+  <a name="the-instructionalist-custom-chat-mode" href="#the-instructionalist-custom-chat-mode">
+  </a>
+  The Instructionalist Custom Chat Mode 📢
+</h3>
+
+<p>My version ignores all of the “Welcome” and “Structure” boilerplate and instead jumps straight into "Purpose" and "Value". It defines chat modes, prompts, and instructions in a way that makes Copilot’s role more engaging and interactive. Copilot makes it clear these aren’t just generic AI prompts — they’re curated for all stages of the dev process. </p>
+
+<p>These don’t explicitly call out the status badge system, but it's referenced in context. And you get extras you won’t see in the other two: "Maturity Level" (so Copilot knows if the project is actively maintained or just camping in test mode), "Dependencies on Other Systems", and, yes, the occasional bit of lore. 😇 Plus explicit anti-patterns and testing/deployment plans.</p>
+
+<blockquote>
+<p>🦄 I have to call out this is the <em>only</em> version that requires the user to participate up front. So naturally it takes longer to spin up. If you're asking me? Completely worth the trade off.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F7j7uc425eksdj2wxxeei.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F7j7uc425eksdj2wxxeei.png" alt="Ashley's Custom Instructionalist Intro" loading="lazy" width="800" height="558"></a></p>
+
+
+<hr>
+
+<h2>
+  <a name="final-answer" href="#final-answer">
+  </a>
+  Final Answer? ⁉️
+</h2>
+
+<p>When you stack them side-by-side, you can see the philosophy differences right away:</p>
+
+<ul>
+<li>
+<strong>Microsoft</strong>: Orient Copilot by describing the map (structure, files, concepts).</li>
+<li>
+<strong>Coding Agent</strong>: Orient Copilot by describing the rules of the game (guidelines, principles, styles).</li>
+<li>
+<strong>My Instructionalist</strong>: Orient Copilot by describing the player’s role (purpose, value, patterns, anti-patterns).</li>
+</ul>
+
+<p>The truth? If you completely ignore the fact that I <em>clearly</em> think mine is the best (because of course I do), <strong>the ideal file is actually a hybrid</strong>. A little structure from Microsoft, a little guideline clarity from Coding Agent, and a little persona and context from The Instructionalist.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fl5h4eew20e1wo357to61.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fl5h4eew20e1wo357to61.png" alt="Example of Combined Instructions — Ashley's Instructionalist + Microsoft VS Code + GitHub Coding Agent Outputs Combined" loading="lazy" width="800" height="914"></a></p>
+
+<p>Every generated file is long, so don’t be afraid to cut anything that's not adding obvious value. Save extras in a <code>/future-review</code> folder. Keep essentials in the main file, and for the love of your PR sanity — <strong>update them every time something changes!</strong></p>
+
+<blockquote>
+<p>⚠️ Seriously, y'all! Old instructions are <strong>just as dangerous</strong> as no instructions at all!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="what-else-have-you-tried" href="#what-else-have-you-tried">
+  </a>
+  What Else Have You Tried?
+</h2>
+
+<p>Have you tried writing instructions by hand or generating your own with Copilot yet? Whether you go Microsoft, Coding Agent, my Instructionalist, some weird hybrid of all three, or something different entirely — I want to know what worked (and what exploded). </p>
+
+<p>Drop your results, screenshots, or horror stories in the comments. Bonus points if you rate yours higher than mine. 😛</p>
+
+
+<hr>
+
+<h2>
+  <a name="built-with-ai" href="#built-with-ai">
+  </a>
+  🛡️ Built with AI
+</h2>
+
+<p>...but only after I gave it a proper tour, told it where the coffee machine was, and warned it about the zombie curse actively infecting LLC.. </p>
+
+<p><em>No Copilots were left unsupervised during the making of this post.</em></p>
+
+</article>
   <p><a href="https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0">Read on Dev.to →</a></p>
 </main>
 </body></html>

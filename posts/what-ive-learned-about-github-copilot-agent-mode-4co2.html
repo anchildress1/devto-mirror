@@ -8,7 +8,274 @@
 <main>
   <h1><a href="https://dev.to/anchildress1/what-ive-learned-about-github-copilot-agent-mode-4co2">What I've Learned About GitHub Copilot Agent Mode</a></h1>
   <p><em>Published: 2025-06-23T00:32:02Z</em></p>
-  <article></article>
+  <article><h2>
+  <a name="surviving-premium-limits-amp-leveling-up-with-custom-instructions" href="#surviving-premium-limits-amp-leveling-up-with-custom-instructions">
+  </a>
+  Surviving Premium Limits &amp; Leveling Up with Custom Instructions
+</h2>
+
+<p>If you’re the kind of dev who treats Copilot’s agent mode like your own private coding butler (and not just a fancier autocomplete), you’ve probably bumped into some premium request limits. I sure did—<strong>hard enough to get shut down after just four days</strong> of bouncing between 4–5 active projects with Claude models. Whoops.</p>
+
+<p>But instead of a doom spiral, I figured: let’s share what’s actually working, and help someone else avoid my mistakes (and my, uh, "Baby Billy on water skis" level of desperation to get back to coding 🦆⛷️).</p>
+
+
+<hr>
+
+<p>TL;DR I'm at a full stop for the moment thanks to this giant red 0 on the page, so I decided to take some time to put together some of the things that's really worked well for me when using Copilot. Here's hoping someone else can avoid some of the mistakes I made early on.</p>
+
+
+<hr>
+
+<h3>
+  <a name="my-realworld-copilot-agent-workflow" href="#my-realworld-copilot-agent-workflow">
+  </a>
+  🛠️ My Real-World Copilot Agent Workflow
+</h3>
+
+<h4>
+  <a name="1-repositoryspecific-instructions" href="#1-repositoryspecific-instructions">
+  </a>
+  1. <strong>Repository-Specific Instructions 📒</strong>
+</h4>
+
+<p>The real MVP for me? The <code>.github/copilot-instructions.md</code> file.</p>
+
+<ul>
+<li>Copilot <em>automatically</em> reads this if it exists in your repo.</li>
+<li>Whatever you put here is context for <strong>every chat interaction</strong> in that repo - it travels across users and IDEs.</li>
+<li>Start small! Define the basics and add specific instructions only as Copilot demonstrates where it gets confused or off track.</li>
+<li>Example: Tell Copilot to summarize its goal &amp; action plan every so often, or ask it to verify a step before continuing.
+</li>
+</ul>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="gu">## Purpose</span>
+<span class="p">-</span> Summarize your current goal before making changes. 
+<span class="p">-</span> For every code edit, output a short plan first.
+
+<span class="gu">## Persona</span>
+<span class="p">-</span> Assume the user is new to the codebase.
+
+<span class="gu">## Technologies</span>
+<span class="p">-</span> This repo was recently upgraded to Java 21 from version 17.
+<span class="p">-</span> ALWAYS write new code using the latest standards and best practices
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<p>🔗 Learn more about <a href="https://docs.github.com/en/copilot/using-github-copilot/github-copilot-agents/customizing-github-copilot-agents-with-repository-instructions" target="_blank" rel="noopener noreferrer">repo-specific Copilot instructions here</a></p>
+
+
+<hr>
+
+<h4>
+  <a name="2-keep-chats-contained" href="#2-keep-chats-contained">
+  </a>
+  2. <strong>Keep Chats Contained 🗂️</strong>
+</h4>
+
+<p>Don’t just let a chat run forever. The context window is limited—so start a new Copilot Agent chat for each new topic, user story, or bug.</p>
+
+<ul>
+<li>
+<strong>Pro tip:</strong> Close all unrelated files in VS Code to reduce distractions for Copilot. 🧹</li>
+<li>
+<strong>History button</strong> (the little clock 🕰️) can help you pick up a previous session if needed.</li>
+<li>
+<strong>Watch your limits</strong> Premium requests pile up quickly, so encourage Copilot to prompt the user before ending the request prematurely.</li>
+</ul>
+
+
+<hr>
+
+<h4>
+  <a name="3-limit-the-blast-radius" href="#3-limit-the-blast-radius">
+  </a>
+  3. <strong>Limit the Blast Radius 💥</strong>
+</h4>
+
+<p>Try not to tackle everything at once.  </p>
+
+<ul>
+<li>Use <strong>Ask Mode</strong> (the GPT models 🧠) to brainstorm ideas, flesh out requirements, and get Copilot’s suggestions.</li>
+<li>For each <em>implementation</em>, <strong>switch to Agent mode</strong> and work one story at a time.
+</li>
+<li>Encourage Copilot to implement incrementally—have it plan, then check, then execute. 🦾
+</li>
+</ul>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="gh"># Story: Add User Login</span>
+
+<span class="gs">**Goal:**</span> Implement secure user authentication.
+<span class="gs">**Acceptance Criteria:**</span>
+<span class="p">-</span> Login with email &amp; password
+<span class="p">-</span> JWT token issued on success
+<span class="p">-</span> Error shown on failure
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h4>
+  <a name="4-iterative-prompt-engineering" href="#4-iterative-prompt-engineering">
+  </a>
+  4. <strong>Iterative Prompt Engineering 🧬</strong>
+</h4>
+
+<p>Change instructions <strong>slowly</strong> and only when you’re sure you understand <em>how</em> Copilot is misbehaving.</p>
+
+<ul>
+<li>I can’t count the number of times I thought I had a clever instruction, only to watch Copilot go rogue and turn my codebase into spaghetti 🤖🍝.</li>
+<li>Want ideas? <a href="https://github.com/search?q=copilot-instructions.md" target="_blank" rel="noopener noreferrer">Search GitHub for <code>copilot-instructions.md</code></a> and see what others are doing.</li>
+</ul>
+
+
+<hr>
+
+<h4>
+  <a name="5-encourage-copilot-to-selfcheck" href="#5-encourage-copilot-to-selfcheck">
+  </a>
+  5. <strong>Encourage Copilot to Self-Check 🦉</strong>
+</h4>
+
+<p>If Copilot starts acting weird (editing the wrong files, doing something unexpected), <strong>hit pause</strong> ⏸️ and ask it to explain its plan.</p>
+
+<ul>
+<li>If the answer makes sense, tell it to continue ▶️.</li>
+<li>If not, you’ve given it a chance to self-correct before things go totally off the rails 🚂.</li>
+</ul>
+
+
+<hr>
+
+<h4>
+  <a name="6-let-copilot-write-its-own-instructions" href="#6-let-copilot-write-its-own-instructions">
+  </a>
+  6. <strong>Let Copilot Write Its Own Instructions ✍️🤖</strong>
+</h4>
+
+<p>Yes, really! Start an Ask chat, put your repo in context, and prompt Copilot:<br><br>
+<em>“Write your own repo-specific instructions based on the structure and common pitfalls you see.”</em>  </p>
+
+
+<hr>
+
+<h3>
+  <a name="bonus-what-to-put-in-your-instructions" href="#bonus-what-to-put-in-your-instructions">
+  </a>
+  📝 Bonus: What to Put In Your Instructions
+</h3>
+
+<ul>
+<li>
+<strong>Project Description 🏷️:</strong>
+What does this repo do? SLO/SLA? Who benefits?</li>
+<li>
+<strong>Persona 🕵️:</strong>
+This is often overlooked, but SREs who have been here 10 years don't need the same level of explanation a brand new junior dev does. Make your project relevant.</li>
+<li>
+<strong>Tech Stack 🧩:</strong>
+Only include if the codebase is inconsistent and state specific target versions for a language.</li>
+<li>
+<strong>Code Style 🎨:</strong>
+Only call out consistent anti-patterns (let your linter do the rest).</li>
+<li>
+<strong>Include DO THIS/NOT THIS examples 📚:</strong>
+If Copilot always botches something, document it. Give “good vs. bad” code snippets.</li>
+</ul>
+
+
+<hr>
+
+<h3>
+  <a name="what-not-to-do" href="#what-not-to-do">
+  </a>
+  🚩 What <em>Not</em> To Do
+</h3>
+
+<ul>
+<li>Don’t just pile on instructions—too much context can backfire 🐘.</li>
+<li>Don’t treat Copilot like a junior dev and expect it to “just get it” - give it feedback, step by step 🧑‍🏫.</li>
+<li>Don’t be afraid to start over if a chat or instruction goes haywire. Sometimes it’s the best move 🔄.</li>
+</ul>
+
+
+<hr>
+
+<p><strong>I posted a couple of the best instructions I have so far.</strong> </p>
+
+<p>Feel free to copy these and adapt however you need them. Be warned, these work best with Claude models and will cost a fortune but it's so fun to watch 🚂</p>
+
+<blockquote>
+<p>Please excuse my static "I need a place to put these icons so I'll stop forgetting what I said yesterday" page, but it was there and easy, so that's where they went.</p>
+</blockquote>
+
+<ul>
+<li><a href="https://github.com/anchildress1/checkmark-icons/blob/gh-pages/copilot/COPILOT_BEST_PRACTICES.md" target="_blank" rel="noopener noreferrer">Copilot Best Practices</a></li>
+<li><a href="https://github.com/anchildress1/checkmark-icons/blob/gh-pages/copilot/copilot-instructions.md" target="_blank" rel="noopener noreferrer">copilot-instructions.md</a></li>
+<li><a href="https://github.com/anchildress1/checkmark-icons/blob/gh-pages/copilot/implement-feature.prompt.md" target="_blank" rel="noopener noreferrer">implement-feature.prompt.md</a></li>
+<li><a href="https://github.com/anchildress1/checkmark-icons/blob/gh-pages/copilot/commit-changes.prompt.md" target="_blank" rel="noopener noreferrer">commit-changes.prompt.md</a></li>
+<li><a href="https://github.com/anchildress1/checkmark-icons/blob/gh-pages/copilot/timestamp-handling.prompt.md" target="_blank" rel="noopener noreferrer">timestamp-handling.prompt.md</a></li>
+</ul>
+
+
+<hr>
+
+<h3>
+  <a name="ready-to-help-copilot-break-out-of-agent-jail" href="#ready-to-help-copilot-break-out-of-agent-jail">
+  </a>
+  Ready to help Copilot break out of agent jail?
+</h3>
+
+<p>Share your quirkiest hacks, wildest agent fails, or the most “I can’t believe that worked” workaround you’ve got. The weirder the better—bonus points for GIFs, rhymes, or actual Baby Billy water skis.</p>
+
+<p>So drop your story below and let’s see if we can turn this zero-balance meltdown into a full-on Agent Mode glow-up! 🦑</p>
+
+
+<hr>
+
+<blockquote>
+<h3>
+  <a name="rai-disclaimer" href="#rai-disclaimer">
+  </a>
+  🛡️ RAI Disclaimer
+</h3>
+
+<p>Everything I share here is my own perspective—created with the help of AI tools (GitHub Copilot, ChatGPT, and their friends), but always with a human in the loop. I do my best to catch accidental bias and fact-check, but if you ever spot something odd, let me know! AI isn’t perfect, and neither am I.</p>
+
+<p><strong>TL; DR:</strong> AI helped, but you can blame me for the <strong>chaos</strong>! 🫠</p>
+</blockquote>
+
+</article>
   <p><a href="https://dev.to/anchildress1/what-ive-learned-about-github-copilot-agent-mode-4co2">Read on Dev.to →</a></p>
 </main>
 </body></html>
