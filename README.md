@@ -41,16 +41,18 @@
 * Uses a **single repo variable**: `DEVTO_USERNAME` — your Dev.to username
 * Derives everything else (GitHub Pages URL, repository context) automatically
 * Generates: `index.html`, `/posts/*.html`, `robots.txt`, `sitemap.xml`
-* **Comments:** pulls your Dev.to comment URLs and content into dedicated /comments/ pages with your blurb and context (perfect for when a “comment” is basically a mini‑post)
+* **Comments:** provides a way to index those special comments that are worthy of mini-post status by pulling your predefined comments into dedicated /comments/ pages with your blurb and context
 * `robots.txt` welcomes major AI crawlers (toggle as you like): GPTBot, ClaudeBot, Claude-Web, Google-Extended, PerplexityBot, Bytespider, CCBot (Common Crawl), and more 👍
 
 ### First Run
+
 - Fetches all posts from the RSS feed
 - Generates HTML files for all posts
 - Creates `posts_data.json` to track all posts
 - Generates `index.html` and `sitemap.xml`
 
 ### Subsequent Runs
+
 - Fetches latest posts from RSS feed
 - Compares against existing posts in `posts_data.json`
 - Only processes NEW posts (stops when it finds an existing post)
@@ -70,10 +72,10 @@ This repository contains a tiny static mirror generator for Dev.to posts. It fet
 ## What this repository contains
 
 - `scripts/generate_site.py` — generator script that reads Dev.to RSS, produces `posts/` HTML files, `index.html`, `robots.txt`, and `sitemap.xml`, and persists post metadata to `posts_data.json`.
-- `posts/` — generated HTML files for individual posts (ignored by default).
-- `posts_data.json` — generated metadata tracking the known posts (ignored by default).
-- `comments/` — optional generated note pages for comment links (ignored by default).
-- `assets/` — images and static assets (a generated social card image is ignored by default).
+- `posts/` — generated HTML files for individual posts.
+- `posts_data.json` — generated metadata tracking the known posts.
+- `comments/` — optional generated note pages for comment links.
+- `assets/` — images and static assets.
 
 ## Usage
 
@@ -87,16 +89,7 @@ python scripts/generate_site.py
 
 The first run generates all posts found in the RSS feed and writes `posts_data.json`. Subsequent runs update the archive incrementally and regenerate `index.html` and `sitemap.xml`.
 
-## Restore generated artifacts
 
-All generated artifacts are stored in the branch `backup/generated-20250815-225458Z`. To restore the generated site from the backup branch:
-
-```bash
-# Example: copy generated files back into current branch (no commit)
-git checkout backup/generated-20250815-225458Z -- posts posts_data.json index.html sitemap.xml comments assets/devto-mirror.jpg
-```
-
-After running that command, inspect the files and commit them on the branch you want to host from.
 
 ## Notes
 
