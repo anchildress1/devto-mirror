@@ -64,8 +64,21 @@ def fetch_all_articles_from_api(last_run_iso=None):
 
         page += 1
 
-    print(f"Found {len(articles)} new or updated articles since last run.")
-    return articles
+    # Fetch full article content for each article (needed for body_html)
+    print(f"Found {len(articles)} articles, fetching full content...")
+    full_articles = []
+    for i, article in enumerate(articles):
+        print(f"Fetching full content for article {i+1}/{len(articles)}: {article['title'][:50]}...")
+        full_response = requests.get(f"https://dev.to/api/articles/{article['id']}")
+        full_response.raise_for_status()
+        full_articles.append(full_response.json())
+        # Add delay to avoid rate limiting
+        if i < len(articles) - 1:  # Don't sleep after the last request
+            import time
+            time.sleep(0.5)  # 500ms delay between requests
+
+    print(f"Found {len(full_articles)} articles with full content.")
+    return full_articles
 
 
 # ----------------------------
