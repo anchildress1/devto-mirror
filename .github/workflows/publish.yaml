@@ -10,9 +10,12 @@ permissions:
 
 jobs:
   build:
+    if: ${{ github.ref != 'refs/heads/gh-pages' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5.6.0
@@ -28,12 +31,64 @@ jobs:
           PAGES_REPO: ${{ github.repository }}        # "username/repo"
         run: python scripts/generate_site.py
 
+      - name: Fetch latest post from Dev.to API
+        id: test_api
+        run: |
+          # Get slug of the most recent post from the generated data
+          LATEST_SLUG=$(jq -r '.[0].slug' posts_data.json)
+          echo "Fetching post with slug: $LATEST_SLUG"
+          curl -s "https://dev.to/api/articles/${{ vars.DEVTO_USERNAME }}/$LATEST_SLUG"
+
       - name: Commit & push
         run: |
           git config user.name "ci-bot"
           git config user.email "actions@users.noreply.github.com"
           git add -A
           git commit -m "chore: auto-publish dev.to mirror" || echo "No changes"
-          git push
+          # Safer publish flow: copy generated site to a temp dir, switch to gh-pages
+          # branch (create if missing), copy generated files (only posts/comments),
+          # merge posts_data.json, regenerate index/sitemap, commit and push.
+          set -e
+          TMPDIR="$(mktemp -d)"
+          echo "Copying generated site to temporary dir: $TMPDIR"
+          # Copy expected generated artifacts (including scripts) into TMPDIR. Fail loudly so CI shows problems.
+          cp -R index.html robots.txt sitemap.xml posts posts_data.json comments scripts "$TMPDIR/"
+          echo "TMPDIR contents:"
+          ls -la "$TMPDIR" || true
 
-# Generated with the help of ChatGPT
+          # Ensure we have the remote branch info
+          git fetch --all --prune || true
+
+          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+            echo "gh-pages exists on remote, checking out"
+            git checkout gh-pages
+            git reset --hard origin/gh-pages
+          else
+            echo "gh-pages does not exist, creating orphan branch"
+            git checkout --orphan gh-pages
+            # leave working tree empty for now
+            git rm -rf .
+          fi
+
+          # Copy the generated posts and comment pages only; do NOT overwrite index.html or sitemap.xml
+          # This preserves older posts that no longer appear in the RSS feed.
+          cp -R "$TMPDIR"/posts ./
+          cp -R "$TMPDIR"/comments ./
+
+          # Save the freshly-generated posts_data.json as a separate file so we can merge
+          if [ -f "$TMPDIR/posts_data.json" ]; then
+            cp "$TMPDIR/posts_data.json" posts_data_new.json
+          fi
+
+          # Run the helper from the TMPDIR copy (this is the same helper used to generate the new data)
+          if [ -f "$TMPDIR/scripts/render_index_sitemap.py" ]; then
+            python "$TMPDIR/scripts/render_index_sitemap.py"
+          else
+            echo "Warning: render_index_sitemap.py not found in TMPDIR; skipping index/sitemap regeneration" >&2
+          fi
+
+          git add -A
+          git commit -m "chore: publish generated site to gh-pages" || echo "No changes to commit"
+          git push origin gh-pages
+
+# Generated with the help of ChatGPT and GitHub Copilot.
