@@ -60,114 +60,50 @@
 
 ---
 
-## Key Benefits
+````markdown
+# Dev.to Mirror
 
-1. **Preserves History**: Maintains all historical posts, not just the last 30 days from RSS
-2. **Efficient**: Only generates HTML for new posts, skips existing ones
-3. **Rolling Updates**: New posts appear at the top, creating a growing archive
-4. **Fast**: No need to regenerate existing content
+![social card](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror.jpg)
 
-## Files
+This repository contains a tiny static mirror generator for Dev.to posts. It fetches posts from the Dev.to RSS feed and produces a minimal, crawler-friendly static site with canonical links back to Dev.to.
 
-- `scripts/generate_site.py` - Main script with incremental update logic
-- `posts_data.json` - Persistent storage of all posts (auto-generated)
-- `.github/workflows/publish.yaml` - GitHub Actions workflow (runs daily)
+## What this repository contains
 
-## Environment Variables
+- `scripts/generate_site.py` — generator script that reads Dev.to RSS, produces `posts/` HTML files, `index.html`, `robots.txt`, and `sitemap.xml`, and persists post metadata to `posts_data.json`.
+- `posts/` — generated HTML files for individual posts (ignored by default).
+- `posts_data.json` — generated metadata tracking the known posts (ignored by default).
+- `comments/` — optional generated note pages for comment links (ignored by default).
+- `assets/` — images and static assets (a generated social card image is ignored by default).
 
-This should be set in the repo settings as an environment variable.
+## Usage
 
-- `DEVTO_USERNAME` - Your Dev.to username
-
----
-
-## Manual Usage
+Set the required environment variables and run the generator locally:
 
 ```bash
 export DEVTO_USERNAME="your-username"
-# PAGES_REPO is automatically calculated from your repository information
+# Optionally set PAGES_REPO (e.g. username/repo). If not set, the script derives it from the git remote.
 python scripts/generate_site.py
 ```
 
-The script automatically detects first run vs subsequent runs and behaves accordingly.
+The first run generates all posts found in the RSS feed and writes `posts_data.json`. Subsequent runs update the archive incrementally and regenerate `index.html` and `sitemap.xml`.
 
----
+## Restore generated artifacts
 
-## Forking and Using This Mirror
+All generated artifacts are stored in the branch `backup/generated-20250815-225458Z`. To restore the generated site from the backup branch:
 
-### Quick Setup for Your Own Dev.to Mirror
-
-1. **Fork this repository**
-   ```bash
-   # Click "Fork" on GitHub or use GitHub CLI
-   gh repo fork anchildress1/devto-mirror --clone
-   ```
-
-2. **Delete existing `gh-pages` branch**
-   ```bash
-   git push origin --delete gh-pages
-   ```
-
-3. **Configure your Dev.to username**
-   - Go to your forked repository settings
-   - Navigate to Settings → Secrets and variables → Repository variables
-   - Add a new variable:
-     - Name: `DEVTO_USERNAME`
-     - Value: `your-devto-username`
-
-4. **Enable GitHub Pages**
-   - Go to Settings → Pages
-   - Source: Deploy from a branch
-   - Branch: `gh-pages` (or your default branch)
-   - Folder: `/ (root)`
-
-5. **Run the initial setup**
-   - Go to Actions tab
-   - Click on "Dev.to Mirror (Static, Hourly)"
-   - Click "Run workflow" → "Run workflow"
-   - Wait for completion
-   - Optional: You can change the schedule (UTC) in `.github/workflows/publish.yaml` to run at a different time.
-
-6. **Your mirror is ready!**
-   - Visit `https://yourusername.github.io/devto-mirror`
-   - Posts will auto-update daily at 2:15 PM UTC
-
-### Troubleshooting
-
-- **No posts appearing**: Check that `DEVTO_USERNAME` variable is set correctly
-- **Pages not updating**: Verify GitHub Pages is enabled and workflow is running
-- **Want to start fresh**: Use the "Reset All" workflow described above
-
----
-
-## Pro Tip 💡
-
-Add a custom `description:` in your Dev.to post as a comment. It’s not mandatory, but it *can* help bots pull in a better preview — even if it’s extra work up front.
-
-```markdown
-<!-- description: One-line summary for crawlers and previews for this post. -->
+```bash
+# Example: copy generated files back into current branch (no commit)
+git checkout backup/generated-20250815-225458Z -- posts posts_data.json index.html sitemap.xml comments assets/devto-mirror.jpg
 ```
 
-> 🦄 I did do this on a couple, and I’m still waiting to see if it truly makes a difference. It wouldn’t be the first time ChatGPT talked me into something that sounded absolutely insane and ended up 100% working... I guess we'll find out!
+After running that command, inspect the files and commit them on the branch you want to host from.
 
----
+## Notes
 
-## Discovery & Timing ⏱️
+- The generator uses `feedparser`, `jinja2`, and `python-slugify`.
+- Environment variables required: `DEVTO_USERNAME` (the Dev.to username). `PAGES_REPO` is optional but can be set to `username/repo`.
 
-* GitHub Pages is friendly — usually crawled within **minutes to a few hours**
-* AI engines may take **hours to a couple days** to surface your content
-* You can speed it up with minimal linking (no big broadcast required)
-
-**Examples:**
-
-* Add a small link to this mirror in **this repo’s README**. That’s enough for discovery.
-* Optional: if you have a **profile README** (`<your-username>/<your-username>`), drop a quiet line like: `Mirror for bots → https://<github-username>.github.io/<repo>/`.
-* Optional: orgs can use an **org profile README** (`.github/profile/README.md`) with a tiny link.
-* You do **not** need to put the Pages link into your Dev.to posts if you want to keep the mirror low‑profile. The **sitemap.xml** and the link from this repo are sufficient.
-
----
-
-## Local Test 🖥️
+## Local test
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
@@ -176,8 +112,7 @@ DEVTO_USERNAME=yourname PAGES_REPO=username/repo python scripts/generate_site.py
 open index.html
 ```
 
-> 🦄 I’ve never actually tried the local test myself — if it works for you, let me know. 😅
+<small>Generated with the help of automation tooling</small>
 
----
-
-<small>Generated with the help of ChatGPT and GitHub Copilot</small>
+````
+4. **Enable GitHub Pages**

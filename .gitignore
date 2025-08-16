@@ -31,3 +31,11 @@ Thumbs.db
 # Logs
 *.log
 *.tmp
+
+# Generated site artifacts (ignored by default)
+posts/
+posts_data.*
+index.html
+sitemap.xml
+robots.txt
+comments/
