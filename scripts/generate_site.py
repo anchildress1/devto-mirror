@@ -1,13 +1,13 @@
-import os, pathlib, re, html, json
-import feedparser
+import os, pathlib, re, html, json, requests
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from slugify import slugify
 from jinja2 import Template
-from datetime import datetime
-from email.utils import parsedate_to_datetime
-from urllib.parse import urlparse
+from utils import INDEX_TMPL, SITEMAP_TMPL, parse_date, dedupe_posts_by_link
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
+LAST_RUN_FILE = "last_run.txt"
 
 assert DEVTO_USERNAME, "Missing DEVTO_USERNAME (your Dev.to username)"
 assert "/" in PAGES_REPO, "Invalid PAGES_REPO (expected 'user/repo')"
@@ -19,38 +19,54 @@ ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
 POSTS_DIR.mkdir(parents=True, exist_ok=True)
 
-class EmptyFeed:
-    """A fallback object with an empty .entries list to prevent crashes on network failure."""
-    def __init__(self):
-        self.entries = []
+def get_last_run_timestamp():
+    """Reads the timestamp from the last successful run."""
+    p = pathlib.Path(LAST_RUN_FILE)
+    if not p.exists():
+        return None
+    return p.read_text(encoding="utf-8").strip()
 
-FEED_URL = f"https://dev.to/feed/{DEVTO_USERNAME}"
-try:
-    feed = feedparser.parse(FEED_URL)
-    if hasattr(feed, 'bozo') and feed.bozo:
-        print(f"Warning: RSS feed parsing issue: {getattr(feed, 'bozo_exception', 'Unknown error')}")
-        # For testing purposes, continue with empty feed
-    if not hasattr(feed, 'entries') or not feed.entries:
-        print("No entries found in RSS feed")
-except Exception as e:
-    print(f"Error fetching RSS feed: {e}")
-    # Use the fallback empty feed
-    feed = EmptyFeed()
+def set_last_run_timestamp():
+    """Writes the current UTC timestamp to the run file."""
+    p = pathlib.Path(LAST_RUN_FILE)
+    p.write_text(datetime.now(timezone.utc).isoformat(), encoding="utf-8")
 
-# Log raw feed entries
-print("--- Raw feed entries ---")
-try:
-    # Attempt to print the raw text if available from the feed object
-    if hasattr(feed, 'text'):
-        print(feed.text)
-    else:
-        # Fallback to printing entries if raw text is not available
-        import json
-        for entry in feed.entries:
-            print(json.dumps(entry, indent=2, default=str))
-except Exception as log_e:
-    print(f"Error logging raw feed data: {log_e}")
-print("--- End raw feed entries ---")
+def fetch_all_articles_from_api(last_run_iso=None):
+    """Fetch all articles from the Dev.to API, paginating if necessary.
+    If last_run_iso is provided, it will only fetch articles published after that time.
+    """
+    articles = []
+    page = 1
+    while True:
+        print(f"Fetching page {page} of articles...")
+        api_url = f"https://dev.to/api/articles?username={DEVTO_USERNAME}&page={page}&per_page=100"
+        response = requests.get(api_url)
+        response.raise_for_status()
+        data = response.json()
+        if not data:
+            break
+
+        new_articles = data
+        # If a last run timestamp is provided, filter out older posts
+        if last_run_iso:
+            last_run_dt = datetime.fromisoformat(last_run_iso)
+            new_articles = [
+                article for article in data
+                if datetime.fromisoformat(article['published_at'].replace("Z", "+00:00")) > last_run_dt
+            ]
+
+        articles.extend(new_articles)
+
+        # If we are filtering and the number of articles fetched is less than a full page,
+        # or if we added fewer articles than we fetched, we can stop.
+        if last_run_iso and (len(data) < 100 or len(new_articles) < len(data)):
+             break
+
+        page += 1
+
+    print(f"Found {len(articles)} new or updated articles since last run.")
+    return articles
+
 
 # ----------------------------
 # Templates (posts + index)
@@ -71,33 +87,6 @@ PAGE_TMPL = Template("""<!doctype html><html lang="en"><head>
 </body></html>
 """)
 
-INDEX_TMPL = Template("""<!doctype html><html lang="en"><head>
-<meta charset="utf-8">
-<title>{{ username }} — Dev.to Mirror</title>
-<link rel="canonical" href="{{ canonical }}">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-</head><body>
-<main>
-  <h1>{{ username }} — Dev.to Mirror</h1>
-  <ul>
-  {% for p in posts %}
-    <li><a href="posts/{{ p.slug }}.html">{{ p.title }}</a> — <small>{{ p.date }}</small></li>
-  {% endfor %}
-  </ul>
-  {% if comments %}<h2>Comment Notes</h2>
-  <ul>
-  {% for c in comments %}
-    <li><a href="{{ c.local }}">{{ c.text }}</a></li>
-  {% endfor %}
-  </ul>{% endif %}
-  <p>Canonical lives on Dev.to. This is just a crawler-friendly mirror.</p>
-</main>
-</body></html>
-""")
-
-# ----------------------------
-# Minimal comment notes (no scraping)
-# ----------------------------
 COMMENT_NOTE_TMPL = Template("""<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ title }}</title>
@@ -229,19 +218,6 @@ Allow: /
 Sitemap: {home}sitemap.xml
 """
 
-SITEMAP_TMPL = Template("""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>{{ home }}</loc></url>
-  {% for p in posts %}
-    {# Prefer canonical Dev.to link if available #}
-    <url><loc>{{ p.link or (home + 'posts/' + p.slug + '.html') }}</loc></url>
-  {% endfor %}
-  {% for c in comments %}
-    <url><loc>{{ c.url or (home + c.local) }}</loc></url>
-  {% endfor %}
-</urlset>
-""")
-
 # ----------------------------
 # Helpers
 # ----------------------------
@@ -255,56 +231,18 @@ def strip_html(text):
     return collapsed.strip()
 
 class Post:
-    def __init__(self, entry):
-        self.title = getattr(entry, "title", "Untitled")
-        self.link = getattr(entry, "link", HOME)
-        # Normalize date to ISO 8601 if possible; fall back to raw string
-        raw_date = getattr(entry, "published", "") or getattr(entry, "updated", "") or ""
-        iso_date = ""
-        try:
-            # feedparser may provide a parsed time tuple
-            if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                iso_date = datetime(*entry.published_parsed[:6]).isoformat() + "Z"
-            elif raw_date:
-                # Try RFC-style parsing first, then ISO
-                try:
-                    dt = parsedate_to_datetime(raw_date)
-                    iso_date = dt.isoformat()
-                except Exception:
-                    try:
-                        iso_date = datetime.fromisoformat(raw_date).isoformat()
-                    except Exception:
-                        iso_date = raw_date
-        except Exception:
-            iso_date = raw_date
-        self.date = iso_date
-        # Prefer full content, then summary, then empty
-        if getattr(entry, "content", None):
-            content_html = entry.content[0].value
-        elif getattr(entry, "summary", None):
-            content_html = entry.summary
-        else:
-            content_html = ""
-        self.content_html = content_html
+    def __init__(self, api_data):
+        self.title = api_data.get("title", "Untitled")
+        self.link = api_data.get("url", HOME)
+        self.date = api_data.get("published_at", "")
+        self.content_html = api_data.get("body_html", "")
 
-        # Prioritize the dedicated 'description' field from the feed, which is
-        # often populated by Dev.to's YAML frontmatter.
-        raw_desc = getattr(entry, "description", "")
-        if raw_desc:
-            desc_text = strip_html(raw_desc)
-        else:
-            # Fallback: Use the stripped post content itself.
-            desc_text = strip_html(content_html)
-
-        # Ensure description is trimmed and then truncated to 160 chars for SEO
-        desc_text = (desc_text or "").strip()
+        # Use the API's description, truncate for SEO
+        desc_text = (api_data.get("description", "") or "").strip()
         self.description = desc_text[:160]
 
-        # Extract slug from the canonical link (URL path's last segment)
-        # This is more reliable than slugifying the title. No truncation.
-        path = urlparse(self.link).path
-        slug_from_link = path.rstrip('/').split('/')[-1] if path else ''
-        self.slug = slug_from_link or slugify(self.title) or "post"
+        # Use the slug directly from the API
+        self.slug = api_data.get("slug", slugify(self.title) or "post")
 
     def to_dict(self):
         """Convert Post to dictionary for JSON serialization"""
@@ -373,27 +311,7 @@ def load_existing_posts(path="posts_data.json"):
 def _parse_date_str(datestr):
     """Try to parse a date string from RFC or ISO formats. Returns a timezone-aware
     datetime when possible, otherwise None."""
-    if not datestr:
-        return None
-    # If it's already a datetime, return
-    if isinstance(datestr, datetime):
-        return datestr
-    s = str(datestr).strip()
-    try:
-        # handle trailing Z
-        if s.endswith('Z'):
-            s2 = s.replace('Z', '+00:00')
-            return datetime.fromisoformat(s2)
-    except Exception:
-        pass
-    try:
-        return parsedate_to_datetime(s)
-    except Exception:
-        pass
-    try:
-        return datetime.fromisoformat(s)
-    except Exception:
-        return None
+    return parse_date(datestr)
 
 def save_posts_data(posts, path="posts_data.json"):
     """Save posts to JSON file"""
@@ -405,86 +323,55 @@ def is_first_run():
     """Check if this is the first run by looking for posts_data.json"""
     return not pathlib.Path("posts_data.json").exists()
 
-def find_new_posts(rss_posts, existing_posts):
-    """Find new posts from RSS that aren't in existing posts.
-    Since RSS posts are ordered by date (newest first), we can stop
-    when we find a post that already exists.
-    """
-    # If no existing posts, everything is new
-    if not existing_posts:
-        return rss_posts
-
-    # Build a map of existing links for fast lookup
-    existing_links = {post.link: post for post in existing_posts}
-
-    new_posts = []
-    for post in rss_posts:
-        # If this link exists, compare dates and keep the newest in existing_posts
-        if post.link in existing_links:
-            # We encountered a post already present; treat remaining RSS items as older
-            break
-        new_posts.append(post)
-
+def find_new_posts(api_articles, existing_posts):
+    """Find new posts from the API that aren't in existing posts."""
+    existing_links = {post['link'] for post in existing_posts}
+    new_posts = [
+        Post(article) for article in api_articles
+        if article['url'] not in existing_links
+    ]
     return new_posts
 
 # ----------------------------
 # Build posts (incremental updates)
 # ----------------------------
-entries = feed.entries or []
-rss_posts = [Post(e) for e in entries]
+last_run_timestamp = get_last_run_timestamp()
+api_articles = fetch_all_articles_from_api(last_run_timestamp)
+
+# Convert API articles to Post objects
+new_posts = [Post(article) for article in api_articles]
+
+if not new_posts:
+    print("No new posts to process. Exiting.")
+    # Still update the timestamp to avoid re-checking the same period
+    set_last_run_timestamp()
+    exit()
 
 # Load existing posts from previous runs
-existing_posts = load_existing_posts()
+existing_posts_data = load_existing_posts()
 
-def _key_for_post_obj(post):
-    # Prefer slug, otherwise last path segment of the link
-    slug = getattr(post, 'slug', None)
-    if slug:
-        return slug.lower()
-    link = getattr(post, 'link', '')
-    path = urlparse(link).path
-    last = path.rstrip('/').split('/')[-1]
-    return (last or link).lower()
+# Create a set of existing post URLs for faster lookup
+existing_links = {p.get('link', '') for p in existing_posts_data}
 
-if is_first_run():
-    print("First run: generating all posts from RSS feed")
-    new_posts = rss_posts
-    all_posts = rss_posts
-else:
-    print("Subsequent run: checking for new posts")
-    new_posts = find_new_posts(rss_posts, existing_posts)
+# Filter out new posts that already exist
+truly_new_posts = []
+for post in new_posts:
+    if post.link not in existing_links:
+        truly_new_posts.append(post)
 
-    # Merge by normalized key (slug or last path segment). Prefer the newest
-    # post when duplicates exist. existing_posts are treated as older unless
-    # their parsed date is newer.
-    merged = {}
+# Combine all posts: existing + truly new
+all_posts_data = existing_posts_data.copy()
+for post in truly_new_posts:
+    all_posts_data.append(post.to_dict())
 
-    def _add_candidate(p):
-        key = _key_for_post_obj(p)
-        cand_date = _parse_date_str(getattr(p, 'date', None))
-        existing = merged.get(key)
-        if not existing:
-            merged[key] = {'post': p, 'date': cand_date}
-            return
-        # if existing has no date, prefer candidate if it has one
-        if existing['date'] is None and cand_date is not None:
-            merged[key] = {'post': p, 'date': cand_date}
-            return
-        if cand_date is None:
-            return
-        # prefer newer
-        if existing['date'] is None or cand_date > existing['date']:
-            merged[key] = {'post': p, 'date': cand_date}
+# Deduplicate and sort all posts by date, newest first
+all_posts_data = dedupe_posts_by_link(all_posts_data)
 
-    # Add new posts first (RSS newest), then existing posts to fill gaps
-    for p in new_posts:
-        _add_candidate(p)
-    for p in existing_posts:
-        _add_candidate(p)
+# Convert dicts back to Post objects for rendering
+all_posts = [Post.from_dict(p) for p in all_posts_data]
 
-    # Flatten merged mapping and sort newest-first
-    all_posts = [v['post'] for k, v in sorted(merged.items(), key=lambda kv: kv[1]['date'] or datetime.min, reverse=True)]
-    print(f"Found {len(new_posts)} new posts")
+print(f"Found {len(truly_new_posts)} new posts. Total posts: {len(all_posts)}")
+
 
 # Generate (or regenerate) HTML files for all posts and ensure the
 # page <link rel="canonical"> matches the feed-provided URL saved in
@@ -504,22 +391,10 @@ for p in all_posts:
     print(f"Wrote: {p.slug}.html (canonical: {canonical})")
 
 # Save the updated posts data for next run
-# Do not overwrite feed-provided links. However, preserve existing descriptions
-# when the new feed entry lacks a meaningful description.
-    # Use normalized key mapping to prefer existing descriptions when present
-existing_key_map = { _key_for_post_obj(ep): ep for ep in existing_posts }
-for i, post in enumerate(all_posts):
-    try:
-        key = _key_for_post_obj(post)
-        existing = existing_key_map.get(key)
-        if existing:
-            new_desc = (post.description or "").strip()
-            if (not new_desc) or (new_desc == post.title):
-                post.description = existing.description
-    except Exception:
-        pass
+save_posts_data(all_posts_data)
 
-save_posts_data(all_posts)
+# Update the timestamp for the next run
+set_last_run_timestamp()
 
 # ----------------------------
 # Build minimal comment pages (optional)

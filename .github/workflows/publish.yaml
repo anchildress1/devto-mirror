@@ -23,7 +23,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install feedparser jinja2 python-slugify
+        run: pip install requests jinja2 python-slugify
 
       - name: Generate site
         env:
@@ -31,13 +31,7 @@ jobs:
           PAGES_REPO: ${{ github.repository }}        # "username/repo"
         run: python scripts/generate_site.py
 
-      - name: Fetch latest post from Dev.to API
-        id: test_api
-        run: |
-          # Get slug of the most recent post from the generated data
-          LATEST_SLUG=$(jq -r '.[0].slug' posts_data.json)
-          echo "Fetching post with slug: $LATEST_SLUG"
-          curl -s "https://dev.to/api/articles/${{ vars.DEVTO_USERNAME }}/$LATEST_SLUG"
+      # API is now used inside the generator; no separate probe needed
 
       - name: Commit & push
         run: |
@@ -51,8 +45,11 @@ jobs:
           set -e
           TMPDIR="$(mktemp -d)"
           echo "Copying generated site to temporary dir: $TMPDIR"
-          # Copy expected generated artifacts (including scripts) into TMPDIR. Fail loudly so CI shows problems.
-          cp -R index.html robots.txt sitemap.xml posts posts_data.json comments scripts "$TMPDIR/"
+          # Copy required artifacts; fail loudly if required ones are missing
+          cp -R index.html robots.txt sitemap.xml posts posts_data.json scripts "$TMPDIR/"
+          # Optional artifacts
+          if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
+          if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
           echo "TMPDIR contents:"
           ls -la "$TMPDIR" || true
 
@@ -74,6 +71,10 @@ jobs:
           # This preserves older posts that no longer appear in the RSS feed.
           cp -R "$TMPDIR"/posts ./
           cp -R "$TMPDIR"/comments ./
+          # Persist last_run.txt so incremental updates work across runs
+          if [ -f "$TMPDIR/last_run.txt" ]; then
+            cp "$TMPDIR/last_run.txt" ./last_run.txt
+          fi
 
           # Save the freshly-generated posts_data.json as a separate file so we can merge
           if [ -f "$TMPDIR/posts_data.json" ]; then

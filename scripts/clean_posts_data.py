@@ -9,32 +9,11 @@ import json
 from pathlib import Path
 from datetime import datetime
 from email.utils import parsedate_to_datetime
+from utils import parse_date
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = ROOT / "posts_data.json"
 BACKUP_FILE = ROOT / "posts_data.json.bak"
-
-
-def parse_date(d):
-    if not d:
-        return None
-    if isinstance(d, (int, float)):
-        try:
-            return datetime.fromtimestamp(d)
-        except Exception:
-            return None
-    if isinstance(d, datetime):
-        return d
-    # try RFC-style parse first
-    try:
-        return parsedate_to_datetime(d)
-    except Exception:
-        pass
-    # try ISO
-    try:
-        return datetime.fromisoformat(d)
-    except Exception:
-        return None
 
 
 def key_for(post):

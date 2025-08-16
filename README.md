@@ -40,25 +40,27 @@
 * Runs ~~hourly~~ daily at **`9:15 AM EST`** so you (almost) never post exactly on the mirror time
 * Uses a **single repo variable**: `DEVTO_USERNAME` — your Dev.to username
 * Derives everything else (GitHub Pages URL, repository context) automatically
-* Generates: `index.html`, `/posts/*.html`, `robots.txt`, `sitemap.xml`
+* Generates: `index.html`, `/posts/*.html`, `robots.txt`, `sitemap.xml`, `last_run.txt`
 * **Comments:** provides a way to index those special comments that are worthy of mini-post status by pulling your predefined comments into dedicated /comments/ pages with your blurb and context
 * `robots.txt` welcomes major AI crawlers (toggle as you like): GPTBot, ClaudeBot, Claude-Web, Google-Extended, PerplexityBot, Bytespider, CCBot (Common Crawl), and more 👍
 
 ### First Run
 
-- Fetches all posts from the RSS feed
+- Fetches all posts via the Dev.to public API
 - Generates HTML files for all posts
 - Creates `posts_data.json` to track all posts
 - Generates `index.html` and `sitemap.xml`
 
 ### Subsequent Runs
 
-- Fetches latest posts from RSS feed
+- Fetches latest posts via the Dev.to API
 - Compares against existing posts in `posts_data.json`
 - Only processes NEW posts (stops when it finds an existing post)
 - Generates HTML files only for new posts
 - Updates `posts_data.json` with new posts at the top
 - Regenerates `index.html` and `sitemap.xml` with complete post list
+
+Incremental updates are keyed off `last_run.txt`, which stores the ISO8601 UTC timestamp of the last successful run. The generator only processes articles with `published_at` after that timestamp and then updates the file.
 
 **Note on Descriptions:** Post descriptions are automatically truncated to 160 characters to align with SEO best practices for search engine result snippets.
 
@@ -69,7 +71,7 @@
 
 ![social card](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror.jpg)
 
-This repository contains a tiny static mirror generator for Dev.to posts. It fetches posts from the Dev.to RSS feed and produces a minimal, crawler-friendly static site with canonical links back to Dev.to.
+This repository contains a tiny static mirror generator for Dev.to posts. It fetches posts from the Dev.to API and produces a minimal, crawler-friendly static site with canonical links back to Dev.to.
 
 ## What this repository contains
 
@@ -95,14 +97,14 @@ The first run generates all posts found in the RSS feed and writes `posts_data.j
 
 ## Notes
 
-- The generator uses `feedparser`, `jinja2`, and `python-slugify`.
+- The generator uses `requests`, `jinja2`, and `python-slugify`.
 - Environment variables required: `DEVTO_USERNAME` (the Dev.to username). `PAGES_REPO` is optional but can be set to `username/repo`.
 
 ## Local test
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install feedparser jinja2 python-slugify
+pip install requests jinja2 python-slugify
 DEVTO_USERNAME=yourname PAGES_REPO=username/repo python scripts/generate_site.py
 open index.html
 ```
