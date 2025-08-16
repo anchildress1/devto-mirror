@@ -60,6 +60,8 @@
 - Updates `posts_data.json` with new posts at the top
 - Regenerates `index.html` and `sitemap.xml` with complete post list
 
+**Note on Descriptions:** Post descriptions are automatically truncated to 160 characters to align with SEO best practices for search engine result snippets.
+
 ---
 
 ````markdown

@@ -287,20 +287,24 @@ class Post:
             content_html = ""
         self.content_html = content_html
 
-        # Attempt to extract a special HTML comment description from the content
-        # Format: <!-- description: Your description here -->
-        desc_match = re.search(r"<!--\s*description:\s*(.*?)-->", content_html, re.IGNORECASE | re.DOTALL)
-        if desc_match:
-            desc_text = strip_html(desc_match.group(1))
-        else:
-            # Prefer entry.description if present, otherwise fall back to stripped content_html
-            raw_desc = getattr(entry, "description", "") or content_html
+        # Prioritize the dedicated 'description' field from the feed, which is
+        # often populated by Dev.to's YAML frontmatter.
+        raw_desc = getattr(entry, "description", "")
+        if raw_desc:
             desc_text = strip_html(raw_desc)
+        else:
+            # Fallback: Use the stripped post content itself.
+            desc_text = strip_html(content_html)
 
-        # Ensure description is trimmed and then truncated to 300 chars
+        # Ensure description is trimmed and then truncated to 160 chars for SEO
         desc_text = (desc_text or "").strip()
-        self.description = desc_text[:300]
-        self.slug = (slugify(self.title)[:80] or slugify(self.link)) or "post"
+        self.description = desc_text[:160]
+
+        # Extract slug from the canonical link (URL path's last segment)
+        # This is more reliable than slugifying the title. No truncation.
+        path = urlparse(self.link).path
+        slug_from_link = path.rstrip('/').split('/')[-1] if path else ''
+        self.slug = slug_from_link or slugify(self.title) or "post"
 
     def to_dict(self):
         """Convert Post to dictionary for JSON serialization"""
