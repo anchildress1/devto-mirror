@@ -237,9 +237,8 @@ class Post:
         self.date = api_data.get("published_at", "")
         self.content_html = api_data.get("body_html", "")
 
-        # Use the API's description, truncate for SEO
-        desc_text = (api_data.get("description", "") or "").strip()
-        self.description = desc_text[:160]
+        # Use the API's description as-is
+        self.description = (api_data.get("description", "") or "").strip()
 
         # Use the slug directly from the API
         self.slug = api_data.get("slug", slugify(self.title) or "post")
