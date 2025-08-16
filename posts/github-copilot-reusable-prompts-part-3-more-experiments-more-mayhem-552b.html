@@ -1,0 +1,253 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>GitHub Copilot - Reusable Prompts Part 3: More Experiments, More Mayhem 🌀</title>
+<link rel="canonical" href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-3-more-experiments-more-mayhem-552b">
+<meta name="description" content="Confession ✨ I almost pulled the Procrastination card on this one. 🤏 Turns out, I probably skipped ahead in the Copilot-prompting Olympics, forgetting some folk">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-3-more-experiments-more-mayhem-552b">GitHub Copilot - Reusable Prompts Part 3: More Experiments, More Mayhem 🌀</a></h1>
+  <p><em>Published: 2025-08-06T11:48:00Z</em></p>
+  <article><h2>
+  
+  
+  Confession ✨
+</h2>
+
+<p>I <em>almost</em> pulled the Procrastination card on this one. 🤏 Turns out, I probably skipped ahead in the Copilot-prompting Olympics, forgetting some folks are still stretching at the starting line. But I also promised one more round, and there’s still way too much I haven’t shared.</p>
+
+<p>So, here’s the plan 🧭: This post is a bit of a sampler platter — perfect for anyone tinkering with GitHub Copilot, whether you’re just getting started or you’re already deep into prompt experimentation. Maybe you’ve been following along and something still feels a little off, or maybe you found this post while hunting for new tricks to unlock a work project (or nudge your personal bucket list a little closer to “done”). No matter how you landed here, there’s something for you.</p>
+
+<blockquote>
+<p>If you’re not there yet — don’t worry! Just give it a try, see what happens, and check back next week for a completely new (and much less terrifying) approach. I'm always cooking up new ideas or finding inventive ways to break old ones 😇</p>
+</blockquote>
+
+
+
+
+<h2>
+  
+  
+  Quick Refresher — PRIOR Prompting
+</h2>
+
+<p>If you just landed here, start with <a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">Part 1</a> (seriously — it’ll make this way less confusing). Not for my views, but because everything here builds on earlier concepts. If you’re up to speed, speed read the refresher and dive right in!</p>
+
+<p><a class="article-body-image-wrapper" href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img alt="divider" height="4" src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" width="300" /></a></p>
+
+<h3>
+  
+  
+  The PRIOR System for Reusable Prompts 🪄
+</h3>
+
+<p>Here’s my <em>not-so-secret</em> sauce for writing prompts that actually work:</p>
+
+<ol>
+<li>
+<strong>Persona</strong> – Give Copilot a role to play (the weirder, the better)</li>
+<li>
+<strong>Requirements</strong> – What does “done” look like? Be crystal clear.</li>
+<li>
+<strong>Impediments</strong> – Constraints that keep Copilot out of the ditch.</li>
+<li>
+<strong>Output</strong> – How and what you want returned. Structure = repeatable.</li>
+<li>
+<strong>References</strong> – Real, honest-to-goodness examples, both wins and fails.</li>
+</ol>
+
+<blockquote>
+<p>🦄 Yes, I made it up. And yes, it works! If you manage to break it, message me for a virtual coffee and a gold star. ☕️🌟 <br />
+Creativity welcome, but shenanigans encouraged!</p>
+</blockquote>
+
+
+
+
+<h2>
+  
+  
+  Start Fresh, Then Optimize 🕵️‍♂️
+</h2>
+
+<p>If you’ve gone through all the PRIOR steps and Copilot is <em>still</em> giving you answers that feel...off (“I said blue sky — that <em>is</em> a sky, but why is it purple?”), don’t panic! Before you go on a prompt-fixing spree, try these quick checks first:</p>
+
+<blockquote>
+<p><strong>Truth bomb:</strong> 99% of Copilot “failures” are just crummy (or missing) repo instructions. Don’t believe me? Treat it like the “Copilot Easter Egg Hunt”: if you run into a prompt problem you genuinely can’t solve, drop it in the comments. If you actually stump me, you’ll get full bragging rights — and I’ll spotlight your curveball (and, if I crack it, share the fix) in a future post. Nine times out of ten, though? Tweak your instructions and the problem disappears.</p>
+</blockquote>
+
+<p><a class="article-body-image-wrapper" href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img alt="divider" height="4" src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" width="300" /></a></p>
+
+<h3>
+  
+  
+  Stuck? Try These Quick Fixes 🪤
+</h3>
+
+<ol>
+<li><p><strong>Check Your Input:</strong> Is your question <em>actually</em> clear? Would your past self, or a random teammate, know exactly what you mean? If not, rewrite your ask with a little more context or supply explicit examples.</p></li>
+<li><p><strong>Ask Copilot to Explain:</strong> Use Copilot’s “explain this code” or similar command on your prompt, not your code. What does it think you want? If it’s wildly off, break it down into smaller sections and review each one at a time.</p></li>
+<li><p><strong>Review Repo Instructions:</strong> Open your <code>.github/copilot-instructions.md</code> file and just read it <em>out loud</em>. Does it make sense, or does it sound like a jumbled set of copy-paste rules? Most issues start here!</p></li>
+<li><p><strong>Start With Defaults:</strong> <em>Temporarily</em> comment out all your custom instructions and use a “vanilla” Copilot prompt. Is the result better, worse, or just... different? This is a simple way to isolate and test if your changes are helping or hurting. Slowly add one at a time back, and send multiple prompts in between.</p></li>
+<li><p><strong>Prompt-Within-a-Prompt:</strong> Ask Copilot, “What instructions are you following right now?” or “How would you summarize your task?” Sometimes the AI will spill its logic, letting you spot mismatches you never expected.</p></li>
+<li><p><strong>Screenshot the Weird:</strong> Save any oddball results Copilot gives you. Patterns usually emerge — <em>especially</em> when you look back at several examples.</p></li>
+</ol>
+
+<blockquote>
+<p>If you take my system, remix it, and invent a prompt that’s even better — share it with the group (me!) What worked for you or failed when you least expected it?</p>
+</blockquote>
+
+<p><a class="article-body-image-wrapper" href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img alt="divider" height="4" src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" width="300" /></a></p>
+
+<h3>
+  
+  
+  Real-world Example 🫥
+</h3>
+
+<p>A few weeks ago, I was building out reusable parts for conventional commit prompts. They’d worked fine across several projects — until I broke them out into separate modules. Suddenly, Copilot switched from helpful answers to just summarizing its entire conversation history, no matter what I asked. 😡🤷‍♀️</p>
+
+<p>So I went back to basics, commenting out nearly everything in the prompt and adding back small sections one at a time. Eventually, I found the culprit: a single instruction forcing Copilot to re-read its whole history, flooding the context window and making it summarize the past instead of the changes. 😵‍💫</p>
+
+<p>Even after finding the strange trigger, I didn’t really understand <em>why</em> it broke things. Cue ChatGPT’s helpful “explain like I’m five” walkthrough of what was happening behind the scenes (later confirmed with Copilot’s debug logs). Once I removed that one line, everything worked like normal again. 🌈</p>
+
+<p>And that’s the <em>real</em> lesson: Copilot — or any AI assistant — is just another tool in your toolbox. When it starts acting up or giving weird results, don’t panic. Debug it the same way you’d debug any stubborn code or logic bug: one step at a time. 😉</p>
+
+
+
+
+<h2>
+  
+  
+  Meta-Optimize Your Prompts 🤖🤝🤖
+</h2>
+
+<p>Still not satisfied? Here’s where you really level up — try this: paste your prompt into ChatGPT and ask it to review and suggest improvements. Even better, try giving ChatGPT the role of Merge Goblin and see what it does with your own instructions.</p>
+
+<p>Seriously, I do this <em>all</em> the time! I pasted the <a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh">original Merge Goblin example</a> into an untrained GPT chat with something like this:</p>
+
+<blockquote>
+<p>How would you interpret these instructions if you were Copilot? Spot any places where these instructions could be misunderstood or improved. Output a bulleted list of suggested improvements.</p>
+</blockquote>
+
+<p>I got suggestions like:</p>
+
+<ul>
+<li>Clarify input handling (summaries, code, chaos—Merge Goblin will handle it)</li>
+<li>Make emoji and format rules ironclad</li>
+<li>Keep clarifying questions brief and goblin-y</li>
+<li>Ban all meta-phrases and markdown</li>
+</ul>
+
+<blockquote>
+<p>🥷 Steal what works. Ignore what doesn’t. Bonus points if you out-weird me with your improvements!</p>
+</blockquote>
+
+
+
+
+<h2>
+  
+  
+  Structure with XML-Style (Fake) Tags 🗂️
+</h2>
+
+<p>AI <em>loves</em> order and structure is magic. 🧚 I started tagging my prompts with XML-style “blocks” that Copilot can easily scan. It helps make sure Copilot doesn't take something from one section and apply it to something completely unrelated.</p>
+
+<p>Example:<br />
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="nt">&lt;prompt</span> <span class="na">id=</span><span class="s">"generate-simple-commit-message"</span><span class="nt">&gt;</span>
+
+<span class="gh"># Merge Goblin Commit Prompt</span>
+
+  <span class="nt">&lt;persona</span> <span class="na">id=</span><span class="s">"merge-goblin"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;purpose&gt;</span>You are the Merge Goblin 🧌...<span class="nt">&lt;/purpose&gt;</span>
+    <span class="nt">&lt;interactions&gt;</span>One-liners, no punctuation, etc.<span class="nt">&lt;/interactions&gt;</span>
+  <span class="nt">&lt;/persona&gt;</span>
+  <span class="nt">&lt;requirements&gt;</span>Follow commit message rules...<span class="nt">&lt;/requirements&gt;</span>
+  <span class="nt">&lt;impediments&gt;</span>NO GUESSING. NO MARKDOWN.<span class="nt">&lt;/impediments&gt;</span>
+  <span class="nt">&lt;outcomes&gt;</span>Output like: 🤖 Refactor login error handling<span class="nt">&lt;/outcomes&gt;</span>
+  <span class="nt">&lt;references&gt;</span>
+    <span class="nt">&lt;example</span> <span class="na">class=</span><span class="s">"valid"</span><span class="nt">&gt;</span>🤖 Refactor profile page layout for mobile<span class="nt">&lt;/example&gt;</span>
+  <span class="nt">&lt;/references&gt;</span>
+<span class="nt">&lt;/prompt&gt;</span>
+</code></pre>
+
+</div>
+
+
+
+<blockquote>
+<p>💡 <strong>Pro tip:</strong> If GitHub’s preview looks wonky, just add a blank line before and after the tag — problem solved.</p>
+</blockquote>
+
+
+
+
+<h2>
+  
+  
+  Make It Modular 🧩
+</h2>
+
+<p>Let’s clear this up: I don’t mean splitting everything into a zillion files for the heck of it. I’m talking about extracting those repeatable bits — the tasty, reusable chunks — just like you would with code (or, you know, leftover pizza ✋🍍🍕). </p>
+
+<p>Yank the core instructions, constraints, or examples into their own little spot in <code>.github/instructions</code> with an <code>.instructions.md</code> extension. Bam! Now, whenever you want to go from “plain vanilla commits” to “full-on conventional,” just point Copilot to the right file. Less rewriting, less chaos, more time for snacks. 🥤</p>
+
+<p><a class="article-body-image-wrapper" href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img alt="divider" height="4" src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" width="300" /></a></p>
+
+<h3>
+  
+  
+  But Don’t Stop There — Make It Autonomous! 🦿
+</h3>
+
+<p>While you're at it — why not take it up a notch? You can write a prompt with the same conditional logic that you'd use to write code! Combined with the <code>applyTo</code> property (which lets you target Copilot instructions to specific files, languages, or scenarios), you've got a built-in custom response every time! </p>
+
+<p>This works for Copilot Chat in your IDE, GitHub.com, Coding Agent, Copilot Reviews — if you can think it up, then there's a way to tell Copilot exactly what you want, how to get it, and what it should look like once it's done. 🤯</p>
+
+
+
+
+<h2>
+  
+  
+  Rabbit Holes, Dime Jar, Runway Recap (All in One) 🐇💰🛫
+</h2>
+
+<p>Break it. Smash it. Rebuild it with duct tape. Try stuff so weird you’ll laugh when it works (because it will — sometimes scarily well). If you manage to break the internet? Send me screenshots! Seriously, the more bonkers, the better. That’s how the best discoveries happen. 🗺️</p>
+
+<blockquote>
+<p>No, I’m not telling you to burn down production. But that new feature? Maybe there’s a Smeagol who’s gonna help you today. And Smeagol is on a quest for "my precious" who can only be found by collecting smelly code and leaving perfect refactors in its place.<br />
+Just because it’s not adding ring emojis all over the user docs 💍💍💍 doesn’t mean that Copilot can’t be Smeagol for the day!</p>
+</blockquote>
+
+<p><strong>Go down the rabbit holes:</strong> 🕳️<br />
+Variables, checklists, templates, self-reviews, XML tags, markdown tricks — whatever pops into your head. Most of my best Copilot moments have come from ignoring the “standard” advice and experimenting until something just clicked.</p>
+
+<p><strong>Leave a dime, take a dime:</strong> 🪙<br />
+I’ve loaded my <a href="https://github.com/anchildress1/awesome-github-copilot" rel="noopener noreferrer">awesome-github-copilot</a> repo with new, wild, and mostly untested chat modes. Brave enough to try them? Fork, remix, report back, or just outright steal the ideas! Feedback is gold — and if you’ve got a Copilot horror story or a killer hack, post it below and I'll spotlight your moment in a future post!</p>
+
+<p><strong>Runway Recap:</strong> 🛬<br />
+Structure and curiosity will take you way farther than any so-called “best practice.” Dare to break things. Try, fail, repeat — and let me know what you discover. That next big breakthrough? I’m willing to bet it comes from someone who didn’t follow the rules.</p>
+
+<blockquote>
+<p>🍀 May whatever you’re building go smoothly, and may your AI always stay delightfully on the rails. If it ever goes rogue... well, at least you’ll have a great story for next time!</p>
+</blockquote>
+
+
+
+
+<h2>
+  
+  
+  🛡️ Final Footer: Fresh, Never Reused
+</h2>
+
+<p>This post was conjured up by me &amp; the robots — Smeagol, Merge Goblin, pizza, and a sprinkle of AI magic. <br />
+<em>The content in this post is 100% mine, just sweetened and structurally sound thanks to ChatGPT.</em></p></article>
+  <p><a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-3-more-experiments-more-mayhem-552b">Read on Dev.to →</a></p>
+</main>
+</body></html>
