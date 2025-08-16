@@ -315,7 +315,7 @@ def _parse_date_str(datestr):
 
 def save_posts_data(posts, path="posts_data.json"):
     """Save posts to JSON file"""
-    posts_data = [post.to_dict() for post in posts]
+    posts_data = [post.to_dict() if hasattr(post, 'to_dict') else post for post in posts]
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(posts_data, f, indent=2, ensure_ascii=False)
 
