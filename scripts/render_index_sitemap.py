@@ -7,6 +7,7 @@ from jinja2 import Template
 from datetime import datetime
 from email.utils import parsedate_to_datetime
 from utils import INDEX_TMPL, SITEMAP_TMPL, parse_date, dedupe_posts_by_link
+from slugify import slugify
 
 ROOT = pathlib.Path('.')
 
@@ -45,7 +46,7 @@ def load_comment_manifest(path='comments.txt'):
         context = ctx[0] if ctx else ''
         # normalize comment id from URL fragment or path
         m = re.search(r"/comment/([A-Za-z0-9]+)", url) or re.search(r"#comment-([A-Za-z0-9_-]+)", url)
-        cid = m.group(1) if m else (re.sub(r'[^A-Za-z0-9]+','-', url)[:48])
+        cid = m.group(1) if m else slugify(url)[:48]
         local = f"comments/{cid}.html"
         label = (context or url)
         if len(label) > 80:
@@ -77,6 +78,16 @@ def main():
                 print("Warning: Failed to write merged posts_data.json")
         else:
             print("No new posts found in posts_data_new.json to merge")
+    # Build HOME from env PAGES_REPO if available (needed when normalizing comment locs)
+    home_env = os.environ.get('PAGES_REPO', '')
+    if '/' in home_env:
+        user, repo = home_env.split('/', 1)
+        HOME = f"https://{user}.github.io/{repo}/"
+    else:
+        # If PAGES_REPO isn't set, don't use the local filesystem HOME as the site URL.
+        # Leave HOME blank so templates fall back to relative paths.
+        HOME = ''
+
     comments = load_comment_manifest()
     # Deduplicate comments by url/local and compute a final 'loc' for sitemap entries.
     comments_seen = {}
@@ -100,16 +111,6 @@ def main():
         comments_final.append({'loc': loc, 'url': c.get('url'), 'local': c.get('local'), 'text': c.get('text')})
     # replace comments with final normalized comment list for rendering
     comments = comments_final
-
-    # Build HOME from env PAGES_REPO if available
-    home_env = os.environ.get('PAGES_REPO','')
-    if '/' in home_env:
-        user, repo = home_env.split('/',1)
-        HOME = f"https://{user}.github.io/{repo}/"
-    else:
-        # If PAGES_REPO isn't set, don't use the local filesystem HOME as the site URL.
-        # Leave HOME blank so templates fall back to relative paths.
-        HOME = ''
 
     devto_username = os.environ.get('DEVTO_USERNAME','')
     canonical_index = f"https://dev.to/{devto_username}" if devto_username else HOME

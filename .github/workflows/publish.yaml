@@ -34,6 +34,9 @@ jobs:
       # API is now used inside the generator; no separate probe needed
 
       - name: Commit & push
+        env:
+          DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
+          PAGES_REPO: ${{ github.repository }}
         run: |
           git config user.name "ci-bot"
           git config user.email "actions@users.noreply.github.com"
@@ -81,11 +84,17 @@ jobs:
             cp "$TMPDIR/posts_data.json" posts_data_new.json
           fi
 
-          # Run the helper from the TMPDIR copy (this is the same helper used to generate the new data)
-          if [ -f "$TMPDIR/scripts/render_index_sitemap.py" ]; then
-            env DEVTO_USERNAME=${{ vars.DEVTO_USERNAME }} PAGES_REPO=${{ github.repository }} python "$TMPDIR/scripts/render_index_sitemap.py"
+          # Copy helper scripts into the gh-pages working tree and run the renderer from the checkout root.
+          # Running from the checkout root ensures the renderer's ROOT (.) points at the gh-pages tree
+          # so posts/ and comments/ are resolved correctly and we don't accidentally run code from TMPDIR.
+          if [ -d "$TMPDIR/scripts" ]; then
+            cp -R "$TMPDIR/scripts" ./
+          fi
+
+          if [ -f "scripts/render_index_sitemap.py" ]; then
+            python scripts/render_index_sitemap.py
           else
-            echo "Warning: render_index_sitemap.py not found in TMPDIR; skipping index/sitemap regeneration" >&2
+            echo "Warning: scripts/render_index_sitemap.py not found in working tree; skipping index/sitemap regeneration" >&2
           fi
 
           git add -A
