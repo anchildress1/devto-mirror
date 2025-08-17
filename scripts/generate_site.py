@@ -47,7 +47,7 @@ def fetch_all_articles_from_api(last_run_iso=None):
         # Add cache-buster on page 1 to avoid stale cached responses
         if page == 1:
             # use minute granularity so value changes once per minute
-            params["_cb"] = str(int(time.time() // 60))
+            params["_cb"] = time.time() // 60
         response = requests.get(api_base, params=params)
         response.raise_for_status()
         data = response.json()
@@ -82,7 +82,6 @@ def fetch_all_articles_from_api(last_run_iso=None):
         full_articles.append(full_response.json())
         # Add delay to avoid rate limiting
         if i < len(articles) - 1:  # Don't sleep after the last request
-            import time
             time.sleep(0.5)  # 500ms delay between requests
 
     print(f"Found {len(full_articles)} articles with full content.")
@@ -371,7 +370,7 @@ if not new_posts:
 existing_posts_data = load_existing_posts()
 
 # Create a set of existing post URLs for faster lookup
-existing_links = {p.get('link', '') for p in existing_posts_data}
+existing_links = {getattr(p, 'link', '') for p in existing_posts_data}
 
 # Filter out new posts that already exist
 truly_new_posts = []
