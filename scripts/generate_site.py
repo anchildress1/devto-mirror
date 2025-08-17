@@ -260,8 +260,21 @@ class Post:
         # Use the API's description as-is
         self.description = (api_data.get("description", "") or "").strip()
 
-        # Use the slug directly from the API
-        self.slug = api_data.get("slug", slugify(self.title) or "post")
+        # Extract the full slug from the URL instead of using the API's slug field
+        # Dev.to URLs have format: https://dev.to/username/full-slug-with-id
+        if self.link and "//" in self.link:
+            try:
+                # Extract the path part after the username
+                url_path = self.link.split("//")[1]  # Remove protocol
+                path_parts = url_path.split("/")
+                if len(path_parts) >= 3:  # domain, username, slug
+                    self.slug = path_parts[2]  # The full slug with ID
+                else:
+                    self.slug = api_data.get("slug", slugify(self.title) or "post")
+            except Exception:
+                self.slug = api_data.get("slug", slugify(self.title) or "post")
+        else:
+            self.slug = api_data.get("slug", slugify(self.title) or "post")
 
     def to_dict(self):
         """Convert Post to dictionary for JSON serialization"""
