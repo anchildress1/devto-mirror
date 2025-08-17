@@ -40,8 +40,8 @@
 * Runs ~~hourly~~ daily at **`9:15 AM EST`** so you (almost) never post exactly on the mirror time
 * Uses a **single repo variable**: `DEVTO_USERNAME` — your Dev.to username
 * Derives everything else (GitHub Pages URL, repository context) automatically
-* Generates: `index.html`, `/posts/*.html`, `robots.txt`, `sitemap.xml`, `last_run.txt`
-* **Comments:** provides a way to index those special comments that are worthy of mini-post status by pulling your predefined comments into dedicated /comments/ pages with your blurb and context
+* Generates: `index.html`, `.nojekyll`, `robots.txt`, `sitemap.xml`, `last_run.txt`, `/posts/*.html`
+* **Comments:** The `comments.txt` file provides a way to index those special comments that are worthy of mini-post status by pulling your predefined comments into dedicated `/comments/` pages with your blurb and context
 * `robots.txt` welcomes major AI crawlers (toggle as you like): GPTBot, ClaudeBot, Claude-Web, Google-Extended, PerplexityBot, Bytespider, CCBot (Common Crawl), and more 👍
 
 ### First Run
@@ -66,50 +66,46 @@ Incremental updates are keyed off `last_run.txt`, which stores the ISO8601 UTC t
 
 ---
 
-````markdown
-# Dev.to Mirror
+## Quick Setup (2-Second Version) ⚡
 
-![social card](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror.jpg)
+**TL;DR:** Fork this repo → Set your Dev.to username → Enable GitHub Pages → Done. Your site auto-updates daily.
 
-This repository contains a tiny static mirror generator for Dev.to posts. It fetches posts from the Dev.to API and produces a minimal, crawler-friendly static site with canonical links back to Dev.to.
+### Step-by-Step Setup
 
-## What this repository contains
+1. **Fork this repository** or use it as a template
+2. **Set Repository Variable**
+   - Go to Settings → Secrets and variables → Actions → Variables
+   - Add `DEVTO_USERNAME` with your Dev.to username
+3. **Delete existing gh-pages branch** (if it exists)
+   - Go to your repo → Branches
+   - Delete the `gh-pages` branch if present
+4. **Run the workflow manually** (creates the gh-pages branch)
+   - Go to Actions → "Generate and Deploy Site"
+   - Click "Run workflow" → "Run workflow"
+   - Wait for it to complete (creates `gh-pages` branch with your content)
+5. **Enable GitHub Pages** (now that gh-pages exists)
+   - Go to Settings → Pages
+   - Source: "Deploy from a branch"
+   - Branch: `gh-pages`
 
-- `scripts/generate_site.py` — generator script that reads Dev.to RSS, produces `posts/` HTML files, `index.html`, `robots.txt`, and `sitemap.xml`, and persists post metadata to `posts_data.json`.
-- `posts/` — generated HTML files for individual posts.
-- `posts_data.json` — generated metadata tracking the known posts.
-- `comments/` — optional generated note pages for comment links.
-- `assets/` — images and static assets.
+🎉 **Your site is now live!** → `https://anchildress1.github.io/devto-mirror/` 👈 Add your actual URL here so you site stays discoverable!
 
-## Usage
-
-Set the required environment variables and run the generator locally:
-
-```bash
-export DEVTO_USERNAME="your-username"
-# Optionally set PAGES_REPO (e.g. username/repo). If not set, the script derives it from the git remote.
-python scripts/generate_site.py
-```
-
-The first run generates all posts found in the RSS feed and writes `posts_data.json`. Subsequent runs update the archive incrementally and regenerate `index.html` and `sitemap.xml`.
-
-
-
-## Notes
-
-- The generator uses `requests`, `jinja2`, and `python-slugify`.
-- Environment variables required: `DEVTO_USERNAME` (the Dev.to username). `PAGES_REPO` is optional but can be set to `username/repo`.
-
-## Local test
+### Local Development
 
 ```bash
+git clone https://github.com/anchildress1/devto-mirror.git
+cd devto-mirror
 python -m venv .venv && source .venv/bin/activate
 pip install requests jinja2 python-slugify
-DEVTO_USERNAME=yourname PAGES_REPO=username/repo python scripts/generate_site.py
+export DEVTO_USERNAME="your-username"
+python scripts/generate_site.py
 open index.html
 ```
 
-<small>Generated with the help of automation tooling</small>
+## What You Get
 
-````
-4. **Enable GitHub Pages**
+- **Auto-generated site** that updates daily at 9:15 AM EST
+- **SEO-friendly**: canonical links, sitemap.xml, robots.txt
+- **AI crawler-friendly**: welcomes GPTBot, ClaudeBot, Google-Extended, etc.
+- **Zero maintenance**: set it and forget it
+- **Comment support**: optionally include special comments as standalone pages

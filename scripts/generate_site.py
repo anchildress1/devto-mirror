@@ -76,7 +76,7 @@ def fetch_all_articles_from_api(last_run_iso=None):
     print(f"Found {len(articles)} articles, fetching full content...")
     full_articles = []
     for i, article in enumerate(articles):
-        print(f"Fetching full content for article {i+1}/{len(articles)}: {article['title']}...")
+        print(f"Fetching full content for article {i+1}/{len(articles)}: {article['title']}")
         full_response = requests.get(f"https://dev.to/api/articles/{article['id']}")
         full_response.raise_for_status()
         full_articles.append(full_response.json())
