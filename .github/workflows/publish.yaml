@@ -29,6 +29,7 @@ jobs:
         env:
           DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}  # single variable only
           PAGES_REPO: ${{ github.repository }}        # "username/repo"
+          FORCE_FULL_REGEN: "true"                    # Force full regeneration to ensure all files are created
         run: python scripts/generate_site.py
 
       # API is now used inside the generator; no separate probe needed

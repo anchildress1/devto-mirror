@@ -367,7 +367,15 @@ def find_new_posts(api_articles, existing_posts):
 # ----------------------------
 # Build posts (incremental updates)
 # ----------------------------
-last_run_timestamp = get_last_run_timestamp()
+# Check if we should force a full regeneration
+force_full_regen = os.getenv("FORCE_FULL_REGEN", "").lower() in ("true", "1", "yes")
+
+if force_full_regen:
+    print("FORCE_FULL_REGEN is set - performing full regeneration...")
+    last_run_timestamp = None
+else:
+    last_run_timestamp = get_last_run_timestamp()
+
 api_articles = fetch_all_articles_from_api(last_run_timestamp)
 
 # Convert API articles to Post objects
