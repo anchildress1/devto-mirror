@@ -111,3 +111,4 @@ open index.html
 - **AI crawler-friendly**: welcomes GPTBot, ClaudeBot, Google-Extended, etc.
 - **Zero maintenance**: set it and forget it
 - **Comment support**: optionally include special comments as standalone pages
+# Trigger workflow rebuild Sun Aug 17 18:08:28 EDT 2025
