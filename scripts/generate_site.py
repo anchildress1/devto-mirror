@@ -37,10 +37,17 @@ def fetch_all_articles_from_api(last_run_iso=None):
     """
     articles = []
     page = 1
+    api_base = f"https://dev.to/api/articles"
     while True:
         print(f"Fetching page {page} of articles...")
-        api_url = f"https://dev.to/api/articles?username={DEVTO_USERNAME}&page={page}&per_page=100"
-        response = requests.get(api_url)
+
+        params = {"username": DEVTO_USERNAME, "page": page}
+        if page > 1:  # or use a cache-buster on page 1 instead
+            params["per_page"] = 100
+        # optional cache-buster for page 1
+        if page == 1:
+            params["_cb"] = int(time.time() // 60)  # busts once per minute
+        response = requests.get(api_base, params=params)
         response.raise_for_status()
         data = response.json()
         if not data:
@@ -68,7 +75,7 @@ def fetch_all_articles_from_api(last_run_iso=None):
     print(f"Found {len(articles)} articles, fetching full content...")
     full_articles = []
     for i, article in enumerate(articles):
-        print(f"Fetching full content for article {i+1}/{len(articles)}: {article['title'][:50]}...")
+        print(f"Fetching full content for article {i+1}/{len(articles)}: {article['title']}...")
         full_response = requests.get(f"https://dev.to/api/articles/{article['id']}")
         full_response.raise_for_status()
         full_articles.append(full_response.json())
