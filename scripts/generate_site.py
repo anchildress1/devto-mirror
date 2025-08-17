@@ -44,9 +44,10 @@ def fetch_all_articles_from_api(last_run_iso=None):
         params = {"username": DEVTO_USERNAME, "page": page}
         if page > 1:  # or use a cache-buster on page 1 instead
             params["per_page"] = 100
-        # optional cache-buster for page 1
+        # Add cache-buster on page 1 to avoid stale cached responses
         if page == 1:
-            params["_cb"] = int(time.time() // 60)  # busts once per minute
+            # use minute granularity so value changes once per minute
+            params["_cb"] = str(int(time.time() // 60))
         response = requests.get(api_base, params=params)
         response.raise_for_status()
         data = response.json()
