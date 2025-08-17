@@ -83,7 +83,7 @@ jobs:
 
           # Run the helper from the TMPDIR copy (this is the same helper used to generate the new data)
           if [ -f "$TMPDIR/scripts/render_index_sitemap.py" ]; then
-            python "$TMPDIR/scripts/render_index_sitemap.py"
+            env DEVTO_USERNAME=${{ vars.DEVTO_USERNAME }} PAGES_REPO=${{ github.repository }} python "$TMPDIR/scripts/render_index_sitemap.py"
           else
             echo "Warning: render_index_sitemap.py not found in TMPDIR; skipping index/sitemap regeneration" >&2
           fi
