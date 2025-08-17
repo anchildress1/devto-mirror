@@ -88,7 +88,9 @@ Incremental updates are keyed off `last_run.txt`, which stores the ISO8601 UTC t
    - Source: "Deploy from a branch"
    - Branch: `gh-pages`
 
-🎉 **Your site is now live!** → `https://anchildress1.github.io/devto-mirror/` 👈 Add your actual URL here so you site stays discoverable!
+🎉 **Your site is now live!** → `https://anchildress1.github.io/devto-mirror/` 👈 Add your actual URL here so your site stays discoverable!
+
+*Note: All post links now include full Dev.to slugs with post IDs for proper navigation.*
 
 ### Local Development
 
