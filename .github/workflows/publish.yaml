@@ -52,7 +52,7 @@ jobs:
           TMPDIR="$(mktemp -d)"
           echo "Copying generated site to temporary dir: $TMPDIR"
           # Copy required artifacts; fail loudly if required ones are missing
-          cp -R .nojekyll index.html robots.txt sitemap.xml posts posts_data.json scripts "$TMPDIR/"
+          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml posts posts_data.json scripts "$TMPDIR/"
           # Optional artifacts
           if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
           if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
