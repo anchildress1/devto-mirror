@@ -1,0 +1,186 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>What in the World Is GitHub Coding Agent?</title>
+<link rel="canonical" href="https://dev.to/anchildress1/what-in-the-world-is-github-coding-agent-2m8p">
+<meta name="description" content="An all-in, real-world guide to GitHub’s Coding Agent—what it really does, what can go sideways, and why “all in” was the only way I could learn. This is just the start of a whole series, because honestly, this rabbit hole goes deep.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/what-in-the-world-is-github-coding-agent-2m8p">What in the World Is GitHub Coding Agent?</a></h1>
+  <p><em>Published: 2025-08-27T13:12:23Z</em></p>
+  <article><blockquote>
+<p>🦄 You know, I've been ready to write this post for ages. This is the <em>one thing</em> that got me hooked on AI to begin with, and I'm still obsessed. But now that I'm here? I'm almost, <strong><em>almost</em></strong> too tired to even enjoy it. And because I'm a ride-or-die kind of person — either all in or over it yesterday — we're just going to dive headfirst into the shallow end. No holding back — I hope you're ready! 🛟</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6rv2yc0bs2pwe59a6k5p.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6rv2yc0bs2pwe59a6k5p.png" alt="short dotted horizontal divider" loading="lazy" width="300" height="4"></a></p>
+
+<h2>
+  <a name="your-10minute-101-to-get-you-started-with-autonomous-ai" href="#your-10minute-101-to-get-you-started-with-autonomous-ai">
+  </a>
+  Your 10-minute 101 to get you started with autonomous AI ⏰
+</h2>
+
+<p>Honestly? there's <em>no way</em> I can cover everything about GitHub Coding Agent in one go. So, for this post 👇, we're doing the "just enough to be dangerous" thing. I'll hit you with the absolute must-knows, show you how to get started (in 10 minutes or less), and <em>hopefully</em>, not put you to sleep in the process (or myself!). </p>
+
+<p>My goal is to give you a "preview teaser" so you can go play, explore a bit, and maybe even tackle that hack time project you keep putting off. But whatever you do, <em>please</em> don't think this is your all-inclusive pass to go wild on production code. 🫡</p>
+
+
+<hr>
+
+<h2>
+  <a name="coding-agent-%E2%89%A0-agent-mode" href="#coding-agent-%E2%89%A0-agent-mode">
+  </a>
+  Coding Agent ≠ Agent Mode 🤪
+</h2>
+
+<p>Okay, let's get something straight right off the bat, because these names are just asking for trouble. Yes, they both have "GitHub" and "Agent" in the name. And yes, they're both powered by Claude Sonnet 4, but <strong>that's where the similarities stop.</strong> Agent Mode is for in-IDE use, a bit like a sidekick who waits for you to tell it what to do next. Coding Agent? It's the whole show — a full-on autonomous workflow that runs on its own dedicated VM. </p>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> Custom instructions and prompt techniques are the secret sauce here. This is true for any Gen-AI tool, but it's <em>especially critical</em> with Coding Agent, which will just keep guessing until it runs out of steam or thinks the job is done. Don't let it run wild without a map!</p>
+</blockquote>
+
+<p>Don't worry, Coding Agent is designed with safety in mind. It's an incredibly contained, safe version of the "autonomous coding" experiment I ran on my own a while back. I spent 45 days arguing with a thing I wired up on my laptop, and I worked harder then than on any other project I've built before or since. </p>
+
+<p>Why? Because I didn't want to just listen to what people were saying about AI — I <em>needed</em> to see it for myself. </p>
+
+<blockquote>
+<p>🦄 And that, my friends, is why I'm here volunteering as your guide. If you get stuck, hit me up! I've probably tried it that way plus three other insane ideas before I found one that mostly worked 🙃</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="safety-first-chaos-second" href="#safety-first-chaos-second">
+  </a>
+  Safety First, Chaos Second 🛡️
+</h2>
+
+<p>I know, I know... I just spent a whole paragraph telling you how much I love this thing, and now I'm gonna give you the other half of the equation. </p>
+
+<p>I'm all for pushing a new tool to its absolute limit, just to see what happens. It reminds me of my favorite Hunter S. Thompson quote — which I slightly mangled to get a SFW version — but the core truth remains: </p>
+
+<blockquote>
+<p>When you find a new, beautiful wave, <strong>the tendency is to push it as far as you can.</strong> </p>
+</blockquote>
+
+<p>So, how far can you push GitHub Coding Agent? Pretty far, but there are a few things you need to know first.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6rv2yc0bs2pwe59a6k5p.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6rv2yc0bs2pwe59a6k5p.png" alt="short dotted horizontal divider" loading="lazy" width="300" height="4"></a></p>
+
+<h3>
+  <a name="1-just-because-you-can-doesnt-mean-you-should" href="#1-just-because-you-can-doesnt-mean-you-should">
+  </a>
+  1. Just Because You Can, Doesn't Mean You <em>Should</em>
+</h3>
+
+<p>This tool can absolutely excel, but it requires the right prompt, instructions, and general setup. If you're looking to dive into some legacy code to see what's what, or maybe you want a safe playground to mess around in, then this is your guy! </p>
+
+<p>But if you're thinking about using it to fix a production bug, especially when you're on a tight deadline, you probably (aka absolutely, most definitely) want to reconsider. Treat this as a "learn how this works" project, not a "throw it at a problem and hope" situation.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6rv2yc0bs2pwe59a6k5p.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6rv2yc0bs2pwe59a6k5p.png" alt="short dotted horizontal divider" loading="lazy" width="300" height="4"></a></p>
+
+<h3>
+  <a name="2-your-prompt-is-everything" href="#2-your-prompt-is-everything">
+  </a>
+  2. Your Prompt is Everything
+</h3>
+
+<p>The effectiveness of your instructions and prompt is multiplied exponentially by the complexity of your task. A great, well-thought-out set of instructions that you've carefully tweaked over weeks? Coding Agent will do fine. But if you spend 10 minutes throwing a few sentences together just to see what happens, don't be surprised when you come back to a haunted house where your beautiful little cottage of a codebase used to be.</p>
+
+<blockquote>
+<p>🦄 It is an agent and when an agent doesn't know something, <em>they guess</em>. <strong>That's just what they do.</strong> The only thing more dangerous than an AI off the rails and hallucinating is the fact that you just turned it loose on your code all by itself.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="what-its-actually-good-for" href="#what-its-actually-good-for">
+  </a>
+  What It's Actually Good For ✨
+</h2>
+
+<p>After all those warnings, I need to make it crystal clear: <strong>this tool is not dangerous.</strong> It runs on its own virtual machine and executes safely within GitHub Actions. It has a limited environment and only has access to what you explicitly give it. </p>
+
+<p>It <strong>always creates a new branch</strong>, which is a key safety feature. You can't get around it, even if you try. Trust me, I was annoyed, but the safety is worth it.</p>
+
+<p>So what can you realistically use this for? Here are some of my favorite real-world use cases:</p>
+
+<ul>
+<li>
+<strong>Documentation:</strong> Nothing has worked better for me than using Coding Agent to dive deep into a codebase and spit out test-ready use cases or a handful of detailed system architecture Mermaid diagrams. You set it loose, go get a coffee, and come back to 7-8 pages of detailed, well-researched use cases ready to be plugged in.</li>
+<li>
+<strong>Testing:</strong> This one's a little controversial for a test-driven development purist like me, <em>but</em>... when you're on a deadline and you just need to get things done, you can write the code and have Coding Agent go write the tests. It's not a perfect solution, but a pull request with 28/30 passing tests is way better than one with zero tests at all. 🤫🫣</li>
+<li>
+<strong>Project Planning:</strong> Got a big initiative coming up? Instead of spending a week flipping through pages of dead code to figure out how it used to work, you can have Coding Agent do the heavy lifting and print out a nifty little report when it's done. </li>
+</ul>
+
+
+<hr>
+
+<h2>
+  <a name="how-to-get-started-in-5-minutes-or-less" href="#how-to-get-started-in-5-minutes-or-less">
+  </a>
+  How to Get Started in 5 Minutes or Less ⏱️
+</h2>
+
+<p>In the interest of time and keeping this digestible, I'm going to give you the basics that will work 100% of the time. We'll dig in on some more tools next week.</p>
+
+<p>GitHub has made this incredibly accessible now. You can find the new <strong>agents panel</strong> button on just about every page in GitHub: both on the home page and within any repository.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ft0y20jjys62xwrj9bb3x.png%3Fv%3D2" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ft0y20jjys62xwrj9bb3x.png%3Fv%3D2" alt="GitHub new agents panel view to access Coding Agent" loading="lazy" width="1200" height="669"></a></p>
+
+<ol>
+<li><p><strong>Select the Repository and Base Branch:</strong> Choose the repo and the branch you want Coding Agent to work from. It will <em>always</em> create its own branch, so don't worry about selecting <code>main</code> (or a trunk-based development model) if that's your primary branch. I'm telling you, you can <em>try</em> to tell it not to create a branch, but it's not going to listen.</p></li>
+<li><p><strong>Craft Your Prompt:</strong> This is <em>not</em> your typical conversational prompting. Coding Agent <em>will keep guessing</em> until it reaches what it considers to be "complete." Save yourself the headache and give it all the info up front.</p></li>
+<li><p><strong>Submit Your Request:</strong> Every time you hit send, it's considered one premium request. This is why it's so important to be concise and provide all the context it needs upfront.</p></li>
+</ol>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> To save premium requests when reviewing Copilot's PR, go to the diff page and leave all your <code>@copilot</code> comments as pending. When you're ready, submit them all at once, and it will only cost you <em>one request</em> whether you leave two comments or 20.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="a-final-warning-about-responsibility" href="#a-final-warning-about-responsibility">
+  </a>
+  A Final Warning About Responsibility 😈
+</h2>
+
+<p>Okay, one last thing. I have to let this sink in: </p>
+
+<p><strong>If it's <em>your</em> prompt, it's <em>your code</em>. Period.</strong></p>
+
+<p>If you go out and give a prompt to Copilot, ignore it for 30 minutes, do a half-hearted review, approve your own pull request, override the protection rules to push it to main, and then the codebase burns down... that's <strong>not</strong> Copilot's fault. That's your fault. Your prompt, your branch, your code, AI or not.</p>
+
+<p>So, be aware, be smart, and <em>please</em> don't use this as an excuse to ignore the basics. Start small with documentation or tests, and work your way up.</p>
+
+
+<hr>
+
+<h2>
+  <a name="lets-get-real" href="#lets-get-real">
+  </a>
+  Let's Get Real 🤨
+</h2>
+
+<p>Have you tried GitHub Coding Agent yet? What are your thoughts? Are you all in or has it been a big nope so far? Drop your wins, fails, and horror stories in the comments below. Bonus points if you link a fun code review you've got to do for Copilot. 🤪</p>
+
+
+<hr>
+
+<h2>
+  <a name="ai-helped-i-did-the-heavy-lifting" href="#ai-helped-i-did-the-heavy-lifting">
+  </a>
+  🛡️ AI helped (I did the heavy lifting)
+</h2>
+
+<p>This post was written by me + one suspiciously helpful robot (Gemini) + one robot firmly in the time-out corner (ChatGPT).</p>
+
+</article>
+  <p><a href="https://dev.to/anchildress1/what-in-the-world-is-github-coding-agent-2m8p">Read on Dev.to →</a></p>
+</main>
+</body></html>
