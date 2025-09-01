@@ -1,0 +1,117 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>Underfoot: The ChatPot for Hidden Places (and Why I Don’t Do Hackathons)</title>
+<link rel="canonical" href="https://dev.to/anchildress1/underfoot-the-chatpot-for-hidden-places-and-why-i-dont-do-hackathons-2684">
+<meta name="description" content="This is a submission for the AI Agents Challenge powered by n8n and Bright Data             What I...">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/underfoot-the-chatpot-for-hidden-places-and-why-i-dont-do-hackathons-2684">Underfoot: The ChatPot for Hidden Places (and Why I Don’t Do Hackathons)</a></h1>
+  <p><em>Published: 2025-09-01T07:00:38Z</em></p>
+  <article><p><em>This is a submission for the <a href="https://dev.to/challenges/brightdata-n8n-2025-08-13">AI Agents Challenge powered by n8n and Bright Data</a></em></p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4q3prh5o7iq2ytk5f2m2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4q3prh5o7iq2ytk5f2m2.png" alt=" " loading="lazy" width="800" height="800"></a></p>
+
+<h2>
+  <a name="what-i-built" href="#what-i-built">
+  </a>
+  What I Built
+</h2>
+
+<p><strong>Underfoot</strong> is a chatbot that finds locals-only, off-the-map places you won’t see on Yelp or TripAdvisor. You give it a location and intent (music, coffee, hiking, spider farms…) and it returns unique results with a “Stonewalker” rating. Each query also adds anonymous “whispers” to the cache, so the dataset grows as people use it.</p>
+
+<p>Repo: <a href="https://github.com/CheckMarKDevTools/underfoot-underground-travel-planner" target="_blank" rel="noopener noreferrer">CheckMarKDevTools/underfoot-underground-travel-planner</a>  </p>
+
+<h2>
+  <a name="demo" href="#demo">
+  </a>
+  Demo
+</h2>
+
+<p>Go easy on him, he's not been in the world very long!<br>
+<a href="https://checkmarkdevtools.app.n8n.cloud/webhook/d92bc454-8f78-4471-ae25-ffa0c9bb87b3/chat" target="_blank" rel="noopener noreferrer">Underfoot - The Stonewalker Agent</a></p>
+
+<h3>
+  <a name="n8n-workflow" href="#n8n-workflow">
+  </a>
+  n8n Workflow
+</h3>
+
+<ul>
+<li>Central AI agent (GPT-4.1-mini) acting as <em>The Stonewalker</em>.
+</li>
+<li>Triggers: Webhook + Chat.
+</li>
+<li>Sources: Google SERP (backup), internal cache, Reddit, Facebook events.
+</li>
+<li>Output: structured parser + secondary normalizer.
+</li>
+<li>Error handling: Discord notifier (very loud).
+</li>
+<li>Planned: Bright Data Google Maps dataset (undelivered).
+</li>
+</ul>
+
+
+<hr>
+
+<h2>
+  <a name="technical-implementation" href="#technical-implementation">
+  </a>
+  Technical Implementation
+</h2>
+
+<ul>
+<li>
+<strong>System Instructions</strong>: Stonewalker persona.
+</li>
+<li>
+<strong>Model</strong>: GPT-4.1-mini.
+</li>
+<li>
+<strong>Memory/Cache</strong>: stores normalized results for reuse.
+</li>
+<li>
+<strong>Nodes</strong>: HTTP Request, Function (normalize/dedupe), Discord notifier.
+</li>
+</ul>
+
+
+<hr>
+
+<h3>
+  <a name="bright-data-verified-node" href="#bright-data-verified-node">
+  </a>
+  Bright Data Verified Node
+</h3>
+
+<p>Planned integration with a Google Maps dataset. Didn’t land before the deadline, so SERP acted as backup.  </p>
+
+
+<hr>
+
+<h2>
+  <a name="journey" href="#journey">
+  </a>
+  Journey
+</h2>
+
+<p>First hackathon since college — and I remembered why I avoid them. I can’t do simple. Built, scrapped, rebuilt. UI detours, caches, ADRs, Discord server, memory blowups in n8n. Dataset never arrived, so I hacked a backup. Up to the last second, I was still trying to do everything.  </p>
+
+<p>But I learned n8n, Bright Data, Supabase, Leonardo, React, and more — mission accomplished. Full juicy write-up coming once I’ve recovered.  </p>
+
+
+<hr>
+
+<h2>
+  <a name="chatgpt-and-copilot-helped-this-entire-project" href="#chatgpt-and-copilot-helped-this-entire-project">
+  </a>
+  🛡️ ChatGPT and Copilot helped this entire project
+</h2>
+
+<p>And I realized 2 seconds after the fact that neither included a footer to say so 🫠</p>
+
+</article>
+  <p><a href="https://dev.to/anchildress1/underfoot-the-chatpot-for-hidden-places-and-why-i-dont-do-hackathons-2684">Read on Dev.to →</a></p>
+</main>
+</body></html>
