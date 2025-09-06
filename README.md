@@ -64,6 +64,24 @@ Incremental updates are keyed off `last_run.txt`, which stores the ISO8601 UTC t
 
 **Note on Descriptions:** Post descriptions are automatically truncated to 160 characters to align with SEO best practices for search engine result snippets.
 
+### Refresh All Posts and Comments 🔄
+
+Need to refresh all your posts and comments? Use the **Refresh** workflow for a complete regeneration:
+
+1. **Go to Actions** → "Refresh All Posts and Comments"
+2. **Click "Run workflow"** → "Run workflow"
+3. **Monitor progress** - The workflow will:
+   - 📦 Create a timestamped backup branch of your current site
+   - 🔄 Reset the last run timestamp to force full API data retrieval
+   - 🚀 Trigger the main publish workflow for complete regeneration
+
+**When to use refresh:**
+- After making significant changes to the codebase
+- When you suspect missing or corrupted data
+- To force a complete rebuild from scratch
+
+The refresh process safely backs up your current state before wiping and regenerating everything, ensuring you can recover if needed.
+
 ---
 
 ## Quick Setup (2-Second Version) ⚡
