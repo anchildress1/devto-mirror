@@ -2,7 +2,7 @@
 
 This document outlines the changes made to implement the three requested tasks:
 
-## Task 1: Post Banner Images ✅
+## Post Banner Images ✅
 
 ### Changes Made:
 - **Modified `Post` class in `scripts/generate_site.py`**:
@@ -22,17 +22,7 @@ This document outlines the changes made to implement the three requested tasks:
 ### Result:
 Posts with banner images now display them prominently at the top of detail pages with proper SEO attributes.
 
-## Task 2: Comments Display ✅
-
-### Verification:
-Comments are already working correctly in both locations:
-
-- **index.html**: Comments appear under "Comment Notes" section with personal blurb context
-- **sitemap.xml**: Comments are included as separate URL entries
-
-The existing implementation in `utils.py` (INDEX_TMPL) and render logic correctly handles comment display.
-
-## Task 3: Description Analysis ✅
+## Description Analysis ✅
 
 ### New Script Created:
 - **`scripts/analyze_descriptions.py`**: Comprehensive analysis tool
