@@ -112,3 +112,14 @@ open index.html
 - **Zero maintenance**: set it and forget it
 - **Comment support**: optionally include special comments as standalone pages
 # Trigger workflow rebuild Sun Aug 17 18:08:28 EDT 2025
+
+---
+
+## License 📄
+
+Every project has to have a stack of fine print somewhere. _Keep going, keep going, keep going..._ Here's mine, as painless as possible:
+
+You know where [the license](./LICENSE) is, but I'll sum it up: **this is not open source** (even though you can still do just about anything you want with it). As long as you're not turning it into the next big SaaS or selling subscriptions in the cloud, then have fun! Else, **you've gotta ask me first.**
+
+Basically? This project's got boundaries. Be cool, don't try to sneak it into a product launch, and we'll get along just fine. 😘
+
