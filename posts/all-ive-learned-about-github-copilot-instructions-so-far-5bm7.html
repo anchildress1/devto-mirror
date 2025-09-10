@@ -511,24 +511,7 @@ Follow rules in <span class="sb">`.eslintrc.js`</span>
   💻 VS Code Only: Instruction Types
 </h2>
 
-<p>VS Code Insiders (my primary playground) supports more instruction types than what is currently available in the release version of VS Code. If you don't have these yet, consider this a sneak peek (or jump on the bandwagon and download it <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener noreferrer">here</a>).</p>
-
-<ul>
-<li>
-<strong>Review Selection</strong> – Triggered by selection commands</li>
-<li>
-<strong>Code Generation</strong> – The most-used and most powerful</li>
-<li>
-<strong>Commit Message Generation</strong> – Define formats or reference tools like CommitLint</li>
-<li>
-<strong>Pull Request Descriptions</strong> – Coming into play (still testing)</li>
-<li>
-<strong>Test Generation</strong> – For TDD and beyond</li>
-</ul>
-
-<blockquote>
-<p>💡 <strong>Pro Tip</strong>: Check in your <code>.vscode</code> folder to keep workspace settings consistent across your team.</p>
-</blockquote>
+<p><strong>UPDATED</strong>: So, VS Code <em>used</em> to support various kinds of custom instructions (commits, reviews, tests, etc). Those are now officially deprecated in favor of the default <code>.github/copilot-instructions.md</code> file along with the more generalized <code>.github/instructions/*.instructions.md</code> with a valid <code>applyTo</code> defined in the frontmatter as a glob pattern (same way you'd add it to the <code>.gitignore</code>).</p>
 
 
 <hr>

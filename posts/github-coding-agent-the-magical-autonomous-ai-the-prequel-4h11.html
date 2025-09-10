@@ -1,0 +1,413 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>GitHub Coding Agent the Magical Autonomous AI: The Prequel</title>
+<link rel="canonical" href="https://dev.to/anchildress1/github-coding-agent-the-magical-autonomous-ai-the-prequel-4h11">
+<meta name="description" content="Everything you need to know about setting up GitHub's Coding Agent for best results—setup, advanced tricks, and gotchas from real stories and wins. Chaos, fun, and no filter.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/github-coding-agent-the-magical-autonomous-ai-the-prequel-4h11">GitHub Coding Agent the Magical Autonomous AI: The Prequel</a></h1>
+  <p><em>Published: 2025-09-10T11:52:42Z</em></p>
+  <article><blockquote>
+<p>🦄  Alright, you made it! Thanks for stopping by. Yes, I’m a little late (again), but you’re getting the first edition of an in-depth Coding Agent adventure. Everything I wish someone had told me, plus all the misadventures that happen when you mix too much caffeine, not enough sleep, and a healthy dose of ‘what does this button do?’ energy.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fa896t6c60qv8ri6ltm40.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fa896t6c60qv8ri6ltm40.png" alt="Badge: This post was Human-Crafted and AI-Edited" loading="lazy" width="200" height="200"></a></p>
+
+
+<hr>
+
+<h2>
+  <a name="just-a-quick-headsup" href="#just-a-quick-headsup">
+  </a>
+  Just a Quick Heads-Up 📌
+</h2>
+
+<p><strong>Coding Agent is still a preview feature</strong> from GitHub and is subject to pre-license terms and frequent changes. Treat it like an enthusiastic beta test—one that keeps leveling up behind the scenes. This is <em>not</em> the tool to bet your workflow on (yet), but if you’re the adventurous type, you’ll have stories to tell. If not, don't worry! There's plenty of practical uses for it, too.</p>
+
+<blockquote>
+<p>🫠 I know you’re not ready to run your business on it. I’m not, either! That’s half the fun of it, though!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="so-what-is-coding-agent" href="#so-what-is-coding-agent">
+  </a>
+  So What Is Coding Agent? 🦾
+</h2>
+
+<p>“Agents do this.” “Agentic AI.” “Agent Mode.” “Agent search.” </p>
+
+<p>That one word is like an annoying little fly that simply will not leave the conversation, no matter how many times you try to bat it away. Except <em>this</em> agent you're going to want to hang around. </p>
+
+<p>In the IDE, you get <strong>Agent Mode</strong>—the friendly Copilot that does your bidding while you sit back and supervise. </p>
+
+<p>Its cousin is <strong>Coding Agent</strong>—that’s what happens when you hand Copilot the keys and let it go wild (within reason, I promise). This is a fully autonomous, sandboxed solution you send off into the wild with a single task, powered by a dash of machine learning or a generous helping of “I wonder what this shiny new button does...” and absolutely zero risk of burning down your repo. 🧯</p>
+
+<blockquote>
+<p>🦄 I'm willing to bet there's some magical things going on behind the scenes at GitHub when it comes to Coding Agent's future, too, because the updates are coming at a furious pace — quicker than I've ever seen this one updated before.</p>
+</blockquote>
+
+<p>The first thing people always ask: <strong>Can I trust it?</strong></p>
+
+<p>Absolutely! If you don’t believe me, just know that I tried every trick in the book to break it. All I got was some truly creative nonsense code, but the bot never colored outside the lines. 🖍️</p>
+
+<blockquote>
+<p>👌 That’s exactly what you want from an AI—brilliantly stubborn about staying in its lane, even when you're trying to tempt it off the rails.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="rapid-upgrades-amp-real-gotchas" href="#rapid-upgrades-amp-real-gotchas">
+  </a>
+  Rapid Upgrades &amp; Real Gotchas 🔄⚠️
+</h2>
+
+<p>You have to treat it like a beta test, really. Only this is a whole lot better than a beta test, because they've obviously been doing a ton of work on this guy. And not only that, it is changing <em>frequently</em>. Honestly, I was prepared to output a whole long list in this section, and I'm glad I checked first! </p>
+
+<p>Most of what <em>was</em> on <a href="https://docs.github.com/en/copilot/concepts/coding-agent/coding-agent" target="_blank" rel="noopener noreferrer">their page</a>, even last week, has disappeared. So here are the things that <em>still</em> remain. And yes, most of these are true for Copilot whether it's in your IDE or out in the wild.</p>
+
+<ul>
+<li>Copilot can leak any information it has access to.
+
+<ul>
+<li>If you care, lock it down <em>now</em>. This includes chat in the IDE!</li>
+</ul>
+
+
+</li>
+
+<li>Vulnerable to prompt injection, especially from issues or pull requests.
+
+<ul>
+<li>GitHub filters out hidden characters, but nothing’s truly foolproof.</li>
+</ul>
+
+
+</li>
+
+<li>Every response to a prompt goes into a pull request, and nowhere else.</li>
+
+<li>Copilot might give you code that matches public repos—with zero references, even if you have the safety on.</li>
+
+<li>AI bias and weirdness? Still here, just as much as anywhere else.</li>
+
+</ul>
+
+<blockquote>
+<p>🦄 GitHub all but guarantees it won't nuke your repo. No official stamp of approval, but there are <em>a lot</em> of safety nets.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="safety-baked-in" href="#safety-baked-in">
+  </a>
+  Safety Baked In 🛡️
+</h2>
+
+<p>You don't have to panic when the cats run across your keyboard playing whatever it is cats play while racing through the house. No matter what chaos (or wildlife) hits your desk, Coding Agent will never touch your <code>main</code> branch directly. It’s hardwired to make its own “copilot/” branch for every adventure.</p>
+
+<ul>
+<li>Each branch is “copilot” branded—no hiding where the magic happened.</li>
+<li>Copilot only works in branches it created itself. (Your leftovers are safe. For now.)</li>
+<li>When it’s done, you get a draft pull request—with <em>your</em> name as co-author, so prompt responsibly!</li>
+<li>Those required peer reviews and checks that fail out of nowhere? Yup, all the fun repo rules still apply.</li>
+<li>Prompted it? Sorry, you can’t self-approve your own work. Consider it a code review, not a trust fall.</li>
+<li>If you want more than repo-level access, you’ll need to do the secret handshake (read: set up a PAT token and permissions).</li>
+</ul>
+
+<blockquote>
+<p>💡 ProTip: Coding Agent always charges exactly one premium request for every prompt. You can write a small novel if you want! Just know, it's also charging you for GitHub Actions minutes while Copilot is doing work—they add up faster than you think.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="set-yourself-up-for-success" href="#set-yourself-up-for-success">
+  </a>
+  Set Yourself Up for Success 🚀
+</h2>
+
+<p>Setting up a code-generating robot should be as easy as flipping a switch, right? Well... <em>almost</em>. In reality, it's more like trying to train a particularly smart, but very distractible, golden retriever.<br><br>
+Give it the right setup, the right instructions, and crystal-clear boundaries—or you’ll be chasing down its “creative solutions” all week.</p>
+
+<p>If you’ve already got instructions dialed in, you’re golden! If not, check out <a href="https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0">my post on custom instructions</a>, because <em>everything</em> works better when you lay the ground rules. </p>
+
+<p>If your instructions are for a different agent? Hang tight—you’ll want to read the next bit.</p>
+
+<blockquote>
+<p>🎟️ Side note: If you’re not using VS Code, you are absolutely missing out. If you want the shiniest new Copilot features, install Insiders too. Yes, it’s a little buggy, but you’ll never be bored!</p>
+</blockquote>
+
+<hr>
+<h2>
+  <a name="instructions-instructions-instructions" href="#instructions-instructions-instructions">
+  </a>
+  Instructions, Instructions, Instructions! 📝
+</h2>
+
+<p>As of last week, GitHub lets Coding Agent gobble up just about any custom instructions it can find in addition to the usual <code>.github/copilot-instructions.md</code> file. Now is a great time to start using <code>.github/instructions/*.instructions.md</code>, if you're not already. Think of it as a your laser-focused playbook pointing at exactly which files apply. Use YAML frontmatter with <code>applyTo</code> glob patterns, just like the <code>.gitignore</code>. </p>
+
+<p>For example:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="nn">---</span>
+<span class="na">applyTo</span><span class="pi">:</span> <span class="s">frontend/**/*</span>
+<span class="nn">---</span>
+
+<span class="gh"># Frontend Instructions</span>
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<p>Coding Agent will also happily read <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and <code>GEMINI.md</code>. This is great for one-off tests, but if you have different instructions for different bots? Welcome to the "land where instructions collide"! If you’re not careful, your instructions can cross streams and leave you with some wild results. </p>
+
+<blockquote>
+<p>🦄 On the plus side, it’s a huge leap toward standardization that we desperately need. At the same time, it’s a whole new way to find edge cases nobody saw coming. </p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="settings-amp-environment-setup" href="#settings-amp-environment-setup">
+  </a>
+  Settings &amp; Environment Setup ⚙️
+</h2>
+
+<h3>
+  <a name="custom-firewall-rules" href="#custom-firewall-rules">
+  </a>
+  Custom Firewall Rules 🔥
+</h3>
+
+<p>Work in a locked-down org? Yeah, me too. Your firewall is probably less “security theater” and more “impenetrable fortress.” so don't be surprised if you get this message in your Coding Agent response:</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fi7cjfre4hc87dxg7urx6.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fi7cjfre4hc87dxg7urx6.png" alt="Screenshot GitHub.com warning displayed when Coding Agent is blocked by the firewall" loading="lazy" width="800" height="264"></a></p>
+
+<p>Good news: You don’t have to turn it off—just add the right URLs to your Copilot allow list under repo settings.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbb9pklly2swwj3os8ft8.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbb9pklly2swwj3os8ft8.png" alt="Screenshot GitHub.com repo settings for configuring Coding Agent firewall allow list" loading="lazy" width="800" height="501"></a></p>
+
+<blockquote>
+<p>🦄 And yes, I forget this step <em>every single time</em> and wonder why nothing works for half an hour.</p>
+</blockquote>
+
+
+<hr>
+
+<h3>
+  <a name="mcp-servers-playwright-integration" href="#mcp-servers-playwright-integration">
+  </a>
+  MCP Servers + Playwright Integration 🤖
+</h3>
+
+<p>By default, GitHub’s MCP <em>and</em> Playwright are ready to go—zero extra setup. If you need to talk to something outside the box (looking at you, Jira), add it under repo settings.</p>
+
+<p>For real magic, use <a href="https://github.com/upstash/context7" target="_blank" rel="noopener noreferrer">Context7</a>. While it draws the line at spelunking in stack overflow, it's an absolute game-changer when it comes to literally every other form of documentation you could possibly need. Skeptical? Check <a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/extend-coding-agent-with-mcp" target="_blank" rel="noopener noreferrer">the official docs</a>.<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"context7"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://mcp.context7.com/mcp"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"CONTEXT7_API_KEY"</span><span class="p">:</span><span class="w"> </span><span class="s2">"YOUR_API_KEY"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"tools"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"get-library-docs"</span><span class="p">,</span><span class="w"> </span><span class="s2">"resolve-library-id"</span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>🦄 Context7 is a lifesaver, but be warned: unless you specify a library-id, response times can go from “speedy” to “waiting for a train that might never come.” I keep a list of IDs in the repo and reference it in the instructions. It saves you the cost of a lookup call every time Copilot needs to pull documentation. 😉</p>
+</blockquote>
+
+
+<hr>
+
+<h3>
+  <a name="secrets-amp-more-settings" href="#secrets-amp-more-settings">
+  </a>
+  Secrets &amp; More Settings 🔑
+</h3>
+
+<p>MCP is plug-and-play, but by default, Copilot can only see the current repo. To grant it superpowers, make a PAT token starting with <code>COPILOT_MCP_</code> and add it to your Copilot environment variables.</p>
+
+<p>If you haven’t poked around GitHub environments before, now’s the time. There’s some weirdly powerful stuff in there! 🧙</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fshnmiji1cezi9m2f5yur.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fshnmiji1cezi9m2f5yur.png%3Fv%3D2025" alt="Screenshot GitHub.com repo settings, Copilot environment" loading="lazy" width="2294" height="1034"></a></p>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> Name your secret wrong and Coding Agent just shrugs and ignores you. And yes, it took me way longer than it should have to figure that one out!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="customizing-the-workspace" href="#customizing-the-workspace">
+  </a>
+  Customizing the Workspace 🧑‍💻
+</h2>
+
+<p>Do you have custom workflows that make it seem like your AI’s about to start freelancing for a competition? Then you’ll want the Copilot Steps workflow—your way to build a fully custom, hands-off dev environment for the AI.</p>
+
+<ul>
+<li>The file must be <code>.github/workflows/copilot-setup-steps.yml</code>
+</li>
+<li>The job? Always <code>copilot-setup-steps</code>, or it’s invisible.</li>
+<li>You can’t change everything; only certain fields count (steps, permissions, runs-on, container, services, snapshot, timeout-minutes). Anything else, and Copilot pretends like it's not even there.</li>
+</ul>
+
+<p>Here’s a sample workflow (straight from <a href="https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment" target="_blank" rel="noopener noreferrer">GitHub’s docs</a>):<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight yaml"><code><span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Copilot</span><span class="nv"> </span><span class="s">Setup</span><span class="nv"> </span><span class="s">Steps"</span>
+
+<span class="c1"># Automatically run the setup steps when they are changed to allow for easy validation, and</span>
+<span class="c1"># allow manual testing through the repository's "Actions" tab</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">workflow_dispatch</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">.github/workflows/copilot-setup-steps.yml</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">.github/workflows/copilot-setup-steps.yml</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="c1"># The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.</span>
+  <span class="na">copilot-setup-steps</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+
+    <span class="c1"># Set the permissions to the lowest permissions possible needed for your steps.</span>
+    <span class="c1"># Copilot will be given its own token for its operations.</span>
+    <span class="na">permissions</span><span class="pi">:</span>
+      <span class="c1"># If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.</span>
+      <span class="na">contents</span><span class="pi">:</span> <span class="s">read</span>
+
+    <span class="c1"># You can define any steps you want, and they will run before the agent starts.</span>
+    <span class="c1"># If you do not check out your code, Copilot will do this for you.</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout code</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v5</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Node.js</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-node@v4</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">node-version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">20"</span>
+          <span class="na">cache</span><span class="pi">:</span> <span class="s2">"</span><span class="s">npm"</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install JavaScript dependencies</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">npm ci</span>
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>🦄 This actually works. I know, I was shocked too. Get creative with it—multiple repos, wild setups, whatever. Let me know how it goes!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="wait-thats-it" href="#wait-thats-it">
+  </a>
+  Wait, That’s It? 🤔
+</h2>
+
+<p>Yeah, I know—you expected another ten pages. But in the time it took me to write this, argue with ChatGPT <em>and</em> Gemini, play with Leonardo, and still make it to work on time? GitHub probably pushed three more features and fixed half the bugs I was going to joke about anyway.</p>
+
+<p>So instead, here are the weirdest, most useful things I've learned about Coding Agent so far:</p>
+
+<ol>
+<li>
+<strong>Can I change the model?</strong> Nope. Coding Agent = Claude Sonnet 4. You can't change it, but at least they picked a good model for the job.</li>
+<li>
+<strong>How much does it cost?</strong> Every prompt equals exactly one premium, plus GHA minutes equal to run time.</li>
+<li>
+<strong>How should I review the PR?</strong> Add comments in the <code>Files changed</code> tab so they’re submitted together as a batch. One batch is also equal to one premium request 😀 Anywhere else, go nuts giving it all the information you can.</li>
+<li>
+<strong>Why won’t it work on my PR?</strong> It only works on PRs and branches it created with the “copilot” prefix. Start there if you want to use it.</li>
+<li>
+<strong>Why won’t it respond?</strong> Use <code>@copilot</code> in <em>every</em> comment. Still nothing? Don’t spam—try a normal comment as a reply and watch for the eyes emoji 👀.</li>
+<li>
+<strong>Workflow stuck?</strong> Be patient. Coding Agent likes to take coffee breaks between sprints. If you’re done waiting, you can cancel it—it won’t break anything, but you'll probably lose all the work it's done so far.</li>
+<li>
+<strong>How good are the results?</strong> It’s only as good as your prompt. If you want A+ output, nail the instructions and follow <a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh#personal-guide-to-prompting-prior">PRIOR</a>. (you can skip the P, unless you’re feeling dramatic.)</li>
+</ol>
+
+<blockquote>
+<p>🦄  If you’re stuck, confused, or just want to swap horror stories, leave a comment or DM me anywhere. It may take me a bit, but I’ll answer (eventually).</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="the-robots-helped-but-less-than-usual" href="#the-robots-helped-but-less-than-usual">
+  </a>
+  🛡️ The robots helped, but less than usual.
+</h2>
+
+<p>ChatGPT and Gemini are both in the time out corner. No Copilots were harmed in the making of this post—but there <em>were</em> some loud sighs, at least one new colorful expression, and a mild existential crisis while I debated the sanity of my choices.</p>
+
+</article>
+  <p><a href="https://dev.to/anchildress1/github-coding-agent-the-magical-autonomous-ai-the-prequel-4h11">Read on Dev.to →</a></p>
+</main>
+</body></html>
