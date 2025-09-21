@@ -1,6 +1,6 @@
 # 🛡 SECURITY.md
 
-> 🦄 “It's not a *bug*, it's a zero-day.”  
+> 🦄 “It’s not a bug, it’s an impromptu feature demo.”
 > — A developer, probably. Hopefully not me.
 
 Hi. I'm Ashley — the one and only human behind this repo (and all the others here or with the CheckMarK name on them). If you’ve stumbled across something security-related — a leak, a loophole, a weird edge case with evil vibes — thank you. I want to hear about it.
@@ -26,7 +26,7 @@ Things that *don’t* count (but I admire your curiosity):
 
 Instead, email me directly at:
 
-**✉️ human@checkmarkdevtools.dev**
+**✉️ [human@checkmarkdevtools.dev](mailto:human@checkmarkdevtools.dev)**
 
 Include:
 - What you found
@@ -40,11 +40,12 @@ I’ll read it. I’ll fix it. I might even send back a thank-you gif (no promis
 - I take security seriously, even if this file doesn’t sound like it.
 - Let me know privately so I can fix things before they hit the internet and I'm drinking weird caffeinated mixtures after dark.
 - If it’s legit, I’ll shout you out — or not, if you prefer to remain the cool mysterious hacker in the shadows.
-- Please don’t publish it before I’ve had time to clean up the mess. I’ll be fast. Probably.
+- Please don’t publish it before I’ve had time to clean up the mess. I’ll be fast. Probably...
 
 ---
 
-Thanks for keeping the chaos constructive.
+Thanks for keeping the chaos constructive. 🫶
 
-— Ashley  
+— Ashley
 [CheckMarK DevTools](https://checkmarkdevtools.dev)
+[human@checkmarkdevtools.dev](mailto:human@checkmarkdevtools.dev)

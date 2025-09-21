@@ -48,6 +48,7 @@ def analyze_posts_data(posts_file='posts_data.json'):
                 'url': url,
                 'reason': 'Empty or missing description'
             })
+            print(f"⚠️  WARNING: Missing description for post '{title}'")
         # Check for descriptions that exceed the 140-145 char limit
         elif len(description) > 145:
             long_descriptions.append({
