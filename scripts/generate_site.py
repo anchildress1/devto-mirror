@@ -316,7 +316,9 @@ class Post:
         self.cover_image = api_data.get("cover_image", "")
         
         # Capture tags from Dev.to API and normalize to array
-        self.tags = self._normalize_tags(api_data.get("tag_list", []))
+        # Try tag_list first (Dev.to standard), fallback to tags field
+        tags_raw = api_data.get("tag_list") or api_data.get("tags", [])
+        self.tags = self._normalize_tags(tags_raw)
 
         # Extract the full slug from the URL instead of using the API's slug field
         # Dev.to URLs have format: https://dev.to/username/full-slug-with-id
