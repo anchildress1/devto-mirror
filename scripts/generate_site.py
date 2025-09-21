@@ -315,8 +315,8 @@ class Post:
         # Capture cover image for banner display
         self.cover_image = api_data.get("cover_image", "")
         
-        # Capture tags from Dev.to API
-        self.tags = api_data.get("tag_list", [])
+        # Capture tags from Dev.to API and normalize to array
+        self.tags = self._normalize_tags(api_data.get("tag_list", []))
 
         # Extract the full slug from the URL instead of using the API's slug field
         # Dev.to URLs have format: https://dev.to/username/full-slug-with-id
@@ -333,6 +333,38 @@ class Post:
                 self.slug = api_data.get("slug", slugify(self.title) or "post")
         else:
             self.slug = api_data.get("slug", slugify(self.title) or "post")
+
+    def _normalize_tags(self, tags):
+        """
+        Normalize tags to always be a list of strings.
+        Handles various input formats from Dev.to API or JSON data.
+        """
+        if not tags:
+            return []
+        
+        # Already a list - clean and return
+        if isinstance(tags, list):
+            return [str(tag).strip() for tag in tags if tag and str(tag).strip()]
+        
+        # String format - try different separators
+        if isinstance(tags, str):
+            tags = tags.strip()
+            if not tags:
+                return []
+            
+            # Try comma separation first (most common)
+            if ',' in tags:
+                return [tag.strip() for tag in tags.split(',') if tag.strip()]
+            
+            # Try space separation
+            if ' ' in tags:
+                return [tag.strip() for tag in tags.split() if tag.strip()]
+            
+            # Single tag
+            return [tags]
+        
+        # Fallback - convert to string and try again
+        return self._normalize_tags(str(tags))
 
     def to_dict(self):
         """Convert Post to dictionary for JSON serialization"""
@@ -362,7 +394,7 @@ class Post:
         post.description = data['description']
         post.slug = data['slug']
         post.cover_image = data.get('cover_image', '')  # Handle legacy data without cover_image
-        post.tags = data.get('tags', [])  # Handle legacy data without tags
+        post.tags = post._normalize_tags(data.get('tags', []))  # Handle legacy data without tags and normalize
         return post
 
 def load_comment_manifest(path="comments.txt"):
