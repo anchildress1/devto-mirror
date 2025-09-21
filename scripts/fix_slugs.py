@@ -20,8 +20,9 @@ def extract_slug_from_url(url):
         path_parts = url_path.split("/")
         if len(path_parts) >= 3:  # domain, username, slug
             return path_parts[2]  # The full slug with ID
-    except Exception:
-        pass
+    except (IndexError, ValueError):
+        # Failed to parse URL structure
+        return None
     
     return None
 
