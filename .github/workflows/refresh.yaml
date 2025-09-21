@@ -1,0 +1,104 @@
+name: Refresh All Posts and Comments
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_branch:
+        description: 'Name for backup branch (default: backup-YYYYMMDD-HHMMSS)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.11"
+
+      - name: Create backup branch
+        run: |
+          # Generate backup branch name if not provided
+          if [ -z "${{ inputs.backup_branch }}" ]; then
+            BACKUP_BRANCH="backup-$(date +%Y%m%d-%H%M%S)"
+          else
+            BACKUP_BRANCH="${{ inputs.backup_branch }}"
+          fi
+          
+          echo "BACKUP_BRANCH=$BACKUP_BRANCH" >> $GITHUB_ENV
+          echo "Creating backup branch: $BACKUP_BRANCH"
+          
+          # Configure git
+          git config user.name "ci-bot"
+          git config user.email "actions@users.noreply.github.com"
+          
+          # Fetch all branches to ensure we have the latest state
+          git fetch --all --prune || true
+          
+          # Check if gh-pages branch exists and has content to backup
+          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+            echo "Found gh-pages branch, creating backup..."
+            git checkout gh-pages
+            git reset --hard origin/gh-pages
+            
+            # Create backup branch from current gh-pages state
+            git checkout -b "$BACKUP_BRANCH"
+            git push origin "$BACKUP_BRANCH"
+            echo "✅ Backup created in branch: $BACKUP_BRANCH"
+            
+            # Return to main branch
+            git checkout main
+          else
+            echo "ℹ️  No gh-pages branch found, skipping backup"
+          fi
+
+      - name: Reset last run timestamp
+        run: |
+          echo "🔄 Resetting last run timestamp to force full regeneration..."
+          
+          # Remove last_run.txt if it exists to force full regeneration
+          if [ -f last_run.txt ]; then
+            rm last_run.txt
+            echo "Removed existing last_run.txt"
+          fi
+          
+          # Also check and reset timestamp in gh-pages if it exists
+          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+            git checkout gh-pages
+            git reset --hard origin/gh-pages
+            
+            if [ -f last_run.txt ]; then
+              rm last_run.txt
+              git add -A
+              git commit -m "chore: reset last_run.txt for full refresh" || echo "No changes to commit"
+              git push origin gh-pages
+              echo "Reset last_run.txt in gh-pages branch"
+            fi
+            
+            git checkout main
+          fi
+
+      - name: Trigger publish workflow
+        run: |
+          echo "🚀 Triggering the main publish workflow for full regeneration..."
+          
+          # Use GitHub CLI to trigger the publish workflow
+          gh workflow run publish.yaml \
+            --ref main
+          
+          echo "✅ Publish workflow triggered successfully"
+          echo "🔍 Monitor the workflow at: ${{ github.server_url }}/${{ github.repository }}/actions"
+          echo "📦 Backup available in branch: $BACKUP_BRANCH"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Generated with the help of ChatGPT and GitHub Copilot
