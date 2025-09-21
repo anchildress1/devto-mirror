@@ -7,7 +7,12 @@
     "description": "Flip the right GitHub previews, understand Copilot’s PR shape, batch your review prompts, and keep control of the code—practical notes with just a dash of wizardry.",
     "slug": "magical-coding-agent-the-ship-ready-spellbook-2mbf",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fpw10t4pdlmf0semwbyil.jpg%3Fv%3D2025",
-    "tags": "githubcopilot, ai, tutorial, productivity"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "tutorial",
+      "productivity"
+    ]
   },
   {
     "title": "GitHub Coding Agent the Magical Autonomous AI: The Prequel",
@@ -17,7 +22,12 @@
     "description": "Everything you need to know about setting up GitHub's Coding Agent for best results—setup, advanced tricks, and gotchas from real stories and wins. Chaos, fun, and no filter.",
     "slug": "github-coding-agent-the-magical-autonomous-ai-the-prequel-4h11",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Foke78uikbtlzlawras6r.png%3Fv%3D2025",
-    "tags": "githubcopilot, ai, tutorial, productivity"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "tutorial",
+      "productivity"
+    ]
   },
   {
     "title": "Can We Set the Record Straight? AI, Content, and a Bit of Sanity 🙏",
@@ -27,7 +37,12 @@
     "description": "A story-driven look at AI content, bans, why process matters, and why a little honesty beats a blanket rule every time.",
     "slug": "can-we-set-the-record-straight-ai-content-and-a-bit-of-sanity-1inj",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fd5hh8gwj80nin1gj3ur7.png%3Fv%3D25",
-    "tags": "ai, writing, ethics, devrel"
+    "tags": [
+      "ai",
+      "writing",
+      "ethics",
+      "devrel"
+    ]
   },
   {
     "title": "The Hackathon I Swore Off — and the Exhaustion That Mostly Compiled",
@@ -37,7 +52,12 @@
     "description": "The hackathon I said I’d never do again turned exhaustion into code.",
     "slug": "the-hackathon-i-swore-off-and-the-exhaustion-that-mostly-compiled-c4l",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fw5r68w9yq7mddqy5s59g.png%3Fv%3D2",
-    "tags": "watercooler, career, life, n8nagentchallenge"
+    "tags": [
+      "watercooler",
+      "career",
+      "life",
+      "n8nagentchallenge"
+    ]
   },
   {
     "title": "Don't judge this version of the submission, but it was driving me insane that I didn't have time to actually finish the post that I had already spent so much time organizing and writing this past week. This is that version, check out how it really went!",
@@ -47,7 +67,12 @@
     "description": "Underfoot: The ChatPot for Hidden Places (and Why I Don’t Do...",
     "slug": "dont-judge-this-version-of-the-submission-but-it-was-driving-me-insane-that-i-didnt-have-time-to-56o6",
     "cover_image": null,
-    "tags": "devchallenge, n8nbrightdatachallenge, ai, webdev"
+    "tags": [
+      "devchallenge",
+      "n8nbrightdatachallenge",
+      "ai",
+      "webdev"
+    ]
   },
   {
     "title": "Underfoot: The ChatPot for Hidden Places (and Why I Don’t Do Hackathons)",
@@ -57,7 +82,12 @@
     "description": "My updated submission for the first hackathon I've done in more than 10 years, here's how it really happened.",
     "slug": "underfoot-the-chatpot-for-hidden-places-and-why-i-dont-do-hackathons-2684",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F0ah4yyho2xc21jlmfyc9.png",
-    "tags": "devchallenge, n8nbrightdatachallenge, ai, webdev"
+    "tags": [
+      "devchallenge",
+      "n8nbrightdatachallenge",
+      "ai",
+      "webdev"
+    ]
   },
   {
     "title": "What in the World Is GitHub Coding Agent?",
@@ -67,7 +97,12 @@
     "description": "An all-in, real-world guide to GitHub’s Coding Agent—what it really does, what can go sideways, and why “all in” was the only way I could learn. This is just the start of a whole series, because honestly, this rabbit hole goes deep.",
     "slug": "what-in-the-world-is-github-coding-agent-2m8p",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjljecf0ii5q2wzqhg5zo.png%3Fv%3D3",
-    "tags": "githubcopilot, ai, tutorial, productivity"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "tutorial",
+      "productivity"
+    ]
   },
   {
     "title": "Medium and the Blanket AI Ban 😶",
@@ -77,7 +112,12 @@
     "description": "Medium’s AI policy feels like gatekeeping: spellcheck is fine, but real AI use is banned. Here’s why that doesn’t fly.",
     "slug": "medium-and-the-blanket-ai-ban-2cni",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxaqwca0srf1fk1t1stve.png%3Fv%3D2",
-    "tags": "writers, discuss, ai, chatgpt"
+    "tags": [
+      "writers",
+      "discuss",
+      "ai",
+      "chatgpt"
+    ]
   },
   {
     "title": "Three AIs and a Funeral: My Take on GPT-5 ⚰️",
@@ -87,7 +127,12 @@
     "description": "My real-world GPT-5 experience, tested daily in GitHub Copilot + ChatGPT.",
     "slug": "three-ais-and-a-funeral-my-take-on-gpt-5-3f3e",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqyk7n6n6fot4isf5y5jx.jpg%3Fv%3D2",
-    "tags": "githubcopilot, chatgpt, writing, watercooler"
+    "tags": [
+      "githubcopilot",
+      "chatgpt",
+      "writing",
+      "watercooler"
+    ]
   },
   {
     "title": "Weekend Hack: Making My Blog AI-Searchable (No Flames Required) 🔥🚫",
@@ -97,7 +142,12 @@
     "description": "My blog was invisible to AI search. Three hours later (and a solid round of OCD), I built a lazy Dev.to → GitHub Pages mirror. No flames required.",
     "slug": "weekend-hack-making-my-blog-ai-searchable-no-flames-required-16h5",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fejrxqn98k76uf04dmet4.jpg",
-    "tags": "writing, ai, seo, chatgpt"
+    "tags": [
+      "writing",
+      "ai",
+      "seo",
+      "chatgpt"
+    ]
   },
   {
     "title": "Everything I Know About GitHub Copilot Instructions — From Zero to Onboarded (For Real) ⚡",
@@ -107,7 +157,12 @@
     "description": "Everything you need to know about Copilot custom instructions — why they work, how to write them, and how to go from zero to useful fast.",
     "slug": "everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqdl3jnnrbk2p3wrxbnhj.png",
-    "tags": "githubcopilot, ai, productivity, learn"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "productivity",
+      "learn"
+    ]
   },
   {
     "title": "Herding Cats in Pajamas: Teamwork Across Time Zones 🐈‍⬛🕰️🛋️",
@@ -117,7 +172,12 @@
     "description": "Distributed teamwork isn’t easy — especially when everyone’s remote. Here’s how I wrangle projects and people without losing my mind (or coffee)",
     "slug": "herding-cats-in-pajamas-teamwork-across-time-zones-242n",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fb7ng9jqlul1f9dai31e5.png",
-    "tags": "discuss, career, productivity, developers"
+    "tags": [
+      "discuss",
+      "career",
+      "productivity",
+      "developers"
+    ]
   },
   {
     "title": "GitHub Copilot - Reusable Prompts Part 3: More Experiments, More Mayhem 🌀",
@@ -127,7 +187,12 @@
     "description": "Part 3 of the Reusable Prompts series covers troubleshooting when GitHub Copilot prompts don’t work as expected — with personal examples, optimization tips, structured syntax, and how to split, share, and reference prompts later.",
     "slug": "github-copilot-reusable-prompts-part-3-more-experiments-more-mayhem-552b",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgdsj7uaxrvtp32kx9ojo.png",
-    "tags": "githubcopilot, ai, tutorial, productivity"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "tutorial",
+      "productivity"
+    ]
   },
   {
     "title": "Guess what?! I passed the Pearson VUE GitHub Copilot Certification Exam 🏆✨",
@@ -137,7 +202,12 @@
     "description": "New as of July 2025: GitHub Copilot certification now runs on Pearson VUE. How I registered, what to expect on exam day, rules, gotchas, and a few funny moments.",
     "slug": "oh-i-have-big-news-guess-what-i-got-yesterday-1jca",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fox7kikbm3uxzdegqu276.png",
-    "tags": "community, watercooler, githubcopilot, developers"
+    "tags": [
+      "community",
+      "watercooler",
+      "githubcopilot",
+      "developers"
+    ]
   },
   {
     "title": "GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples",
@@ -147,7 +217,12 @@
     "description": "Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot — why it works, real examples, and how to use it in your own projects.",
     "slug": "github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png",
-    "tags": "githubcopilot, ai, tutorial, productivity"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "tutorial",
+      "productivity"
+    ]
   },
   {
     "title": "Reposting in case you missed it. Blaming AI is easy — but the real issue? It’s always been about people. 🧠✨",
@@ -157,7 +232,12 @@
     "description": "Fact-Checking the Fear Behind “The Dark Side of AI”: The Real...",
     "slug": "reposting-in-case-you-missed-it-the-first-time-because-blaming-ai-is-the-easy-way-out-but-this-1ga1",
     "cover_image": null,
-    "tags": "ai, mentalhealth, chatgpt, technology"
+    "tags": [
+      "ai",
+      "mentalhealth",
+      "chatgpt",
+      "technology"
+    ]
   },
   {
     "title": "So... This Was Just a Test - You Made It a Thing 🫶",
@@ -167,7 +247,12 @@
     "description": "If you've been following me (or just started), THANK YOU — seriously! To be honest, I really didn't...",
     "slug": "so-this-was-just-a-test-you-made-it-a-thing-6df",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fcs8jvrs5u49cib64985q.png",
-    "tags": "community, watercooler, writing, githubcopilot"
+    "tags": [
+      "community",
+      "watercooler",
+      "writing",
+      "githubcopilot"
+    ]
   },
   {
     "title": "GitHub Copilot: Everything You Wanted to Know About Reusable (and Experimental) Prompts - Part 1",
@@ -177,7 +262,12 @@
     "description": "An introduction to reusable prompts in GitHub Copilot — what they are, how they work, and why they’re worth adding to your dev workflow.",
     "slug": "github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbaao3h9wio1o8xfq52ge.png",
-    "tags": "githubcopilot, ai, tutorial, productivity"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "tutorial",
+      "productivity"
+    ]
   },
   {
     "title": "Fact-Checking the Fear Behind “The Dark Side of AI”: The Real Story",
@@ -187,7 +277,12 @@
     "description": "This post is a direct response to four nearly identical articles by @abhi_jith_f00c2ff58ac2a7e, all...",
     "slug": "fact-checking-the-fear-behind-the-dark-side-of-ai-the-real-story-366p",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fpy8x0dynqa7pw42s9ypy.png",
-    "tags": "ai, mentalhealth, chatgpt, technology"
+    "tags": [
+      "ai",
+      "mentalhealth",
+      "chatgpt",
+      "technology"
+    ]
   },
   {
     "title": "Is GitHub Copilot Safe? The Fun (and Hard) Truth About Responsible AI 🚦",
@@ -197,7 +292,12 @@
     "description": "It hit me the other day - I haven’t been great about adding RAI disclaimers (especially around here)....",
     "slug": "is-github-copilot-safe-the-fun-and-hard-truth-about-responsible-ai-3b95",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fdbk6nvlain3f3i33cmli.png",
-    "tags": "githubcopilot, ai, tutorial, discuss"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "tutorial",
+      "discuss"
+    ]
   },
   {
     "title": "How I Blog with Bots (But You Can Still Blame Me) 😅",
@@ -207,7 +307,12 @@
     "description": "The cover image is a result of me getting very impatient with ChatGPT after the third nearly perfect...",
     "slug": "how-i-blog-with-bots-but-you-can-still-blame-me-2861",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsz4qrlmm5hbbbxgbqw1w.png",
-    "tags": "watercooler, ai, discuss, community"
+    "tags": [
+      "watercooler",
+      "ai",
+      "discuss",
+      "community"
+    ]
   },
   {
     "title": "Name Swap Alert: OCD Strikes Again (But It’s Just the Username)",
@@ -217,7 +322,12 @@
     "description": "I changed my username back to anchildress1 (just dropped the extra “1” from anchildress11). For...",
     "slug": "name-swap-alert-ocd-strikes-again-but-its-just-the-username-3pai",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F3r7it14s5n0mqmdw2j8v.png",
-    "tags": "watercooler, profiletweaks, ocdmoments, usernamenews"
+    "tags": [
+      "watercooler",
+      "profiletweaks",
+      "ocdmoments",
+      "usernamenews"
+    ]
   },
   {
     "title": "GitHub Copilot Agent Mode: The Mistake You NEVER Want to Make",
@@ -227,7 +337,12 @@
     "description": "Copilot Agent Mode tried to help. Instead, it deleted my secrets. Took me 3 days to find them. Hilarious now. Wasn’t then.",
     "slug": "github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fzd6r96czythtk6tciwb7.png",
-    "tags": "githubcopilot, ai, discuss, watercooler"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "discuss",
+      "watercooler"
+    ]
   },
   {
     "title": "⚙️ Build It Better: Real-World AI Coding with GitHub Copilot",
@@ -237,7 +352,12 @@
     "description": "Originally shared as an internal how-to document.            GitHub Copilot as a true pair...",
     "slug": "build-it-better-real-world-ai-coding-with-github-copilot-1d47",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fkvg6wzqbawpim3n0bh69.png",
-    "tags": "githubcopilot, ai, productivity, tutorial"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "productivity",
+      "tutorial"
+    ]
   },
   {
     "title": "Calling All NodeJS Wizards: What Would You Add to the Ultimate Boilerplate?",
@@ -247,7 +367,12 @@
     "description": "🚀 TL;DR   I'm kicking off a new NodeJS starter template and crowdsourcing the best tips,...",
     "slug": "calling-all-nodejs-wizards-what-would-you-add-to-the-ultimate-boilerplate-38aj",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Foxifza2wedm7xa98xgwj.png",
-    "tags": "discuss, node, javascript, coding"
+    "tags": [
+      "discuss",
+      "node",
+      "javascript",
+      "coding"
+    ]
   },
   {
     "title": "📋 All I’ve Learned About GitHub Copilot Instructions (So Far)",
@@ -257,7 +382,12 @@
     "description": "📢 Just a Heads Up   I’ve started sharing these at work as well, so what you’re seeing here...",
     "slug": "all-ive-learned-about-github-copilot-instructions-so-far-5bm7",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fzpyly1o3hx438eoojb4m.png",
-    "tags": "githubcopilot, learning, ai, productivity"
+    "tags": [
+      "githubcopilot",
+      "learning",
+      "ai",
+      "productivity"
+    ]
   },
   {
     "title": "Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)",
@@ -267,7 +397,12 @@
     "description": "Welcome to Copilot Troubleshooting, Real-World Edition    ⚠️ This guide assumes you have...",
     "slug": "troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjxdfl79nlp19a29aw9ti.png",
-    "tags": "githubcopilot, ai, productivity, learning"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "productivity",
+      "learning"
+    ]
   },
   {
     "title": "What I've Learned About GitHub Copilot Agent Mode",
@@ -277,7 +412,12 @@
     "description": "This is Agent Mode, not autopilot. I tested the edges — from rogue workarounds to “wait, that worked?” moments. Welcome to the weird side.",
     "slug": "what-ive-learned-about-github-copilot-agent-mode-4co2",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fvpnc8ehs3l9hhdx6s7tr.png",
-    "tags": "githubcopilot, learning, ai, showdev"
+    "tags": [
+      "githubcopilot",
+      "learning",
+      "ai",
+      "showdev"
+    ]
   },
   {
     "title": "📈 Letting AI Drive: From Hell Loops to Happy Commits",
@@ -287,7 +427,12 @@
     "description": "What does 600,000+ lines of AI-generated code look like in the wild?            🛠️ What I...",
     "slug": "from-hell-loops-to-happy-commits-38c4",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsdb5g6alj83rl4n3pgcp.png",
-    "tags": "githubcopilot, ai, developers, casestudy"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "developers",
+      "casestudy"
+    ]
   },
   {
     "title": "🧠 Letting AI Drive: A Month of Building with GitHub Copilot",
@@ -297,6 +442,11 @@
     "description": "“When the going gets weird, the weird turn pro.” — Hunter S. Thompson            What happens when...",
     "slug": "letting-ai-drive-a-month-of-building-with-github-copilot-4a94",
     "cover_image": "https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5q4icjaorkkrasrgw9in.png",
-    "tags": "githubcopilot, ai, developers, casestudy"
+    "tags": [
+      "githubcopilot",
+      "ai",
+      "developers",
+      "casestudy"
+    ]
   }
 ]
