@@ -10,13 +10,38 @@ INDEX_TMPL = Template("""<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ username }} — Dev.to Mirror</title>
 <link rel="canonical" href="{{ canonical }}">
+<meta name="description" content="{{ site_description }}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ home }}">
+<meta property="og:title" content="{{ username }} — Dev.to Mirror">
+<meta property="og:description" content="{{ site_description }}">
+<meta property="og:image" content="{{ social_image }}">
+<meta property="og:site_name" content="{{ username }} — Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="{{ home }}">
+<meta name="twitter:title" content="{{ username }} — Dev.to Mirror">
+<meta name="twitter:description" content="{{ site_description }}">
+<meta name="twitter:image" content="{{ social_image }}">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="{{ username }} — Dev.to Mirror">
+<meta property="linkedin:description" content="{{ site_description }}">
+<meta property="linkedin:image" content="{{ social_image }}">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="{{ social_image }}">
+<meta name="author" content="{{ username }}">
 </head><body>
 <main>
   <h1>{{ username }} — Dev.to Mirror</h1>
   <ul>
   {% for p in posts %}
-    <li><a href="posts/{{ p.slug }}.html">{{ p.title }}</a>{% if p.description %} — {{ p.description }}{% endif %} — <small>{{ p.date }}</small></li>
+    <li><a href="posts/{{ p.slug }}.html">{{ p.title }}</a>{% if p.description %} — {{ p.description }}{% endif %}{% if p.tags %} — <small>Tags: {% for tag in p.tags %}#{{ tag }}{% if not loop.last %}, {% endif %}{% endfor %}</small>{% endif %} — <small>{{ p.date }}</small></li>
   {% endfor %}
   </ul>
   {% if comments %}<h2>Comment Notes</h2>

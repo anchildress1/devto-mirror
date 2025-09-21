@@ -97,11 +97,38 @@ PAGE_TMPL = Template("""<!doctype html><html lang="en"><head>
 <link rel="canonical" href="{{ canonical }}">
 <meta name="description" content="{{ description }}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:image" content="{{ social_image }}">
+<meta property="og:site_name" content="{{ site_name }}">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="{{ canonical }}">
+<meta name="twitter:title" content="{{ title }}">
+<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:image" content="{{ social_image }}">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="{{ title }}">
+<meta property="linkedin:description" content="{{ description }}">
+<meta property="linkedin:image" content="{{ social_image }}">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="{{ social_image }}">
+<meta name="author" content="{{ author }}">
+{% if tags %}<meta name="keywords" content="{{ tags|join(', ') }}">{% endif %}
 </head><body>
 <main>
   <h1><a href="{{ canonical }}">{{ title }}</a></h1>
   {% if cover_image %}<img src="{{ cover_image }}?v=2" alt="Banner image for {{ title }}" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">{% endif %}
   {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
+  {% if tags %}<p><strong>Tags:</strong> {% for tag in tags %}<span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#{{ tag }}</span>{% if not loop.last %} {% endif %}{% endfor %}</p>{% endif %}
+  {% if description %}<p><em>{{ description }}</em></p>{% endif %}
   <article>{{ content }}</article>
   <p><a href="{{ canonical }}">Read on Dev.to →</a></p>
 </main>
@@ -114,6 +141,30 @@ COMMENT_NOTE_TMPL = Template("""<!doctype html><html lang="en"><head>
 <link rel="canonical" href="{{ canonical }}">
 <meta name="description" content="{{ description }}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:image" content="{{ social_image }}">
+<meta property="og:site_name" content="{{ site_name }}">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="{{ canonical }}">
+<meta name="twitter:title" content="{{ title }}">
+<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:image" content="{{ social_image }}">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="{{ title }}">
+<meta property="linkedin:description" content="{{ description }}">
+<meta property="linkedin:image" content="{{ social_image }}">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="{{ social_image }}">
+<meta name="author" content="{{ author }}">
 </head><body>
 <main>
   <h1>{{ title }}</h1>
@@ -263,6 +314,9 @@ class Post:
         
         # Capture cover image for banner display
         self.cover_image = api_data.get("cover_image", "")
+        
+        # Capture tags from Dev.to API
+        self.tags = api_data.get("tag_list", [])
 
         # Extract the full slug from the URL instead of using the API's slug field
         # Dev.to URLs have format: https://dev.to/username/full-slug-with-id
@@ -293,7 +347,8 @@ class Post:
             'content_html': self.content_html,
             'description': self.description,
             'slug': self.slug,
-            'cover_image': self.cover_image
+            'cover_image': self.cover_image,
+            'tags': self.tags
         }
 
     @classmethod
@@ -307,6 +362,7 @@ class Post:
         post.description = data['description']
         post.slug = data['slug']
         post.cover_image = data.get('cover_image', '')  # Handle legacy data without cover_image
+        post.tags = data.get('tags', [])  # Handle legacy data without tags
         return post
 
 def load_comment_manifest(path="comments.txt"):
@@ -426,13 +482,21 @@ for p in all_posts:
     # Use the feed-provided link as canonical. Fall back to a Dev.to
     # constructed URL only if link is falsy for some reason.
     canonical = getattr(p, 'link', None) or f"https://dev.to/{DEVTO_USERNAME}/{p.slug}"
+    
+    # Use cover image as social image, fallback to default banner
+    social_image = p.cover_image or f"{HOME}assets/devto-mirror.jpg"
+    
     html_out = PAGE_TMPL.render(
         title=p.title,
         canonical=canonical,
         description=p.description,
         date=p.date,
         content=p.content_html,
-        cover_image=p.cover_image
+        cover_image=p.cover_image,
+        tags=getattr(p, 'tags', []),
+        social_image=social_image,
+        site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
+        author=DEVTO_USERNAME
     )
     (POSTS_DIR / f"{p.slug}.html").write_text(html_out, encoding="utf-8")
     print(f"Wrote: {p.slug}.html (canonical: {canonical})")
@@ -452,19 +516,37 @@ if comment_items:
     for c in comment_items:
         title = "Comment note"
         desc = (c["context"] or "Comment note").strip()[:300]
+        
+        # Default social image
+        social_image = f"{HOME}assets/devto-mirror.jpg"
+        
         # For comment notes, canonical should point back to the original Dev.to URL
         html_page = COMMENT_NOTE_TMPL.render(
             title=title,
             canonical=c["url"],
             description=desc,
             context=html.escape(c["context"]) if c["context"] else "",
-            url=c["url"]
+            url=c["url"],
+            social_image=social_image,
+            site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
+            author=DEVTO_USERNAME
         )
         pathlib.Path(c["local"]).write_text(html_page, encoding="utf-8")
 
 # Use Dev.to profile as canonical for the index page
 devto_profile = f"https://dev.to/{DEVTO_USERNAME}"
-index_html = INDEX_TMPL.render(username=DEVTO_USERNAME, posts=all_posts, comments=comment_items, home=HOME, canonical=devto_profile)
+site_description = f"Mirror of {DEVTO_USERNAME}'s Dev.to blog posts. Canonical lives on Dev.to. This is just a crawler-friendly mirror."
+social_image = f"{HOME}assets/devto-mirror.jpg"
+
+index_html = INDEX_TMPL.render(
+    username=DEVTO_USERNAME, 
+    posts=all_posts, 
+    comments=comment_items, 
+    home=HOME, 
+    canonical=devto_profile,
+    site_description=site_description,
+    social_image=social_image
+)
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
 pathlib.Path("robots.txt").write_text(ROBOTS_TMPL.format(home=HOME), encoding="utf-8")
 
