@@ -100,6 +100,7 @@ PAGE_TMPL = Template("""<!doctype html><html lang="en"><head>
 </head><body>
 <main>
   <h1><a href="{{ canonical }}">{{ title }}</a></h1>
+  {% if cover_image %}<img src="{{ cover_image }}?v=2" alt="Banner image for {{ title }}" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">{% endif %}
   {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
   <article>{{ content }}</article>
   <p><a href="{{ canonical }}">Read on Dev.to →</a></p>
@@ -259,6 +260,9 @@ class Post:
 
         # Use the API's description as-is
         self.description = (api_data.get("description", "") or "").strip()
+        
+        # Capture cover image for banner display
+        self.cover_image = api_data.get("cover_image", "")
 
         # Extract the full slug from the URL instead of using the API's slug field
         # Dev.to URLs have format: https://dev.to/username/full-slug-with-id
@@ -288,7 +292,8 @@ class Post:
             'date': date_val,
             'content_html': self.content_html,
             'description': self.description,
-            'slug': self.slug
+            'slug': self.slug,
+            'cover_image': self.cover_image
         }
 
     @classmethod
@@ -301,6 +306,7 @@ class Post:
         post.content_html = data['content_html']
         post.description = data['description']
         post.slug = data['slug']
+        post.cover_image = data.get('cover_image', '')  # Handle legacy data without cover_image
         return post
 
 def load_comment_manifest(path="comments.txt"):
@@ -425,7 +431,8 @@ for p in all_posts:
         canonical=canonical,
         description=p.description,
         date=p.date,
-        content=p.content_html
+        content=p.content_html,
+        cover_image=p.cover_image
     )
     (POSTS_DIR / f"{p.slug}.html").write_text(html_out, encoding="utf-8")
     print(f"Wrote: {p.slug}.html (canonical: {canonical})")
