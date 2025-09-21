@@ -92,13 +92,15 @@ def parse_date(date_str):
         if s.endswith('Z'):
             s = s.replace('Z', '+00:00')
         return datetime.fromisoformat(s)
-    except Exception:
+    except (ValueError, TypeError):
+        # Failed to parse as ISO format, try RFC format
         pass
 
     # Try RFC-style parse
     try:
         return parsedate_to_datetime(s)
-    except Exception:
+    except (ValueError, TypeError, OverflowError):
+        # Failed to parse as RFC format, try basic ISO format
         pass
 
     # Try basic ISO without timezone

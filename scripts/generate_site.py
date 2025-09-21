@@ -9,8 +9,10 @@ DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
 LAST_RUN_FILE = "last_run.txt"
 
-assert DEVTO_USERNAME, "Missing DEVTO_USERNAME (your Dev.to username)"
-assert "/" in PAGES_REPO, "Invalid PAGES_REPO (expected 'user/repo')"
+if not DEVTO_USERNAME:
+    raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
+if "/" not in PAGES_REPO:
+    raise ValueError("Invalid PAGES_REPO (expected 'user/repo')")
 
 username, repo = PAGES_REPO.split("/")
 HOME = f"https://{username}.github.io/{repo}/"
@@ -48,7 +50,7 @@ def fetch_all_articles_from_api(last_run_iso=None):
         if page == 1:
             # use minute granularity so value changes once per minute
             params["_cb"] = time.time() // 60
-        response = requests.get(api_base, params=params)
+        response = requests.get(api_base, params=params, timeout=30)
         response.raise_for_status()
         data = response.json()
         if not data:
@@ -77,7 +79,7 @@ def fetch_all_articles_from_api(last_run_iso=None):
     full_articles = []
     for i, article in enumerate(articles):
         print(f"Fetching full content for article {i+1}/{len(articles)}: {article['title']}")
-        full_response = requests.get(f"https://dev.to/api/articles/{article['id']}")
+        full_response = requests.get(f"https://dev.to/api/articles/{article['id']}", timeout=30)
         full_response.raise_for_status()
         full_articles.append(full_response.json())
         # Add delay to avoid rate limiting
