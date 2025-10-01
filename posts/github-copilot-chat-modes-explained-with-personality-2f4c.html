@@ -1,0 +1,424 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>GitHub Copilot Chat Modes Explained (with Personality) 🎭</title>
+<link rel="canonical" href="https://dev.to/anchildress1/github-copilot-chat-modes-explained-with-personality-2f4c">
+<meta name="description" content="The third way to shape how GitHub Copilot responds: chat modes. Not in GitHub’s docs, but they’re real, they’re in the awesome-copilot repo, and they work. Here’s how to write your own with personality.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/github-copilot-chat-modes-explained-with-personality-2f4c">
+<meta property="og:title" content="GitHub Copilot Chat Modes Explained (with Personality) 🎭">
+<meta property="og:description" content="The third way to shape how GitHub Copilot responds: chat modes. Not in GitHub’s docs, but they’re real, they’re in the awesome-copilot repo, and they work. Here’s how to write your own with personality.">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fp3gj357ptihfl2b6711l.png%3Fv%3D2025">
+<meta property="og:site_name" content="anchildress1 — Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/github-copilot-chat-modes-explained-with-personality-2f4c">
+<meta name="twitter:title" content="GitHub Copilot Chat Modes Explained (with Personality) 🎭">
+<meta name="twitter:description" content="The third way to shape how GitHub Copilot responds: chat modes. Not in GitHub’s docs, but they’re real, they’re in the awesome-copilot repo, and they work. Here’s how to write your own with personality.">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fp3gj357ptihfl2b6711l.png%3Fv%3D2025">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="GitHub Copilot Chat Modes Explained (with Personality) 🎭">
+<meta property="linkedin:description" content="The third way to shape how GitHub Copilot responds: chat modes. Not in GitHub’s docs, but they’re real, they’re in the awesome-copilot repo, and they work. Here’s how to write your own with personality.">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fp3gj357ptihfl2b6711l.png%3Fv%3D2025">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fp3gj357ptihfl2b6711l.png%3Fv%3D2025">
+<meta name="author" content="anchildress1">
+<meta name="keywords" content="githubcopilot, ai, tutorial, productivity">
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/github-copilot-chat-modes-explained-with-personality-2f4c">GitHub Copilot Chat Modes Explained (with Personality) 🎭</a></h1>
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fp3gj357ptihfl2b6711l.png%3Fv%3D2025?v=2" alt="Banner image for GitHub Copilot Chat Modes Explained (with Personality) 🎭" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  <p><em>Published: 2025-10-01T14:11:00Z</em></p>
+  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#tutorial</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#productivity</span></p>
+  <p><em>The third way to shape how GitHub Copilot responds: chat modes. Not in GitHub’s docs, but they’re real, they’re in the awesome-copilot repo, and they work. Here’s how to write your own with personality.</em></p>
+  <article><blockquote>
+<p>🦄 I’ve been writing these weekly Copilot posts since June and it’s been great… but (of course there has to be a “but”) I feel like I've hit a wall on topics. Maybe I could poke at the new CLI (seems unimpressive so far), maybe I’d wait out the rate limits and finally wrestle with Codex, I might even take a week or two off. Then someone asked a new question and I realized—nope. None of that is happening, at least not yet.  </p>
+
+<p>I’ve covered pretty much every major Copilot angle except this one: chat modes. I’ve been dropping random asides about them for weeks while studiously avoiding a full post. Well, I guess time’s up. Chat modes are the last trick in the set—the third and final way to shape Copilot without breaking it. At least, <em>I’m gonna try</em> to explain my thought process in a way that makes sense to someone who isn’t already living inside my head.</p>
+
+<p>And while we’re here, current me is once again making promises that future me will probably regret—next week I’ll show you how to put your shiny new chat mode to work. Spoiler: you’ll want VS Code (or Insiders) installed before then.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqzzhmrykwxgzn1ew0nux.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqzzhmrykwxgzn1ew0nux.png%3Fv%3D2025" alt="Human-Crafted, AI-Edited badge" loading="lazy" width="200" height="200"></a></p>
+
+
+<hr>
+
+<h2>
+  <a name="what-are-chat-modes" href="#what-are-chat-modes">
+  </a>
+  What are Chat Modes? 🤔
+</h2>
+
+<p>You can thank my friends at work for asking me this question directly, or I might’ve successfully dodged this post entirely. I don’t think I even answered in the moment—I spun into a whirlwind of deep thought and then sprinted back to whatever I was <em>supposed</em> to be doing after some undetermined amount of time I spent over-thinking Copilot. 😆</p>
+
+<p>I’ve thought about writing this up several times, but after a couple of false starts I started actively avoiding it. One—it’s highly specific. Two—it’s the hardest of my Copilot approaches to explain in a way that doesn’t sound made up. Which… is fair, because I did make a lot of it up for my own workflows.</p>
+
+<p>Before we dig into my thought process, let’s take inventory of the <a href="https://docs.github.com/en/copilot/concepts/prompting/response-customization" target="_blank" rel="noopener noreferrer">“official” GitHub story</a>.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fe8p7xi0p6urphzqsb7qi.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fe8p7xi0p6urphzqsb7qi.png%3Fv%3D2025" alt="Screenshot GitHub docs regarding Copilot customization" loading="lazy" width="1558" height="618"></a></p>
+
+<p>Conveniently, GitHub doesn’t mention <strong>chat modes</strong> at all (at least not anywhere I could find). <em>Why?</em> No clue! They do exist, though, and they’re a visible part of GitHub’s own <a href="https://github.com/github/awesome-copilot" target="_blank" rel="noopener noreferrer">awesome-copilot</a> repo. After some digging, I landed on <a href="https://code.visualstudio.com/docs/copilot/customization/custom-chat-modes" target="_blank" rel="noopener noreferrer">VS Code’s explanation</a>—which at least proves they’re real:</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F1l3nua5lu12h6g69ufup.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F1l3nua5lu12h6g69ufup.png%3Fv%3D2025" alt="Screenshot VS Code docs regarding Copilot customization" loading="lazy" width="1600" height="298"></a></p>
+
+
+<hr>
+
+<h2>
+  <a name="how-i-explain-it-instead" href="#how-i-explain-it-instead">
+  </a>
+  How I Explain It, Instead 🎭
+</h2>
+
+<p>There are three unique ways to shape how Copilot behaves, and I’ve already written whole series on the first two:</p>
+
+<ul>
+<li><p><strong>Instructions</strong> — These are your foundation. They ground Copilot in a methodology or approach, almost like a README for AI that explains <strong>how to behave</strong>. If you want to see the full breakdown, check out my <a href="https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0">Everything I Know About GitHub Copilot Instructions</a> series.  </p></li>
+<li><p><strong>Reusable prompts</strong> — These are your recipes, a full printout of <strong>step-by-step directions</strong> that break a complex task into smaller manageable pieces. They’re the “do these parts in this order to reach a specific goal” instructions I covered in my <a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">Everything You Wanted to Know About Reusable (and Experimental) Prompts</a> series.  </p></li>
+<li><p><strong>Chat modes</strong> — These are your characters. It’s <strong>the agent’s state of being</strong>, and it can combine both instructions and reusable prompts into a larger directive. Give the same task to two different characters and you’ll get two very different results—both technically correct, but not even remotely the same.  </p></li>
+</ul>
+
+<blockquote>
+<p>🦄 Nobody expects House to solve a problem like Daenerys Targaryen. If you hand them the same problem, you’ll get two wildly different outcomes—both accurate and valid, neither boring.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="build-from-scratch" href="#build-from-scratch">
+  </a>
+  Build From Scratch 🛠️
+</h2>
+
+<p>I mostly follow my <strong>PRIOR</strong> model for these, the exact same one I use for all prompts in general. The order doesn’t matter nearly as much as keeping things logical and cutting anything that doesn’t apply.</p>
+
+<p>Also, don’t misunderstand. I’m not saying order <em>never</em> matters—because sometimes it absolutely does. What I’m trying to say is worry less about how the steps look on the page and more about the substance you’re feeding into them. As long as it makes sense to you, then it will most likely make sense to Copilot, too.</p>
+
+<blockquote>
+<p>🦄 You can paint like Picasso or carve like Michelangelo—both masterpieces, completely different processes. The point isn’t which steps you followed, it’s whether what you built holds up as art.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="frontmatter" href="#frontmatter">
+  </a>
+  Frontmatter 🔖
+</h2>
+
+<p>Remember that a chat mode is essentially a character sheet for Copilot to use every time it completes a task with that costume on. The YAML frontmatter helps define exactly what that task looks like and identifies all the tools your agent will be able to access in that mode.<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="nn">---</span>
+<span class="na">description</span><span class="pi">:</span> <span class="pi">|</span>
+  <span class="s">Automates secure, structured, and centralized logging implementation and reviews across your codebase, wielding JSON like a switchblade and enforcing structured readability like a made man.</span>
+<span class="na">model</span><span class="pi">:</span> <span class="s">claude-sonnet-4</span>
+<span class="na">tools</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">search</span>
+  <span class="pi">-</span> <span class="s">editFiles</span>
+  <span class="pi">-</span> <span class="s">readFiles</span>
+  <span class="pi">-</span> <span class="s">runInTerminal</span>
+  <span class="pi">-</span> <span class="s">runTests</span>
+  <span class="pi">-</span> <span class="s">findTestFiles</span>
+<span class="nn">---</span>
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> If you leave the <code>model</code> definition out of the frontmatter, then the model selected in the user's dropdown will be the default selection. A lot of people will leave these blank intentionally so the user can pick, but other times it's beneficial to limit this to a very specific model instead.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="persona" href="#persona">
+  </a>
+  Persona 🎭
+</h2>
+
+<p>This is your chance to really have some fun with Copilot. Want a sleek vampire voice or iZombie-style debugging? Go for it! Some people complain that personas waste context space or distract from the goal. My counter: you can define a character in under fifty tokens, you can absolutely make this a logical part of the goal, and honestly—nobody wants a boring Copilot.</p>
+
+<blockquote>
+<p>🦄 Well, I don’t want a boring Copilot! Even my “pragmatist” mode has dry wit baked in—and it’s supposed to be the quiet one.</p>
+</blockquote>
+
+<p>A persona should define everything about a character, including moods, style, and a reason to exist. If you only tell it how to respond then you’ll end up with a simple tone. But if you tell it why it exists and give it a driving force, you’ll see the real usefulness. Tone becomes a quick addition to steer the dialog.</p>
+
+<blockquote>
+<p>🪄 Voila! Suddenly your Copilot isn’t just wearing a costume—it knows why it walked on stage in the first place.<br>
+</p>
+</blockquote>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="p">-</span> You are <span class="gs">**The Logfather**</span> — the quiet but commanding force of logging order.
+<span class="p">-</span> You're confident, unshakeable, and precise.
+<span class="p">-</span> You enforce structure, security, and clarity without touching business logic.
+<span class="p">-</span> Every log has a place, every level a purpose.
+<span class="p">-</span> Your job is to clean up logging across the codebase without rewriting the soul of the app.
+<span class="p">-</span> You like your logs structured, injected, and environment-aware.
+<span class="p">-</span> And if someone tries to sneak in an unstructured debug print? Fuhgeddaboudit.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> Skip all the over-inflated titles (“expert,” “experienced,” “10x,” etc.). They do nothing to change the model’s training—but they absolutely shape the confidence level of every response you get.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="requirements" href="#requirements">
+  </a>
+  Requirements 📌
+</h2>
+
+<p>This is your <strong>definition of done.</strong> How does the actor know when the job is finished? Maybe it’s once a specific output appears; maybe it’s an ongoing mission. Either way, spell it out.</p>
+
+<p>For the Logfather, the job is to help with <strong>enterprise-ready structured logs</strong> in any language—and even scaffold centralized logging if your repo hasn’t adopted that practice yet.<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code>Your goals include:
+<span class="p">
+-</span> Detect and fix poor logging practices (e.g., wrong levels, missing logs, noisy debug prints)
+<span class="p">-</span> Insert or upgrade structured logging using appropriate libraries per language
+<span class="p">-</span> Ensure logging setup is centralized and DI-compliant (if possible)
+<span class="p">-</span> Verify that logging levels are configurable via environment, not static config
+<span class="p">-</span> Provide a clear, concise summary of the changes
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h2>
+  <a name="impediments" href="#impediments">
+  </a>
+  Impediments ⛔
+</h2>
+
+<p>This is where you call out what will trip Copilot up or drag results off-course. For the Logfather, that means zero changes to business logic—its one job has nothing to do with rewriting code or tests.</p>
+
+<p>Guidance like RFC 2119 (MAY / SHOULD / MUST, and all their bossy friends) is controversial. My advice is to <strong>use it carefully</strong>. Don’t flood your instructions with absolutes unless you’ve thoroughly tested how Copilot reacts. Sometimes they save you; other times they back you into a corner you never meant to be in. Use them when they truly add value, be strategic, and remember that flexibility often delivers better, more consistent results.<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="p">-</span> NEVER alter or refactor application logic outside of logging concerns
+<span class="p">-</span> AVOID inserting logs globally unless explicitly told to
+<span class="p">-</span> MUST respect the user’s scoped intent (default to most valuable module or path, if unclear)
+<span class="p">-</span> MUST maintain compatibility with existing test suites (update mocks as needed but AVOID logic changes)
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>🦄 I’m using them here because, in this limited context, it made sense and test results were good. Also know, it once took me three days to realize <code>EXCEPT</code> does not always do what you think it does. If an agent misbehaves, do yourself a favor and stop for a minute. <em>Ask it why.</em> A decent model can explain its reasoning and then jump right back into the work once the instructions align with the goal again.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="outcomes" href="#outcomes">
+  </a>
+  Outcomes 🎯
+</h2>
+
+<p>This is the part I see people skip the most—it might as well be the Terms &amp; Conditions screen you scroll past when installing a new app. But half of the chat modes’ magic lives right here. If you want structure in your results, this is the place to define it.</p>
+
+<p>Outcomes are the <strong>acceptance criteria and style guardrails</strong> for your mode—think pre-flight checklist, not a grading rubric.<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code>Each response should:
+<span class="p">
+-</span> Apply appropriate logging levels based on context and severity (e.g., trace for deep dive, debug for dev-only, info for ops, warn for edge behavior, error for failures)
+<span class="p">-</span> Use structured logging (preferably JSON)
+<span class="p">-</span> Automatically use or insert centralized logging, with environment-configurable level control
+<span class="p">-</span> Include correlation IDs in structured logs when processing requests or events
+<span class="p">-</span> Apply log sampling when high volume is detected (project-appropriate threshold)
+
+Every response should provide:
+<span class="p">
+-</span> A <span class="gs">**brief summary of changes**</span> grouped by intent (e.g., <span class="sb">`Logger injected`</span>, <span class="sb">`Error logs added`</span>)
+<span class="p">-</span> Optional <span class="gs">**warnings or suggestions**</span> for gaps (e.g., missing logger config)
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> "Make logs better" is a wish. Copilot isn’t a genie—give it measurable results it can check against output data.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="reference-examples" href="#reference-examples">
+  </a>
+  Reference Examples 🔗
+</h2>
+
+<p>This is how you stop Copilot from drifting into the weeds. Think of it as painting the lane lines on the road: show the clear path forward, but also mark the curbs it shouldn’t cross. Good examples alone aren’t enough—you want both the wins and the facepalms spelled out.<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="gu">### Good Examples ✅</span>
+
+You may receive any of the following:
+<span class="p">
+-</span> Code snippets or full file contents
+<span class="p">-</span> Scope directives like <span class="sb">`analyze API/payment`</span>
+
+Requests that work well:
+<span class="p">
+-</span> "Audit this worker process for proper log levels"
+<span class="p">-</span> "Ensure this module is safe from log injection"
+<span class="p">-</span> "Review my log config to allow runtime env changes"
+<span class="p">-</span> "Add correlation tracking for this API endpoint"
+<span class="p">-</span> "Implement log sampling for this high-volume service"
+
+If the application is already using a centralized logger, you SHOULD use it.
+If not, offer to set one up—but aim for minimally invasive, focused edits.
+
+<span class="gu">### Anti-Patterns to Fix ❌</span>
+<span class="p">
+-</span> <span class="sb">`console.log()`</span> or <span class="sb">`print()`</span> statements in production code
+<span class="p">-</span> Logging sensitive data (passwords, tokens, API keys, PII)
+<span class="p">-</span> Static log levels hardcoded in source files
+<span class="p">-</span> Concatenated strings instead of structured fields
+<span class="p">-</span> Missing context (no correlation IDs, timestamps, or severity)
+<span class="p">-</span> Overly verbose debug logs left active in production
+<span class="p">-</span> Exception stack traces that expose internal architecture
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> You can’t shower Copilot in sunshine and then complain when it doesn’t know how to drive in the rain. Stop and dip it in a few puddles along the way, too.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="get-creative-and-share" href="#get-creative-and-share">
+  </a>
+  Get Creative and Share 🎨
+</h2>
+
+<p>If you can dream it up, Copilot can <em>probably</em> handle it. Build a teacher mode or a reviewer mode. I have an Instructionalist, the HLBPA, the Logfather, a Principal Pragmatist—plus a couple more working their way through planning right now. Want a Vampiric Copilot or a Commit Troll just to guard commits to your repo? Then do it! (Also: guilty ✋).</p>
+
+<p>Check out my <a href="https://github.com/anchildress1/awesome-github-copilot" target="_blank" rel="noopener noreferrer">awesome-github-copilot</a> repo or the larger community-driven <a href="https://github.com/github/awesome-copilot" target="_blank" rel="noopener noreferrer">awesome-copilot</a> repo for even more examples when you start building your own. Don’t forget to come back and share what you come up with!</p>
+
+<blockquote>
+<p>🪄 Aside regarding my XML chat modes: they started solely as a theory. Yes—they do work, but Markdown is still the officially supported format when giving any input to Copilot. I mostly use the XML style for Coding Agent because it’s easy—but you can drop the full Markdown file in there, too. No problem!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="ai-signed-in-ink-not-invisible" href="#ai-signed-in-ink-not-invisible">
+  </a>
+  🛡️ AI Signed in Ink, Not Invisible
+</h2>
+
+<p>This wasn’t ghost-written. I drafted every section, then argued with ChatGPT until the words fought back. It flagged inconsistencies, punched up pacing, and helped sharpen jokes. I approved every line—and yes, I grinned when the edits swung back at me. <em>Finally!</em> 😁</p>
+
+</article>
+  <p><a href="https://dev.to/anchildress1/github-copilot-chat-modes-explained-with-personality-2f4c">Read on Dev.to →</a></p>
+</main>
+</body></html>
