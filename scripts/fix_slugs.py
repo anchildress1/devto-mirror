@@ -7,13 +7,12 @@ Usage: python3 scripts/fix_slugs.py
 """
 import json
 import pathlib
-from datetime import datetime
 
 def extract_slug_from_url(url):
     """Extract the full slug from a Dev.to URL"""
     if not url or "//" not in url:
         return None
-    
+
     try:
         # Extract the path part after the protocol
         url_path = url.split("//")[1]  # Remove protocol
@@ -23,23 +22,23 @@ def extract_slug_from_url(url):
     except (IndexError, ValueError):
         # Failed to parse URL structure
         return None
-    
+
     return None
 
 def main():
     """Fix slugs in posts_data.json"""
     posts_file = pathlib.Path("posts_data.json")
-    
+
     if not posts_file.exists():
         print("No posts_data.json found. Nothing to fix.")
         return
-    
+
     # Backup the original file
     backup_file = pathlib.Path("posts_data.json.backup")
     if not backup_file.exists():
         backup_file.write_text(posts_file.read_text(), encoding="utf-8")
-        print(f"Created backup: {backup_file}")
-    
+        print("Created backup: posts_data.json.backup")
+
     # Load the data
     try:
         with posts_file.open("r", encoding="utf-8") as f:
@@ -47,25 +46,25 @@ def main():
     except Exception as e:
         print(f"Error loading posts_data.json: {e}")
         return
-    
+
     print(f"Loaded {len(posts)} posts")
-    
+
     fixed_count = 0
     for post in posts:
         url = post.get("link", "")
         current_slug = post.get("slug", "")
-        
+
         if url:
             correct_slug = extract_slug_from_url(url)
             if correct_slug and correct_slug != current_slug:
-                print(f"Fixing slug:")
-                print(f"  Title: {post.get('title', 'Untitled')}")
-                print(f"  Old slug: {current_slug}")
-                print(f"  New slug: {correct_slug}")
+                print("Fixing slug:")
+                print("  Title: %s" % post.get('title', 'Untitled'))
+                print("  Old slug: %s" % current_slug)
+                print("  New slug: %s" % correct_slug)
                 post["slug"] = correct_slug
                 fixed_count += 1
                 print()
-    
+
     if fixed_count > 0:
         # Save the fixed data
         try:

@@ -8,7 +8,6 @@ Usage: python3 scripts/clean_posts_data.py
 import json
 from pathlib import Path
 from datetime import datetime
-from email.utils import parsedate_to_datetime
 from utils import parse_date
 
 ROOT = Path(__file__).resolve().parents[1]

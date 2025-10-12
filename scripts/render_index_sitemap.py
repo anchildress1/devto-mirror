@@ -3,10 +3,7 @@ import json
 import pathlib
 import re
 import urllib.parse
-from jinja2 import Template
-from datetime import datetime
-from email.utils import parsedate_to_datetime
-from utils import INDEX_TMPL, SITEMAP_TMPL, parse_date, dedupe_posts_by_link
+from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
 from slugify import slugify
 
 ROOT = pathlib.Path('.')
@@ -131,7 +128,12 @@ def main():
     if not title_user and posts_sorted:
         # attempt to extract user from first post link
         try:
-            first_link = posts_sorted[0].get('link') if isinstance(posts_sorted[0], dict) else getattr(posts_sorted[0], 'link', '')
+            first_post = posts_sorted[0]
+            if isinstance(first_post, dict):
+                first_link = first_post.get('link')
+            else:
+                first_link = getattr(first_post, 'link', '')
+
             if first_link:
                 parsed = urllib.parse.urlparse(first_link)
                 parts = parsed.path.strip('/').split('/')
@@ -140,7 +142,13 @@ def main():
         except Exception:
             title_user = ''
 
-    index_html = INDEX_TMPL.render(username=title_user or devto_username, posts=posts_sorted, comments=comments, canonical=canonical_index, home=HOME)
+    index_html = INDEX_TMPL.render(
+        username=title_user or devto_username,
+        posts=posts_sorted,
+        comments=comments,
+        canonical=canonical_index,
+        home=HOME,
+    )
     (ROOT / 'index.html').write_text(index_html, encoding='utf-8')
 
     # For sitemap, prefer the explicit 'link' field (canonical dev.to URL) when present.

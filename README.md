@@ -1,4 +1,4 @@
-# Dev\.to Mirror — The Set-and-Forget AI Crawler
+# Dev.to Mirror — The Set-and-Forget AI Crawler
 
 ![anchildress1/devto-mirror social card: A colorful crawler](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror.jpg)
 
@@ -22,16 +22,12 @@
 
 ## Repo Stuff
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-EDC531.svg?logo=apache)](./LICENSE)
-![Repo Size](https://img.shields.io/github/repo-size/anchildress1/devto-mirror)
-![Last Commit](https://img.shields.io/github/last-commit/anchildress1/devto-mirror)
-![Stars](https://img.shields.io/github/stars/anchildress1/devto-mirror)
-<br />
- [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/anchildress1)
- [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto\&logoColor=fff)](https://dev.to/anchildress1)
- [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?logo=linkedin\&logoColor=white)](https://www.linkedin.com/in/anchildress1/)
+[![GitHub License](https://img.shields.io/badge/license-Polyform_Shield_1.0.0-yellow)](./LICENSE) ![Repo Size](https://img.shields.io/github/repo-size/anchildress1/devto-mirror) ![Last Commit](https://img.shields.io/github/last-commit/anchildress1/devto-mirror) ![Stars](https://img.shields.io/github/stars/anchildress1/devto-mirror)
+ [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/anchildress1) [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto\&logoColor=fff)](https://dev.to/anchildress1) [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?logo=linkedin\&logoColor=white)](https://www.linkedin.com/in/anchildress1/)
 
-> **DevTO-Mirror** helps make your dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante’s DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.tx — _that's it_. If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
+## DevTO-Mirror
+
+This Copilot generated utility helps make your Dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante’s DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.tx — _that's it_. If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
 
 ---
 
@@ -93,6 +89,18 @@ The refresh process safely backs up your current state before wiping and regener
 1. **Fork this repository** or use it as a template
 2. **Set Repository Variable**
    - Go to Settings → Secrets and variables → Actions → Variables
+
+   Local security & linting
+   ------------------------
+
+   We include a `pre-commit` configuration and a small set of developer dependencies to make it easy to run security checks locally. Recommended steps:
+
+   1. Create and activate a venv: `python -m venv .venv && source .venv/bin/activate`
+   2. Install dev tools: `pip install -r dev-requirements.txt`
+   3. Install git hooks: `pre-commit install`
+   4. Run a full check: `pre-commit run --all-files`
+
+   This mirrors the CI checks (bandit, flake8, detect-secrets) and prevents many security flags from reaching PRs.
    - Add `DEVTO_USERNAME` with your Dev.to username
 3. **Delete existing gh-pages branch** (if it exists)
    - Go to your repo → Branches
@@ -140,4 +148,3 @@ Every project has to have a stack of fine print somewhere. _Keep going, keep goi
 You know where [the license](./LICENSE) is, but I'll sum it up: **this is not open source** (even though you can still do just about anything you want with it). As long as you're not turning it into the next big SaaS or selling subscriptions in the cloud, then have fun! Else, **you've gotta ask me first.**
 
 Basically? This project's got boundaries. Be cool, don't try to sneak it into a product launch, and we'll get along just fine. 😘
-

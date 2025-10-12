@@ -1,0 +1,32 @@
+repos:
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        # Ignore common style issues to focus on code quality over formatting
+        # E302: expected 2 blank lines before function/class - relaxes spacing rules
+        # E305: expected 2 blank lines after class/function - relaxes spacing rules
+        # E231: missing whitespace after ',' - allows compact lists
+        # E261: at least two spaces before inline comment - allows flexible commenting
+        # E401: multiple imports on one line - allows import grouping
+        args: ['--max-line-length=120', '--ignore=E302,E305,E231,E261,E401']
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.6
+    hooks:
+      - id: bandit
+        args: ['-r', 'scripts']
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  - repo: local
+    hooks:
+      - id: commit-msg-conventional
+        name: Conventional commit message lint
+        entry: python scripts/validate_commit_msg.py
+        language: python
+        additional_dependencies: ['gitlint>=0.16.0']
+        pass_filenames: false
+        stages: [commit-msg]

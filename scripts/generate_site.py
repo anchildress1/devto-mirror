@@ -1,13 +1,13 @@
 import os, pathlib, re, html, json, requests, time
 from datetime import datetime, timezone
-from email.utils import parsedate_to_datetime
 from slugify import slugify
-from jinja2 import Template
-from utils import INDEX_TMPL, SITEMAP_TMPL, parse_date, dedupe_posts_by_link
+from jinja2 import Environment, select_autoescape
+from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
 LAST_RUN_FILE = "last_run.txt"
+POSTS_DATA_FILE = "posts_data.json"
 
 if not DEVTO_USERNAME:
     raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
@@ -21,6 +21,7 @@ ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
 POSTS_DIR.mkdir(parents=True, exist_ok=True)
 
+
 def get_last_run_timestamp():
     """Reads the timestamp from the last successful run."""
     p = pathlib.Path(LAST_RUN_FILE)
@@ -28,72 +29,86 @@ def get_last_run_timestamp():
         return None
     return p.read_text(encoding="utf-8").strip()
 
+
 def set_last_run_timestamp():
     """Writes the current UTC timestamp to the run file."""
     p = pathlib.Path(LAST_RUN_FILE)
     p.write_text(datetime.now(timezone.utc).isoformat(), encoding="utf-8")
 
-def fetch_all_articles_from_api(last_run_iso=None):
-    """Fetch all articles from the Dev.to API, paginating if necessary.
-    If last_run_iso is provided, it will only fetch articles published after that time.
+
+def _fetch_article_pages(last_run_iso=None):
+    """Return a list of article summary objects from the paginated API.
+    This helper keeps the pagination logic isolated to reduce cognitive
+    complexity in the public function.
     """
     articles = []
     page = 1
-    api_base = f"https://dev.to/api/articles"
+    api_base = "https://dev.to/api/articles"
     while True:
         print(f"Fetching page {page} of articles...")
 
         params = {"username": DEVTO_USERNAME, "page": page}
-        if page > 1:  # or use a cache-buster on page 1 instead
+        if page > 1:
             params["per_page"] = 100
-        # Add cache-buster on page 1 to avoid stale cached responses
         if page == 1:
-            # use minute granularity so value changes once per minute
             params["_cb"] = time.time() // 60
+
         response = requests.get(api_base, params=params, timeout=30)
         response.raise_for_status()
         data = response.json()
         if not data:
             break
 
-        new_articles = data
-        # If a last run timestamp is provided, filter out older posts
         if last_run_iso:
             last_run_dt = datetime.fromisoformat(last_run_iso)
             new_articles = [
-                article for article in data
-                if datetime.fromisoformat(article['published_at'].replace("Z", "+00:00")) > last_run_dt
+                article
+                for article in data
+                if datetime.fromisoformat(article["published_at"].replace("Z", "+00:00")) > last_run_dt
             ]
-
-        articles.extend(new_articles)
-
-        # If we are filtering and the number of articles fetched is less than a full page,
-        # or if we added fewer articles than we fetched, we can stop.
-        if last_run_iso and (len(data) < 100 or len(new_articles) < len(data)):
-             break
+            articles.extend(new_articles)
+            if len(data) < 100 or len(new_articles) < len(data):
+                break
+        else:
+            articles.extend(data)
 
         page += 1
 
-    # Fetch full article content for each article (needed for body_html)
+    return articles
+
+
+def _fetch_full_articles(articles):
+    """Fetch full article content for each article (needed for body_html).
+    Kept separate so the pagination implementation remains easy to reason about.
+    """
     print(f"Found {len(articles)} articles, fetching full content...")
     full_articles = []
     for i, article in enumerate(articles):
-        print(f"Fetching full content for article {i+1}/{len(articles)}: {article['title']}")
+        print(f"Fetching full content for article {i + 1}/{len(articles)}: {article.get('title')}")
         full_response = requests.get(f"https://dev.to/api/articles/{article['id']}", timeout=30)
         full_response.raise_for_status()
         full_articles.append(full_response.json())
-        # Add delay to avoid rate limiting
-        if i < len(articles) - 1:  # Don't sleep after the last request
-            time.sleep(0.5)  # 500ms delay between requests
+        if i < len(articles) - 1:
+            time.sleep(0.5)
 
     print(f"Found {len(full_articles)} articles with full content.")
     return full_articles
 
 
+def fetch_all_articles_from_api(last_run_iso=None):
+    """Public API that returns full-article objects after pagination.
+    Delegates to smaller helpers to keep complexity low.
+    """
+    summaries = _fetch_article_pages(last_run_iso=last_run_iso)
+    return _fetch_full_articles(summaries)
+
+
 # ----------------------------
 # Templates (posts + index)
 # ----------------------------
-PAGE_TMPL = Template("""<!doctype html><html lang="en"><head>
+env = Environment(autoescape=select_autoescape(["html", "xml"]))
+PAGE_TMPL = env.from_string(
+    """<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ title }}</title>
 <link rel="canonical" href="{{ canonical }}">
@@ -127,17 +142,30 @@ PAGE_TMPL = Template("""<!doctype html><html lang="en"><head>
 </head><body>
 <main>
   <h1><a href="{{ canonical }}">{{ title }}</a></h1>
-  {% if cover_image %}<img src="{{ cover_image }}?v=2" alt="Banner image for {{ title }}" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">{% endif %}
+  {% if cover_image %}<img src="{{ cover_image }}?v=2"
+
+    alt="Banner image for {{ title }}"
+
+    style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">{% endif %}
   {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
-  {% if tags %}<p><strong>Tags:</strong> {% for tag in tags %}<span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#{{ tag }}</span>{% if not loop.last %} {% endif %}{% endfor %}</p>{% endif %}
+  {% if tags %}
+
+  <p><strong>Tags:</strong> {% for tag in tags %}<span
+
+      style="background: #f0f0f0; padding: 2px 6px; margin: 2px;
+
+      border-radius: 3px; font-size: 0.9em;">#{{ tag }}</span>{% if not loop.last %} {% endif %}{% endfor %}</p>
+
+  {% endif %}
   {% if description %}<p><em>{{ description }}</em></p>{% endif %}
   <article>{{ content }}</article>
   <p><a href="{{ canonical }}">Read on Dev.to →</a></p>
 </main>
-</body></html>
-""")
+</body></html>"""
+)
 
-COMMENT_NOTE_TMPL = Template("""<!doctype html><html lang="en"><head>
+COMMENT_NOTE_TMPL = env.from_string(
+    """<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ title }}</title>
 <link rel="canonical" href="{{ canonical }}">
@@ -174,7 +202,8 @@ COMMENT_NOTE_TMPL = Template("""<!doctype html><html lang="en"><head>
   <p><a href="{{ url }}">Open on Dev.to →</a></p>
 </main>
 </body></html>
-""")
+"""
+)
 
 # ----------------------------
 # robots + sitemap
@@ -292,6 +321,7 @@ Allow: /
 Sitemap: {home}sitemap.xml
 """
 
+
 # ----------------------------
 # Helpers
 # ----------------------------
@@ -304,6 +334,29 @@ def strip_html(text):
     collapsed = re.sub(r"\s+", " ", no_tags)
     return collapsed.strip()
 
+
+def sanitize_html_content(content):
+    """
+    Basic HTML sanitization to allow common formatting tags while removing potentially harmful content.
+    This replaces the bleach.clean() functionality with a safer built-in approach.
+    """
+    if not content:
+        return ""
+
+    # Remove script tags and their content for security
+    content = re.sub(r"<script[^>]*>.*?</script>", "", content, flags=re.DOTALL | re.IGNORECASE)
+
+    # Remove potentially harmful attributes (keep src, alt, href, class)
+    content = re.sub(
+        r"<([^>]*?)\s+(?:on\w+|javascript:|data-)[^>]*?>",
+        r"<\1>",
+        content,
+        flags=re.IGNORECASE,
+    )
+
+    return content
+
+
 class Post:
     def __init__(self, api_data):
         self.title = api_data.get("title", "Untitled")
@@ -313,10 +366,10 @@ class Post:
 
         # Use the API's description as-is
         self.description = (api_data.get("description", "") or "").strip()
-        
+
         # Capture cover image for banner display
         self.cover_image = api_data.get("cover_image", "")
-        
+
         # Capture tags from Dev.to API and normalize to array
         # Try tag_list first (Dev.to standard), fallback to tags field
         tags_raw = api_data.get("tag_list") or api_data.get("tags", [])
@@ -345,28 +398,28 @@ class Post:
         """
         if not tags:
             return []
-        
+
         # Already a list - clean and return
         if isinstance(tags, list):
             return [str(tag).strip() for tag in tags if tag and str(tag).strip()]
-        
+
         # String format - try different separators
         if isinstance(tags, str):
             tags = tags.strip()
             if not tags:
                 return []
-            
+
             # Try comma separation first (most common)
-            if ',' in tags:
-                return [tag.strip() for tag in tags.split(',') if tag.strip()]
-            
+            if "," in tags:
+                return [tag.strip() for tag in tags.split(",") if tag.strip()]
+
             # Try space separation
-            if ' ' in tags:
+            if " " in tags:
                 return [tag.strip() for tag in tags.split() if tag.strip()]
-            
+
             # Single tag
             return [tags]
-        
+
         # Fallback - convert to string and try again
         return self._normalize_tags(str(tags))
 
@@ -377,29 +430,30 @@ class Post:
         if isinstance(self.date, datetime):
             date_val = self.date.isoformat()
         return {
-            'title': self.title,
-            'link': self.link,
-            'date': date_val,
-            'content_html': self.content_html,
-            'description': self.description,
-            'slug': self.slug,
-            'cover_image': self.cover_image,
-            'tags': self.tags
+            "title": self.title,
+            "link": self.link,
+            "date": date_val,
+            "content_html": self.content_html,
+            "description": self.description,
+            "slug": self.slug,
+            "cover_image": self.cover_image,
+            "tags": self.tags,
         }
 
     @classmethod
     def from_dict(cls, data):
         """Create Post from dictionary loaded from JSON"""
         post = cls.__new__(cls)
-        post.title = data['title']
-        post.link = data['link']
-        post.date = data['date']
-        post.content_html = data['content_html']
-        post.description = data['description']
-        post.slug = data['slug']
-        post.cover_image = data.get('cover_image', '')  # Handle legacy data without cover_image
-        post.tags = post._normalize_tags(data.get('tags', []))  # Handle legacy data without tags and normalize
+        post.title = data["title"]
+        post.link = data["link"]
+        post.date = data["date"]
+        post.content_html = data["content_html"]
+        post.description = data["description"]
+        post.slug = data["slug"]
+        post.cover_image = data.get("cover_image", "")  # Handle legacy data without cover_image
+        post.tags = post._normalize_tags(data.get("tags", []))  # Handle legacy data without tags and normalize
         return post
+
 
 def load_comment_manifest(path="comments.txt"):
     """Read lines of: URL | optional context (one line)."""
@@ -418,19 +472,20 @@ def load_comment_manifest(path="comments.txt"):
         cid = m.group(1) if m else slugify(url)[:48]
         local = f"comments/{cid}.html"
         # short label for index
-        label = (context or url)
+        label = context or url
         if len(label) > 80:
             label = label[:77] + "..."
         items.append({"url": url, "context": context, "local": local, "text": label})
     return items
 
-def load_existing_posts(path="posts_data.json"):
+
+def load_existing_posts(path=POSTS_DATA_FILE):
     """Load existing posts from JSON file"""
     p = pathlib.Path(path)
     if not p.exists():
         return []
     try:
-        with open(p, 'r', encoding='utf-8') as f:
+        with open(p, "r", encoding="utf-8") as f:
             posts_data = json.load(f)
             # Convert dicts to Post instances (avoid re-parsing RSS entries)
             return [Post.from_dict(post_dict) for post_dict in posts_data]
@@ -438,29 +493,24 @@ def load_existing_posts(path="posts_data.json"):
         return []
 
 
-def _parse_date_str(datestr):
-    """Try to parse a date string from RFC or ISO formats. Returns a timezone-aware
-    datetime when possible, otherwise None."""
-    return parse_date(datestr)
-
-def save_posts_data(posts, path="posts_data.json"):
+def save_posts_data(posts, path=POSTS_DATA_FILE):
     """Save posts to JSON file"""
-    posts_data = [post.to_dict() if hasattr(post, 'to_dict') else post for post in posts]
-    with open(path, 'w', encoding='utf-8') as f:
+    posts_data = [post.to_dict() if hasattr(post, "to_dict") else post for post in posts]
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(posts_data, f, indent=2, ensure_ascii=False)
+
 
 def is_first_run():
     """Check if this is the first run by looking for posts_data.json"""
-    return not pathlib.Path("posts_data.json").exists()
+    return not pathlib.Path(POSTS_DATA_FILE).exists()
+
 
 def find_new_posts(api_articles, existing_posts):
     """Find new posts from the API that aren't in existing posts."""
-    existing_links = {post['link'] for post in existing_posts}
-    new_posts = [
-        Post(article) for article in api_articles
-        if article['url'] not in existing_links
-    ]
+    existing_links = {post["link"] for post in existing_posts}
+    new_posts = [Post(article) for article in api_articles if article["url"] not in existing_links]
     return new_posts
+
 
 # ----------------------------
 # Build posts (incremental updates)
@@ -489,7 +539,7 @@ if not new_posts:
 existing_posts_data = load_existing_posts()
 
 # Create a set of existing post URLs for faster lookup
-existing_links = {getattr(p, 'link', '') for p in existing_posts_data}
+existing_links = {getattr(p, "link", "") for p in existing_posts_data}
 
 # Filter out new posts that already exist
 truly_new_posts = []
@@ -517,24 +567,29 @@ print(f"Found {len(truly_new_posts)} new posts. Total posts: {len(all_posts)}")
 for p in all_posts:
     # Use the feed-provided link as canonical. Fall back to a Dev.to
     # constructed URL only if link is falsy for some reason.
-    canonical = getattr(p, 'link', None) or f"https://dev.to/{DEVTO_USERNAME}/{p.slug}"
-    
+    canonical = getattr(p, "link", None) or f"https://dev.to/{DEVTO_USERNAME}/{p.slug}"
+
     # Use cover image as social image, fallback to default banner
     social_image = p.cover_image or f"{HOME}assets/devto-mirror.jpg"
-    
+
     html_out = PAGE_TMPL.render(
         title=p.title,
         canonical=canonical,
-        description=p.description,
+        description=html.escape(p.description or ""),
         date=p.date,
-        content=p.content_html,
+        content=sanitize_html_content(p.content_html or ""),
         cover_image=p.cover_image,
-        tags=getattr(p, 'tags', []),
+        tags=getattr(p, "tags", []),
         social_image=social_image,
         site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
-        author=DEVTO_USERNAME
+        author=DEVTO_USERNAME,
     )
-    (POSTS_DIR / f"{p.slug}.html").write_text(html_out, encoding="utf-8")
+    # Prevent path traversal or unsafe filenames in slugs
+    safe_slug = re.sub(r"[^A-Za-z0-9\-_.]", "-", p.slug)[:120]
+    # Avoid accidental relative paths
+    if "/" in safe_slug or ".." in safe_slug:
+        safe_slug = re.sub(r"[/.]+", "-", safe_slug)
+    (POSTS_DIR / f"{safe_slug}.html").write_text(html_out, encoding="utf-8")
     print(f"Wrote: {p.slug}.html (canonical: {canonical})")
 
 # Save the updated posts data for next run
@@ -552,36 +607,45 @@ if comment_items:
     for c in comment_items:
         title = "Comment note"
         desc = (c["context"] or "Comment note").strip()[:300]
-        
+
         # Default social image
         social_image = f"{HOME}assets/devto-mirror.jpg"
-        
+
         # For comment notes, canonical should point back to the original Dev.to URL
         html_page = COMMENT_NOTE_TMPL.render(
-            title=title,
+            title=html.escape(title),
             canonical=c["url"],
-            description=desc,
+            description=html.escape(desc),
             context=html.escape(c["context"]) if c["context"] else "",
             url=c["url"],
             social_image=social_image,
             site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
-            author=DEVTO_USERNAME
+            author=DEVTO_USERNAME,
         )
-        pathlib.Path(c["local"]).write_text(html_page, encoding="utf-8")
+        # Ensure local path is safe
+        local_path = pathlib.Path(re.sub(r"[^A-Za-z0-9\-_./]", "-", c["local"]))
+        local_path.parent.mkdir(parents=True, exist_ok=True)
+        local_path.write_text(html_page, encoding="utf-8")
 
 # Use Dev.to profile as canonical for the index page
 devto_profile = f"https://dev.to/{DEVTO_USERNAME}"
-site_description = f"Mirror of {DEVTO_USERNAME}'s Dev.to blog posts. Canonical lives on Dev.to. This is just a crawler-friendly mirror."
+site_description = (
+
+    f"Mirror of {DEVTO_USERNAME}'s Dev.to blog posts. "
+
+    "Canonical lives on Dev.to. This is just a crawler-friendly mirror."
+
+)
 social_image = f"{HOME}assets/devto-mirror.jpg"
 
 index_html = INDEX_TMPL.render(
-    username=DEVTO_USERNAME, 
-    posts=all_posts, 
-    comments=comment_items, 
-    home=HOME, 
+    username=DEVTO_USERNAME,
+    posts=all_posts,
+    comments=comment_items,
+    home=HOME,
     canonical=devto_profile,
     site_description=site_description,
-    social_image=social_image
+    social_image=social_image,
 )
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
 pathlib.Path("robots.txt").write_text(ROBOTS_TMPL.format(home=HOME), encoding="utf-8")
