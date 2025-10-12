@@ -135,6 +135,53 @@
 <hr>
 
 <h2>
+  <a name="update" href="#update">
+  </a>
+  <strong>UPDATE</strong> 💥
+</h2>
+
+<blockquote>
+<p>I just learned something new literally three seconds ago and had to update this post before I dive into this new rabbit hole. 🤣 </p>
+</blockquote>
+
+<p>I'm working through the testing phase of a couple of chat modes currently and somehow ended up with a very weird context glitch in GPT-5-mini that makes zero sense.</p>
+
+<p>First, I have said chat mode selected in the dropdown, and my prompt is intentionally vague—it asks Copilot to identify ambiguity and conflict between my instructions and its system instructions.</p>
+
+<p>This is what I got back:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight plaintext"><code>If the chat mode wasn’t invoked by name or didn’t include a machine-visible trigger in the current message, it wasn’t promoted to the working instruction set.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<p>Apparently, just referencing desired output while the chat mode’s selected isn’t enough of a hint for my little friend here. It also expects you to call that chat mode out explicitly in your prompt. 🤯</p>
+
+<p>Honestly, including the name of the chat mode in your accompanying prompt (as it describes) is usually enough to trigger the context reference it needs. The much safer option is to use <code>#chat-mode-name</code> explicitly in VS Code. Then there’s zero logic the LLM needs to consider before deciding whether to look at the mode you already selected in the dropdown.</p>
+
+<blockquote>
+<p>🦄 <strong>As a theoretical aside</strong>, this is the reality of the AI landscape we’re working with. While the potential is incredible and new advancements emerge almost daily, this is a model that was first previewed in August 2025 (less than two months ago) and <strong>we still need explicit references to manually manage context</strong> for reliable output. You can’t assume reliability or even consistency in anything AI does—<em>yet</em>.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
   <a name="testing-your-custom-chat-mode" href="#testing-your-custom-chat-mode">
   </a>
   Testing Your Custom Chat Mode 🧪
