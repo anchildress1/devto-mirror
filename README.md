@@ -95,8 +95,8 @@ The refresh process safely backs up your current state before wiping and regener
 
    We include a `pre-commit` configuration and a small set of developer dependencies to make it easy to run security checks locally. Recommended steps:
 
-   1. Create and activate a venv: `python -m venv .venv && source .venv/bin/activate`
-   2. Install dev tools: `pip install -r dev-requirements.txt`
+   1. Create and activate a venv: `uv venv && source .venv/bin/activate`
+   2. Install dev tools: `uv pip install -e '.[dev]'`
    3. Install git hooks: `pre-commit install`
    4. Run a full check: `pre-commit run --all-files`
 
@@ -114,18 +114,25 @@ The refresh process safely backs up your current state before wiping and regener
    - Source: "Deploy from a branch"
    - Branch: `gh-pages`
 
-🎉 **Your site is now live!** → `https://anchildress1.github.io/devto-mirror/` 👈 Add your actual URL here so your site stays discoverable!
-
-*Note: All post links now include full Dev.to slugs with post IDs for proper navigation.*
+🎉 **Your site is now live!** → [`https://anchildress1.github.io/devto-mirror/`](https://anchildress1.github.io/devto-mirror/) 👈 Add your actual URL here so your site stays discoverable!
 
 ### Local Development
 
 ```bash
 git clone https://github.com/anchildress1/devto-mirror.git
 cd devto-mirror
-python -m venv .venv && source .venv/bin/activate
-pip install requests jinja2 python-slugify
+uv venv && source .venv/bin/activate
+uv pip install -e '.[dev]'
 export DEVTO_USERNAME="your-username"
+export PAGES_REPO="your-username/devto-mirror"
+
+# Run tests
+python -m unittest
+
+# Run quality checks
+pre-commit run --all-files
+
+# Generate site
 python scripts/generate_site.py
 open index.html
 ```

@@ -8,6 +8,7 @@ env/
 venv/
 .venv/
 .env
+devto_mirror.egg-info
 
 # Test files
 test_*.py

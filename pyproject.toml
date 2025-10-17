@@ -1,0 +1,32 @@
+[project]
+name = "devto-mirror"
+version = "0.1.0"
+description = "Static HTML mirror of Dev.to blog posts for better search engine discoverability"
+authors = [
+    {name = "Ashley Childress", email = "6563688+anchildress1@users.noreply.github.com"}
+]
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31.0",
+    "jinja2>=3.1.2",
+    "python-slugify>=8.0.1",
+    "bleach>=6.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "bandit>=1.8.0",
+    "pip-audit>=2.0.0",
+    "flake8>=6.1.0",
+    "pre-commit>=3.4.0",
+    "gitlint>=0.16.0",
+    "detect-secrets>=1.0.0",
+    "black>=24.0.0"
+]
+
+[tool.setuptools.packages.find]
+exclude = ["specs*", "assets*", "tests*", ".github*"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
