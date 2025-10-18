@@ -4,6 +4,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-12
 
 ## Active Technologies
 - Python 3.11+ + requests, jinja2, python-slugify, bleach (001-upgrade-the-python)
+- Python 3.11+ + uv (package manager), pip-audit, bandit, flake8, GitHub Actions, CodeQL
+- Git branches (backup branches), GitHub Security tab (CodeQL findings)
 
 ## Project Structure
 ```
@@ -51,6 +53,10 @@ Python 3.11+: Follow standard conventions
 - **GitHub Pages**: Static hosting from `gh-pages` branch
 - **GitHub Actions**: Daily automated builds using uv
 - **SEO Optimization**: Canonical links, meta tags, sitemaps, AI-crawler friendly robots.txt
+
+## Project Nature & Clarification Guidance
+- **Simple Utility Repository**: This is a straightforward utility project - avoid over-engineering, complex orchestration, or overly verbose documentation
+- **Clarifications**: If you ever have multiple independent questions to interrogate the user with, then always display them in a single prompt to get a single answer aimed to save extraneous/unnecessary interactions. You should make informed decisions based on simplicity principles rather than asking excessive questions. Present all clarification choices at the end when all other parts of the task are complete, for review.
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
