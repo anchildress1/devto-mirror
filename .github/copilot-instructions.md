@@ -60,3 +60,13 @@ Python 3.11+: Follow standard conventions
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
+
+## GHA Workflows
+- `security-ci.yml` — Detects vulnerabilities and code smells
+- `codeql.yml` — Runs CodeQL analysis (Python)
+- `publish.yaml` — Builds the static site and deploys to `gh-pages`
+- `refresh.yaml` — Manual refresh workflow that creates backups and re-publishes the site
+
+## Critical Constraints
+- NEVER comment out code as a shortcut unless explicitly instructed to do so by the user.
+- NEVER update anything related to the `./specs` directory unless explicitly instructed to execute a corresponding `.github/prompts/speckit.*` command.

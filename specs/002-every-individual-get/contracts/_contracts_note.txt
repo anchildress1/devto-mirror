@@ -1,0 +1,1 @@
+Note: Creating abbreviated contracts for security-ci, codeql, and refresh. Full contracts follow same structure as publish-contract.md
