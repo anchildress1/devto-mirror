@@ -1,0 +1,441 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>Copilot Premium Requests—More Than Asked, Exactly What You Need 💸</title>
+<link rel="canonical" href="https://dev.to/anchildress1/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph">
+<meta name="description" content="Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph">
+<meta property="og:title" content="Copilot Premium Requests—More Than Asked, Exactly What You Need 💸">
+<meta property="og:description" content="Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbg5ycue4h0nel8pflrs9.png%3Fv%3D2025">
+<meta property="og:site_name" content="anchildress1 — Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph">
+<meta name="twitter:title" content="Copilot Premium Requests—More Than Asked, Exactly What You Need 💸">
+<meta name="twitter:description" content="Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbg5ycue4h0nel8pflrs9.png%3Fv%3D2025">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="Copilot Premium Requests—More Than Asked, Exactly What You Need 💸">
+<meta property="linkedin:description" content="Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbg5ycue4h0nel8pflrs9.png%3Fv%3D2025">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbg5ycue4h0nel8pflrs9.png%3Fv%3D2025">
+<meta name="author" content="anchildress1">
+<meta name="keywords" content="githubcopilot, ai, productivity, tutorial">
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph">Copilot Premium Requests—More Than Asked, Exactly What You Need 💸</a></h1>
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbg5ycue4h0nel8pflrs9.png%3Fv%3D2025?v=2" alt="Banner image for Copilot Premium Requests—More Than Asked, Exactly What You Need 💸" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  <p><em>Published: 2025-10-22T12:48:00Z</em></p>
+  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#productivity</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#tutorial</span></p>
+  <p><em>Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.</em></p>
+  <article><blockquote>
+<p>🦄 Any time I make a plan—like last week’s noble intention to finish part two of my slightly theoretical, totally manual <a href="https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l">AI attribution solution</a>—the universe just laughs. I’ll finish that one soon, I swear. But October’s almost over somehow, and I’m just as confused about that as you are! 🎃</p>
+
+<p>Anyway—this unscheduled detour has a good reason. 🌊 The flood of questions about Copilot’s <em>premium request limits</em> is back, right on schedule. If you added up the messages from every random channel I watch, you could set an atomic clock by this monthly “why am I out of requests?” panic. The closer we get to the first of the month, the faster the confusion multiplies.</p>
+
+<p>These limits are constantly misunderstood, misquoted, or just plain outdated. Honestly, that’s not really surprising—GitHub changes billing often and rarely broadcasts it beyond the <a href="https://github.blog/changelog/?label=copilot&amp;opened-months=10" target="_blank" rel="noopener noreferrer">official changelog</a>. There’s plenty of folklore about how to stretch your monthly allotment too—some of it is even good advice!—but dependable output is another story entirely.</p>
+
+<p>So, consider this your wallet-friendly survival guide for that final tight stretch before usage limits reset at midnight UTC on the first of each month—a few truths about GitHub Copilot’s premium requests, plus the workflow tweaks I rely on daily across both Pro and Enterprise.</p>
+
+<p>🎭 <strong>Fair warning:</strong> In case you're new to my ramblings, I’m an easily amused dev with a <em>touch</em> of dramatic flair (understatement?). Let’s see if I can make the boring-but-necessary Copilot billing rules entertaining enough to survive this post—<em>and</em> maybe save you a few premium requests along the way.</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5e0o7kt9ey2sz1uzllih.png%3FV%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5e0o7kt9ey2sz1uzllih.png%3FV%3D2025" alt="Human-crafted, AI-Edited badge" loading="lazy" width="200" height="200"></a></p>
+
+
+<hr>
+
+<h2>
+  <a name="ai-meltdown-coming-soon" href="#ai-meltdown-coming-soon">
+  </a>
+  AI Meltdown Coming Soon 🔥
+</h2>
+
+<p>Most of us are at least somewhat familiar with the outrageous amount of resources used to power AI at scale—not today's debate, but it's not a small thing! Most of the major AI players, GitHub included, had to find a way to somehow impose fair usage limits to a very finite number of resources and an exponentially multiplying customer base.</p>
+
+<p>For those of you actively using Copilot before June 2025—congrats! You were one of the last to experience unrestricted prompting, infinite turns to perfect every implementation, and the thrill of running experimental prompts without much thought to the "invisible" cost of execution. GitHub was balancing that behind the scenes. Those days are officially over—at least, it is for the current hardware. I've heard some people refer to this unexpected complication as "<em>physics</em>", but that whole concept seems unnecessarily complicated, if you ask me!</p>
+
+<p>That unconstrained, largely unlimited free-for-all of an AI system was always destined to collapse under its own weight without a reliable way to manage the hardware (among other things). </p>
+
+<blockquote>
+<p>🦄 Take a second and really think about that problem. Can you think of a single solution that you could squish into the definition of <em>"simple"</em> at that point in time? You're actively draining the ocean just to keep up with the constant threat of spontaneously combusting machines in a sealed back room.</p>
+
+<p>😅 <em>Okay, fine!</em> In reality, presumably well-tested alerts would kick in, which would handle the situation gracefully—likely with throttling or outright shutdowns of some kind. Meaning temps will stay well below the point of combustion long before anything shoots sparks or melts off the shelves. But you've gotta admit, my version is far more entertaining!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="introducing-premium-requests" href="#introducing-premium-requests">
+  </a>
+  Introducing Premium Requests 💳
+</h2>
+
+<p>When the concept of premium requests was first introduced, it was nothing more than a seemingly arbitrary and proprietary—read, hidden—calculation describing a unit of AI usage that's in a serious, long-term relationship with your monthly bill. Otherwise, it was a complete mystery to everyone. I mean, even GitHub had a hard time trying to explain what was happening!</p>
+
+<p>For the record, most IDE integrations now have a built-in monitoring system in the form of a tiny Copilot button in your status bar. Don't expect any real metrics from this view, for that you'd have to check out your <a href="https://github.com/settings/billing/premium_requests_usage" target="_blank" rel="noopener noreferrer">GitHub settings for billing</a> (unless you're under a larger organization or enterprise, then that view is usually routed directly to admins instead). For quick view though, this version is very convenient.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgleewmhul44yofowt99g.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgleewmhul44yofowt99g.png%3Fv%3D2025" alt="VS Code Insiders screenshot of Copilot Premium Request monitoring view" loading="lazy" width="571" height="874"></a></p>
+
+<p>Not everyone was aware of the announcement GitHub made sharing their plan to start enforcing premium request limits. But these premium requests had been around for a while by then—they just lacked meaning from the user's perspective. After a few false starts, GitHub officially started enforcing this seemingly arbitrary calculation starting June 18, 2025. So, <em>I knew</em> the death of free unrestricted access was approaching—<em>fast</em>. So right up until that date, I used Copilot literally as much as possible. </p>
+
+<p>Starting "enforcement day", I had to scale that usage way back. Well... I <em>thought</em> I had toned it down to a reasonable amount. Guess how long <em>that</em> lasted?</p>
+
+<blockquote>
+<p>🦄 <strong>Exactly <em>four days</em>.</strong> 😑 It was approximately 7:30 PM on a Saturday and now there's no more Copilot? Obviously, I did the logical thing and tried to pull the fire alarm like it was a critical production incident! Honestly? I considered this particular situation a crisis of equal proportions. Nobody else seemed to agree with me on that point, but work did eventually fix it for me. 🫶</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="premium-requests-explained" href="#premium-requests-explained">
+  </a>
+  Premium Requests Explained 📊
+</h2>
+
+<p>Lucky for us, GitHub has made several improvements to the overall system since the original mystery calculation took effect back in June. There's still a little math involved in this setup, but I'll simplify the entire system for you:</p>
+
+<p><code>(Number of Prompts Sent) × (Model's Multiplier) = Premium Requests Deducted</code></p>
+
+<ol>
+<li>
+<strong>You burn one request every time you click <em>send</em>.</strong> It doesn't matter if you're in the IDE chat, on GitHub.com, if you opened a PR that auto-triggered a Copilot review, sent Coding Agent off to handle something on its own, or used the CLI instead. One prompt almost always equals one premium request.</li>
+<li>
+<strong>The request is also multiplied by your model's multiplier.</strong> Some models cost less and others cost more. Besides, not all models are great at <em>everything</em> anyway (not even Claude!)</li>
+</ol>
+
+<p>There are a couple of exceptions to this standard, but the rules are subject to change at any time and without warning. Especially for preview features. If you don't have an active line to <a href="https://github.blog/changelog/?label=copilot&amp;opened-months=10" target="_blank" rel="noopener noreferrer">GitHub's Changelog</a> in some form, now's the perfect time to fix that problem! As of today (meaning the <code>Posted on</code> date at the top), exceptions include:</p>
+
+<ol>
+<li>
+<strong><a href="https://docs.github.com/en/copilot/concepts/auto-model-selection" target="_blank" rel="noopener noreferrer">Auto model selection</a></strong> is billed at 90% cost. It's a new feature designed to reduce <em>rate limits</em> by automatically selecting the <em>most available</em> model—note that this is not the same thing as the most <em>appropriate model</em>! However, for small scale, non-critical tasks it's a great way to rack up easy savings.</li>
+<li>
+<strong><a href="https://docs.github.com/en/copilot/concepts/spark" target="_blank" rel="noopener noreferrer">GitHub Spark</a></strong> is billed at 4x cost for every single prompt. Yes—Spark is fantastic! You're paying for that with every prompt you send, too! </li>
+</ol>
+
+<blockquote>
+<p>Also <strong>quick PSA</strong>, just in case: Spark is <em>not a chat bot</em>—don’t waste your prompts expecting Copilot-styled answers. You prompt, it codes—period.</p>
+
+<p>🦄 <a href="https://github.com/spark" target="_blank" rel="noopener noreferrer">GitHub Spark</a> is still pretty new and is currently available if you have an Enterprise or Pro+ subscription. I'm not sure how long that will last, but historically access has been expanded to include the Business tier next, followed by Pro, and finally the Free tier.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="no-two-models-are-alike" href="#no-two-models-are-alike">
+  </a>
+  No Two Models Are Alike 🧪
+</h2>
+
+<p>You can consider these guys thoroughly tested and mildly abused: here’s the model lineup I actually use—what works, what breaks, and when it’s worth the cost. </p>
+
+<div class="table-wrapper-paragraph"><table>
+<thead>
+<tr>
+<th><strong>Model</strong></th>
+<th><strong>Multiplier</strong></th>
+<th><strong>Best For</strong></th>
+<th><strong>Beware Of</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-4.1</td>
+<td>0x = Free</td>
+<td>Great for exploring ideas or acting as a rubber duck. Surprisingly creative.</td>
+<td>Weak on structured implementation unless carefully guided (even with <a href="https://github.com/github/awesome-copilot/blob/main/chatmodes/4.1-Beast.chatmode.md" target="_blank" rel="noopener noreferrer">Beast Mode</a>).</td>
+</tr>
+<tr>
+<td>o4-mini</td>
+<td>0.33x</td>
+<td>Finds obscure patterns in small, focused data sets. Excellent for root-cause analysis.</td>
+<td>Overwhelmed by large context windows—keep inputs tight.</td>
+</tr>
+<tr>
+<td>Grok Code Fast 1</td>
+<td>0x = Free</td>
+<td>Speedy, accurate edits when given clear instructions.</td>
+<td>Trades reasoning for speed—logic decisions become coin flips.</td>
+</tr>
+<tr>
+<td>GPT-5-mini</td>
+<td>0x = Free</td>
+<td>Handles small-to-medium tasks cleanly. Can reliably handle smallish leaps of logic.</td>
+<td>Constant stream of chaos in chat output—don’t read mid-generation unless you enjoy mild terror.</td>
+</tr>
+<tr>
+<td>Gemini 2.5 Pro</td>
+<td>1×</td>
+<td>Strong at complex mid-sized tasks with reliable results.</td>
+<td>Availability fluctuates wildly.</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.5</td>
+<td>1×</td>
+<td>Excellent at visual reasoning and UI logic.</td>
+<td>Loves building glitter-bomb tangents of documentation you never asked for.</td>
+</tr>
+<tr>
+<td>Claude Opus 4.1</td>
+<td>10×</td>
+<td>Ideal for planning large epics and solving hard problems.</td>
+<td>Only runs in “Ask” mode—no agent execution.</td>
+</tr>
+</tbody>
+</table></div>
+
+<blockquote>
+<p>🦄 For the record, there's quite a few models missing from this list. GitHub keeps pushing more before I can figure out the current one! I'm on it, but these things take time...</p>
+
+<p>💡 <strong>ProTip:</strong> Model availability is based on license tier, environment, and chat mode. Always check <a href="https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/ai-models/supported-models" target="_blank" rel="noopener noreferrer">GitHub Docs</a> for what’s actually usable.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="story-savings" href="#story-savings">
+  </a>
+  Story Savings 💾
+</h2>
+
+<h3>
+  <a name="dont-skimp-on-planning" href="#dont-skimp-on-planning">
+  </a>
+  Don't Skimp On Planning 🧠
+</h3>
+
+<p>The number one reason I see devs overspend is a set-and-forget approach to model selection. Most likely, Claude’s running the show, chewing through requests like an over-caffeinated showman while the rest of your team wonders how long you’ll let the headliner steal the spotlight.</p>
+
+<blockquote>
+<p>🦄 <em>Yes—I like Claude too!</em> But it gets expensive when it’s left on stage 24/7. Let it plan ahead, document to its heart’s content in exactly one temp file, and then exit stage right.</p>
+</blockquote>
+
+<p>I usually let Claude-4.5 run point on planning—but not <em>always</em>. GPT-5 or Gemini 2.5 Pro can both produce solid implementation plans, sometimes closer to the real goal anyway. Experiment every so often—you might find a new favorite opening act.</p>
+
+<p>I shared this same prompt last week, but it’s still the perfect example of how I work. You could even adapt it into <a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">your own reusable prompt</a>. I probably would have done that already had I not gotten sick of rewriting a new one every time a new model debuts!<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code><span class="gh"># ─────────────── CONTEXT ───────────────</span>
+<span class="p">-</span> Using #atlassian/atlassian-mcp-server, pull info for JIRA-123, including any linked documentation in Confluence.  
+<span class="p">-</span> Gather info to assess changes required in this #codebase.  
+
+<span class="gh"># ─────────────── TASK BREAKDOWN ───────────────</span>
+<span class="p">-</span> DO NOT MAKE CHANGES YET.  
+<span class="p">-</span> Break this story into concise iterative pieces that include testing at every step.  
+
+<span class="gh"># ─────────────── OUTPUT STRUCTURE ───────────────</span>
+<span class="p">-</span> Document all iterative steps required to meet all acceptance criteria as an ordered list of individual steps with an accompanying unordered checklist.  
+<span class="p">-</span> Each numbered step should be clear enough that any AI agent can be prompted one step at a time to complete and fully test with both integration and unit tests, whenever applicable.  
+
+<span class="gh"># ─────────────── SCOPE GUARDRAIL ───────────────</span>
+<span class="p">-</span> DO NOT break down tasks unnecessarily—the goal is for each step to be both meaningful and fully testable.  
+
+<span class="gh"># ─────────────── COMPLETION CRITERIA ───────────────</span>
+<span class="p">-</span> When all items are marked complete, acceptance criteria for this story should be met and all happy, sad, and edge-case paths accounted for.  
+
+<span class="gh"># ─────────────── ADMIN NOTES ───────────────</span>
+<span class="p">-</span> Include documentation updates and any relevant deployment tasks.  
+<span class="p">-</span> Save this concise story breakdown in a new file named <span class="sb">`./progress.tmp`</span>.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+<p>I can’t stress enough how important Human-in-the-Loop (HITL) review is here. This output becomes your map for Copilot from now until completion. There’s rarely reason to waste premium requests iterating accuracy here; you’ll fix more by reading through and making quick corrections yourself.</p>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> Add a short instruction reminding Copilot not to touch this file without asking first. It’s not bulletproof, but it will help prevent random and unexpected map rewrites mid-journey.</p>
+</blockquote>
+
+<hr>
+<h3>
+  <a name="aside-for-spec-kit" href="#aside-for-spec-kit">
+  </a>
+  Aside for Spec Kit 🧰
+</h3>
+
+<p>I’ll sometimes use <a href="https://github.github.com/spec-kit/" target="_blank" rel="noopener noreferrer">Spec Kit</a> for planning. It’s excellent at writing ultra-detailed requirements, though the “you get what you pay for” rule applies. A detailed spec usually costs at minimum five premium requests—worth it for complex work, but overkill for the small stuff.</p>
+
+<p>If I’m dealing with serious complexity, Spec Kit is a must-have. For quick stories, you’ll spend more defining the spec than just prompting Copilot to code it in one shot.</p>
+
+<blockquote>
+<p>🦄 If you haven’t tried <a href="https://github.github.com/spec-kit/" target="_blank" rel="noopener noreferrer">Spec Kit</a> yet, it’s worth a spin. Maybe their flavor clicks with you and the cost becomes worth it—in which case, great!—if it works for you, then go with it!</p>
+</blockquote>
+
+<hr>
+<h3>
+  <a name="feature-plan-to-code" href="#feature-plan-to-code">
+  </a>
+  Feature Plan to Code 🚀
+</h3>
+
+<p>Once I’m confident Copilot's steps output in <code>./progress.tmp</code> are airtight, it’s time to tidy up a bit and swap to a free model. Close every open file, run <code>/clear</code> in chat, and double-check that only the tools for Step 1 are active. The smaller you can make your context window, the higher the chances of accurate results without lengthy iterations designed to drive you mad.</p>
+
+<p>My usual picks here are Grok or GPT-5-mini—despite mini’s flair for chaos, both deliver solid implementations when given the right step. That said, choose by scenario:</p>
+
+<div class="table-wrapper-paragraph"><table>
+<thead>
+<tr>
+<th><strong>Use Case</strong></th>
+<th><strong>Model</strong></th>
+<th><strong>Cost</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requires logical decision-making?</td>
+<td>GPT-5-mini</td>
+<td>FREE</td>
+</tr>
+<tr>
+<td>Step-by-step plan already defined?</td>
+<td>Grok</td>
+<td>FREE</td>
+</tr>
+<tr>
+<td>Data-heavy or analytical task?</td>
+<td>o4-mini</td>
+<td>0.33</td>
+</tr>
+<tr>
+<td>Slightly bloated but non-critical?</td>
+<td>Auto</td>
+<td>0.90</td>
+</tr>
+<tr>
+<td>Truly complex or experimental?</td>
+<td>Claude/GPT</td>
+<td>1×</td>
+</tr>
+</tbody>
+</table></div>
+
+<p>This list doesn’t cover every case—it just reflects the scenarios I see most often. And yes, I've been (accurately) accused of vanishing whenever UI work appears; my status with frontend dev remains set to “it’s complicated.” </p>
+
+<p>The rule still stands: <strong>pick the cheapest model that can actually finish the job.</strong> Then iterate one step at a time, pausing for review between turns.</p>
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> Keep your context clean. Commit often, close open files, reset chats, and start every new step like a brand-new session. You’ll be amazed how much saner Copilot sounds when its context doesn’t suggest a starring role in the latest episode of <em>Hoarders</em>!</p>
+</blockquote>
+
+<hr>
+<h2>
+  <a name="ask-more-with-less" href="#ask-more-with-less">
+  </a>
+  Ask More With Less 🤹‍♀️
+</h2>
+
+<p>If you've been working with AI for a bit already, then this will likely seem over-simplified—which is fair. For everyone else, I'm going to give you my version of Chain of Thought (CoT) prompting, which we're just going to hope contains enough technical accuracy that I don't end up arguing semantics later. 🤞</p>
+
+<p>I really can't explain why CoT always seems plagued by some overly verbose, unnecessarily complicated, and often long-winded overlord of technical rambling. I'm the last to discourage you from exploring anything you want, but the technical aspects of this whole setup honestly bore me to no end. Besides, it's truly unnecessary—you're most likely already using this concept daily—whether you realize it or not.</p>
+
+<p>My exaggeratedly simple CoT example:</p>
+
+<p><link rel="stylesheet" href="https://assets.dev.to/assets/katex-7b986a08a52ed11e0e3379cd9c4bb3ccb187f09c249a1de099b16c423e34bb76.css">
+
+</p>
+<div class="katex-element">
+  <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>S</mi><mi>T</mi><mi>A</mi><mi>R</mi><mi>T</mi><mo>→</mo><mi>A</mi><mo>→</mo><mi>B</mi><mo>→</mo><mi>C</mi><mo>→</mo><mn>1</mn><mo>→</mo><mn>2</mn><mo>→</mo><mn>3</mn><mo>→</mo><mi>E</mi><mi>N</mi><mi>D</mi></mrow><annotation encoding="application/x-tex">START → A → B → C → 1 → 2 → 3 → END </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">ST</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.13889em;">RT</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">EN</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span></span>
+</div>
+
+
+
+<p>Or with words, if you prefer:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre class="highlight markdown"><code>CoT is nothing more than step-by-step directions.
+Sometimes, it looks like the prompt example above.
+But that's not a requirement of any kind.
+You start at the beginning.
+Explain the first logical step.
+Then move to the next.
+Repeat, as needed.
+Keep clear separation between each point.
+Stay disciplined about using a consistent structure.
+Continue until you're finished.
+But you can abandon ship at any point—
+before anything gets too complicated.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
+    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
+</svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
+    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
+</svg>
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>🦄 If you happen to find someone in charge of this CoT concept, tell them to please stop manually adjusting the minimum distance requirements between me and toast!</p>
+</blockquote>
+
+<p>In practice, I use this style of prompting more often than any other recommended pattern. As soon as I get a response back from my <code>Implement step N defined in #progress.tmp</code> prompt, it's time for a mini code review. No formalities required—seriously, the chat can handle it—no PR needed.</p>
+
+<p>I immediately click to "keep" all changes, because Git is my true north for everything. VS Code lets you stage a single character at a time or dump everything in there all at once. Neither extreme is very realistic in practice, but you can be as picky as you want when accepting changes.</p>
+
+<p>So, review every change starting with anything that evokes a "where's your proof?" sort of reaction. Continue adding feedback using clearly separated points, staging acceptable changes, and using context markers via <code>#selection</code> all the way up to anything resembling, "Nope! That's definitely not right! Why are you still doing this wrong?!"</p>
+
+<blockquote>
+<p>⚠️ <strong>Beware:</strong> Any reaction you might have beyond that last one is guaranteed to exponentially increase your chances of an involuntary ALL-CAPS situation. <em>Trust me</em>—it's not worth it! And there's no good way to explain that feeling after suddenly realizing you've just spent an embarrassingly long time losing a lively argument with hardware. 🫠</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a name="its-really-not-that-strict" href="#its-really-not-that-strict">
+  </a>
+  It's Really Not That Strict 🌙
+</h2>
+
+<p>Hopefully you’ll adapt some of this to stretch your premium request limit without sacrificing quality or sanity along the way. You don’t need to copy my setup—use whatever you can that works, and toss what doesn’t.</p>
+
+<p>If you’ve discovered your own tricks, share them with the class! Maybe you’ve already solved a pain point that someone else is still swearing at. We’re all just devs here, trying to make it through the sprint without maxing out the meter.</p>
+
+
+<hr>
+
+<h2>
+  <a name="end-of-training-loop" href="#end-of-training-loop">
+  </a>
+  🛡️ End of Training Loop
+</h2>
+
+<p>ChatGPT handled the grammar; I tracked spending. Both of us ran out of energy (and <em>sanity</em>) at the same time—but it looks good anyway. ☕⚡</p>
+
+</article>
+  <p><a href="https://dev.to/anchildress1/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph">Read on Dev.to →</a></p>
+</main>
+</body></html>
