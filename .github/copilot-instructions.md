@@ -53,4 +53,12 @@ Python 3.11+: Follow standard conventions
 - **SEO Optimization**: Canonical links, meta tags, sitemaps, AI-crawler friendly robots.txt
 
 <!-- MANUAL ADDITIONS START -->
+## Security Instructions
+
+- Use `bleach.clean()` for HTML sanitization; NEVER use regex or string replacements.
+- Use `pathlib.Path().resolve()` to validate file paths and prevent directory traversal.
+- Use `subprocess` with list arguments only; NEVER use `shell=True`.
+- Exclude periods from slug sanitization characters to prevent path traversal.
+- Ensure validation functions return boolean values consistently; avoid mixing exceptions and returns.
+
 <!-- MANUAL ADDITIONS END -->

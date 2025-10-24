@@ -24,7 +24,7 @@ ALLOWED_TYPES = (
 )
 
 # Known footer tokens
-BREAKING_CHANGE_TOKEN = "BREAKING CHANGE"  # nosec
+BREAKING_CHANGE_TOKEN = "BREAKING CHANGE"  # nosec B105 - conventional commit footer token, not a password
 BREAKING_CHANGE_PREFIX = BREAKING_CHANGE_TOKEN + ":"
 
 
@@ -35,9 +35,11 @@ def run_gitlint(msgfile: str) -> int:
     """
     gitlint_cmd = which("gitlint")
     if gitlint_cmd:
+        # Using subprocess to call gitlint command safely with list arguments, avoiding shell injection.
         return subprocess.call([gitlint_cmd, "--msg-filename", msgfile])  # nosec
     # try module invocation as fallback
     try:
+        # Using subprocess to call gitlint module safely with list arguments, avoiding shell injection.
         return subprocess.call([sys.executable, "-m", "gitlint", "--msg-filename", msgfile])  # nosec
     except Exception:
         return 2
@@ -55,7 +57,7 @@ def _find_header_and_strip(lines):
 
 def _validate_header(header: str) -> bool:
     type_part = "|".join(ALLOWED_TYPES)
-    header_re = re.compile(rf"^({type_part})(?:\([A-Za-z0-9_\-:.]+\))?:\s+[A-Z][\s\S]{{0,71}}$")
+    header_re = re.compile(rf"^({type_part})(?:\([A-Za-z0-9_\-:.]+\))?:\s+[A-Z][^\n]{{0,71}}$")
     if not header_re.match(header):
         print("Invalid commit header:", header, file=sys.stderr)
         print("Expected: type(scope)?: Subject — where type is one of:", file=sys.stderr)
@@ -128,13 +130,15 @@ def _validate_commit_generated_by(value) -> bool:
 
 def _validate_reviewed_by(value) -> bool:
     if not _validate_person_footer(value):
-        raise ValueError("Reviewed-by must be in form: Name <email>")
+        print("Reviewed-by must be in form: Name <email>", file=sys.stderr)
+        return False
     return True
 
 
 def _validate_co_authored_by(value) -> bool:
     if not _validate_person_footer(value):
-        raise ValueError("Co-authored-by must be in form: Name <email>")
+        print("Co-authored-by must be in form: Name <email>", file=sys.stderr)
+        return False
     return True
 
 
@@ -151,6 +155,35 @@ def _parse_footers_list(flist):
     return parsed
 
 
+def _validate_breaking_change(parsed) -> bool:
+    if any(t == BREAKING_CHANGE_TOKEN for t, _ in parsed) and parsed[0][0] != BREAKING_CHANGE_TOKEN:
+        print(
+            "BREAKING CHANGE: footer must appear as the first footer line",
+            file=sys.stderr,
+        )
+        return False
+    return True
+
+
+def _validate_single_footer(token, value) -> bool:
+    if token == BREAKING_CHANGE_TOKEN:
+        if not value:
+            print("BREAKING CHANGE footer must include a description", file=sys.stderr)
+            return False
+        return True
+    if token not in FOOTER_VALIDATORS:
+        print("Unknown footer token:", token, file=sys.stderr)
+        return False
+    try:
+        ok = FOOTER_VALIDATORS[token](value)
+    except ValueError as e:
+        print(str(e), file=sys.stderr)
+        return False
+    if not ok:
+        return False
+    return True
+
+
 def _validate_footers(footers) -> bool:
     if not footers:
         return True
@@ -161,46 +194,29 @@ def _validate_footers(footers) -> bool:
         print(str(e), file=sys.stderr)
         return False
 
-    # BREAKING CHANGE must be first footer if present
-    if any(t == BREAKING_CHANGE_TOKEN for t, _ in parsed) and parsed[0][0] != BREAKING_CHANGE_TOKEN:
-        print(
-            "BREAKING CHANGE: footer must appear as the first footer line",
-            file=sys.stderr,
-        )
+    if not _validate_breaking_change(parsed):
         return False
 
     for token, value in parsed:
-        if token == BREAKING_CHANGE_TOKEN:
-            if not value:
-                print("BREAKING CHANGE footer must include a description", file=sys.stderr)
-                return False
-            continue
-        if token not in FOOTER_VALIDATORS:
-            print("Unknown footer token:", token, file=sys.stderr)
+        if not _validate_single_footer(token, value):
             return False
-        try:
-            ok = FOOTER_VALIDATORS[token](value)
-        except ValueError as e:
-            print(str(e), file=sys.stderr)
-            return False
-        if not ok:
-            return False
+
     return True
 
 
 FOOTER_VALIDATORS = {
     "Commit-generated-by": _validate_commit_generated_by,
-    "Assisted-by": lambda v: bool(v),
+    "Assisted-by": bool,
     "Co-authored-by": _validate_co_authored_by,
-    "Generated-by": lambda v: bool(v),
-    "Authored-by": lambda v: bool(v),
+    "Generated-by": bool,
+    "Authored-by": bool,
     "Reviewed-by": _validate_reviewed_by,
-    "Fixes": lambda v: bool(v),
-    "Closes": lambda v: bool(v),
-    "Resolves": lambda v: bool(v),
-    "Related": lambda v: bool(v),
-    "References": lambda v: bool(v),
-    BREAKING_CHANGE_TOKEN: lambda v: bool(v),
+    "Fixes": bool,
+    "Closes": bool,
+    "Resolves": bool,
+    "Related": bool,
+    "References": bool,
+    BREAKING_CHANGE_TOKEN: bool,
 }
 KNOWN_KEYS = set(FOOTER_VALIDATORS.keys())
 
