@@ -34,7 +34,7 @@ Python 3.11+: Follow standard conventions
 - **Data Flow**: Dev.to API → JSON processing → HTML files in `posts/` directory
 
 ## Critical Workflows
-- **Dependency Management**: Use `uv` (not pip) - requires quotes: `uv pip install -e '.[dev]'`
+- **Dependency Management**: Use `pip` with pyproject.toml: `pip install -e '.[dev]'`
 - **Testing**: `python -m unittest` from project root (not scripts/)
 - **Code Quality**: `pre-commit run --all-files` (flake8, bandit, detect-secrets)
 - **Site Generation**: Set `DEVTO_USERNAME` and `PAGES_REPO` env vars, run `python scripts/generate_site.py`
@@ -49,7 +49,7 @@ Python 3.11+: Follow standard conventions
 ## Integration Points
 - **Dev.to API**: RESTful article fetching with pagination
 - **GitHub Pages**: Static hosting from `gh-pages` branch
-- **GitHub Actions**: Daily automated builds using uv
+- **GitHub Actions**: Daily automated builds using pip
 - **SEO Optimization**: Canonical links, meta tags, sitemaps, AI-crawler friendly robots.txt
 
 <!-- MANUAL ADDITIONS START -->

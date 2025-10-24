@@ -41,3 +41,7 @@ sitemap.xml
 robots.txt
 comments/
 Trigger CI rebuild with description fixes
+
+.specify
+spec
+.github/prompts

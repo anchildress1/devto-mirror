@@ -95,8 +95,8 @@ The refresh process safely backs up your current state before wiping and regener
 
    We include a `pre-commit` configuration and a small set of developer dependencies to make it easy to run security checks locally. Recommended steps:
 
-   1. Create and activate a venv: `uv venv && source .venv/bin/activate`
-   2. Install dev tools: `uv pip install -e '.[dev]'`
+   1. Create and activate a venv: `python -m venv .venv && source .venv/bin/activate`
+   2. Install dev tools: `pip install -e '.[dev]'`
    3. Install git hooks: `pre-commit install`
    4. Run a full check: `pre-commit run --all-files`
 
@@ -121,8 +121,8 @@ The refresh process safely backs up your current state before wiping and regener
 ```bash
 git clone https://github.com/anchildress1/devto-mirror.git
 cd devto-mirror
-uv venv && source .venv/bin/activate
-uv pip install -e '.[dev]'
+python -m venv .venv && source .venv/bin/activate
+pip install -e '.[dev]'
 export DEVTO_USERNAME="your-username"
 export PAGES_REPO="your-username/devto-mirror"
 
