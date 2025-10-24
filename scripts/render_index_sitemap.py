@@ -109,7 +109,7 @@ def main():
     # replace comments with final normalized comment list for rendering
     comments = comments_final
 
-    devto_username = os.environ.get('DEVTO_USERNAME','')
+    devto_username = os.environ.get('DEVTO_USERNAME', '')
     canonical_index = f"https://dev.to/{devto_username}" if devto_username else HOME
 
     # Deduplicate posts by link (or slug) preferring the newest by date, then sort newest first
@@ -154,6 +154,7 @@ def main():
     # For sitemap, prefer the explicit 'link' field (canonical dev.to URL) when present.
     smap = SITEMAP_TMPL.render(home=HOME, posts=posts_sorted, comments=comments)
     (ROOT / 'sitemap.xml').write_text(smap, encoding='utf-8')
+
 
 if __name__ == '__main__':
     main()

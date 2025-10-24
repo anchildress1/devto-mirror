@@ -8,6 +8,7 @@ Usage: python3 scripts/fix_slugs.py
 import json
 import pathlib
 
+
 def extract_slug_from_url(url):
     """Extract the full slug from a Dev.to URL"""
     if not url or "//" not in url:
@@ -24,6 +25,7 @@ def extract_slug_from_url(url):
         return None
 
     return None
+
 
 def main():
     """Fix slugs in posts_data.json"""
@@ -75,6 +77,7 @@ def main():
             print(f"❌ Error saving fixed data: {e}")
     else:
         print("✅ No slugs needed fixing.")
+
 
 if __name__ == "__main__":
     main()

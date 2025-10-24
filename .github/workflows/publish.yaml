@@ -3,7 +3,16 @@ name: Dev.to Mirror (Static, Hourly)
 on:
   schedule:
     - cron: "40 13 * * 3"  # At 09:40 EDT every Wednesday; change to 14 for EST when applicable
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_full_regen:
+        description: 'Force full regeneration (fetch all posts instead of incremental)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
   push:
     branches: [main]
 
@@ -42,26 +51,73 @@ jobs:
         env:
           DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}  # single variable only
           PAGES_REPO: ${{ github.repository }}        # "username/repo"
-          # Use workflow_dispatch input to optionally force a full regeneration.
-          FORCE_FULL_REGEN: ${{ github.event.inputs.full_regen || 'false' }}
+          FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}  # Incremental by default
         run: python scripts/generate_site.py
 
-      - name: Prepare site for Pages deployment
+      - name: Commit & push to gh-pages
+        env:
+          DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
+          PAGES_REPO: ${{ github.repository }}
         run: |
-          set -euo pipefail
-          OUT_DIR=out
-          rm -rf "$OUT_DIR"
-          mkdir -p "$OUT_DIR"
-          # Copy site artifacts into a clean output directory
-          cp -a .nojekyll index.html robots.txt sitemap.xml "$OUT_DIR/" || true
-          if [ -d posts ]; then cp -a posts "$OUT_DIR/"; fi
-          if [ -d comments ]; then cp -a comments "$OUT_DIR/"; fi
-          if [ -f posts_data.json ]; then cp posts_data.json "$OUT_DIR/"; fi
+          git config user.name "ci-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: auto-publish dev.to mirror" || echo "No changes"
+          # Safer publish flow: copy generated site to a temp dir, switch to gh-pages
+          # branch (create if missing), copy generated files (only posts/comments),
+          # merge posts_data.json, regenerate index/sitemap, commit and push.
+          set -e
+          TMPDIR="$(mktemp -d)"
+          echo "Copying generated site to temporary dir: $TMPDIR"
+          # Copy required artifacts; fail loudly if required ones are missing
+          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml posts posts_data.json scripts "$TMPDIR/"
+          # Optional artifacts
+          if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
+          if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
+          echo "TMPDIR contents:"
+          ls -la "$TMPDIR" || true
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: out
+          # Ensure we have the remote branch info
+          git fetch --all --prune || true
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
+            echo "gh-pages exists on remote, checking out"
+            git checkout gh-pages
+            git reset --hard origin/gh-pages
+          else
+            echo "gh-pages does not exist, creating orphan branch"
+            git checkout --orphan gh-pages
+            # leave working tree empty for now
+            git rm -rf .
+          fi
+
+          # Copy the generated posts and comment pages only; do NOT overwrite index.html or sitemap.xml
+          # This preserves older posts that are no longer available from the Dev.to API pagination.
+          cp -R "$TMPDIR"/posts ./
+          cp -R "$TMPDIR"/comments ./
+          # Persist last_run.txt so incremental updates work across runs
+          if [ -f "$TMPDIR/last_run.txt" ]; then
+            cp "$TMPDIR/last_run.txt" ./last_run.txt
+          fi
+
+          # Save the freshly-generated posts_data.json as a separate file so we can merge
+          if [ -f "$TMPDIR/posts_data.json" ]; then
+            cp "$TMPDIR/posts_data.json" posts_data_new.json
+          fi
+
+          # Copy helper scripts into the gh-pages working tree and run the renderer from the checkout root.
+          # Running from the checkout root ensures the renderer's ROOT (.) points at the gh-pages tree
+          # so posts/ and comments/ are resolved correctly and we don't accidentally run code from TMPDIR.
+          if [ -d "$TMPDIR/scripts" ]; then
+            cp -R "$TMPDIR/scripts" ./
+          fi
+
+          if [ -f "scripts/render_index_sitemap.py" ]; then
+            python scripts/render_index_sitemap.py
+          else
+            echo "Warning: scripts/render_index_sitemap.py not found in working tree; skipping index/sitemap regeneration" >&2
+          fi
+
+          git add -A
+          git commit -m "chore: publish generated site to gh-pages" || echo "No changes to commit"
+          git push origin gh-pages

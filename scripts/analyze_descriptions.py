@@ -15,6 +15,7 @@ import json
 import sys
 from pathlib import Path
 
+
 def analyze_posts_data(posts_file='posts_data.json'):
     """Analyze posts data for description length violations and missing descriptions"""
     posts_path = Path(posts_file)
@@ -67,6 +68,7 @@ def analyze_posts_data(posts_file='posts_data.json'):
             })
 
     return long_descriptions, missing_descriptions
+
 
 def generate_report(long_descriptions, missing_descriptions):
     """Generate a formatted report"""
@@ -121,11 +123,13 @@ def generate_report(long_descriptions, missing_descriptions):
     else:
         print("\n✅ All post descriptions are within acceptable limits!")
 
+
 def main():
     # Analyze the current posts_data.json file or provided argument
     posts_file = sys.argv[1] if len(sys.argv) > 1 else 'posts_data.json'
     long_descriptions, missing_descriptions = analyze_posts_data(posts_file)
     generate_report(long_descriptions, missing_descriptions)
+
 
 if __name__ == "__main__":
     main()

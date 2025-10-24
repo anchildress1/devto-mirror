@@ -8,6 +8,7 @@ import shutil
 import json
 from pathlib import Path
 
+
 def reset_repository():
     """Reset the repository to its original state"""
     repo_root = Path(__file__).parent.parent
@@ -17,11 +18,11 @@ def reset_repository():
 
     # Files and directories to remove
     items_to_remove = [
-        "posts",           # Directory containing all blog post HTML files
-        "index.html",      # Generated index page
-        "sitemap.xml",     # Generated sitemap
-        "posts_data.json", # Posts data tracking file
-        "robots.txt"       # Generated robots.txt (if it exists)
+        "posts",            # Directory containing all blog post HTML files
+        "index.html",       # Generated index page
+        "sitemap.xml",      # Generated sitemap
+        "posts_data.json",  # Posts data tracking file
+        "robots.txt"        # Generated robots.txt (if it exists)
     ]
 
     removed_items = []
@@ -68,6 +69,7 @@ def reset_repository():
     print("   2. Approve the workflow to commit the reset")
     print("   3. GitHub Pages will be disabled automatically")
     print("   4. Repository will be ready for fresh setup")
+
 
 if __name__ == "__main__":
     reset_repository()
