@@ -7,7 +7,7 @@ name: "CodeQL Analysis"
   pull_request:
     branches: ["main"]
   schedule:
-    - cron: "15 2 * * 1"  # Weekly on Mondays at 2:15 AM UTC
+    - cron: "23 2 * * 1"  # Weekly on Mondays at 2:23 AM UTC
   workflow_dispatch: {}
 
 permissions:
@@ -28,6 +28,7 @@ jobs:
     permissions:
       security-events: write
       packages: read
+
     strategy:
       matrix:
         include:
@@ -44,23 +45,6 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.build-mode }}
           queries: +security-extended,security-and-quality
-
-      # If the analyze step fails for one of the languages you are analyzing
-      # with "We were unable to automatically build your code", modify the
-      # matrix above to set the build mode to "manual" and uncomment the
-      # following three steps and modify them (or add more) to build your
-      # code if your project, please refer to the EXAMPLE below for guidance.
-
-      # - name: Set up Python
-      #   uses: actions/setup-python@v6
-      #   with:
-      #     python-version: '3.11'
-      #     cache: 'pip'
-      #
-      # - name: Install dependencies (recommended: pip / editable install)
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     python -m pip install -e '.[dev]'
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
