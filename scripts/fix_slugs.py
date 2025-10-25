@@ -60,9 +60,9 @@ def main():
             correct_slug = extract_slug_from_url(url)
             if correct_slug and correct_slug != current_slug:
                 print("Fixing slug:")
-                print("  Title: %s" % post.get('title', 'Untitled'))
-                print("  Old slug: %s" % current_slug)
-                print("  New slug: %s" % correct_slug)
+                print(f"  Title: {post.get('title', 'Untitled')}")
+                print(f"  Old slug: {current_slug}")
+                print(f"  New slug: {correct_slug}")
                 post["slug"] = correct_slug
                 fixed_count += 1
                 print()

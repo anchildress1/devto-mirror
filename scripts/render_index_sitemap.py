@@ -52,10 +52,8 @@ def load_comment_manifest(path='comments.txt'):
     return items
 
 
-def main():
-    # Load existing posts data from the gh-pages working tree (if present)
+def load_and_merge_posts():
     posts = load_posts_data()
-    # If a freshly-generated posts_data.json was provided (posts_data_new.json), merge it
     new_path = ROOT / 'posts_data_new.json'
     if new_path.exists():
         try:
@@ -65,7 +63,6 @@ def main():
             new_posts = []
         if new_posts:
             print(f"Merging {len(new_posts)} new posts into existing {len(posts)} posts")
-            # Combine all posts and deduplicate by link
             combined = posts + new_posts
             merged = dedupe_posts_by_link(combined)
             if save_posts_data(merged):
@@ -75,85 +72,79 @@ def main():
                 print("Warning: Failed to write merged posts_data.json")
         else:
             print("No new posts found in posts_data_new.json to merge")
-    # Build HOME from env PAGES_REPO if available (needed when normalizing comment locs)
+    return posts
+
+
+def get_home_url():
     home_env = os.environ.get('PAGES_REPO', '')
     if '/' in home_env:
         user, repo = home_env.split('/', 1)
-        HOME = f"https://{user}.github.io/{repo}/"
-    else:
-        # If PAGES_REPO isn't set, don't use the local filesystem HOME as the site URL.
-        # Leave HOME blank so templates fall back to relative paths.
-        HOME = ''
+        return f"https://{user}.github.io/{repo}/"
+    return ''
 
+
+def process_comments(home):
     comments = load_comment_manifest()
-    # Deduplicate comments by url/local and compute a final 'loc' for sitemap entries.
     comments_seen = {}
     comments_final = []
     for c in comments:
         key = c.get('url') or c.get('local')
-        if not key:
-            continue
-        if key in comments_seen:
+        if not key or key in comments_seen:
             continue
         comments_seen[key] = True
-        if c.get('url'):
-            loc = c['url']
-        elif HOME:
-            loc = HOME + c['local']
-        else:
-            loc = c['local']
+        loc = c.get('url') or (home + c['local'] if home else c['local'])
         entry = dict(c)
         entry['loc'] = loc
-        # For template compatibility use 'loc' field as 'loc' but template expects 'loc' key
         comments_final.append({'loc': loc, 'url': c.get('url'), 'local': c.get('local'), 'text': c.get('text')})
-    # replace comments with final normalized comment list for rendering
-    comments = comments_final
+    return comments_final
 
-    devto_username = os.environ.get('DEVTO_USERNAME', '')
-    canonical_index = f"https://dev.to/{devto_username}" if devto_username else HOME
 
-    # Deduplicate posts by link (or slug) preferring the newest by date, then sort newest first
-    # Clean posts in-memory for rendering only. Do NOT overwrite posts_data.json
-    # here; posts_data.json is authoritative unless an explicit merge is requested
-    posts = dedupe_posts_by_link(posts)
+def get_title_user(posts_sorted, devto_username):
+    if devto_username:
+        return devto_username
+    if not posts_sorted:
+        return ''
+    try:
+        first_post = posts_sorted[0]
+        first_link = first_post.get('link') if isinstance(first_post, dict) else getattr(first_post, 'link', '')
+        if first_link:
+            parsed = urllib.parse.urlparse(first_link)
+            parts = parsed.path.strip('/').split('/')
+            return parts[0] if parts else ''
+    except Exception as e:
+        # Log the parsing error for visibility (avoids swallowing exceptions silently)
+        # and return an empty username as a safe fallback.
+        import sys
 
-    # Ensure posts are sorted newest first by date (already sorted by dedupe_posts_by_link)
-    posts_sorted = posts
+        print(f"Warning: failed to extract username from first post link: {e}", file=sys.stderr)
+        return ''
+    return ''
 
-    # When rendering, prefer the dev.to canonical link if present for canonical index
-    # and ensure templates use post.link when available.
-    # Title should always keep the username (fallback to DEVTO_USERNAME or
-    # derive from first post link if not present).
-    title_user = devto_username
-    if not title_user and posts_sorted:
-        # attempt to extract user from first post link
-        try:
-            first_post = posts_sorted[0]
-            if isinstance(first_post, dict):
-                first_link = first_post.get('link')
-            else:
-                first_link = getattr(first_post, 'link', '')
 
-            if first_link:
-                parsed = urllib.parse.urlparse(first_link)
-                parts = parsed.path.strip('/').split('/')
-                if parts:
-                    title_user = parts[0]
-        except Exception:
-            title_user = ''
+def render_templates(posts, comments, home, devto_username):
+    posts_sorted = dedupe_posts_by_link(posts)
+    title_user = get_title_user(posts_sorted, devto_username)
+    canonical_index = f"https://dev.to/{devto_username}" if devto_username else home
 
     index_html = INDEX_TMPL.render(
         username=title_user or devto_username,
         posts=posts_sorted,
         comments=comments,
         canonical=canonical_index,
-        home=HOME,
+        home=home,
     )
     (ROOT / 'index.html').write_text(index_html, encoding='utf-8')
 
-    # For sitemap, prefer the explicit 'link' field (canonical dev.to URL) when present.
-    smap = SITEMAP_TMPL.render(home=HOME, posts=posts_sorted, comments=comments)
+    smap = SITEMAP_TMPL.render(home=home, posts=posts_sorted, comments=comments)
     (ROOT / 'sitemap.xml').write_text(smap, encoding='utf-8')
+
+
+def main():
+    posts = load_and_merge_posts()
+    home = get_home_url()
+    comments = process_comments(home)
+    devto_username = os.environ.get('DEVTO_USERNAME', '')
+    render_templates(posts, comments, home, devto_username)
 
 
 if __name__ == '__main__':

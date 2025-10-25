@@ -3,6 +3,7 @@ repos:
   rev: 7.3.0
   hooks:
   - id: flake8
+    stages: [pre-commit]
 - repo: https://github.com/PyCQA/bandit
   rev: 1.8.6
   hooks:
@@ -10,6 +11,7 @@ repos:
     args:
     - -r
     - scripts
+    stages: [pre-commit]
 - repo: https://github.com/Yelp/detect-secrets
   rev: v1.5.0
   hooks:
@@ -17,6 +19,7 @@ repos:
     args:
     - --baseline
     - .secrets.baseline
+    stages: [pre-commit]
 - repo: local
   hooks:
   - id: warn-pip-audit
@@ -24,14 +27,3 @@ repos:
     entry: python scripts/warn_pip_audit.py
     language: python
     pass_filenames: false
-- repo: local
-  hooks:
-  - id: commit-msg-conventional
-    name: Conventional commit message lint
-    entry: /Users/anchildress1/git_personal/devto-mirror/scripts/validate_commit_msg.py
-    language: python
-    additional_dependencies:
-    - gitlint>=0.16.0
-    pass_filenames: true
-    stages:
-    - commit-msg

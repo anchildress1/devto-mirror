@@ -44,7 +44,8 @@ Python 3.11+: Follow standard conventions
 - **Environment Variables**: `DEVTO_USERNAME` (required), `PAGES_REPO` (user/repo format)
 - **Generated Files**: HTML output in root directory but gitignored (posts/, index.html, etc.)
 - **Package Exclusions**: `specs/`, `assets/`, `tests/`, `.github/` excluded from distribution
-- **Commit Messages**: Conventional commits validated by `scripts/validate_commit_msg.py`
+- **Commit Messages**: Conventional commits generated using `../awesome-github-copilot/.github/prompts/generate-commit-message.prompt.md`
+  - NEVER execute a git commit command unless the user explicitly asks for it.
 
 ## Integration Points
 - **Dev.to API**: RESTful article fetching with pagination
@@ -60,5 +61,6 @@ Python 3.11+: Follow standard conventions
 - Use `subprocess` with list arguments only; NEVER use `shell=True`.
 - Exclude periods from slug sanitization characters to prevent path traversal.
 - Ensure validation functions return boolean values consistently; avoid mixing exceptions and returns.
+- Do not add useless lambdas anywhere in this codebase. They add no value and confuse readers.
 
 <!-- MANUAL ADDITIONS END -->

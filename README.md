@@ -24,8 +24,10 @@
 
 ## Repo Stuff
 
-[![GitHub License](https://img.shields.io/badge/license-Polyform_Shield_1.0.0-yellow)](./LICENSE) ![Repo Size](https://img.shields.io/github/repo-size/anchildress1/devto-mirror) ![Last Commit](https://img.shields.io/github/last-commit/anchildress1/devto-mirror) ![Stars](https://img.shields.io/github/stars/anchildress1/devto-mirror)
- [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/anchildress1) [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto\&logoColor=fff)](https://dev.to/anchildress1) [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?logo=linkedin\&logoColor=white)](https://www.linkedin.com/in/anchildress1/)
+[![GitHub License](https://img.shields.io/badge/license-Polyform_Shield_1.0.0-yellow?style=plastic)](./LICENSE) ![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=plastic) ![Repo Size](https://img.shields.io/github/repo-size/anchildress1/devto-mirror?style=plastic) ![Last Commit](https://img.shields.io/github/last-commit/anchildress1/devto-mirror?style=plastic)
+[![Publish Dev.to Mirror Site](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml/badge.svg?branch=main&style=plastic)](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml) [![CodeQL Analysis](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml/badge.svg?style=plastic)](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml) [![Security and Lint CI](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml/badge.svg?style=plastic)](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml)
+![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Fdevto-mirror%2Frefs%2Fheads%2F001-upgrade-the-python%2Fpyproject.toml&query=%24.project.requires-python&style=plastic&logo=python&logoColor=fff&label=Python&color=3776AB) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=plastic) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=plastic) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=plastic) ![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=plastic)
+ [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black&style=plastic)](https://www.buymeacoffee.com/anchildress1) [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto&logoColor=fff&style=plastic)](https://dev.to/anchildress1) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin\&logoColor=white&style=plastic)](https://www.linkedin.com/in/anchildress1/)
 
 ## What is this?
 
@@ -82,7 +84,7 @@ Install hooks: `pre-commit install`
 Run checks: `pre-commit run --all-files`
 Manual audit: `pip-audit --progress-spinner=off`
 
-Runs: bandit, flake8, detect-secrets, pip-audit
+Runs: `bandit`, `flake8`, `detect-secrets`, `pip-audit`
 
 ---
 

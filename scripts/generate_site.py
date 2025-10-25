@@ -618,7 +618,7 @@ if comment_items:
             author=DEVTO_USERNAME,
         )
         # Ensure local path is safe
-        sanitized_local = re.sub(r"[^A-Za-z0-9\-_./]", "-", c["local"])
+        sanitized_local = re.sub(r"[^A-Za-z0-9\-_]", "-", c["local"])
         local_path = pathlib.Path("comments") / sanitized_local
         resolved_path = local_path.resolve()
         comments_dir = pathlib.Path("comments").resolve()
@@ -627,14 +627,11 @@ if comment_items:
         local_path.parent.mkdir(parents=True, exist_ok=True)
         local_path.write_text(html_page, encoding="utf-8")
 
-# Use Dev.to profile as canonical for the index page
+
 devto_profile = f"https://dev.to/{DEVTO_USERNAME}"
 site_description = (
-
     f"Mirror of {DEVTO_USERNAME}'s Dev.to blog posts. "
-
     "Canonical lives on Dev.to. This is just a crawler-friendly mirror."
-
 )
 social_image = f"{HOME}assets/devto-mirror.jpg"
 
