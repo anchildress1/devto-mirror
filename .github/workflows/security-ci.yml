@@ -19,6 +19,9 @@ jobs:
   security-lint:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
     steps:
       - uses: actions/checkout@v5
         with:
@@ -26,55 +29,22 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
-          cache: 'pip'
-
-      - name: Install uv (safer install via pip)
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install uv
-
-      - name: Install dependencies
-        run: uv pip install -e '.[dev]'
-
-      - name: Run pip-audit
-        id: pip_audit
-        continue-on-error: true
-        run: pip-audit --progress=none
-
-      - name: Run bandit security scan
-        id: bandit
-        continue-on-error: true
-        run: bandit -r scripts -ll -iii
-
-      - name: Run flake8 lint
-        id: flake8
-        continue-on-error: true
-        run: flake8
-
-      - name: Check security results
-        id: check_security_results
-        run: |
-          if [ "${{ steps.pip_audit.outcome }}" = "failure" ] || [ "${{ steps.bandit.outcome }}" = "failure" ] || [ "${{ steps.flake8.outcome }}" = "failure" ]; then
-            echo "::error::Security scans detected issues"
-            exit 1
-          else
-            echo "All security scans passed"
-          fi
-
-      - name: Create automated fix PR
-        if: steps.pip_audit.outcome == 'failure' || steps.bandit.outcome == 'failure'
-        uses: peter-evans/create-pull-request@v5
+          python-version: ${{ matrix.python-version }}
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'fix: auto-remediate security vulnerabilities'
-          title: 'Security: Automated vulnerability fixes'
-          body: |
-            Auto-generated fixes from security scans.
-
-            **Tools**: pip-audit, bandit
-            **Run**: ${{ github.run_id }}
-
-            ⚠️ **Review Required**: This PR is blocked from auto-merge and requires manual review.
-          branch: auto-fix/security-${{ github.run_id }}
-          delete-branch: true
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
+      - name: Install dependencies for analysis
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -e '.[dev]'
+      - name: Run pip-audit
+        run: pip-audit --progress-spinner=off
+      - name: Run bandit security scan
+        run: bandit -r scripts -ll -iii
+      - name: Run flake8 lint
+        run: flake8

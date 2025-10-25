@@ -10,8 +10,13 @@ This repository now includes comprehensive security analysis through GitHub's bu
 - **Coverage**: Python code security scanning with extended security and quality queries
 - **Manual Trigger**: Available via GitHub Actions
 
-### 2. Dependency updates
-This repository does not use an automated Dependabot configuration since Dependabot doesn't support the `uv` package manager used here.
+### 2. Dependabot
+- **File**: `.github/dependabot.yml`
+- **Frequency**: Weekly (Mondays at 4:00 AM UTC)
+- **Coverage**:
+  - Python package dependencies (`pip`)
+  - GitHub Actions versions
+- **Auto-assignment**: PRs are auto-assigned to repository owner
 
 ### 3. Dependencies
 - **File**: `requirements.txt`

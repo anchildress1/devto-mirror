@@ -3,11 +3,15 @@ from datetime import datetime, timezone
 from slugify import slugify
 from jinja2 import Environment, select_autoescape
 from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
+import bleach
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
 LAST_RUN_FILE = "last_run.txt"
 POSTS_DATA_FILE = "posts_data.json"
+
+# Filename sanitization pattern - prevents path traversal and unsafe characters
+SAFE_FILENAME_PATTERN = r"[^A-Za-z0-9_-]"
 
 if not DEVTO_USERNAME:
     raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
@@ -142,21 +146,21 @@ PAGE_TMPL = env.from_string(
 </head><body>
 <main>
   <h1><a href="{{ canonical }}">{{ title }}</a></h1>
-  {% if cover_image %}<img src="{{ cover_image }}?v=2"
-
-    alt="Banner image for {{ title }}"
-
-    style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">{% endif %}
-  {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
-  {% if tags %}
-
-  <p><strong>Tags:</strong> {% for tag in tags %}<span
-
-      style="background: #f0f0f0; padding: 2px 6px; margin: 2px;
-
-      border-radius: 3px; font-size: 0.9em;">#{{ tag }}</span>{% if not loop.last %} {% endif %}{% endfor %}</p>
-
+  {% if cover_image %}
+  <img src="{{ cover_image }}?v=2"
+      alt="Banner image for {{ title }}"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
   {% endif %}
+  {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
+    {% if tags %}
+    <p><strong>Tags:</strong>
+        {% for tag in tags %}
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #{{ tag }}
+            </span>{% if not loop.last %} {% endif %}
+        {% endfor %}
+    </p>
+    {% endif %}
   {% if description %}<p><em>{{ description }}</em></p>{% endif %}
   <article>{{ content }}</article>
   <p><a href="{{ canonical }}">Read on Dev.to →</a></p>
@@ -338,23 +342,18 @@ def strip_html(text):
 def sanitize_html_content(content):
     """
     Basic HTML sanitization to allow common formatting tags while removing potentially harmful content.
-    This replaces the bleach.clean() functionality with a safer built-in approach.
+    Uses bleach for robust sanitization.
     """
     if not content:
         return ""
 
-    # Remove script tags and their content for security
-    content = re.sub(r"<script[^>]*>.*?</script>", "", content, flags=re.DOTALL | re.IGNORECASE)
-
-    # Remove potentially harmful attributes (keep src, alt, href, class)
-    content = re.sub(
-        r"<([^>]*?)\s+(?:on\w+|javascript:|data-)[^>]*?>",
-        r"<\1>",
-        content,
-        flags=re.IGNORECASE,
-    )
-
-    return content
+    allowed_tags = ['p', 'br', 'strong', 'em', 'a', 'code', 'pre', 'blockquote',
+                    'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img']
+    allowed_attributes = {
+        'a': ['href'],
+        'img': ['src', 'alt']
+    }
+    return bleach.clean(content, tags=allowed_tags, attributes=allowed_attributes)
 
 
 class Post:
@@ -470,7 +469,9 @@ def load_comment_manifest(path="comments.txt"):
         # get a stable id from /comment/<id> or #comment-<id>, else slug of URL
         m = re.search(r"/comment/([A-Za-z0-9]+)", url) or re.search(r"#comment-([A-Za-z0-9_-]+)", url)
         cid = m.group(1) if m else slugify(url)[:48]
-        local = f"comments/{cid}.html"
+        # Sanitize only the filename component (cid) to prevent path traversal
+        sanitized_cid = re.sub(SAFE_FILENAME_PATTERN, "-", cid)
+        local = f"comments/{sanitized_cid}.html"
         # short label for index
         label = context or url
         if len(label) > 80:
@@ -585,10 +586,9 @@ for p in all_posts:
         author=DEVTO_USERNAME,
     )
     # Prevent path traversal or unsafe filenames in slugs
-    safe_slug = re.sub(r"[^A-Za-z0-9\-_.]", "-", p.slug)[:120]
-    # Avoid accidental relative paths
-    if "/" in safe_slug or ".." in safe_slug:
-        safe_slug = re.sub(r"[/.]+", "-", safe_slug)
+    safe_slug = re.sub(SAFE_FILENAME_PATTERN, "-", p.slug)[:120]
+    # Periods are not allowed; this prevents path traversal via '..' or similar.
+    # No further sanitization needed.
     (POSTS_DIR / f"{safe_slug}.html").write_text(html_out, encoding="utf-8")
     print(f"Wrote: {p.slug}.html (canonical: {canonical})")
 
@@ -622,19 +622,25 @@ if comment_items:
             site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
             author=DEVTO_USERNAME,
         )
-        # Ensure local path is safe
-        local_path = pathlib.Path(re.sub(r"[^A-Za-z0-9\-_./]", "-", c["local"]))
+        # Ensure local path is safe. Re-sanitize the filename component to be defensive
+        # (load_comment_manifest already attempts sanitization, but double-check here).
+        orig_filename = os.path.basename(c["local"])
+        name, ext = os.path.splitext(orig_filename)
+        sanitized_name = re.sub(SAFE_FILENAME_PATTERN, "-", name)
+        sanitized_local = sanitized_name + ext
+        local_path = pathlib.Path("comments") / sanitized_local
+        resolved_path = local_path.resolve()
+        comments_dir = pathlib.Path("comments").resolve()
+        if not str(resolved_path).startswith(str(comments_dir) + os.sep):
+            raise ValueError(f"Path traversal detected in comment local path: {c['local']}")
         local_path.parent.mkdir(parents=True, exist_ok=True)
         local_path.write_text(html_page, encoding="utf-8")
 
-# Use Dev.to profile as canonical for the index page
+
 devto_profile = f"https://dev.to/{DEVTO_USERNAME}"
 site_description = (
-
     f"Mirror of {DEVTO_USERNAME}'s Dev.to blog posts. "
-
     "Canonical lives on Dev.to. This is just a crawler-friendly mirror."
-
 )
 social_image = f"{HOME}assets/devto-mirror.jpg"
 

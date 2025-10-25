@@ -82,6 +82,7 @@ SITEMAP_TMPL = env.from_string("""<?xml version="1.0" encoding="UTF-8"?>
 </urlset>
 """)
 
+
 def parse_date(date_str):
     """
     Unified date parsing function that handles various formats.

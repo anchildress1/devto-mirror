@@ -8,6 +8,7 @@ Usage: python3 scripts/fix_slugs.py
 import json
 import pathlib
 
+
 def extract_slug_from_url(url):
     """Extract the full slug from a Dev.to URL"""
     if not url or "//" not in url:
@@ -24,6 +25,7 @@ def extract_slug_from_url(url):
         return None
 
     return None
+
 
 def main():
     """Fix slugs in posts_data.json"""
@@ -58,9 +60,9 @@ def main():
             correct_slug = extract_slug_from_url(url)
             if correct_slug and correct_slug != current_slug:
                 print("Fixing slug:")
-                print("  Title: %s" % post.get('title', 'Untitled'))
-                print("  Old slug: %s" % current_slug)
-                print("  New slug: %s" % correct_slug)
+                print(f"  Title: {post.get('title', 'Untitled')}")
+                print(f"  Old slug: {current_slug}")
+                print(f"  New slug: {correct_slug}")
                 post["slug"] = correct_slug
                 fixed_count += 1
                 print()
@@ -75,6 +77,7 @@ def main():
             print(f"❌ Error saving fixed data: {e}")
     else:
         print("✅ No slugs needed fixing.")
+
 
 if __name__ == "__main__":
     main()

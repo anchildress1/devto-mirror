@@ -4,8 +4,6 @@ Auto-generated from all feature plans. Last updated: 2025-10-12
 
 ## Active Technologies
 - Python 3.11+ + requests, jinja2, python-slugify, bleach (001-upgrade-the-python)
-- Python 3.11+ + uv (package manager), pip-audit, bandit, flake8, GitHub Actions, CodeQL
-- Git branches (backup branches), GitHub Security tab (CodeQL findings)
 
 ## Project Structure
 ```
@@ -36,7 +34,7 @@ Python 3.11+: Follow standard conventions
 - **Data Flow**: Dev.to API → JSON processing → HTML files in `posts/` directory
 
 ## Critical Workflows
-- **Dependency Management**: Use `uv` (not pip) - requires quotes: `uv pip install -e '.[dev]'`
+- **Dependency Management**: Use `pip` with pyproject.toml: `pip install -e '.[dev]'`
 - **Testing**: `python -m unittest` from project root (not scripts/)
 - **Code Quality**: `pre-commit run --all-files` (flake8, bandit, detect-secrets)
 - **Site Generation**: Set `DEVTO_USERNAME` and `PAGES_REPO` env vars, run `python scripts/generate_site.py`
@@ -46,27 +44,23 @@ Python 3.11+: Follow standard conventions
 - **Environment Variables**: `DEVTO_USERNAME` (required), `PAGES_REPO` (user/repo format)
 - **Generated Files**: HTML output in root directory but gitignored (posts/, index.html, etc.)
 - **Package Exclusions**: `specs/`, `assets/`, `tests/`, `.github/` excluded from distribution
-- **Commit Messages**: Conventional commits validated by `scripts/validate_commit_msg.py`
+- **Commit Messages**: Conventional commits generated using `../awesome-github-copilot/.github/prompts/generate-commit-message.prompt.md`
+  - NEVER execute a git commit command unless the user explicitly asks for it.
 
 ## Integration Points
 - **Dev.to API**: RESTful article fetching with pagination
 - **GitHub Pages**: Static hosting from `gh-pages` branch
-- **GitHub Actions**: Daily automated builds using uv
+- **GitHub Actions**: Daily automated builds using pip
 - **SEO Optimization**: Canonical links, meta tags, sitemaps, AI-crawler friendly robots.txt
 
-## Project Nature & Clarification Guidance
-- **Simple Utility Repository**: This is a straightforward utility project - avoid over-engineering, complex orchestration, or overly verbose documentation
-- **Clarifications**: If you ever have multiple independent questions to interrogate the user with, then always display them in a single prompt to get a single answer aimed to save extraneous/unnecessary interactions. You should make informed decisions based on simplicity principles rather than asking excessive questions. Present all clarification choices at the end when all other parts of the task are complete, for review.
-
 <!-- MANUAL ADDITIONS START -->
+## Security Instructions
+
+- Use `bleach.clean()` for HTML sanitization; NEVER use regex or string replacements.
+- Use `pathlib.Path().resolve()` to validate file paths and prevent directory traversal.
+- Use `subprocess` with list arguments only; NEVER use `shell=True`.
+- Exclude periods from slug sanitization characters to prevent path traversal.
+- Ensure validation functions return boolean values consistently; avoid mixing exceptions and returns.
+- Do not add useless lambdas anywhere in this codebase. They add no value and confuse readers.
+
 <!-- MANUAL ADDITIONS END -->
-
-## GHA Workflows
-- `security-ci.yml` — Detects vulnerabilities and code smells
-- `codeql.yml` — Runs CodeQL analysis (Python)
-- `publish.yaml` — Builds the static site and deploys to `gh-pages`
-- `refresh.yaml` — Manual refresh workflow that creates backups and re-publishes the site
-
-## Critical Constraints
-- NEVER comment out code as a shortcut unless explicitly instructed to do so by the user.
-- NEVER update anything related to the `./specs` directory unless explicitly instructed to execute a corresponding `.github/prompts/speckit.*` command.
