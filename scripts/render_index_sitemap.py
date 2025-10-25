@@ -2,6 +2,7 @@ import os
 import json
 import pathlib
 import re
+import sys
 import urllib.parse
 from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
 from slugify import slugify
@@ -114,8 +115,6 @@ def get_title_user(posts_sorted, devto_username):
     except Exception as e:
         # Log the parsing error for visibility (avoids swallowing exceptions silently)
         # and return an empty username as a safe fallback.
-        import sys
-
         print(f"Warning: failed to extract username from first post link: {e}", file=sys.stderr)
         return ''
     return ''

@@ -10,6 +10,9 @@ PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
 LAST_RUN_FILE = "last_run.txt"
 POSTS_DATA_FILE = "posts_data.json"
 
+# Filename sanitization pattern - prevents path traversal and unsafe characters
+SAFE_FILENAME_PATTERN = r"[^A-Za-z0-9_-]"
+
 if not DEVTO_USERNAME:
     raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
 if "/" not in PAGES_REPO:
@@ -466,7 +469,9 @@ def load_comment_manifest(path="comments.txt"):
         # get a stable id from /comment/<id> or #comment-<id>, else slug of URL
         m = re.search(r"/comment/([A-Za-z0-9]+)", url) or re.search(r"#comment-([A-Za-z0-9_-]+)", url)
         cid = m.group(1) if m else slugify(url)[:48]
-        local = f"comments/{cid}.html"
+        # Sanitize only the filename component (cid) to prevent path traversal
+        sanitized_cid = re.sub(SAFE_FILENAME_PATTERN, "-", cid)
+        local = f"comments/{sanitized_cid}.html"
         # short label for index
         label = context or url
         if len(label) > 80:
@@ -581,7 +586,7 @@ for p in all_posts:
         author=DEVTO_USERNAME,
     )
     # Prevent path traversal or unsafe filenames in slugs
-    safe_slug = re.sub(r"[^A-Za-z0-9\-_]", "-", p.slug)[:120]
+    safe_slug = re.sub(SAFE_FILENAME_PATTERN, "-", p.slug)[:120]
     # Periods are not allowed; this prevents path traversal via '..' or similar.
     # No further sanitization needed.
     (POSTS_DIR / f"{safe_slug}.html").write_text(html_out, encoding="utf-8")
@@ -617,11 +622,11 @@ if comment_items:
             site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
             author=DEVTO_USERNAME,
         )
-        # Ensure local path is safe
-        # Sanitize only the filename component (e.g., "{cid}.html")
+        # Ensure local path is safe. Re-sanitize the filename component to be defensive
+        # (load_comment_manifest already attempts sanitization, but double-check here).
         orig_filename = os.path.basename(c["local"])
         name, ext = os.path.splitext(orig_filename)
-        sanitized_name = re.sub(r"[^A-Za-z0-9_-]", "-", name)
+        sanitized_name = re.sub(SAFE_FILENAME_PATTERN, "-", name)
         sanitized_local = sanitized_name + ext
         local_path = pathlib.Path("comments") / sanitized_local
         resolved_path = local_path.resolve()
