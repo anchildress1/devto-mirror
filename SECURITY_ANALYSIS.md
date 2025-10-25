@@ -13,7 +13,7 @@ This repository now includes comprehensive security analysis through GitHub's bu
 ### 2. Dependabot
 - **File**: `.github/dependabot.yml`
 - **Frequency**: Weekly (Mondays at 4:00 AM UTC)
-- **Coverage**: 
+- **Coverage**:
   - Python package dependencies (`pip`)
   - GitHub Actions versions
 - **Auto-assignment**: PRs are auto-assigned to repository owner
@@ -31,6 +31,22 @@ To fully enable GitHub's security features, consider enabling these in repositor
 2. **Dependabot alerts** (Settings → Security & analysis)
 3. **Secret scanning** (Settings → Security & analysis)
 4. **Private vulnerability reporting** (Settings → Security & analysis)
+
+## Local & CI security checks
+
+This repository now includes an extra CI workflow (`.github/workflows/security-ci.yml`) that runs a few lightweight, fast checks on pushes and PRs:
+
+- Bandit — looks for common Python security anti-patterns in `scripts/`
+- pip-audit — checks installed packages for known vulnerabilities
+- flake8 — a linter to catch a range of potential issues, including style problems that can hide bugs
+
+To run these locally during development:
+
+1. Create a virtual environment: `python -m venv .venv && source .venv/bin/activate`
+2. Install the dev requirements: `pip install -r dev-requirements.txt`
+3. Run `pip-audit`, `bandit -r scripts`, and `flake8` as needed
+
+These checks are intentionally lightweight — they won't find everything, but they reduce noise in automated scans and catch common mistakes that lead to security flags.
 
 ## How It Works
 

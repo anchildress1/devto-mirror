@@ -3,10 +3,13 @@ Shared utilities for devto-mirror scripts
 """
 from datetime import datetime
 from email.utils import parsedate_to_datetime
-from jinja2 import Template
+from jinja2 import Environment, select_autoescape
+
+# Use a Jinja environment with autoescape enabled for HTML/XML templates
+env = Environment(autoescape=select_autoescape(['html', 'xml']))
 
 # Shared templates
-INDEX_TMPL = Template("""<!doctype html><html lang="en"><head>
+INDEX_TMPL = env.from_string("""<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ username }} — Dev.to Mirror</title>
 <link rel="canonical" href="{{ canonical }}">
@@ -41,7 +44,18 @@ INDEX_TMPL = Template("""<!doctype html><html lang="en"><head>
   <h1>{{ username }} — Dev.to Mirror</h1>
   <ul>
   {% for p in posts %}
-    <li><a href="posts/{{ p.slug }}.html">{{ p.title }}</a>{% if p.description %} — {{ p.description }}{% endif %}{% if p.tags %} — <small>Tags: {% for tag in p.tags %}#{{ tag }}{% if not loop.last %}, {% endif %}{% endfor %}</small>{% endif %} — <small>{{ p.date }}</small></li>
+        <li>
+            <a href="posts/{{ p.slug }}.html">{{ p.title }}</a>
+            {% if p.description %} — {{ p.description }}{% endif %}
+                        {% if p.tags %}
+                                — <small>Tags:
+                                    {% for tag in p.tags %}
+                                        #{{ tag }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </small>
+                        {% endif %}
+            — <small>{{ p.date }}</small>
+        </li>
   {% endfor %}
   </ul>
   {% if comments %}<h2>Comment Notes</h2>
@@ -55,7 +69,7 @@ INDEX_TMPL = Template("""<!doctype html><html lang="en"><head>
 </body></html>
 """)
 
-SITEMAP_TMPL = Template("""<?xml version="1.0" encoding="UTF-8"?>
+SITEMAP_TMPL = env.from_string("""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{{ home }}</loc></url>
   {% for p in posts %}
@@ -67,6 +81,7 @@ SITEMAP_TMPL = Template("""<?xml version="1.0" encoding="UTF-8"?>
   {% endfor %}
 </urlset>
 """)
+
 
 def parse_date(date_str):
     """
@@ -119,7 +134,6 @@ def dedupe_posts_by_link(posts_list):
     if not posts_list:
         return []
 
-    # Build a map of link -> post, keeping the newest post for each link
     posts_map = {}
 
     for post in posts_list:
@@ -127,22 +141,18 @@ def dedupe_posts_by_link(posts_list):
         if not link:
             continue
 
-        # Convert to dict if it's a Post object
         post_dict = post.to_dict() if hasattr(post, 'to_dict') else post
+        new_date = parse_date(post_dict.get('date'))
 
         existing = posts_map.get(link)
-        if not existing:
+        if existing is None:
             posts_map[link] = post_dict
-        else:
-            # Compare dates and keep the newer one
-            existing_date = parse_date(existing.get('date'))
-            new_date = parse_date(post_dict.get('date'))
+            continue
 
-            if new_date and (not existing_date or new_date > existing_date):
-                posts_map[link] = post_dict
+        existing_date = parse_date(existing.get('date'))
+        # Keep the newer post when possible
+        if new_date and (not existing_date or new_date > existing_date):
+            posts_map[link] = post_dict
 
-    # Convert back to list and sort by date
-    deduped = list(posts_map.values())
-    deduped.sort(key=lambda p: parse_date(p.get('date')) or datetime.min, reverse=True)
-
+    deduped = sorted(posts_map.values(), key=lambda p: parse_date(p.get('date')) or datetime.min, reverse=True)
     return deduped

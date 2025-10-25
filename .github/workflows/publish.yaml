@@ -1,14 +1,23 @@
-name: Dev.to Mirror (Static, Hourly)
+name: Generate and Publish Dev.to Mirror Site
 
 on:
   schedule:
-    - cron: "15 14 * * *"   # runs daily at 14:15 UTC, 10:15 AM EDT, 9:15 AM EST
-  workflow_dispatch: {}
-  push:
-    branches: [main]
+    - cron: "40 13 * * 3"  # At 09:40 EDT every Wednesday; change to 14 for EST when applicable
+  workflow_dispatch:
+    inputs:
+      force_full_regen:
+        description: 'Force full regeneration (fetch all posts instead of incremental)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -20,23 +29,31 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v6.0.0
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
-        run: pip install requests jinja2 python-slugify
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
 
       - name: Generate site
         env:
           DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}  # single variable only
           PAGES_REPO: ${{ github.repository }}        # "username/repo"
-          FORCE_FULL_REGEN: "true"                    # Force full regeneration to ensure all files are created
+          FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}  # Incremental by default
         run: python scripts/generate_site.py
 
-      # API is now used inside the generator; no separate probe needed
-
-      - name: Commit & push
+      - name: Commit & push to gh-pages
         env:
           DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
           PAGES_REPO: ${{ github.repository }}
@@ -74,7 +91,7 @@ jobs:
           fi
 
           # Copy the generated posts and comment pages only; do NOT overwrite index.html or sitemap.xml
-          # This preserves older posts that no longer appear in the RSS feed.
+          # This preserves older posts that are no longer available from the Dev.to API pagination.
           cp -R "$TMPDIR"/posts ./
           cp -R "$TMPDIR"/comments ./
           # Persist last_run.txt so incremental updates work across runs
@@ -103,5 +120,3 @@ jobs:
           git add -A
           git commit -m "chore: publish generated site to gh-pages" || echo "No changes to commit"
           git push origin gh-pages
-
-# Generated with the help of ChatGPT and GitHub Copilot.

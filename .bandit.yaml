@@ -1,0 +1,7 @@
+skips: []
+exclude_dirs:
+  - .venv
+  - tests
+exclude_files: []
+severity: LOW
+confidence: LOW
