@@ -154,5 +154,8 @@ def dedupe_posts_by_link(posts_list):
         if new_date and (not existing_date or new_date > existing_date):
             posts_map[link] = post_dict
 
-    deduped = sorted(posts_map.values(), key=lambda p: parse_date(p.get('date')) or datetime.min, reverse=True)
+    def _post_date_key(p):
+        return parse_date(p.get('date')) or datetime.min
+
+    deduped = sorted(posts_map.values(), key=_post_date_key, reverse=True)
     return deduped
