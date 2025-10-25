@@ -1,4 +1,4 @@
-name: Dev.to Mirror (Static, Hourly)
+name: Generate and Publish Dev.to Mirror Site
 
 on:
   schedule:
@@ -13,12 +13,11 @@ on:
         options:
           - 'false'
           - 'true'
-  push:
-    branches: [main]
 
 permissions:
   contents: write
   pages: write
+  id-token: write
 
 jobs:
   build:

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/anchildress1/git_personal/devto-mirror/.venv/bin/python
 """Validate commit message header for Conventional Commits compliance.
 
 This script will try to run `gitlint` if available. If `gitlint` is not
