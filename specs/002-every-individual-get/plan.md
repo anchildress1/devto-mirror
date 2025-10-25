@@ -9,14 +9,14 @@ This feature verifies and updates all four existing GitHub Actions workflows (se
 
 ## Technical Context
 
-**Language/Version**: Python 3.11+, GitHub Actions YAML  
-**Primary Dependencies**: uv (package manager), pip-audit, bandit, flake8, CodeQL, actions/setup-python@v6, actions/checkout@v5  
-**Storage**: N/A (CI/CD workflows, no persistent storage beyond git branches)  
-**Testing**: Manual workflow_dispatch triggers via GitHub Actions UI, workflow execution validation  
-**Target Platform**: ubuntu-latest GitHub Actions runners  
-**Project Type**: CI/CD infrastructure (GitHub Actions workflows)  
-**Performance Goals**: security-ci <10min, codeql <15min, publish <15min, refresh <20min  
-**Constraints**: Least privilege GITHUB_TOKEN permissions, no external service dependencies, simple utility repo approach  
+**Language/Version**: Python 3.11+, GitHub Actions YAML
+**Primary Dependencies**: uv (package manager), pip-audit, bandit, flake8, CodeQL, actions/setup-python@v6, actions/checkout@v5
+**Storage**: N/A (CI/CD workflows, no persistent storage beyond git branches)
+**Testing**: Manual workflow_dispatch triggers via GitHub Actions UI, workflow execution validation
+**Target Platform**: ubuntu-latest GitHub Actions runners
+**Project Type**: CI/CD infrastructure (GitHub Actions workflows)
+**Performance Goals**: security-ci <10min, codeql <15min, publish <15min, refresh <20min
+**Constraints**: Least privilege GITHUB_TOKEN permissions, no external service dependencies, simple utility repo approach
 **Scale/Scope**: 4 workflow files, Python 3.11+ migration validation, schedule optimization for cost reduction
 
 ## Constitution Check
@@ -175,7 +175,7 @@ SECURITY_ANALYSIS.md      # MODIFY: Update uv instructions
 
 1. **`README.md`**: Overview of workflow contract expectations and testing strategy
 
-2. **`security-ci-contract.md`**: 
+2. **`security-ci-contract.md`**:
    - Triggers: push (main), pull_request (main), workflow_dispatch
    - Jobs: security-lint (pip-audit, bandit, flake8)
    - Permissions: contents: read, pull-requests: write
@@ -270,7 +270,7 @@ Expected task structure (preview):
 After implementation (tasks.md execution):
 
 - [ ] All 4 workflows have workflow_dispatch trigger added
-- [ ] security-ci.yml uses uv for dependency installation
+- [ ] security-ci.yml or supported)
 - [ ] codeql.yml verified to work with Python 3.11+
 - [ ] publish.yaml schedule changed to "38 13 * * 3"
 - [ ] refresh.yaml verified to work with Python 3.11+
