@@ -618,7 +618,11 @@ if comment_items:
             author=DEVTO_USERNAME,
         )
         # Ensure local path is safe
-        sanitized_local = re.sub(r"[^A-Za-z0-9\-_]", "-", c["local"])
+        # Sanitize only the filename component (e.g., "{cid}.html")
+        orig_filename = os.path.basename(c["local"])
+        name, ext = os.path.splitext(orig_filename)
+        sanitized_name = re.sub(r"[^A-Za-z0-9_-]", "-", name)
+        sanitized_local = sanitized_name + ext
         local_path = pathlib.Path("comments") / sanitized_local
         resolved_path = local_path.resolve()
         comments_dir = pathlib.Path("comments").resolve()
