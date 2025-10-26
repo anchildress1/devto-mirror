@@ -63,4 +63,13 @@ Python 3.11+: Follow standard conventions
 - Ensure validation functions return boolean values consistently; avoid mixing exceptions and returns.
 - Do not add useless lambdas anywhere in this codebase. They add no value and confuse readers.
 
+## Notes about Specs
+
+- Spec Kit is a test run for this project and dev. It is not intended to be a bible of any kind. The specs may change or be removed at any time. Depend on instructions above all else.
+- Anything living inside of a `spec` folder or related should be assumed to be a planning tool and not a hard requirement.
+
+## Critical Constraints
+
+- Under NO circumstances should you ever attempt to perform a `git commit` command of any kind unless the user explicitly requests it. You may generate commit messages, but you must not execute git commands.
+
 <!-- MANUAL ADDITIONS END -->
