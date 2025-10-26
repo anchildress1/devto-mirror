@@ -84,7 +84,7 @@ jobs:
           TMPDIR="$(mktemp -d)"
           echo "Copying generated site to temporary dir: $TMPDIR"
           # Copy required artifacts; fail loudly if required ones are missing
-          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml posts posts_data.json scripts "$TMPDIR/"
+          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
           # Optional artifacts
           if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
           if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
@@ -109,6 +109,7 @@ jobs:
           # This preserves older posts that are no longer available from the Dev.to API pagination.
           cp -R "$TMPDIR"/posts ./
           cp -R "$TMPDIR"/comments ./
+          cp "$TMPDIR"/google6b80426bb396f31f.html ./
           # Persist last_run.txt so incremental updates work across runs
           if [ -f "$TMPDIR/last_run.txt" ]; then
             cp "$TMPDIR/last_run.txt" ./last_run.txt

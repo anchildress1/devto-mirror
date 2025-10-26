@@ -190,17 +190,17 @@ def _validate_footers(footers) -> bool:
 
 FOOTER_VALIDATORS = {
     "Commit-generated-by": _validate_commit_generated_by,
-    "Assisted-by": lambda v: bool(v),
+    "Assisted-by": bool,
     "Co-authored-by": _validate_co_authored_by,
-    "Generated-by": lambda v: bool(v),
-    "Authored-by": lambda v: bool(v),
+    "Generated-by": bool,
+    "Authored-by": bool,
     "Reviewed-by": _validate_reviewed_by,
-    "Fixes": lambda v: bool(v),
-    "Closes": lambda v: bool(v),
-    "Resolves": lambda v: bool(v),
-    "Related": lambda v: bool(v),
-    "References": lambda v: bool(v),
-    BREAKING_CHANGE_TOKEN: lambda v: bool(v),
+    "Fixes": bool,
+    "Closes": bool,
+    "Resolves": bool,
+    "Related": bool,
+    "References": bool,
+    BREAKING_CHANGE_TOKEN: bool,
 }
 KNOWN_KEYS = set(FOOTER_VALIDATORS.keys())
 

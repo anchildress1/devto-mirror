@@ -67,7 +67,11 @@ def main():
     cleaned = dedupe_posts(data)
     print(f"Deduped to {len(cleaned)} unique posts")
     # sort newest-first
-    cleaned.sort(key=lambda x: parse_date(x.get("date")) or datetime.min, reverse=True)
+
+    def _entry_date_key(x):
+        return parse_date(x.get("date")) or datetime.min
+
+    cleaned.sort(key=_entry_date_key, reverse=True)
 
     DATA_FILE.write_text(json.dumps(cleaned, indent=2, ensure_ascii=False))
     print(f"Wrote cleaned posts_data.json ({len(cleaned)} posts)")

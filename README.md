@@ -97,12 +97,12 @@ Runs: `bandit`, `flake8`, `detect-secrets`, `pip-audit`
 
 We maintain four primary GitHub Actions workflows. Key changes in this branch:
 
-- `security-ci.yml`: Uses Python 3.11 and `uv` for dependency installation, runs `pip-audit`, `bandit`, and `flake8`. Adds `workflow_dispatch` for manual testing and enforces least-privilege permissions.
+- `security-ci.yml`: Uses Python 3.11 for dependency installation, runs `pip-audit`, `bandit`, and `flake8`. Adds `workflow_dispatch` for manual testing and enforces least-privilege permissions.
 - `codeql.yml`: Runs CodeQL analysis via `github/codeql-action@v3` with Python analysis enabled. Includes `workflow_dispatch` and explicit permissions.
-- `publish.yaml`: Now scheduled weekly on Wednesdays at `09:38 AM EDT` (cron `38 13 * * 3`), uses Python 3.11 and `uv`, and deploys to `gh-pages`.
+- `publish.yaml`: Now scheduled weekly on Wednesdays at `09:38 AM EDT` (cron `38 13 * * 3`), uses Python 3.11 and deploys to `gh-pages`.
 - `refresh.yaml`: Manual `workflow_dispatch` trigger that creates a backup branch, resets `last_run.txt`, and triggers the publish workflow.
 
-All workflows include `workflow_dispatch` to allow manual runs from the Actions UI and use `actions/setup-python@v6` with caching enabled for `pip`/`uv`.
+All workflows include `workflow_dispatch` to allow manual runs from the Actions UI and use `actions/setup-python@v6` with caching enabled for `pip`.
 
 ---
 
