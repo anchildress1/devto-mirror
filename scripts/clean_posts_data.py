@@ -8,7 +8,6 @@ Usage: python3 scripts/clean_posts_data.py
 import json
 from pathlib import Path
 from datetime import datetime
-from email.utils import parsedate_to_datetime
 from utils import parse_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,18 +25,7 @@ def key_for(post):
     return link or slug
 
 
-def main():
-    if not DATA_FILE.exists():
-        print(f"No posts_data.json found at {DATA_FILE}")
-        return
-    data = json.loads(DATA_FILE.read_text())
-    print(f"Loaded {len(data)} posts from {DATA_FILE}")
-
-    # backup
-    if not BACKUP_FILE.exists():
-        BACKUP_FILE.write_text(DATA_FILE.read_text())
-        print(f"Backed up original to {BACKUP_FILE}")
-
+def dedupe_posts(data):
     groups = {}
     for p in data:
         k = key_for(p)
@@ -61,11 +49,29 @@ def main():
             continue
         if b > a:
             groups[k] = p
+    return list(groups.values())
 
-    cleaned = list(groups.values())
+
+def main():
+    if not DATA_FILE.exists():
+        print(f"No posts_data.json found at {DATA_FILE}")
+        return
+    data = json.loads(DATA_FILE.read_text())
+    print(f"Loaded {len(data)} posts from {DATA_FILE}")
+
+    # backup
+    if not BACKUP_FILE.exists():
+        BACKUP_FILE.write_text(DATA_FILE.read_text())
+        print(f"Backed up original to {BACKUP_FILE}")
+
+    cleaned = dedupe_posts(data)
     print(f"Deduped to {len(cleaned)} unique posts")
     # sort newest-first
-    cleaned.sort(key=lambda x: parse_date(x.get("date")) or datetime.min, reverse=True)
+
+    def _entry_date_key(x):
+        return parse_date(x.get("date")) or datetime.min
+
+    cleaned.sort(key=_entry_date_key, reverse=True)
 
     DATA_FILE.write_text(json.dumps(cleaned, indent=2, ensure_ascii=False))
     print(f"Wrote cleaned posts_data.json ({len(cleaned)} posts)")

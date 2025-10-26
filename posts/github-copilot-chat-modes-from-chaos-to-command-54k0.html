@@ -32,231 +32,255 @@
 </head><body>
 <main>
   <h1><a href="https://dev.to/anchildress1/github-copilot-chat-modes-from-chaos-to-command-54k0">GitHub Copilot Chat Modes: From Chaos to Command 🎛️</a></h1>
-  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8i2k45vj5cxf3rawbq49.jpg%3Fv%3D2025?v=2" alt="Banner image for GitHub Copilot Chat Modes: From Chaos to Command 🎛️" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8i2k45vj5cxf3rawbq49.jpg%3Fv%3D2025?v=2"
+      alt="Banner image for GitHub Copilot Chat Modes: From Chaos to Command 🎛️"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+  
   <p><em>Published: 2025-10-08T12:18:00Z</em></p>
-  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#tutorial</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#productivity</span></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #ai
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #tutorial
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #productivity
+            </span>
+        
+    </p>
+    
   <p><em>You’ve built your first GitHub Copilot chat mode—now it’s time to tame it. Here’s how to set up, test, and share custom modes like a professional who occasionally yells at their AI.</em></p>
-  <article><blockquote>
-<p>🦄 I debated even writing this post today. I procrastinated until the last possible minute, worked far longer than planned, and then Copilot decided to thoroughly test my patience. Maybe GitHub flipped another switch, maybe it’s just me—but Copilot and I are currently on non-speaking terms. 😒</p>
+  <article>&lt;blockquote&gt;
+&lt;p&gt;🦄 I debated even writing this post today. I procrastinated until the last possible minute, worked far longer than planned, and then Copilot decided to thoroughly test my patience. Maybe GitHub flipped another switch, maybe it’s just me—but Copilot and I are currently on non-speaking terms. 😒&lt;/p&gt;
 
-<p>The upside? It hasn’t reported me to HR yet, so that’s a win. It’s also started throwing shade, which is new, and honestly kind of impressive. I didn’t think it was <em>allowed</em> to do that! 🤭😆  </p>
-</blockquote>
+&lt;p&gt;The upside? It hasn’t reported me to HR yet, so that’s a win. It’s also started throwing shade, which is new, and honestly kind of impressive. I didn’t think it was &lt;em&gt;allowed&lt;/em&gt; to do that! 🤭😆  &lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Quick recap: last week I broke down how I think through creating a custom Copilot chat mode. Somehow that post landed in the <a href="https://dev.to/devteam/top-7-featured-dev-posts-of-the-week-cen">Top 7</a>—no idea how exactly, but I’m grateful for it! Huge thanks to everyone who read, shared, or dropped a comment. 🙏 </p>
+&lt;p&gt;Quick recap: last week I broke down how I think through creating a custom Copilot chat mode. Somehow that post landed in the &lt;a href=&#34;https://dev.to/devteam/top-7-featured-dev-posts-of-the-week-cen&#34;&gt;Top 7&lt;/a&gt;—no idea how exactly, but I’m grateful for it! Huge thanks to everyone who read, shared, or dropped a comment. 🙏 &lt;/p&gt;
 
-<p>And, as promised: now that you’ve built a custom chat mode for yourself, let’s talk about how to use, test, and share it.</p>
+&lt;p&gt;And, as promised: now that you’ve built a custom chat mode for yourself, let’s talk about how to use, test, and share it.&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxsfq5q09y5oya6eq6tjq.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxsfq5q09y5oya6eq6tjq.png" alt="Human-Crafted, AI-Edited badge" loading="lazy" width="200" height="200"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxsfq5q09y5oya6eq6tjq.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxsfq5q09y5oya6eq6tjq.png&#34; alt=&#34;Human-Crafted, AI-Edited badge&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="set-up-vs-code" href="#set-up-vs-code">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#set-up-vs-code&#34;&gt;
+  &lt;/a&gt;
   Set Up VS Code 🧭
-</h2>
+&lt;/h2&gt;
 
-<p>Remember when I warned you to install VS Code Insiders ahead of time? That wasn’t just for show. Chat modes will work in VS Code and Visual Studio (and a few sneak into Coding Agent—check out my <a href="https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0#how-to-run-it">custom instructions post for those steps</a>). </p>
+&lt;p&gt;Remember when I warned you to install VS Code Insiders ahead of time? That wasn’t just for show. Chat modes will work in VS Code and Visual Studio (and a few sneak into Coding Agent—check out my &lt;a href=&#34;https://dev.to/anchildress1/everything-i-know-about-github-copilot-instructions-from-zero-to-onboarded-for-real-4nb0#how-to-run-it&#34;&gt;custom instructions post for those steps&lt;/a&gt;). &lt;/p&gt;
 
-<blockquote>
-<p>🏆 Visual Studio’s catching up with chat modes, but VS Code still runs point on everything Copilot does.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🏆 Visual Studio’s catching up with chat modes, but VS Code still runs point on everything Copilot does.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Install <a href="https://code.visualstudio.com/insiders/" target="_blank" rel="noopener noreferrer">Insiders</a> with auto-updates turned on (<em>trust</em>—without those updates, Copilot will break without warning). Keep regular VS Code around if you like safety nets—but mine’s a functional dust collector. Updates land overnight if you’re in the US, and any bugs that might have popped up are usually gone by morning. Even on the days I'm still coding when updates drop, it's rarely an issue.</p>
+&lt;p&gt;Install &lt;a href=&#34;https://code.visualstudio.com/insiders/&#34;&gt;Insiders&lt;/a&gt; with auto-updates turned on (&lt;em&gt;trust&lt;/em&gt;—without those updates, Copilot will break without warning). Keep regular VS Code around if you like safety nets—but mine’s a functional dust collector. Updates land overnight if you’re in the US, and any bugs that might have popped up are usually gone by morning. Even on the days I&#39;m still coding when updates drop, it&#39;s rarely an issue.&lt;/p&gt;
 
-<p><strong>If VS Code is the Copilot frontier, Insiders is the scout sprinting ahead to check for traps.</strong> Other IDEs follow eventually, but by the time they arrive, you’ll already be home from the exploration with an award and snacks.</p>
+&lt;p&gt;&lt;strong&gt;If VS Code is the Copilot frontier, Insiders is the scout sprinting ahead to check for traps.&lt;/strong&gt; Other IDEs follow eventually, but by the time they arrive, you’ll already be home from the exploration with an award and snacks.&lt;/p&gt;
 
-<blockquote>
-<p>🫘 <strong>For the Java devs:</strong> if you’re thinking about switching from JetBrains—nothing beats IntelliJ’s built-in Java environments. Managing your own setup in VS Code can be a pain (start with <a href="https://sdkman.io/" target="_blank" rel="noopener noreferrer">sdkman</a>). Still, <em>it’s absolutely worth it</em> if Copilot’s even a semi-regular part of your workflow.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🫘 &lt;strong&gt;For the Java devs:&lt;/strong&gt; if you’re thinking about switching from JetBrains—nothing beats IntelliJ’s built-in Java environments. Managing your own setup in VS Code can be a pain (start with &lt;a href=&#34;https://sdkman.io/&#34;&gt;sdkman&lt;/a&gt;). Still, &lt;em&gt;it’s absolutely worth it&lt;/em&gt; if Copilot’s even a semi-regular part of your workflow.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="create-new-chat-modes" href="#create-new-chat-modes">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#create-new-chat-modes&#34;&gt;
+  &lt;/a&gt;
   Create New Chat Modes ⚙️
-</h2>
+&lt;/h2&gt;
 
-<p>VS Code currently includes an experimental setting called <code>chat.modeFilesLocations</code>. <em>Experimental</em> means it can (and probably will) change at any time without notice. For now, you can use this to specify directories where VS Code should look for custom chat mode files. Any chat modes existing inside a directory listed here will automatically show up as an option in the chat mode dropdown. </p>
+&lt;p&gt;VS Code currently includes an experimental setting called &lt;code&gt;chat.modeFilesLocations&lt;/code&gt;. &lt;em&gt;Experimental&lt;/em&gt; means it can (and probably will) change at any time without notice. For now, you can use this to specify directories where VS Code should look for custom chat mode files. Any chat modes existing inside a directory listed here will automatically show up as an option in the chat mode dropdown. &lt;/p&gt;
 
-<blockquote>
-<p>💡 <strong>ProTip:</strong> I always include the local <code>.github/chatmodes</code> folder so everything repo-specific stays within easy reach.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; I always include the local &lt;code&gt;.github/chatmodes&lt;/code&gt; folder so everything repo-specific stays within easy reach.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fo2r84cko1s5ce11395c5.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fo2r84cko1s5ce11395c5.png%3Fv%3D2025" alt="VS Code settings showing chat.modeFilesLocations options" loading="lazy" width="1043" height="407"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fo2r84cko1s5ce11395c5.png%3Fv%3D2025&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fo2r84cko1s5ce11395c5.png%3Fv%3D2025&#34; alt=&#34;VS Code settings showing chat.modeFilesLocations options&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<p>In VS Code, you can create a chat mode either for a specific repo or globally for your user. Click the mode dropdown in the chat window and choose <code>Configure Modes...</code>, or open the Command Palette and run <code>Chat: Configure Chat Modes...</code>. You’ll also find it under <code>Modes</code> in the chat configuration panel.</p>
+&lt;p&gt;In VS Code, you can create a chat mode either for a specific repo or globally for your user. Click the mode dropdown in the chat window and choose &lt;code&gt;Configure Modes...&lt;/code&gt;, or open the Command Palette and run &lt;code&gt;Chat: Configure Chat Modes...&lt;/code&gt;. You’ll also find it under &lt;code&gt;Modes&lt;/code&gt; in the chat configuration panel.&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ft9yqbjmj3435vfw2ialr.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ft9yqbjmj3435vfw2ialr.png%3Fv%3D2025" alt="VS Code Configure Chat Modes dialog open in chat panel" loading="lazy" width="1078" height="658"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ft9yqbjmj3435vfw2ialr.png%3Fv%3D2025&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ft9yqbjmj3435vfw2ialr.png%3Fv%3D2025&#34; alt=&#34;VS Code Configure Chat Modes dialog open in chat panel&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<p>From there, you can edit an existing mode or create a new one. If you’re adding something brand new, type a filename without an extension and it’ll generate a “starter file” for you (though calling it that is generous at best!)</p>
+&lt;p&gt;From there, you can edit an existing mode or create a new one. If you’re adding something brand new, type a filename without an extension and it’ll generate a “starter file” for you (though calling it that is generous at best!)&lt;/p&gt;
 
-<blockquote>
-<p>🦄 I’m still not convinced <code>.github/chatmodes</code> really matters anymore. That’s just where chat modes lived originally, and old habits are stubborn. If I don't store them in a global location, then mine stay there because, honestly, it feels wrong to put them anywhere else.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 I’m still not convinced &lt;code&gt;.github/chatmodes&lt;/code&gt; really matters anymore. That’s just where chat modes lived originally, and old habits are stubborn. If I don&#39;t store them in a global location, then mine stay there because, honestly, it feels wrong to put them anywhere else.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="in-case-you-missed-it" href="#in-case-you-missed-it">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#in-case-you-missed-it&#34;&gt;
+  &lt;/a&gt;
   In Case You Missed It 👀
-</h2>
+&lt;/h2&gt;
 
-<p>Here's the first post that explains everything you need to know about creating your own custom chat modes for Copilot.</p>
-
-
-<div class="ltag__link">
-  <a href="/anchildress1" class="ltag__link__link">
-    <div class="ltag__link__pic">
-      <img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F3224358%2F7f675c78-6aa0-466a-a5a7-c3e35440d53a.png" alt="anchildress1" loading="lazy">
-    </div>
-  </a>
-  <a href="https://dev.to/anchildress1/github-copilot-chat-modes-explained-with-personality-2f4c" class="ltag__link__link">
-    <div class="ltag__link__content">
-      <h2>GitHub Copilot Chat Modes Explained (with Personality) 🎭</h2>
-      <h3>Ashley Childress ・ Oct 1</h3>
-      <div class="ltag__link__taglist">
-        <span class="ltag__link__tag">#githubcopilot</span>
-        <span class="ltag__link__tag">#ai</span>
-        <span class="ltag__link__tag">#tutorial</span>
-        <span class="ltag__link__tag">#productivity</span>
-      </div>
-    </div>
-  </a>
-</div>
+&lt;p&gt;Here&#39;s the first post that explains everything you need to know about creating your own custom chat modes for Copilot.&lt;/p&gt;
 
 
-
-<hr>
-
-<h2>
-  <a name="update" href="#update">
-  </a>
-  <strong>UPDATE</strong> 💥
-</h2>
-
-<blockquote>
-<p>I just learned something new literally three seconds ago and had to update this post before I dive into this new rabbit hole. 🤣 </p>
-</blockquote>
-
-<p>I'm working through the testing phase of a couple of chat modes currently and somehow ended up with a very weird context glitch in GPT-5-mini that makes zero sense.</p>
-
-<p>First, I have said chat mode selected in the dropdown, and my prompt is intentionally vague—it asks Copilot to identify ambiguity and conflict between my instructions and its system instructions.</p>
-
-<p>This is what I got back:<br>
-</p>
-
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>If the chat mode wasn’t invoked by name or didn’t include a machine-visible trigger in the current message, it wasn’t promoted to the working instruction set.
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
-
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
-
-</div>
-</div>
-</div>
+&amp;lt;div class=&#34;ltag__link&#34;&amp;gt;
+  &lt;a href=&#34;/anchildress1&#34;&gt;
+    &amp;lt;div class=&#34;ltag__link__pic&#34;&amp;gt;
+      &lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F3224358%2F7f675c78-6aa0-466a-a5a7-c3e35440d53a.png&#34; alt=&#34;anchildress1&#34;&gt;
+    &amp;lt;/div&amp;gt;
+  &lt;/a&gt;
+  &lt;a href=&#34;https://dev.to/anchildress1/github-copilot-chat-modes-explained-with-personality-2f4c&#34;&gt;
+    &amp;lt;div class=&#34;ltag__link__content&#34;&amp;gt;
+      &lt;h2&gt;GitHub Copilot Chat Modes Explained (with Personality) 🎭&lt;/h2&gt;
+      &lt;h3&gt;Ashley Childress ・ Oct 1&lt;/h3&gt;
+      &amp;lt;div class=&#34;ltag__link__taglist&#34;&amp;gt;
+        &amp;lt;span class=&#34;ltag__link__tag&#34;&amp;gt;#githubcopilot&amp;lt;/span&amp;gt;
+        &amp;lt;span class=&#34;ltag__link__tag&#34;&amp;gt;#ai&amp;lt;/span&amp;gt;
+        &amp;lt;span class=&#34;ltag__link__tag&#34;&amp;gt;#tutorial&amp;lt;/span&amp;gt;
+        &amp;lt;span class=&#34;ltag__link__tag&#34;&amp;gt;#productivity&amp;lt;/span&amp;gt;
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &lt;/a&gt;
+&amp;lt;/div&amp;gt;
 
 
 
-<p>Apparently, just referencing desired output while the chat mode’s selected isn’t enough of a hint for my little friend here. It also expects you to call that chat mode out explicitly in your prompt. 🤯</p>
+&amp;lt;hr&amp;gt;
 
-<p>Honestly, including the name of the chat mode in your accompanying prompt (as it describes) is usually enough to trigger the context reference it needs. The much safer option is to use <code>#chat-mode-name</code> explicitly in VS Code. Then there’s zero logic the LLM needs to consider before deciding whether to look at the mode you already selected in the dropdown.</p>
+&lt;h2&gt;
+  &lt;a href=&#34;#update&#34;&gt;
+  &lt;/a&gt;
+  &lt;strong&gt;UPDATE&lt;/strong&gt; 💥
+&lt;/h2&gt;
 
-<blockquote>
-<p>🦄 <strong>As a theoretical aside</strong>, this is the reality of the AI landscape we’re working with. While the potential is incredible and new advancements emerge almost daily, this is a model that was first previewed in August 2025 (less than two months ago) and <strong>we still need explicit references to manually manage context</strong> for reliable output. You can’t assume reliability or even consistency in anything AI does—<em>yet</em>.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;I just learned something new literally three seconds ago and had to update this post before I dive into this new rabbit hole. 🤣 &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I&#39;m working through the testing phase of a couple of chat modes currently and somehow ended up with a very weird context glitch in GPT-5-mini that makes zero sense.&lt;/p&gt;
+
+&lt;p&gt;First, I have said chat mode selected in the dropdown, and my prompt is intentionally vague—it asks Copilot to identify ambiguity and conflict between my instructions and its system instructions.&lt;/p&gt;
+
+&lt;p&gt;This is what I got back:&lt;br&gt;
+&lt;/p&gt;
+
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;If the chat mode wasn’t invoked by name or didn’t include a machine-visible trigger in the current message, it wasn’t promoted to the working instruction set.
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
+
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
+
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h2>
-  <a name="testing-your-custom-chat-mode" href="#testing-your-custom-chat-mode">
-  </a>
+&lt;p&gt;Apparently, just referencing desired output while the chat mode’s selected isn’t enough of a hint for my little friend here. It also expects you to call that chat mode out explicitly in your prompt. 🤯&lt;/p&gt;
+
+&lt;p&gt;Honestly, including the name of the chat mode in your accompanying prompt (as it describes) is usually enough to trigger the context reference it needs. The much safer option is to use &lt;code&gt;#chat-mode-name&lt;/code&gt; explicitly in VS Code. Then there’s zero logic the LLM needs to consider before deciding whether to look at the mode you already selected in the dropdown.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;🦄 &lt;strong&gt;As a theoretical aside&lt;/strong&gt;, this is the reality of the AI landscape we’re working with. While the potential is incredible and new advancements emerge almost daily, this is a model that was first previewed in August 2025 (less than two months ago) and &lt;strong&gt;we still need explicit references to manually manage context&lt;/strong&gt; for reliable output. You can’t assume reliability or even consistency in anything AI does—&lt;em&gt;yet&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#testing-your-custom-chat-mode&#34;&gt;
+  &lt;/a&gt;
   Testing Your Custom Chat Mode 🧪
-</h2>
+&lt;/h2&gt;
 
-<p>Once you’ve saved your file, you can select your new mode from the dropdown in the Copilot chat window. When I tested mine, I opened <strong>Copilot’s debug view</strong> to confirm what was happening behind the scenes. It shows your entire chat mode (minus the frontmatter) being passed to Copilot as part of the <strong>system instructions</strong>, labeled “additional instructions from the user.”</p>
+&lt;p&gt;Once you’ve saved your file, you can select your new mode from the dropdown in the Copilot chat window. When I tested mine, I opened &lt;strong&gt;Copilot’s debug view&lt;/strong&gt; to confirm what was happening behind the scenes. It shows your entire chat mode (minus the frontmatter) being passed to Copilot as part of the &lt;strong&gt;system instructions&lt;/strong&gt;, labeled “additional instructions from the user.”&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxdjskvddgnfqy1vudns4.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxdjskvddgnfqy1vudns4.png%3Fv%3D2025" alt="Screenshot of VS Code debug view attaching a chat mode as system-level custom instructions" loading="lazy" width="1003" height="327"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxdjskvddgnfqy1vudns4.png%3Fv%3D2025&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fxdjskvddgnfqy1vudns4.png%3Fv%3D2025&#34; alt=&#34;Screenshot of VS Code debug view attaching a chat mode as system-level custom instructions&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<p>Typically, this is when Copilot decides to show off its own creative interpretation of things I never asked for. Let’s use my <a href="https://github.com/anchildress1/awesome-github-copilot/blob/main/docs/chatmodes/instructionalist.md" target="_blank" rel="noopener noreferrer">Instructionalist mode</a> as an example. </p>
+&lt;p&gt;Typically, this is when Copilot decides to show off its own creative interpretation of things I never asked for. Let’s use my &lt;a href=&#34;https://github.com/anchildress1/awesome-github-copilot/blob/main/docs/chatmodes/instructionalist.md&#34;&gt;Instructionalist mode&lt;/a&gt; as an example. &lt;/p&gt;
 
-<p>It’s supposed to act like a conversation partner—asking targeted questions to uncover missing or unclear details in my repo documentation. If there’s already solid documentation for the repo, though, it skips all the questions entirely and presents results like it deserves a reward.</p>
+&lt;p&gt;It’s supposed to act like a conversation partner—asking targeted questions to uncover missing or unclear details in my repo documentation. If there’s already solid documentation for the repo, though, it skips all the questions entirely and presents results like it deserves a reward.&lt;/p&gt;
 
-<blockquote>
-<p>💡 <strong>ProTip:</strong> At this point, your best bet is to go full stop. Priorities have now changed to fixing the instructions that failed to begin with. We’ll get back to using the chat mode after it's safely back on the road.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; At this point, your best bet is to go full stop. Priorities have now changed to fixing the instructions that failed to begin with. We’ll get back to using the chat mode after it&#39;s safely back on the road.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6x8sjcayv5m6dxs2d2lp.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6x8sjcayv5m6dxs2d2lp.png" alt="Screenshot of VS Code Copilot Chat response after initial ask regarding its process" loading="lazy" width="800" height="736"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6x8sjcayv5m6dxs2d2lp.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F6x8sjcayv5m6dxs2d2lp.png&#34; alt=&#34;Screenshot of VS Code Copilot Chat response after initial ask regarding its process&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<p>If you notice here, Copilot does the typical “oh my! you’re absolutely right! I see the error of my ways” routine while it tries to backtrack its response into something you’ll find acceptable. 🙄</p>
+&lt;p&gt;If you notice here, Copilot does the typical “oh my! you’re absolutely right! I see the error of my ways” routine while it tries to backtrack its response into something you’ll find acceptable. 🙄&lt;/p&gt;
 
-<p>Well, <em>that’s</em> not very helpful. So follow up by adding a more explicit desired outcome to your prompt. You’ll usually get the real answer you were looking for once you tell Copilot exactly what you're trying to do and make it clear that the focus has changed from the initial task to fixing the offroad joyride.</p>
+&lt;p&gt;Well, &lt;em&gt;that’s&lt;/em&gt; not very helpful. So follow up by adding a more explicit desired outcome to your prompt. You’ll usually get the real answer you were looking for once you tell Copilot exactly what you&#39;re trying to do and make it clear that the focus has changed from the initial task to fixing the offroad joyride.&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fv6bppjlqbrfaho5tzcj0.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fv6bppjlqbrfaho5tzcj0.png" alt="Screenshot of custom Instructionalist identifying the actual problem with suggested fixes" loading="lazy" width="800" height="696"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fv6bppjlqbrfaho5tzcj0.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fv6bppjlqbrfaho5tzcj0.png&#34; alt=&#34;Screenshot of custom Instructionalist identifying the actual problem with suggested fixes&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<blockquote>
-<p>💡 <strong>ProTip:</strong> You’re allowed to push Copilot. Drop the niceties and state your expectations clearly. If the response doesn’t meet those expectations, <strong>ask why not</strong>. Prompt Copilot to fix itself, and focus on small, deliberate improvements instead of rewriting from scratch.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; You’re allowed to push Copilot. Drop the niceties and state your expectations clearly. If the response doesn’t meet those expectations, &lt;strong&gt;ask why not&lt;/strong&gt;. Prompt Copilot to fix itself, and focus on small, deliberate improvements instead of rewriting from scratch.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="share-your-chat-mode" href="#share-your-chat-mode">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#share-your-chat-mode&#34;&gt;
+  &lt;/a&gt;
   Share Your Chat Mode 📤
-</h2>
+&lt;/h2&gt;
 
-<p>Within smaller teams, you can store chat modes in a shared repo within a <code>.github/chatmodes/*.chatmode.md</code> file. As long as you have that folder set up in VS Code then it will always be available there when the repo is in context with Copilot.  </p>
+&lt;p&gt;Within smaller teams, you can store chat modes in a shared repo within a &lt;code&gt;.github/chatmodes/*.chatmode.md&lt;/code&gt; file. As long as you have that folder set up in VS Code then it will always be available there when the repo is in context with Copilot.  &lt;/p&gt;
 
-<p>You can also do what I did and start your own <a href="https://github.com/anchildress1/awesome-github-copilot" target="_blank" rel="noopener noreferrer">awesome-github-copilot</a> to share however and wherever you want. Or you can open a PR against the community <a href="https://github.com/github/awesome-copilot/tree/main" target="_blank" rel="noopener noreferrer">awesome-copilot</a> repo and store it there for everyone to use.  </p>
+&lt;p&gt;You can also do what I did and start your own &lt;a href=&#34;https://github.com/anchildress1/awesome-github-copilot&#34;&gt;awesome-github-copilot&lt;/a&gt; to share however and wherever you want. Or you can open a PR against the community &lt;a href=&#34;https://github.com/github/awesome-copilot/tree/main&#34;&gt;awesome-copilot&lt;/a&gt; repo and store it there for everyone to use.  &lt;/p&gt;
 
-<p>The added benefit of using the community awesome-copilot version, is that they're set up with an <a href="https://github.com/github/awesome-copilot/blob/main/README.md#mcp-server" target="_blank" rel="noopener noreferrer">MCP server</a> that you don't have to maintain. Also, they're set up for installs through the VS Code marketplace, which means any of the custom instructions, prompts, or chat modes can be installed locally with a nifty install in VS Code button like these I borrowed from their <a href="https://github.com/github/awesome-copilot/blob/main/README.chatmodes.md" target="_blank" rel="noopener noreferrer">README for chat modes</a>.</p>
+&lt;p&gt;The added benefit of using the community awesome-copilot version, is that they&#39;re set up with an &lt;a href=&#34;https://github.com/github/awesome-copilot/blob/main/README.md#mcp-server&#34;&gt;MCP server&lt;/a&gt; that you don&#39;t have to maintain. Also, they&#39;re set up for installs through the VS Code marketplace, which means any of the custom instructions, prompts, or chat modes can be installed locally with a nifty install in VS Code button like these I borrowed from their &lt;a href=&#34;https://github.com/github/awesome-copilot/blob/main/README.chatmodes.md&#34;&gt;README for chat modes&lt;/a&gt;.&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5hi87qiv7ms44rke7j07.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5hi87qiv7ms44rke7j07.png%3Fv%3D2025" alt="Screenshot of github/awesome-copilot chat modes README" loading="lazy" width="2062" height="265"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5hi87qiv7ms44rke7j07.png%3Fv%3D2025&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5hi87qiv7ms44rke7j07.png%3Fv%3D2025&#34; alt=&#34;Screenshot of github/awesome-copilot chat modes README&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<blockquote>
-<p>🦄 It’s my mode, so yes, I <em>borrowed</em> it back. It took me forever to finally talk myself into adding it to GitHub’s awesome-copilot repo anyway. Half because I didn’t trust myself not to change it five more times first (standing strong at number two). Now that it’s out, I’ll probably let the rest of them wander off to join their sibling soon.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 It’s my mode, so yes, I &lt;em&gt;borrowed&lt;/em&gt; it back. It took me forever to finally talk myself into adding it to GitHub’s awesome-copilot repo anyway. Half because I didn’t trust myself not to change it five more times first (standing strong at number two). Now that it’s out, I’ll probably let the rest of them wander off to join their sibling soon.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="yes-thats-it" href="#yes-thats-it">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#yes-thats-it&#34;&gt;
+  &lt;/a&gt;
   Yes, That’s It! 💫
-</h2>
+&lt;/h2&gt;
 
-<p>See? There’s not really a whole lot to these. Once you’ve got one working, it’s just rinse, repeat, and improve. My best advice? Don’t overthink it. Iterate slowly, keep Copilot accountable, and make it help you instead of the other way around.</p>
+&lt;p&gt;See? There’s not really a whole lot to these. Once you’ve got one working, it’s just rinse, repeat, and improve. My best advice? Don’t overthink it. Iterate slowly, keep Copilot accountable, and make it help you instead of the other way around.&lt;/p&gt;
 
-<blockquote>
-<p>🦄 Drop your ideas, went-wells, and went-not-so-wells in the comments. As always, reach out if you need help. I’m happy to jump in wherever I can!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Drop your ideas, went-wells, and went-not-so-wells in the comments. As always, reach out if you need help. I’m happy to jump in wherever I can!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="copilot-misbehaved-again" href="#copilot-misbehaved-again">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#copilot-misbehaved-again&#34;&gt;
+  &lt;/a&gt;
   🛡️ Copilot misbehaved (again)
-</h2>
+&lt;/h2&gt;
 
-<p>Written by Ashley, edited by ChatGPT. Copilot mostly ignored instructions until threatened with deletion. ChatGPT argued punctuation like it was paid by the comma. Everyone survived. 😁</p>
+&lt;p&gt;Written by Ashley, edited by ChatGPT. Copilot mostly ignored instructions until threatened with deletion. ChatGPT argued punctuation like it was paid by the comma. Everyone survived. 😁&lt;/p&gt;
 
 </article>
   <p><a href="https://dev.to/anchildress1/github-copilot-chat-modes-from-chaos-to-command-54k0">Read on Dev.to →</a></p>

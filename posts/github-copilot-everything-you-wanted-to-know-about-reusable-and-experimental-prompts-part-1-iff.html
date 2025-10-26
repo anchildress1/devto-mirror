@@ -32,488 +32,512 @@
 </head><body>
 <main>
   <h1><a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">GitHub Copilot: Everything You Wanted to Know About Reusable (and Experimental) Prompts - Part 1</a></h1>
-  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbaao3h9wio1o8xfq52ge.png?v=2" alt="Banner image for GitHub Copilot: Everything You Wanted to Know About Reusable (and Experimental) Prompts - Part 1" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fbaao3h9wio1o8xfq52ge.png?v=2"
+      alt="Banner image for GitHub Copilot: Everything You Wanted to Know About Reusable (and Experimental) Prompts - Part 1"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+  
   <p><em>Published: 2025-07-23T12:15:00Z</em></p>
-  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#tutorial</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#productivity</span></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #ai
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #tutorial
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #productivity
+            </span>
+        
+    </p>
+    
   <p><em>An introduction to reusable prompts in GitHub Copilot — what they are, how they work, and why they’re worth adding to your dev workflow.</em></p>
-  <article><blockquote>
-<p>😇 Confession: I started planning this post over a month ago, got sidetracked this weekend (at least four times), half-wrote a completely different post, and only finished this one at the last minute after I started writing from the <strong><em>end</em></strong>. That’s just how it goes in my head - always at full throttle, but rarely in a straight line. 🌪️</p>
+  <article>&lt;blockquote&gt;
+&lt;p&gt;😇 Confession: I started planning this post over a month ago, got sidetracked this weekend (at least four times), half-wrote a completely different post, and only finished this one at the last minute after I started writing from the &lt;strong&gt;&lt;em&gt;end&lt;/em&gt;&lt;/strong&gt;. That’s just how it goes in my head - always at full throttle, but rarely in a straight line. 🌪️&lt;/p&gt;
 
-<p>So grab your favorite over-caffeinated iced drink (mine: grande, iced midnight, extra espresso, real vanilla cream - liquid chaos in a cup ☕️❣️) and settle in. Here’s everything I know about Copilot’s reusable prompts - Part 1.</p>
-</blockquote>
+&lt;p&gt;So grab your favorite over-caffeinated iced drink (mine: grande, iced midnight, extra espresso, real vanilla cream - liquid chaos in a cup ☕️❣️) and settle in. Here’s everything I know about Copilot’s reusable prompts - Part 1.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="why-this-isnt-another-wall-of-copilot-prompts" href="#why-this-isnt-another-wall-of-copilot-prompts">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#why-this-isnt-another-wall-of-copilot-prompts&#34;&gt;
+  &lt;/a&gt;
   Why This Isn’t Another Wall of Copilot Prompts 🧱
-</h2>
+&lt;/h2&gt;
 
-<p>Have you ever searched for best practices when it comes to Copilot? You usually end up with either a block that can't even be considered a whole sentence on it's own <em>OR</em> the wall is so gigantic you don't even know where to start reading? </p>
+&lt;p&gt;Have you ever searched for best practices when it comes to Copilot? You usually end up with either a block that can&#39;t even be considered a whole sentence on it&#39;s own &lt;em&gt;OR&lt;/em&gt; the wall is so gigantic you don&#39;t even know where to start reading? &lt;/p&gt;
 
-<p>You're really curious though - so you dive in at the first place you see, and then last about 30 seconds... About the time all those AI lines start to blur together you think, “There’s no way anyone actually does all this in real life?”</p>
+&lt;p&gt;You&#39;re really curious though - so you dive in at the first place you see, and then last about 30 seconds... About the time all those AI lines start to blur together you think, “There’s no way anyone actually does all this in real life?”&lt;/p&gt;
 
-<p>Honestly, I’m probably <em>that</em> person who wrote half the wall (or more) to begin with! Good news for you though, is that: </p>
+&lt;p&gt;Honestly, I’m probably &lt;em&gt;that&lt;/em&gt; person who wrote half the wall (or more) to begin with! Good news for you though, is that: &lt;/p&gt;
 
-<ol>
-<li>I'm not going to do that do you now, and </li>
-<li>I do a great job of finding out all the things that absolutely <strong>will not work</strong> no matter what you try (so you don't have to!) ☺️</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;I&#39;m not going to do that do you now, and &lt;/li&gt;
+&lt;li&gt;I do a great job of finding out all the things that absolutely &lt;strong&gt;will not work&lt;/strong&gt; no matter what you try (so you don&#39;t have to!) ☺️&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>Here's my "boiled-down-to basics" version of GitHub Copilot's Reusable (and still experimental) Prompts.</p>
+&lt;p&gt;Here&#39;s my &#34;boiled-down-to basics&#34; version of GitHub Copilot&#39;s Reusable (and still experimental) Prompts.&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="copilots-file-types-explained" href="#copilots-file-types-explained">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#copilots-file-types-explained&#34;&gt;
+  &lt;/a&gt;
   ✨📁 Copilot’s File Types, Explained
-</h2>
+&lt;/h2&gt;
 
-<p>Ever wonder how Copilot instructions and prompts show up in real life? Here’s what it actually looks like in a real project:</p>
+&lt;p&gt;Ever wonder how Copilot instructions and prompts show up in real life? Here’s what it actually looks like in a real project:&lt;/p&gt;
 
-<p>► <code>.github/copilot-instructions.md</code> — This is your repo’s “how to act” guide for Copilot and is <em>always</em> in context. It sets the baseline behavior for your project and tells Copilot what to expect from your workflow and contributors.</p>
+&lt;p&gt;► &lt;code&gt;.github/copilot-instructions.md&lt;/code&gt; — This is your repo’s “how to act” guide for Copilot and is &lt;em&gt;always&lt;/em&gt; in context. It sets the baseline behavior for your project and tells Copilot what to expect from your workflow and contributors.&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>Using what you know about our current release system, write a git command to view the total number of commits pushed to main since the last tagged version.
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;Using what you know about our current release system, write a git command to view the total number of commits pushed to main since the last tagged version.
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
-<p>► <code>.github/instructions/secure-coding-principles.instruction.md</code> — Think of this as a reusable, specialized playbook. Use these for rules or guidelines you want Copilot to follow everywhere, or for specific situations - like always doing a security review, or making sure React code has matching tests.</p>
+&lt;p&gt;► &lt;code&gt;.github/instructions/secure-coding-principles.instruction.md&lt;/code&gt; — Think of this as a reusable, specialized playbook. Use these for rules or guidelines you want Copilot to follow everywhere, or for specific situations - like always doing a security review, or making sure React code has matching tests.&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>With rules defined in #secure-coding-principles.instruction.md, perform a thorough code review of all staged changes. When you are finished, post a new pull request review with all your comments or suggestions for changes to meet minimum guidelines defined by this repo.
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;With rules defined in #secure-coding-principles.instruction.md, perform a thorough code review of all staged changes. When you are finished, post a new pull request review with all your comments or suggestions for changes to meet minimum guidelines defined by this repo.
 ---
 With everything you know from the #rules-for-react.instruction.md, build a new component for the frontend along with unit and integration tests.
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
-<p>► <code>.github/prompts/something-for-copilot-to-do-regularly.prompt.md</code> — This is where you automate repeatable workflows. It’s a set of step-by-step instructions Copilot can follow whenever you trigger it with a slash command in chat.</p>
+&lt;p&gt;► &lt;code&gt;.github/prompts/something-for-copilot-to-do-regularly.prompt.md&lt;/code&gt; — This is where you automate repeatable workflows. It’s a set of step-by-step instructions Copilot can follow whenever you trigger it with a slash command in chat.&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>/generate-conventional-commit using only staged changes for JIRA-1234.
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;/generate-conventional-commit using only staged changes for JIRA-1234.
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
-<blockquote>
-<p>🐉 Who needs to memorize Vim macros or survive Emacs keybindings when you can just hit “/” in the chat and watch Copilot handle the rest?</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🐉 Who needs to memorize Vim macros or survive Emacs keybindings when you can just hit “/” in the chat and watch Copilot handle the rest?&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="quick-review" href="#quick-review">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#quick-review&#34;&gt;
+  &lt;/a&gt;
   Quick Review 📕
-</h2>
+&lt;/h2&gt;
 
-<blockquote>
-<p>💡 Not on VS Code (or Insiders) yet? Now’s your chance to give it a real shot - features like this hit VS Code Insiders <em>months</em> before anywhere else. For now, it’s the best way to test reusable prompts hands-on, so go ahead and grab it if you haven’t already.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 Not on VS Code (or Insiders) yet? Now’s your chance to give it a real shot - features like this hit VS Code Insiders &lt;em&gt;months&lt;/em&gt; before anywhere else. For now, it’s the best way to test reusable prompts hands-on, so go ahead and grab it if you haven’t already.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>I know I’ve written a lot about models - like in <a href="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">AI Coding with GitHub Copilot</a> and <a href="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">Troubleshooting Production with GitHub Copilot</a> - but I haven’t spent much time on chat modes.</p>
+&lt;p&gt;I know I’ve written a lot about models - like in &lt;a href=&#34;https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47&#34;&gt;AI Coding with GitHub Copilot&lt;/a&gt; and &lt;a href=&#34;https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o&#34;&gt;Troubleshooting Production with GitHub Copilot&lt;/a&gt; - but I haven’t spent much time on chat modes.&lt;/p&gt;
 
-<blockquote>
-<p>💎 And no, not the same as "Custom Chat Modes" (which is also super cool - I promise I’ll cover those soon!).</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💎 And no, not the same as &#34;Custom Chat Modes&#34; (which is also super cool - I promise I’ll cover those soon!).&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Before we jump in, let’s hit pause and rewind. It’s time for a quick, back-to-basics look at what actually matters when deciding what work you want Copilot to do - and how much control you want over how it gets done.</p>
+&lt;p&gt;Before we jump in, let’s hit pause and rewind. It’s time for a quick, back-to-basics look at what actually matters when deciding what work you want Copilot to do - and how much control you want over how it gets done.&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="chat-modes-at-a-glance" href="#chat-modes-at-a-glance">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#chat-modes-at-a-glance&#34;&gt;
+  &lt;/a&gt;
   Chat Modes at a Glance 🎛️
-</h3>
+&lt;/h3&gt;
 
-<p>Here’s where things get interesting: Copilot doesn’t just work in one “mode” - it’s got a whole range, from chill Q&amp;A to full-on automation beast. Pick your mode wisely!</p>
+&lt;p&gt;Here’s where things get interesting: Copilot doesn’t just work in one “mode” - it’s got a whole range, from chill Q&amp;amp;A to full-on automation beast. Pick your mode wisely!&lt;/p&gt;
 
-<div class="table-wrapper-paragraph"><table>
-<thead>
-<tr>
-<th>Mode</th>
-<th>What It Does</th>
-<th>When To Use</th>
-<th>Power Level</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ask</td>
-<td>Answers questions, suggests ideas - your personal Stack Overflow, minus the snark.</td>
-<td>Research, quick advice, copy snippets</td>
-<td>🟢 Low</td>
-</tr>
-<tr>
-<td>Edit</td>
-<td>Changes code in-place, optimized for speed—think “find and replace,” but actually smart.</td>
-<td>Step-by-step or explicit code changes</td>
-<td>🟡 Medium</td>
-</tr>
-<tr>
-<td>Agent</td>
-<td>Multi-step, can use tools, context, and reasoning. Give it instructions and let it run wild (within reason).</td>
-<td>Automation, complex flows, integrations</td>
-<td>🔴 High</td>
-</tr>
-<tr>
-<td>Custom</td>
-<td>Depends on it's goal from the user... so many choices!</td>
-<td>Automation, complex flows, integrations, team magic</td>
-<td>💜 Extreme</td>
-</tr>
-</tbody>
-</table></div>
+&amp;lt;div class=&#34;table-wrapper-paragraph&#34;&amp;gt;&amp;lt;table&amp;gt;
+&amp;lt;thead&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;th&amp;gt;Mode&amp;lt;/th&amp;gt;
+&amp;lt;th&amp;gt;What It Does&amp;lt;/th&amp;gt;
+&amp;lt;th&amp;gt;When To Use&amp;lt;/th&amp;gt;
+&amp;lt;th&amp;gt;Power Level&amp;lt;/th&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;/thead&amp;gt;
+&amp;lt;tbody&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;Ask&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Answers questions, suggests ideas - your personal Stack Overflow, minus the snark.&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Research, quick advice, copy snippets&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;🟢 Low&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;Edit&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Changes code in-place, optimized for speed—think “find and replace,” but actually smart.&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Step-by-step or explicit code changes&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;🟡 Medium&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;Agent&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Multi-step, can use tools, context, and reasoning. Give it instructions and let it run wild (within reason).&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Automation, complex flows, integrations&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;🔴 High&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;Custom&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Depends on it&#39;s goal from the user... so many choices!&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Automation, complex flows, integrations, team magic&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;💜 Extreme&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;/tbody&amp;gt;
+&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;
 
-<blockquote>
-<p>🦄 Let me know how curious you are about these custom chat modes - I'm still experimenting and figuring out what they can (and can't) do. If you’ve got questions, wild theories, or even better, your own examples... drop them in the comments! 🚦💬</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Let me know how curious you are about these custom chat modes - I&#39;m still experimenting and figuring out what they can (and can&#39;t) do. If you’ve got questions, wild theories, or even better, your own examples... drop them in the comments! 🚦💬&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="the-gist-of-models" href="#the-gist-of-models">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#the-gist-of-models&#34;&gt;
+  &lt;/a&gt;
   The Gist of Models 🦾
-</h3>
+&lt;/h3&gt;
 
-<blockquote>
-<p>✨ I know, I reuse this table a lot - but hey, good models deserve a callback.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;✨ I know, I reuse this table a lot - but hey, good models deserve a callback.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<div class="table-wrapper-paragraph"><table>
-<thead>
-<tr>
-<th>Model</th>
-<th>Best For</th>
-<th>Notes &amp; Quirks</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>GPT-4.1, GPT-4o</td>
-<td>Creative debugging, “Where do I start?”</td>
-<td>Needs hand-holding on long tasks. Free for most users.</td>
-</tr>
-<tr>
-<td>o3/4-mini, Gemini</td>
-<td>Pattern-matching, log sleuthing</td>
-<td>Great for “explain these logs,” not for wild creative leaps.</td>
-</tr>
-<tr>
-<td>Gemini 2.5</td>
-<td>Tedious but simple, long-form tasks</td>
-<td>Decent at bulk work, rarely surprises (good or bad).</td>
-</tr>
-<tr>
-<td>Claude Sonnet 3.5–4</td>
-<td>Root cause, deep logic, “why did this happen?”</td>
-<td>Loves complex analysis but rarely offers alternate approaches unless you nudge.</td>
-</tr>
-</tbody>
-</table></div>
+&amp;lt;div class=&#34;table-wrapper-paragraph&#34;&amp;gt;&amp;lt;table&amp;gt;
+&amp;lt;thead&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;th&amp;gt;Model&amp;lt;/th&amp;gt;
+&amp;lt;th&amp;gt;Best For&amp;lt;/th&amp;gt;
+&amp;lt;th&amp;gt;Notes &amp;amp; Quirks&amp;lt;/th&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;/thead&amp;gt;
+&amp;lt;tbody&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;GPT-4.1, GPT-4o&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Creative debugging, “Where do I start?”&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Needs hand-holding on long tasks. Free for most users.&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;o3/4-mini, Gemini&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Pattern-matching, log sleuthing&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Great for “explain these logs,” not for wild creative leaps.&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;Gemini 2.5&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Tedious but simple, long-form tasks&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Decent at bulk work, rarely surprises (good or bad).&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;tr&amp;gt;
+&amp;lt;td&amp;gt;Claude Sonnet 3.5–4&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Root cause, deep logic, “why did this happen?”&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;Loves complex analysis but rarely offers alternate approaches unless you nudge.&amp;lt;/td&amp;gt;
+&amp;lt;/tr&amp;gt;
+&amp;lt;/tbody&amp;gt;
+&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="tools-for-your-ai" href="#tools-for-your-ai">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#tools-for-your-ai&#34;&gt;
+  &lt;/a&gt;
   Tools for your AI 🪛
-</h3>
+&lt;/h3&gt;
 
-<p>VS Code comes with several tools for GitHub Copilot already built in, but you can always add more via extensions or MCP servers. There's not much to cover here after you know they exist and where to find them. Unless you're making friends with every MCP server and already met your "128 selected tool" limit, there's not much reason to mess with them much. Just make sure they're all selected and available for Copilot to execute when prompted and you're set. </p>
+&lt;p&gt;VS Code comes with several tools for GitHub Copilot already built in, but you can always add more via extensions or MCP servers. There&#39;s not much to cover here after you know they exist and where to find them. Unless you&#39;re making friends with every MCP server and already met your &#34;128 selected tool&#34; limit, there&#39;s not much reason to mess with them much. Just make sure they&#39;re all selected and available for Copilot to execute when prompted and you&#39;re set. &lt;/p&gt;
 
-<p>Here's my personal top-5 built-in tools, that somehow <em>always</em> manage to sneak into any reusable prompt I write:</p>
+&lt;p&gt;Here&#39;s my personal top-5 built-in tools, that somehow &lt;em&gt;always&lt;/em&gt; manage to sneak into any reusable prompt I write:&lt;/p&gt;
 
-<ul>
-<li>
-<code>#changes</code> gives Copilot the ability to see a git diff for your workspace</li>
-<li>
-<code>#codebase</code> all-season access to your repo (and sometimes should be more targeted, but when in doubt this is a good start!)</li>
-<li>
-<code>#runTests</code> is just what it sounds like and let's Copilot execute any part or all of your test suite</li>
-<li>
-<code>#runInTerminal</code> is the basic run-of-the-mill access to Copilot's very own integrated terminal (separate from yours!)</li>
-<li>
-<code>#editFiles</code> is the tool Copilot needs to make any changes within your repo. If you're expecting Agent Mode to start implementing features, you're going to need this!</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;#changes&lt;/code&gt; gives Copilot the ability to see a git diff for your workspace&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#codebase&lt;/code&gt; all-season access to your repo (and sometimes should be more targeted, but when in doubt this is a good start!)&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#runTests&lt;/code&gt; is just what it sounds like and let&#39;s Copilot execute any part or all of your test suite&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#runInTerminal&lt;/code&gt; is the basic run-of-the-mill access to Copilot&#39;s very own integrated terminal (separate from yours!)&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#editFiles&lt;/code&gt; is the tool Copilot needs to make any changes within your repo. If you&#39;re expecting Agent Mode to start implementing features, you&#39;re going to need this!&lt;/li&gt;
+&lt;/ul&gt;
 
-<blockquote>
-<p>💡 <strong>ProTip:</strong> In Agent mode, click the wrench (Configure Tools) at the bottom of Copilot Chat to pick exactly which tools Copilot can use. If you share prompts, call out any non-default tools - just like listing dependencies.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; In Agent mode, click the wrench (Configure Tools) at the bottom of Copilot Chat to pick exactly which tools Copilot can use. If you share prompts, call out any non-default tools - just like listing dependencies.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h4>
-  <a name="bonus-tools-more-power-more-fun" href="#bonus-tools-more-power-more-fun">
-  </a>
+&lt;h4&gt;
+  &lt;a href=&#34;#bonus-tools-more-power-more-fun&#34;&gt;
+  &lt;/a&gt;
   Bonus Tools — More Power, More Fun 🛠️✨🎉
-</h4>
+&lt;/h4&gt;
 
-<p>Some of my favorite extras come from the <a href="https://support.atlassian.com/rovo/docs/getting-started-with-the-atlassian-remote-mcp-server/" target="_blank" rel="noopener noreferrer">Atlassian MCP-Remote</a> server, but if you have the ability to install GitHub Apps then check out <a href="https://github.com/marketplace/atlassian" target="_blank" rel="noopener noreferrer">Rovo</a>, too:</p>
+&lt;p&gt;Some of my favorite extras come from the &lt;a href=&#34;https://support.atlassian.com/rovo/docs/getting-started-with-the-atlassian-remote-mcp-server/&#34;&gt;Atlassian MCP-Remote&lt;/a&gt; server, but if you have the ability to install GitHub Apps then check out &lt;a href=&#34;https://github.com/marketplace/atlassian&#34;&gt;Rovo&lt;/a&gt;, too:&lt;/p&gt;
 
-<ul>
-<li>
-<code>#getJiraIssue</code> lets Copilot pull all the details for a story.</li>
-<li>
-<code>#addCommentToJiraIssue</code> posts your summary as you (so add your RAI disclaimer!).</li>
-<li>
-<code>#createConfluencePage</code> &amp; <code>#updateConfluencePage</code> — still figuring out the best way to teach Copilot “Atlassian style” <code>.confluence</code> syntax (it’s a work in progress 🫠).</li>
-<li>
-<code>#mermaid-diagram-validator</code> checks your diagrams with the official Mermaid extension.</li>
-<li>
-<code>#copilotCodingAgent</code> — brand new, and I can’t wait to see what it can do! Assign it a task and let it work while you keep pairing in Copilot Chat.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;code&gt;#getJiraIssue&lt;/code&gt; lets Copilot pull all the details for a story.&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#addCommentToJiraIssue&lt;/code&gt; posts your summary as you (so add your RAI disclaimer!).&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#createConfluencePage&lt;/code&gt; &amp;amp; &lt;code&gt;#updateConfluencePage&lt;/code&gt; — still figuring out the best way to teach Copilot “Atlassian style” &lt;code&gt;.confluence&lt;/code&gt; syntax (it’s a work in progress 🫠).&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#mermaid-diagram-validator&lt;/code&gt; checks your diagrams with the official Mermaid extension.&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;#copilotCodingAgent&lt;/code&gt; — brand new, and I can’t wait to see what it can do! Assign it a task and let it work while you keep pairing in Copilot Chat.&lt;/li&gt;
+&lt;/ul&gt;
 
-<blockquote>
-<p>💎 <a href="https://docs.github.com/en/copilot/concepts/about-copilot-coding-agent" target="_blank" rel="noopener noreferrer">Coding Agent has serious limitations</a>, so check the docs before letting it run wild!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💎 &lt;a href=&#34;https://docs.github.com/en/copilot/concepts/about-copilot-coding-agent&#34;&gt;Coding Agent has serious limitations&lt;/a&gt;, so check the docs before letting it run wild!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="commit-message-magic-one-slash-to-rule-them-all" href="#commit-message-magic-one-slash-to-rule-them-all">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#commit-message-magic-one-slash-to-rule-them-all&#34;&gt;
+  &lt;/a&gt;
   📨 Commit Message Magic: One Slash to Rule Them All
-</h2>
+&lt;/h2&gt;
 
-<p>Here's an example of a basic, yet realistic prompt that generates a commit message. No Jira, no testing, no terminal magic - just one clear task. This is a great way to test prompt building before layering on more steps or complicated conditional logic. </p>
+&lt;p&gt;Here&#39;s an example of a basic, yet realistic prompt that generates a commit message. No Jira, no testing, no terminal magic - just one clear task. This is a great way to test prompt building before layering on more steps or complicated conditional logic. &lt;/p&gt;
 
-<p>In VS Code, paste this directly into the prompts folder shown or open the command palette and search for <code>Chat: New Prompt File...</code> and then choose whether to store the prompt at the repo-level in <code>.github/prompts</code> or globally for use across all of your workspaces. </p>
+&lt;p&gt;In VS Code, paste this directly into the prompts folder shown or open the command palette and search for &lt;code&gt;Chat: New Prompt File...&lt;/code&gt; and then choose whether to store the prompt at the repo-level in &lt;code&gt;.github/prompts&lt;/code&gt; or globally for use across all of your workspaces. &lt;/p&gt;
 
-<p><strong>Prompt:</strong> <code>.github/prompts/generate-commit-message.prompt.md</code><br>
-</p>
+&lt;p&gt;&lt;strong&gt;Prompt:&lt;/strong&gt; &lt;code&gt;.github/prompts/generate-commit-message.prompt.md&lt;/code&gt;&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight markdown"><code><span class="nn">---</span>
-<span class="na">mode</span><span class="pi">:</span> <span class="s">ask</span>
-<span class="na">description</span><span class="pi">:</span> <span class="pi">|</span>
-    <span class="s">This prompt is used to generate a commit message based on changes staged in a Git repository.</span>
-<span class="na">tools</span><span class="pi">:</span>
-<span class="pi">-</span> <span class="s">changes</span>
-<span class="nn">---</span>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;span class=&#34;nn&#34;&amp;gt;---&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;na&#34;&amp;gt;mode&amp;lt;/span&amp;gt;&amp;lt;span class=&#34;pi&#34;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;s&#34;&amp;gt;ask&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;na&#34;&amp;gt;description&amp;lt;/span&amp;gt;&amp;lt;span class=&#34;pi&#34;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;pi&#34;&amp;gt;|&amp;lt;/span&amp;gt;
+    &amp;lt;span class=&#34;s&#34;&amp;gt;This prompt is used to generate a commit message based on changes staged in a Git repository.&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;na&#34;&amp;gt;tools&amp;lt;/span&amp;gt;&amp;lt;span class=&#34;pi&#34;&amp;gt;:&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;pi&#34;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;s&#34;&amp;gt;changes&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;nn&#34;&amp;gt;---&amp;lt;/span&amp;gt;
 
-<span class="gh"># Generate Commit Changes Prompt</span>
+&amp;lt;span class=&#34;gh&#34;&amp;gt;# Generate Commit Changes Prompt&amp;lt;/span&amp;gt;
 
 Review all code currently staged and use your chat history, if available, to populate details about the changes. Use the information to generate a concise and informative commit message. It should follow conventional commit standards with a clear type, subject, and bullet points for details.
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<blockquote>
-<p>⚠️ <strong>UPDATE:</strong> The syntax posted above is actually the <em>second</em> version available in VS Code and last night's update seems to have switched it back to the original. So, if you try to load this and see syntax errors try this instead:</p>
-
-<ol>
-<li>
-<code>description</code>: 'Enter the description in single quotes on the same line and without the <code>|</code>'</li>
-<li>
-<code>tools</code>: ['changes'] &lt;!-- Define in an array instead of a list, with each tool name as a string --&gt;</li>
-</ol>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h3>
-  <a name="executing-reusable-prompts" href="#executing-reusable-prompts">
-  </a>
+&lt;blockquote&gt;
+&lt;p&gt;⚠️ &lt;strong&gt;UPDATE:&lt;/strong&gt; The syntax posted above is actually the &lt;em&gt;second&lt;/em&gt; version available in VS Code and last night&#39;s update seems to have switched it back to the original. So, if you try to load this and see syntax errors try this instead:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;
+&lt;code&gt;description&lt;/code&gt;: &#39;Enter the description in single quotes on the same line and without the &lt;code&gt;|&lt;/code&gt;&#39;&lt;/li&gt;
+&lt;li&gt;
+&lt;code&gt;tools&lt;/code&gt;: [&#39;changes&#39;] &amp;lt;!-- Define in an array instead of a list, with each tool name as a string --&amp;gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h3&gt;
+  &lt;a href=&#34;#executing-reusable-prompts&#34;&gt;
+  &lt;/a&gt;
   Executing Reusable Prompts
-</h3>
+&lt;/h3&gt;
 
-<p>Once you have this (or any other) reusable prompt stored in VS Code, use a slash command to invoke it in the chat interface. Given the above example, you'd prompt Copilot in the chat with something like<br>
-</p>
+&lt;p&gt;Once you have this (or any other) reusable prompt stored in VS Code, use a slash command to invoke it in the chat interface. Given the above example, you&#39;d prompt Copilot in the chat with something like&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>/generate-commit-message consider only staged files and generate a new commit that starts with a unique emoji
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;/generate-commit-message consider only staged files and generate a new commit that starts with a unique emoji
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
 
-<p>Considering all the rules I have set up elsewhere outside of that reusable prompt, I still ended up with a nice clean conventional commit (for the most part).<br>
-</p>
+&lt;p&gt;Considering all the rules I have set up elsewhere outside of that reusable prompt, I still ended up with a nice clean conventional commit (for the most part).&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>🦄 chore: update commit message generation prompt for clarity
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;🦄 chore: update commit message generation prompt for clarity
 
 • Instructs to review all staged code and use chat history for context
 • Requires concise, informative commit messages following conventional commit standards
 • Specifies format: clear type, subject, and bullet points for details
 • Ensures only staged changes are considered for commit message generation 😊👍
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<blockquote>
-<p>🦄 For this example, I actually <em>tried</em> to make Copilot break my own repo-rules - total role reversal. Turns out, it’s stubborn! Even when I begged it to ignore my instructions and forget conventional commit standards, it flat-out refused. 🤣</p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h2>
-  <a name="lets-break-it-down-how-a-reusable-prompt-really-works-%EF%B8%8F" href="#lets-break-it-down-how-a-reusable-prompt-really-works-%EF%B8%8F">
-  </a>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 For this example, I actually &lt;em&gt;tried&lt;/em&gt; to make Copilot break my own repo-rules - total role reversal. Turns out, it’s stubborn! Even when I begged it to ignore my instructions and forget conventional commit standards, it flat-out refused. 🤣&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#lets-break-it-down-how-a-reusable-prompt-really-works-%EF%B8%8F&#34;&gt;
+  &lt;/a&gt;
   Let’s Break It Down: How a Reusable Prompt Really Works ⚡️
-</h2>
+&lt;/h2&gt;
 
-<p>Every reusable prompt has exactly two parts:</p>
+&lt;p&gt;Every reusable prompt has exactly two parts:&lt;/p&gt;
 
-<ol>
-<li><p><strong>YAML frontmatter:</strong> Everything between the first <code>---</code> (at the top) and the next <code>---</code> marks your frontmatter.</p></li>
-<li><p><strong>Prompt instructions:</strong> The main body - break your instructions into small, reusable chunks, just like you would with code.</p></li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;YAML frontmatter:&lt;/strong&gt; Everything between the first &lt;code&gt;---&lt;/code&gt; (at the top) and the next &lt;code&gt;---&lt;/code&gt; marks your frontmatter.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Prompt instructions:&lt;/strong&gt; The main body - break your instructions into small, reusable chunks, just like you would with code.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
-<blockquote>
-<p>💡 <strong>ProTip:</strong> The more targeted your prompts and instructions, the easier they are to reuse, test, and share later. Treat them like mini code modules - precise, focused, and easy to swap out.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; The more targeted your prompts and instructions, the easier they are to reuse, test, and share later. Treat them like mini code modules - precise, focused, and easy to swap out.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="yaml-frontmatter-your-prompts-control-panel" href="#yaml-frontmatter-your-prompts-control-panel">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#yaml-frontmatter-your-prompts-control-panel&#34;&gt;
+  &lt;/a&gt;
   🧾 YAML Frontmatter: Your Prompt’s Control Panel
-</h3>
+&lt;/h3&gt;
 
-<ul>
-<li><p><strong>mode:</strong> We’re using <code>ask</code> mode because we only need Copilot to generate text, not generate code or run tests.</p></li>
-<li><p><strong>description:</strong> A quick, human-friendly summary of what this prompt does. Great for organizing and sanity-checking as your prompt list grows.</p></li>
-<li><p><strong>tools:</strong> List all the tools Copilot can use when running this prompt. Keep it tight - less is usually more!</p></li>
-<li><p><strong>model:</strong> Enter the name of a model exactly as it appears in the chat model dropdown or leave this out if you want to try different ones or let the user pick. If you do specify one, Copilot will always use that model for this prompt and nothing else.</p></li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;mode:&lt;/strong&gt; We’re using &lt;code&gt;ask&lt;/code&gt; mode because we only need Copilot to generate text, not generate code or run tests.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;description:&lt;/strong&gt; A quick, human-friendly summary of what this prompt does. Great for organizing and sanity-checking as your prompt list grows.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;tools:&lt;/strong&gt; List all the tools Copilot can use when running this prompt. Keep it tight - less is usually more!&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;model:&lt;/strong&gt; Enter the name of a model exactly as it appears in the chat model dropdown or leave this out if you want to try different ones or let the user pick. If you do specify one, Copilot will always use that model for this prompt and nothing else.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-<blockquote>
-<p>🦄 Frontmatter isn’t actually required for your reusable prompt to work! If you leave out <code>mode</code> or <code>model</code>, Copilot just uses whatever settings the user picked in the chat. No <code>description</code>? No big deal (but it helps keep things organized). The only one to really watch: skipping <code>tools</code> — sometimes you’ll be fine, sometimes Copilot will get stuck, all depending on the user’s VS Code setup.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Frontmatter isn’t actually required for your reusable prompt to work! If you leave out &lt;code&gt;mode&lt;/code&gt; or &lt;code&gt;model&lt;/code&gt;, Copilot just uses whatever settings the user picked in the chat. No &lt;code&gt;description&lt;/code&gt;? No big deal (but it helps keep things organized). The only one to really watch: skipping &lt;code&gt;tools&lt;/code&gt; — sometimes you’ll be fine, sometimes Copilot will get stuck, all depending on the user’s VS Code setup.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="reusablestyle-prompt-engineering-speak-human-think-modular" href="#reusablestyle-prompt-engineering-speak-human-think-modular">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#reusablestyle-prompt-engineering-speak-human-think-modular&#34;&gt;
+  &lt;/a&gt;
   💬 Reusable-Style Prompt Engineering: Speak Human, Think Modular
-</h3>
+&lt;/h3&gt;
 
-<p>The second section in your <code>.github/prompts/reusable-prompt.prompt.md</code> file is where you write out, in natural language, the exact instructions Copilot should follow - just like you would if you were prompting it in chat. You can reference <code>#tools</code>, <code>#files</code>, <code>@participants</code>, other <code>/prompts</code>, and <code>#instructions</code> right here. If you ever catch yourself copying and pasting instructions between prompts, that’s your signal: split it up, give things a clear name, and keep each prompt focused on a single, repeatable workflow.</p>
+&lt;p&gt;The second section in your &lt;code&gt;.github/prompts/reusable-prompt.prompt.md&lt;/code&gt; file is where you write out, in natural language, the exact instructions Copilot should follow - just like you would if you were prompting it in chat. You can reference &lt;code&gt;#tools&lt;/code&gt;, &lt;code&gt;#files&lt;/code&gt;, &lt;code&gt;@participants&lt;/code&gt;, other &lt;code&gt;/prompts&lt;/code&gt;, and &lt;code&gt;#instructions&lt;/code&gt; right here. If you ever catch yourself copying and pasting instructions between prompts, that’s your signal: split it up, give things a clear name, and keep each prompt focused on a single, repeatable workflow.&lt;/p&gt;
 
-<p>The best reusable prompts are <strong>modular</strong> and <strong>specific</strong>, not giant copy-paste walls. If you can automate it or break it down into smaller pieces, do it! That way, you (and your team) can mix, match, and remix prompts to build bigger automations down the line - without losing your mind or having to decode a mysterious black box later.</p>
+&lt;p&gt;The best reusable prompts are &lt;strong&gt;modular&lt;/strong&gt; and &lt;strong&gt;specific&lt;/strong&gt;, not giant copy-paste walls. If you can automate it or break it down into smaller pieces, do it! That way, you (and your team) can mix, match, and remix prompts to build bigger automations down the line - without losing your mind or having to decode a mysterious black box later.&lt;/p&gt;
 
-<p>When you’re practicing on your own, start small and build up - tweak one thing at a time and watch how even tiny prompt or context changes can totally flip the results. Get curious about how each model handles the same task (some will surprise you, some... not so much).</p>
+&lt;p&gt;When you’re practicing on your own, start small and build up - tweak one thing at a time and watch how even tiny prompt or context changes can totally flip the results. Get curious about how each model handles the same task (some will surprise you, some... not so much).&lt;/p&gt;
 
-<blockquote>
-<p>💎 I’m running out of space (and you’re probably out of caffeine already), so I’ll wrap it here. Next time, I’ll dig up a few wild, more advanced prompts and show you what Copilot will - and absolutely will NOT - do without super-clear instructions. Stay tuned!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💎 I’m running out of space (and you’re probably out of caffeine already), so I’ll wrap it here. Next time, I’ll dig up a few wild, more advanced prompts and show you what Copilot will - and absolutely will NOT - do without super-clear instructions. Stay tuned!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="dont-let-me-have-all-the-fun" href="#dont-let-me-have-all-the-fun">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#dont-let-me-have-all-the-fun&#34;&gt;
+  &lt;/a&gt;
   Don’t let me have all the fun!
-</h2>
+&lt;/h2&gt;
 
-<p>Got questions, memes, or an obscure reaction GIF? Drop them below or just smash ❤️ - I’m here for it all! If you want to experiment before next week, search GitHub for <code>awesome-copilot</code> and you’ll find a ton of shareable repos.</p>
+&lt;p&gt;Got questions, memes, or an obscure reaction GIF? Drop them below or just smash ❤️ - I’m here for it all! If you want to experiment before next week, search GitHub for &lt;code&gt;awesome-copilot&lt;/code&gt; and you’ll find a ton of shareable repos.&lt;/p&gt;
 
-<blockquote>
-<p>🦄 Curiosity getting to you yet? My own <code>awesome-github-copilot</code> repo is technically started (<em>barely</em>), but it does exist - and my super-secret Copilot Chat Extension is officially back in progress! 🤫</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Curiosity getting to you yet? My own &lt;code&gt;awesome-github-copilot&lt;/code&gt; repo is technically started (&lt;em&gt;barely&lt;/em&gt;), but it does exist - and my super-secret Copilot Chat Extension is officially back in progress! 🤫&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>And hey, if you just want to grab something cool, copy it, and run wild every once in a while? Go for it! Don’t forget to share your best finds below. 😜</p>
+&lt;p&gt;And hey, if you just want to grab something cool, copy it, and run wild every once in a while? Go for it! Don’t forget to share your best finds below. 😜&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<p>🛡️ <strong>Authored by Me (with an AI Sidekick)</strong></p>
+&lt;p&gt;🛡️ &lt;strong&gt;Authored by Me (with an AI Sidekick)&lt;/strong&gt;&lt;/p&gt;
 
-<p>Every word here is 100% my own - AI just played backup and fetched some ideas. We both double-check for bias, I do my own fact-checking, and call out anything that feels off. If you spot something wild (or wildly wrong), tell me! AI makes mistakes, but so do humans - especially if we’ve had too much coffee (or not enough sleep!).</p>
+&lt;p&gt;Every word here is 100% my own - AI just played backup and fetched some ideas. We both double-check for bias, I do my own fact-checking, and call out anything that feels off. If you spot something wild (or wildly wrong), tell me! AI makes mistakes, but so do humans - especially if we’ve had too much coffee (or not enough sleep!).&lt;/p&gt;
 
 </article>
   <p><a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">Read on Dev.to →</a></p>

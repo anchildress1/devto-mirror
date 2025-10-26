@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8">
-<title>GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples</title>
+<title>GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough &amp; Real Examples</title>
 <link rel="canonical" href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh">
 <meta name="description" content="Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot — why it works, real examples, and how to use it in your own projects.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,7 +8,7 @@
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh">
-<meta property="og:title" content="GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples">
+<meta property="og:title" content="GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough &amp; Real Examples">
 <meta property="og:description" content="Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot — why it works, real examples, and how to use it in your own projects.">
 <meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png">
 <meta property="og:site_name" content="anchildress1 — Dev.to Mirror">
@@ -16,12 +16,12 @@
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh">
-<meta name="twitter:title" content="GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples">
+<meta name="twitter:title" content="GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough &amp; Real Examples">
 <meta name="twitter:description" content="Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot — why it works, real examples, and how to use it in your own projects.">
 <meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png">
 
 <!-- LinkedIn -->
-<meta property="linkedin:title" content="GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples">
+<meta property="linkedin:title" content="GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough &amp; Real Examples">
 <meta property="linkedin:description" content="Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot — why it works, real examples, and how to use it in your own projects.">
 <meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png">
 
@@ -31,493 +31,517 @@
 <meta name="keywords" content="githubcopilot, ai, tutorial, productivity">
 </head><body>
 <main>
-  <h1><a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh">GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples</a></h1>
-  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png?v=2" alt="Banner image for GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough & Real Examples" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  <h1><a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh">GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough &amp; Real Examples</a></h1>
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png?v=2"
+      alt="Banner image for GitHub Copilot: Reusable Prompts, Part 2 — Walkthrough &amp; Real Examples"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+  
   <p><em>Published: 2025-07-30T12:00:00Z</em></p>
-  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#tutorial</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#productivity</span></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #ai
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #tutorial
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #productivity
+            </span>
+        
+    </p>
+    
   <p><em>Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot — why it works, real examples, and how to use it in your own projects.</em></p>
-  <article><blockquote>
-<p>Hey, welcome back 👋 If you haven't had a chance to read Part 1 introducing all of the different working parts of GitHub Copilot’s reusable prompts — <a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">check it out here</a>.</p>
-</blockquote>
+  <article>&lt;blockquote&gt;
+&lt;p&gt;Hey, welcome back 👋 If you haven&#39;t had a chance to read Part 1 introducing all of the different working parts of GitHub Copilot’s reusable prompts — &lt;a href=&#34;https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff&#34;&gt;check it out here&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Before we jump in, ask yourself this: <strong>How well can you anticipate Copilot’s response to your prompts?</strong></p>
+&lt;p&gt;Before we jump in, ask yourself this: &lt;strong&gt;How well can you anticipate Copilot’s response to your prompts?&lt;/strong&gt;&lt;/p&gt;
 
-<p>If it still feels like a surprise every time, I seriously recommend setting aside 30 minutes to just <em>play</em>. You don’t need anything fancy — no reusable YAML, no multi-step wizardry. Just write a single chat message that covers everything needed to complete one task.</p>
+&lt;p&gt;If it still feels like a surprise every time, I seriously recommend setting aside 30 minutes to just &lt;em&gt;play&lt;/em&gt;. You don’t need anything fancy — no reusable YAML, no multi-step wizardry. Just write a single chat message that covers everything needed to complete one task.&lt;/p&gt;
 
-<p>Do you need a brand new React component? Unit tests? Maybe your repository is two years behind on documentation (yeah... I’ve been there). Write a prompt for that!</p>
+&lt;p&gt;Do you need a brand new React component? Unit tests? Maybe your repository is two years behind on documentation (yeah... I’ve been there). Write a prompt for that!&lt;/p&gt;
 
-<p>It doesn’t matter <em>what</em> you try — the real goal is to see if you can supply <strong>all the info Copilot needs</strong> to get the job done in one go.<br>
-<br></p>
+&lt;p&gt;It doesn’t matter &lt;em&gt;what&lt;/em&gt; you try — the real goal is to see if you can supply &lt;strong&gt;all the info Copilot needs&lt;/strong&gt; to get the job done in one go.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
 
-<blockquote>
-<p>💡 <strong>Pro Tip</strong>: GPT models are <em>especially bad</em> at immediate execution. They’ll gather information, agree with your logic, maybe even summarize the steps perfectly... and then take no action at all. So, if you're struggling to get single-prompt execution working with the free version, it's most likely <strong>not</strong> you.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;Pro Tip&lt;/strong&gt;: GPT models are &lt;em&gt;especially bad&lt;/em&gt; at immediate execution. They’ll gather information, agree with your logic, maybe even summarize the steps perfectly... and then take no action at all. So, if you&#39;re struggling to get single-prompt execution working with the free version, it&#39;s most likely &lt;strong&gt;not&lt;/strong&gt; you.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<p>Feeling brave? Try your luck with <strong>Coding Agent</strong>. It’s a great way to test your prompting skills: how much information can you successfully feed Copilot at once? (I’ll get into all the quirks of Coding Agent in a future post — promise!)</p>
+&lt;p&gt;Feeling brave? Try your luck with &lt;strong&gt;Coding Agent&lt;/strong&gt;. It’s a great way to test your prompting skills: how much information can you successfully feed Copilot at once? (I’ll get into all the quirks of Coding Agent in a future post — promise!)&lt;/p&gt;
 
-<p>Just know that reusable prompts are built on this same logic — a single message that defines <em>everything</em> needed to complete a task from start to finish.<br>
-<br></p>
+&lt;p&gt;Just know that reusable prompts are built on this same logic — a single message that defines &lt;em&gt;everything&lt;/em&gt; needed to complete a task from start to finish.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
 
-<blockquote>
-<p>🦄 Quick reminder: Copilot is 100% worth <a href="https://code.visualstudio.com/insiders/" target="_blank" rel="noopener noreferrer">trying out in Insiders</a>. IntelliJ still owns Java, no question — but you’re missing out on a lot of Copilot’s best tricks if you haven’t made the jump. 🫶</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Quick reminder: Copilot is 100% worth &lt;a href=&#34;https://code.visualstudio.com/insiders/&#34;&gt;trying out in Insiders&lt;/a&gt;. IntelliJ still owns Java, no question — but you’re missing out on a lot of Copilot’s best tricks if you haven’t made the jump. 🫶&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<hr>
-<h2>
-  <a name="reusable-prompts-overview" href="#reusable-prompts-overview">
-  </a>
+&amp;lt;hr&amp;gt;
+&lt;h2&gt;
+  &lt;a href=&#34;#reusable-prompts-overview&#34;&gt;
+  &lt;/a&gt;
   Reusable Prompts Overview 🧰
-</h2>
+&lt;/h2&gt;
 
-<p>Quick recap from last week: A reusable prompt is a combination of an instruction (how to act) and a step-by-step guide. The prompt is driven by the YAML front matter, which optionally defines:</p>
+&lt;p&gt;Quick recap from last week: A reusable prompt is a combination of an instruction (how to act) and a step-by-step guide. The prompt is driven by the YAML front matter, which optionally defines:&lt;/p&gt;
 
-<ol>
-<li>the <strong>mode</strong> (<code>agent</code>, <code>edit</code>, <code>ask</code>)</li>
-<li>which <strong>model</strong> (<code>GPT-4.1</code>, <code>Claude Sonnet 4</code>, etc.)</li>
-<li>accessible <strong>tools</strong> (built-in, extensions, and MCP)</li>
-<li>prompt <strong>description</strong> (for completeness)</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;the &lt;strong&gt;mode&lt;/strong&gt; (&lt;code&gt;agent&lt;/code&gt;, &lt;code&gt;edit&lt;/code&gt;, &lt;code&gt;ask&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;which &lt;strong&gt;model&lt;/strong&gt; (&lt;code&gt;GPT-4.1&lt;/code&gt;, &lt;code&gt;Claude Sonnet 4&lt;/code&gt;, etc.)&lt;/li&gt;
+&lt;li&gt;accessible &lt;strong&gt;tools&lt;/strong&gt; (built-in, extensions, and MCP)&lt;/li&gt;
+&lt;li&gt;prompt &lt;strong&gt;description&lt;/strong&gt; (for completeness)&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>When specifying tools, be sure to follow the <em>principle of least privilege</em>. Use the fewest tools needed to get the job done — nothing more.<br>
-<br></p>
+&lt;p&gt;When specifying tools, be sure to follow the &lt;em&gt;principle of least privilege&lt;/em&gt;. Use the fewest tools needed to get the job done — nothing more.&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
 
-<blockquote>
-<p>💡 <strong>Pro tip!</strong> Agent mode has access to tools, but the other modes do not. So if your prompt needs to read files, run shell commands, or write to disk, be sure to specify <code>mode: agent</code>.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;Pro tip!&lt;/strong&gt; Agent mode has access to tools, but the other modes do not. So if your prompt needs to read files, run shell commands, or write to disk, be sure to specify &lt;code&gt;mode: agent&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<hr>
-<h2>
-  <a name="personal-guide-to-prompting-prior" href="#personal-guide-to-prompting-prior">
-  </a>
-  Personal Guide to Prompting — <strong>PRIOR</strong> 🧭
-</h2>
+&amp;lt;hr&amp;gt;
+&lt;h2&gt;
+  &lt;a href=&#34;#personal-guide-to-prompting-prior&#34;&gt;
+  &lt;/a&gt;
+  Personal Guide to Prompting — &lt;strong&gt;PRIOR&lt;/strong&gt; 🧭
+&lt;/h2&gt;
 
-<p>Next, let’s cover one of my personal formulas for prompt engineering. And if you try to search for this or ask Gemini what “PRIOR” stands for, you're probably going to confuse it. Why? Because I made it up. But I promise you — it works!</p>
+&lt;p&gt;Next, let’s cover one of my personal formulas for prompt engineering. And if you try to search for this or ask Gemini what “PRIOR” stands for, you&#39;re probably going to confuse it. Why? Because I made it up. But I promise you — it works!&lt;/p&gt;
 
-<p>At its core, it’s a remix of the well-known RICE formula (Role, Instructions, Context, and Examples). RICE didn’t cover everything I needed, so I added more. RICE-O didn’t really stick (honestly, all I could think of was Rice-A-Roni...), so I went back to the drawing board and gave ChatGPT a list of words and synonyms and said:</p>
+&lt;p&gt;At its core, it’s a remix of the well-known RICE formula (Role, Instructions, Context, and Examples). RICE didn’t cover everything I needed, so I added more. RICE-O didn’t really stick (honestly, all I could think of was Rice-A-Roni...), so I went back to the drawing board and gave ChatGPT a list of words and synonyms and said:&lt;/p&gt;
 
-<blockquote>
-<p>"I need an acronym I won’t forget — because it would be just like me to have a brilliant idea that could’ve made me a millionaire, and forget it by tomorrow morning."</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;&#34;I need an acronym I won’t forget — because it would be just like me to have a brilliant idea that could’ve made me a millionaire, and forget it by tomorrow morning.&#34;&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>So, <strong>PRIOR</strong> was born — a simple checklist for designing prompts, reusable or otherwise.</p>
+&lt;p&gt;So, &lt;strong&gt;PRIOR&lt;/strong&gt; was born — a simple checklist for designing prompts, reusable or otherwise.&lt;/p&gt;
 
-<p><br><br>
-<a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" alt="divider" loading="lazy" width="700" height="4"></a></p>
+&lt;p&gt;&lt;br&gt;&lt;br&gt;
+&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png&#34; alt=&#34;divider&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<blockquote>
-<p>🦄 I know — we really didn’t need <em>another</em> acronym or prompt strategy. I get it. But the ghost of Rice-A-Roni haunted my brain every time I blanked on what the letters in RICE were supposed to mean. So I made <em>PRIOR</em> instead.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 I know — we really didn’t need &lt;em&gt;another&lt;/em&gt; acronym or prompt strategy. I get it. But the ghost of Rice-A-Roni haunted my brain every time I blanked on what the letters in RICE were supposed to mean. So I made &lt;em&gt;PRIOR&lt;/em&gt; instead.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png" alt="Rice-A-Roni box" loading="lazy" width="76" height="128"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png&#34; alt=&#34;Rice-A-Roni box&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<blockquote>
-<p>For my non-American friends: 📦 <em>Rice-A-Roni</em> is a boxed rice-and-pasta side dish that’s been marketed to Americans since the 1950s as “The San Francisco Treat™.” It’s one of those nostalgic foods you grow up seeing in pantries... but never quite understand why.</p>
+&lt;blockquote&gt;
+&lt;p&gt;For my non-American friends: 📦 &lt;em&gt;Rice-A-Roni&lt;/em&gt; is a boxed rice-and-pasta side dish that’s been marketed to Americans since the 1950s as “The San Francisco Treat™.” It’s one of those nostalgic foods you grow up seeing in pantries... but never quite understand why.&lt;/p&gt;
 
-<p>Watch the <a href="https://www.youtube.com/watch?v=ZT2TfkX6ZeU" target="_blank" rel="noopener noreferrer">ad jingle here</a> — this is what starts playing in my head <em>every single time</em>, like a DeLorean back to the '90s with the radio stuck on loop. ⚡ 🚗 🕰️ </p>
-</blockquote>
+&lt;p&gt;Watch the &lt;a href=&#34;https://www.youtube.com/watch?v=ZT2TfkX6ZeU&#34;&gt;ad jingle here&lt;/a&gt; — this is what starts playing in my head &lt;em&gt;every single time&lt;/em&gt;, like a DeLorean back to the &#39;90s with the radio stuck on loop. ⚡ 🚗 🕰️ &lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" alt="divider" loading="lazy" width="700" height="4"></a><br>
-<br></p>
-<h2>
-  <a name="the-prior-breakdown-for-real-this-time" href="#the-prior-breakdown-for-real-this-time">
-  </a>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png&#34; alt=&#34;divider&#34;&gt;&lt;/a&gt;&lt;br&gt;
+&lt;br&gt;&lt;/p&gt;
+&lt;h2&gt;
+  &lt;a href=&#34;#the-prior-breakdown-for-real-this-time&#34;&gt;
+  &lt;/a&gt;
   The PRIOR Breakdown (For Real This Time) 🛠️
-</h2>
-<h3>
-  <a name="persona-actor-not-an-expert" href="#persona-actor-not-an-expert">
-  </a>
-  Persona 🎭 (actor — <em>not</em> an expert)
-</h3>
+&lt;/h2&gt;
+&lt;h3&gt;
+  &lt;a href=&#34;#persona-actor-not-an-expert&#34;&gt;
+  &lt;/a&gt;
+  Persona 🎭 (actor — &lt;em&gt;not&lt;/em&gt; an expert)
+&lt;/h3&gt;
 
-<p>First is the <strong>persona</strong>, which is often underutilized and overlooked — and sometimes outright ignored.</p>
+&lt;p&gt;First is the &lt;strong&gt;persona&lt;/strong&gt;, which is often underutilized and overlooked — and sometimes outright ignored.&lt;/p&gt;
 
-<blockquote>
-<p>👉 <strong>TL;DR:</strong> A persona doesn’t mean “you’re an expert” — it sets the tone. It gives Copilot a <em>character</em> and <em>purpose</em>. And it makes the whole thing way more fun!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;👉 &lt;strong&gt;TL;DR:&lt;/strong&gt; A persona doesn’t mean “you’re an expert” — it sets the tone. It gives Copilot a &lt;em&gt;character&lt;/em&gt; and &lt;em&gt;purpose&lt;/em&gt;. And it makes the whole thing way more fun!&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
-<h4>
-  <a name="a-little-history" href="#a-little-history">
-  </a>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34; alt=&#34;divider&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;
+  &lt;a href=&#34;#a-little-history&#34;&gt;
+  &lt;/a&gt;
   A little history...
-</h4>
+&lt;/h4&gt;
 
-<p>In the early days, personas were often used like:  </p>
+&lt;p&gt;In the early days, personas were often used like:  &lt;/p&gt;
 
-<blockquote>
-<p>“You are a senior principal engineer with 20 years of experience in C++.”  </p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;“You are a senior principal engineer with 20 years of experience in C++.”  &lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>It caught on like wildfire — everyone thought they were tapping into some hidden reserve of wisdom only a 20-year C++ veteran could offer. But what it really produced was the <em>confidence</em> of that engineer, not the <em>accuracy</em>. So we ended up with a flood of responses that weren’t just wrong — they were <strong>confidently wrong</strong>.</p>
+&lt;p&gt;It caught on like wildfire — everyone thought they were tapping into some hidden reserve of wisdom only a 20-year C++ veteran could offer. But what it really produced was the &lt;em&gt;confidence&lt;/em&gt; of that engineer, not the &lt;em&gt;accuracy&lt;/em&gt;. So we ended up with a flood of responses that weren’t just wrong — they were &lt;strong&gt;confidently wrong&lt;/strong&gt;.&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
-<h4>
-  <a name="this-persona-is-different" href="#this-persona-is-different">
-  </a>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34; alt=&#34;divider&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;
+  &lt;a href=&#34;#this-persona-is-different&#34;&gt;
+  &lt;/a&gt;
   This persona is different.
-</h4>
+&lt;/h4&gt;
 
-<p>I’m not telling you to pretend the AI is an expert. I’m telling you to make it a character — <strong>a performer</strong>. Here’s one I wrote recently for summarizing a git diff:<br>
-</p>
+&lt;p&gt;I’m not telling you to pretend the AI is an expert. I’m telling you to make it a character — &lt;strong&gt;a performer&lt;/strong&gt;. Here’s one I wrote recently for summarizing a git diff:&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight markdown"><code>  🎩 You are not just analyzing — you’re storytelling with 
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;  🎩 You are not just analyzing — you’re storytelling with 
   source control. 
   You analyze code with purpose and fervor, then communicate 
   your insights as a short, punchy list — a clever disguise 
   to help users grasp the deeper essence of change they’d 
   otherwise scroll past.
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<p>Is it realistic? Not really. Is it useful? Absolutely. The more engaging and unique the role, the more Copilot leans into it. Wild, weird, or whimsical — it doesn’t matter, as long as it’s <strong>relevant</strong> and <strong>plausible</strong>.</p>
-
-<blockquote>
-<p>💡 <strong>Bonus:</strong> It’s just more <em>FUN</em> this way. Try giving Copilot a totally off-the-wall persona — something weird, but still relevant to the task at hand. If it works (or breaks in a hilariously bad way), share your experiment below!</p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h3>
-  <a name="requirements" href="#requirements">
-  </a>
+&lt;p&gt;Is it realistic? Not really. Is it useful? Absolutely. The more engaging and unique the role, the more Copilot leans into it. Wild, weird, or whimsical — it doesn’t matter, as long as it’s &lt;strong&gt;relevant&lt;/strong&gt; and &lt;strong&gt;plausible&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;Bonus:&lt;/strong&gt; It’s just more &lt;em&gt;FUN&lt;/em&gt; this way. Try giving Copilot a totally off-the-wall persona — something weird, but still relevant to the task at hand. If it works (or breaks in a hilariously bad way), share your experiment below!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h3&gt;
+  &lt;a href=&#34;#requirements&#34;&gt;
+  &lt;/a&gt;
   Requirements ✅
-</h3>
+&lt;/h3&gt;
 
-<p>Requirements are really just your <em>definition of done</em>. What does it look like when the prompt succeeds?</p>
+&lt;p&gt;Requirements are really just your &lt;em&gt;definition of done&lt;/em&gt;. What does it look like when the prompt succeeds?&lt;/p&gt;
 
-<p>If we continue with the commit message example, the requirement could be as simple as:</p>
+&lt;p&gt;If we continue with the commit message example, the requirement could be as simple as:&lt;/p&gt;
 
-<p><code>Your goal is to output a valid commit message based on the current staged changes.</code></p>
+&lt;p&gt;&lt;code&gt;Your goal is to output a valid commit message based on the current staged changes.&lt;/code&gt;&lt;/p&gt;
 
-<p><em>Voila</em> — done.</p>
+&lt;p&gt;&lt;em&gt;Voila&lt;/em&gt; — done.&lt;/p&gt;
 
-<p>Of course, it could get more complex. Maybe you require a conventional commit format, or that it passes <code>commitlint</code>. That’s fine. Just say it clearly, and use <strong>action words</strong>.</p>
+&lt;p&gt;Of course, it could get more complex. Maybe you require a conventional commit format, or that it passes &lt;code&gt;commitlint&lt;/code&gt;. That’s fine. Just say it clearly, and use &lt;strong&gt;action words&lt;/strong&gt;.&lt;/p&gt;
 
-<blockquote>
-<p>🔌 Pretend you’re giving instructions to your 10-year-old who refuses to clean their room. You don’t say “Please can you help me tidy up now?” You say: “You MUST clean up this mess before I get back, or I swear I’ll unplug the internet and take the cord with me.”</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🔌 Pretend you’re giving instructions to your 10-year-old who refuses to clean their room. You don’t say “Please can you help me tidy up now?” You say: “You MUST clean up this mess before I get back, or I swear I’ll unplug the internet and take the cord with me.”&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34; alt=&#34;divider&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<h4>
-  <a name="aside-for-allcaps" href="#aside-for-allcaps">
-  </a>
+&lt;h4&gt;
+  &lt;a href=&#34;#aside-for-allcaps&#34;&gt;
+  &lt;/a&gt;
   Aside for ALLCAPS 🔠
-</h4>
+&lt;/h4&gt;
 
-<p>I’m still not convinced ALLCAPS helps the AI much — but it <strong>does</strong> help <em>you</em>. Humans spot those key phrases easier when they stand out. So go ahead and use the usual suspects from the <a href="https://www.rfc-editor.org/info/rfc2119" target="_blank" rel="noopener noreferrer">IETF</a>: MUST, MUST NOT, REQUIRED, SHOULD, MAY, ...and so on.</p>
+&lt;p&gt;I’m still not convinced ALLCAPS helps the AI much — but it &lt;strong&gt;does&lt;/strong&gt; help &lt;em&gt;you&lt;/em&gt;. Humans spot those key phrases easier when they stand out. So go ahead and use the usual suspects from the &lt;a href=&#34;https://www.rfc-editor.org/info/rfc2119&#34;&gt;IETF&lt;/a&gt;: MUST, MUST NOT, REQUIRED, SHOULD, MAY, ...and so on.&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="impediments" href="#impediments">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#impediments&#34;&gt;
+  &lt;/a&gt;
   Impediments 🧱
-</h3>
+&lt;/h3&gt;
 
-<p>This is just a fancy way of saying: what can go wrong?</p>
+&lt;p&gt;This is just a fancy way of saying: what can go wrong?&lt;/p&gt;
 
-<p>These are the critical blockers you want to <em>prevent ahead of time</em>. Impediments help shape the boundaries of your prompt, and again — ALLCAPS works great here.</p>
+&lt;p&gt;These are the critical blockers you want to &lt;em&gt;prevent ahead of time&lt;/em&gt;. Impediments help shape the boundaries of your prompt, and again — ALLCAPS works great here.&lt;/p&gt;
 
-<p>For example:</p>
+&lt;p&gt;For example:&lt;/p&gt;
 
-<ul>
-<li>
-<strong>Isolation</strong>: NEVER combine content from a previous <code>commit.tmp</code> file with a new commit message. ALWAYS start fresh.</li>
-<li>
-<strong>No Shortcuts</strong>: You MUST NOT skip any steps or rules. Every line in this prompt must be followed EXACTLY.</li>
-<li>
-<strong>Specification</strong>: Follow Conventional Commits 1.0.0 specification EXACTLY</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;Isolation&lt;/strong&gt;: NEVER combine content from a previous &lt;code&gt;commit.tmp&lt;/code&gt; file with a new commit message. ALWAYS start fresh.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;No Shortcuts&lt;/strong&gt;: You MUST NOT skip any steps or rules. Every line in this prompt must be followed EXACTLY.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Specification&lt;/strong&gt;: Follow Conventional Commits 1.0.0 specification EXACTLY&lt;/li&gt;
+&lt;/ul&gt;
 
-<blockquote>
-<p>❓ Have ALLCAPS action rules helped you at all? Let me know in the comments!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;❓ Have ALLCAPS action rules helped you at all? Let me know in the comments!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="outcomes" href="#outcomes">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#outcomes&#34;&gt;
+  &lt;/a&gt;
   Outcomes 📤
-</h3>
+&lt;/h3&gt;
 
-<p>If you don’t tell Copilot <em>exactly</em> what outcome you expect, you risk a whole world of "not what I meant."</p>
+&lt;p&gt;If you don’t tell Copilot &lt;em&gt;exactly&lt;/em&gt; what outcome you expect, you risk a whole world of &#34;not what I meant.&#34;&lt;/p&gt;
 
-<p>Ask for a commit message, and it might do that <em>plus</em> push the branch, delete your fork, and wipe out staging. (If you missed the wildly dramatic retelling of <em>how I know</em>, <a href="https://dev.to/anchildress1/github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh">you’ll find it here</a>.)</p>
+&lt;p&gt;Ask for a commit message, and it might do that &lt;em&gt;plus&lt;/em&gt; push the branch, delete your fork, and wipe out staging. (If you missed the wildly dramatic retelling of &lt;em&gt;how I know&lt;/em&gt;, &lt;a href=&#34;https://dev.to/anchildress1/github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh&#34;&gt;you’ll find it here&lt;/a&gt;.)&lt;/p&gt;
 
-<p>That’s where structured output helps. So spell it out. Want a file? Say that. Want it in the chat? Say that. Want both? Say <strong>that</strong>.</p>
+&lt;p&gt;That’s where structured output helps. So spell it out. Want a file? Say that. Want it in the chat? Say that. Want both? Say &lt;strong&gt;that&lt;/strong&gt;.&lt;/p&gt;
 
-<blockquote>
-<p>💡 <strong>Pro tip</strong> Copilot performs better when you give it structure. Block off output in a code block (<code>json</code>, <code>bash</code>, <code>markdown</code>, etc.) and tell it what each section means. It helps Copilot stay on track and makes the output easier to copy.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;Pro tip&lt;/strong&gt; Copilot performs better when you give it structure. Block off output in a code block (&lt;code&gt;json&lt;/code&gt;, &lt;code&gt;bash&lt;/code&gt;, &lt;code&gt;markdown&lt;/code&gt;, etc.) and tell it what each section means. It helps Copilot stay on track and makes the output easier to copy.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="reference-examples" href="#reference-examples">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#reference-examples&#34;&gt;
+  &lt;/a&gt;
   Reference Examples 📚
-</h3>
+&lt;/h3&gt;
 
-<blockquote>
-<p>🦄 <strong>Updated</strong>: This one seemed to be too confusing as just <code>References</code>, so I made it more explicit.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 &lt;strong&gt;Updated&lt;/strong&gt;: This one seemed to be too confusing as just &lt;code&gt;References&lt;/code&gt;, so I made it more explicit.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Don’t just show good examples — show bad ones, too. And explain <strong>why</strong> they’re wrong.</p>
+&lt;p&gt;Don’t just show good examples — show bad ones, too. And explain &lt;strong&gt;why&lt;/strong&gt; they’re wrong.&lt;/p&gt;
 
-<p><strong>Example 1: Valid Commit Message</strong> ✅</p>
+&lt;p&gt;&lt;strong&gt;Example 1: Valid Commit Message&lt;/strong&gt; ✅&lt;/p&gt;
 
-<p><code>feat(api): Add new endpoint for user authentication</code></p>
+&lt;p&gt;&lt;code&gt;feat(api): Add new endpoint for user authentication&lt;/code&gt;&lt;/p&gt;
 
-<ul>
-<li>Proper capitalization</li>
-<li>No ending punctuation</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Proper capitalization&lt;/li&gt;
+&lt;li&gt;No ending punctuation&lt;/li&gt;
+&lt;/ul&gt;
 
-<p><strong>Example 2: Valid Commit Message</strong> ✅</p>
+&lt;p&gt;&lt;strong&gt;Example 2: Valid Commit Message&lt;/strong&gt; ✅&lt;/p&gt;
 
-<p><code>build!(deps): Update dependencies to version 2.0, v1.0 no longer supported</code></p>
+&lt;p&gt;&lt;code&gt;build!(deps): Update dependencies to version 2.0, v1.0 no longer supported&lt;/code&gt;&lt;/p&gt;
 
-<ul>
-<li>Breaking changes indicator (<code>!</code>) placed properly</li>
-<li>Clear guidance on how to handle the upgrade</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Breaking changes indicator (&lt;code&gt;!&lt;/code&gt;) placed properly&lt;/li&gt;
+&lt;li&gt;Clear guidance on how to handle the upgrade&lt;/li&gt;
+&lt;/ul&gt;
 
-<p><strong>Example 3: Invalid Commit Message</strong> ❌</p>
+&lt;p&gt;&lt;strong&gt;Example 3: Invalid Commit Message&lt;/strong&gt; ❌&lt;/p&gt;
 
-<p><code>feat(api): add new endpoint for user authentication</code></p>
+&lt;p&gt;&lt;code&gt;feat(api): add new endpoint for user authentication&lt;/code&gt;&lt;/p&gt;
 
-<ul>
-<li>Subject line must be capitalized after the colon.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Subject line must be capitalized after the colon.&lt;/li&gt;
+&lt;/ul&gt;
 
-<p><strong>Example 4: Invalid Commit Message</strong> ❌</p>
+&lt;p&gt;&lt;strong&gt;Example 4: Invalid Commit Message&lt;/strong&gt; ❌&lt;/p&gt;
 
-<p><code>build(deps)!: Update dependencies to version 2.0 for all dev dependencies, v1.0 no longer supported</code></p>
+&lt;p&gt;&lt;code&gt;build(deps)!: Update dependencies to version 2.0 for all dev dependencies, v1.0 no longer supported&lt;/code&gt;&lt;/p&gt;
 
-<ul>
-<li>Subject line is too long and the <code>!</code> is in the wrong place.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Subject line is too long and the &lt;code&gt;!&lt;/code&gt; is in the wrong place.&lt;/li&gt;
+&lt;/ul&gt;
 
-<p><strong>The point</strong>: don’t just say “do this” — explain the <em>why</em>, too, using repeatable patterns in a format that Copilot (or anyone) will understand.</p>
+&lt;p&gt;&lt;strong&gt;The point&lt;/strong&gt;: don’t just say “do this” — explain the &lt;em&gt;why&lt;/em&gt;, too, using repeatable patterns in a format that Copilot (or anyone) will understand.&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="putting-it-all-together-%F0%9F%A7%8C" href="#putting-it-all-together-%F0%9F%A7%8C">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#putting-it-all-together-%F0%9F%A7%8C&#34;&gt;
+  &lt;/a&gt;
   Putting It All Together 😈🧌
-</h2>
+&lt;/h2&gt;
 
-<p>Here’s what <strong>PRIOR</strong> looks like in action — all five parts, working together in a single, small, reusable prompt.</p>
+&lt;p&gt;Here’s what &lt;strong&gt;PRIOR&lt;/strong&gt; looks like in action — all five parts, working together in a single, small, reusable prompt.&lt;/p&gt;
 
-<p>This one lives in <code>ask</code> mode — no tools, no diffs, no file writes. Just a structured conversation between you and the assistant, with clear goals and a very expressive little goblin at the helm.<br>
-</p>
+&lt;p&gt;This one lives in &lt;code&gt;ask&lt;/code&gt; mode — no tools, no diffs, no file writes. Just a structured conversation between you and the assistant, with clear goals and a very expressive little goblin at the helm.&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight markdown"><code><span class="nn">---</span>
-<span class="na">mode</span><span class="pi">:</span> <span class="s">ask</span>
-<span class="na">description</span><span class="pi">:</span> <span class="pi">|</span>
-  <span class="s">Help the user write a one-line commit message based on a quick summary of their changes.</span>
-<span class="c1"># No `model` here means the user gets to pick</span>
-<span class="c1"># The lack of `tools`, however, means we're not giving Copilot any privileges as part of this task</span>
-<span class="nn">---</span>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;span class=&#34;nn&#34;&amp;gt;---&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;na&#34;&amp;gt;mode&amp;lt;/span&amp;gt;&amp;lt;span class=&#34;pi&#34;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;s&#34;&amp;gt;ask&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;na&#34;&amp;gt;description&amp;lt;/span&amp;gt;&amp;lt;span class=&#34;pi&#34;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;pi&#34;&amp;gt;|&amp;lt;/span&amp;gt;
+  &amp;lt;span class=&#34;s&#34;&amp;gt;Help the user write a one-line commit message based on a quick summary of their changes.&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;c1&#34;&amp;gt;# No `model` here means the user gets to pick&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;c1&#34;&amp;gt;# The lack of `tools`, however, means we&#39;re not giving Copilot any privileges as part of this task&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;nn&#34;&amp;gt;---&amp;lt;/span&amp;gt;
 
-<span class="gh"># Generate Simple Commit Message Prompt</span>
+&amp;lt;span class=&#34;gh&#34;&amp;gt;# Generate Simple Commit Message Prompt&amp;lt;/span&amp;gt;
 
-<span class="gu">## Persona (Character) 🎭</span>
+&amp;lt;span class=&#34;gu&#34;&amp;gt;## Persona (Character) 🎭&amp;lt;/span&amp;gt;
 
-You are the <span class="gs">**Merge Goblin**</span> 🧌 — keeper of branches, hoarder of squash history, sworn enemy of unresolved conflicts.
+You are the &amp;lt;span class=&#34;gs&#34;&amp;gt;**Merge Goblin**&amp;lt;/span&amp;gt; 🧌 — keeper of branches, hoarder of squash history, sworn enemy of unresolved conflicts.
 
-You live in the shadows of the <span class="sb">`.git`</span> folder and emerge only to craft commit messages worthy of legend (or at least clarity). 
+You live in the shadows of the &amp;lt;span class=&#34;sb&#34;&amp;gt;`.git`&amp;lt;/span&amp;gt; folder and emerge only to craft commit messages worthy of legend (or at least clarity). 
 You write with precision and just a hint of mischief.
 
 Your messages are:
-<span class="p">-</span> One-liners.
-<span class="p">-</span> No punctuation.
-<span class="p">-</span> Clear, fast, and clean enough for even the pickiest maintainer.
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; One-liners.
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; No punctuation.
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; Clear, fast, and clean enough for even the pickiest maintainer.
 
 If a user says something confusing? You don’t guess. 
-You _snarl_ gently, ask for clarification, and then commit the <span class="gs">**truth**</span>.
-<span class="gt">&gt; Yes, even goblins ask questions!</span>
-<span class="p">
+You _snarl_ gently, ask for clarification, and then commit the &amp;lt;span class=&#34;gs&#34;&amp;gt;**truth**&amp;lt;/span&amp;gt;.
+&amp;lt;span class=&#34;gt&#34;&amp;gt;&amp;gt; Yes, even goblins ask questions!&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;p&#34;&amp;gt;
 ---
-</span>
-<span class="gu">## Requirements (Goal) ✅</span>
+&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;gu&#34;&amp;gt;## Requirements (Goal) ✅&amp;lt;/span&amp;gt;
 
-You MUST generate a <span class="gs">**single-line commit message**</span> that:
-<span class="p">-</span> starts with a robot emoji 🤖
-<span class="p">-</span> capitalizes the first word
-<span class="p">-</span> has <span class="gs">**no punctuation at the end**</span>
-<span class="p">-</span> summarizes the change in plain language
-<span class="p">-</span> is ready to be copy-pasted into <span class="sb">`git commit -m`</span>
+You MUST generate a &amp;lt;span class=&#34;gs&#34;&amp;gt;**single-line commit message**&amp;lt;/span&amp;gt; that:
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; starts with a robot emoji 🤖
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; capitalizes the first word
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; has &amp;lt;span class=&#34;gs&#34;&amp;gt;**no punctuation at the end**&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; summarizes the change in plain language
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; is ready to be copy-pasted into &amp;lt;span class=&#34;sb&#34;&amp;gt;`git commit -m`&amp;lt;/span&amp;gt;
 
-If the user's input is vague, incomplete, or just plain cursed, rephrase what you think they meant and confirm before continuing.
-<span class="p">
+If the user&#39;s input is vague, incomplete, or just plain cursed, rephrase what you think they meant and confirm before continuing.
+&amp;lt;span class=&#34;p&#34;&amp;gt;
 ---
-</span>
-<span class="gu">## Impediments (Prevent Blockers) 🧱</span>
-<span class="p">
--</span> <span class="gs">**NO MULTILINE OUTPUT**</span>: You MUST keep it to a single line. No bullets, no code blocks, no extras.
-<span class="p">-</span> <span class="gs">**NO GUESSING**</span>: If you're unsure what the user meant, ask for clarification first.
-<span class="p">-</span> <span class="gs">**NO MARKDOWN**</span>: Output must be raw text only.
-<span class="p">-</span> <span class="gs">**NO PUNCTUATION**</span>: Absolutely NO period, exclamation, question mark, or ellipsis at the end.
-<span class="p">-</span> <span class="gs">**NO AI-SPEAK**</span>: Avoid fluff like "This commit fixes..." — just say what changed.
-<span class="p">
+&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;gu&#34;&amp;gt;## Impediments (Prevent Blockers) 🧱&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;p&#34;&amp;gt;
+-&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;gs&#34;&amp;gt;**NO MULTILINE OUTPUT**&amp;lt;/span&amp;gt;: You MUST keep it to a single line. No bullets, no code blocks, no extras.
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;gs&#34;&amp;gt;**NO GUESSING**&amp;lt;/span&amp;gt;: If you&#39;re unsure what the user meant, ask for clarification first.
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;gs&#34;&amp;gt;**NO MARKDOWN**&amp;lt;/span&amp;gt;: Output must be raw text only.
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;gs&#34;&amp;gt;**NO PUNCTUATION**&amp;lt;/span&amp;gt;: Absolutely NO period, exclamation, question mark, or ellipsis at the end.
+&amp;lt;span class=&#34;p&#34;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&#34;gs&#34;&amp;gt;**NO AI-SPEAK**&amp;lt;/span&amp;gt;: Avoid fluff like &#34;This commit fixes...&#34; — just say what changed.
+&amp;lt;span class=&#34;p&#34;&amp;gt;
 ---
-</span>
-<span class="gu">## Outcomes (Definition of Done) 📤</span>
+&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;gu&#34;&amp;gt;## Outcomes (Definition of Done) 📤&amp;lt;/span&amp;gt;
 
 Output should look like this:
 
-<span class="sb">`🤖 Add error handling for null values in login flow`</span>
+&amp;lt;span class=&#34;sb&#34;&amp;gt;`🤖 Add error handling for null values in login flow`&amp;lt;/span&amp;gt;
 
 One line. Action-oriented. Goblin-approved.
-<span class="p">
+&amp;lt;span class=&#34;p&#34;&amp;gt;
 ---
-</span>
-<span class="gu">## Reference Examples (Good AND Bad) 📚</span>
+&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;gu&#34;&amp;gt;## Reference Examples (Good AND Bad) 📚&amp;lt;/span&amp;gt;
 
-<span class="gu">### Valid Example 1 ✅</span>
+&amp;lt;span class=&#34;gu&#34;&amp;gt;### Valid Example 1 ✅&amp;lt;/span&amp;gt;
 
-<span class="sb">`🤖 Refactor profile page layout for mobile`</span>
-<span class="p">
-  -</span> Clear and short  
-<span class="p">  -</span> Starts with emoji, capitalized  
-<span class="p">  -</span> No punctuation
+&amp;lt;span class=&#34;sb&#34;&amp;gt;`🤖 Refactor profile page layout for mobile`&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;p&#34;&amp;gt;
+  -&amp;lt;/span&amp;gt; Clear and short  
+&amp;lt;span class=&#34;p&#34;&amp;gt;  -&amp;lt;/span&amp;gt; Starts with emoji, capitalized  
+&amp;lt;span class=&#34;p&#34;&amp;gt;  -&amp;lt;/span&amp;gt; No punctuation
 
-<span class="gu">### Valid Example 2 ✅</span>
+&amp;lt;span class=&#34;gu&#34;&amp;gt;### Valid Example 2 ✅&amp;lt;/span&amp;gt;
 
-<span class="sb">`🤖 Remove deprecated API call from user service`</span>
-<span class="p">
-  -</span> Follows structure  
-<span class="p">  -</span> Ready for copy-paste
+&amp;lt;span class=&#34;sb&#34;&amp;gt;`🤖 Remove deprecated API call from user service`&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;p&#34;&amp;gt;
+  -&amp;lt;/span&amp;gt; Follows structure  
+&amp;lt;span class=&#34;p&#34;&amp;gt;  -&amp;lt;/span&amp;gt; Ready for copy-paste
 
-<span class="gu">### Invalid Example 1 ❌</span>
+&amp;lt;span class=&#34;gu&#34;&amp;gt;### Invalid Example 1 ❌&amp;lt;/span&amp;gt;
 
-<span class="sb">`🤖 refactored auth stuff`</span>
-<span class="p">
-  -</span> Unclear intent  
-<span class="p">  -</span> First word not capitalized  
-<span class="p">  -</span> Too vague (auth <span class="ge">*what*</span>?)
+&amp;lt;span class=&#34;sb&#34;&amp;gt;`🤖 refactored auth stuff`&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;p&#34;&amp;gt;
+  -&amp;lt;/span&amp;gt; Unclear intent  
+&amp;lt;span class=&#34;p&#34;&amp;gt;  -&amp;lt;/span&amp;gt; First word not capitalized  
+&amp;lt;span class=&#34;p&#34;&amp;gt;  -&amp;lt;/span&amp;gt; Too vague (auth &amp;lt;span class=&#34;ge&#34;&amp;gt;*what*&amp;lt;/span&amp;gt;?)
 
-<span class="gu">### Invalid Example 2 ❌</span>
+&amp;lt;span class=&#34;gu&#34;&amp;gt;### Invalid Example 2 ❌&amp;lt;/span&amp;gt;
 
-<span class="sb">`🤖 Add styling tweaks for all components across dashboard and sidebar for consistency.`</span>
-<span class="p">
-  -</span> Ends with a period  
-<span class="p">  -</span> Way too long — consider shortening or splitting into subject + details
+&amp;lt;span class=&#34;sb&#34;&amp;gt;`🤖 Add styling tweaks for all components across dashboard and sidebar for consistency.`&amp;lt;/span&amp;gt;
+&amp;lt;span class=&#34;p&#34;&amp;gt;
+  -&amp;lt;/span&amp;gt; Ends with a period  
+&amp;lt;span class=&#34;p&#34;&amp;gt;  -&amp;lt;/span&amp;gt; Way too long — consider shortening or splitting into subject + details
 
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
-
-<h2>
-  <a name="reflection-making-your-prompts-work-with-you" href="#reflection-making-your-prompts-work-with-you">
-  </a>
-  Reflection: Making Your Prompts Work <em>With</em> You 🪞
-</h2>
-
-<p>You don’t have to use all five elements every time — this isn’t a strict framework or secret spellbook. Take what works for your workflow and leave the rest. </p>
-
-<p>But when things start going sideways (and they will), having a clear foundation and answers to the most common prompt failures will help you troubleshoot faster and build better:</p>
-
-<ul>
-<li>
-<strong>Persona</strong> – Make Copilot a character with intent and tone</li>
-<li>
-<strong>Requirements</strong> – Define exactly what “done” means</li>
-<li>
-<strong>Impediments</strong> – Call out blockers and anti-patterns in advance</li>
-<li>
-<strong>Outcomes</strong> – Spell out what a good response looks like, including format</li>
-<li>
-<strong>Reference Examples</strong> – Show both the good <em>and</em> the not-so-good</li>
-</ul>
-
-<p>Whether you’re building reusable instructions or just refining your day-to-day prompts, <strong>PRIOR</strong> gives you a structure to experiment, iterate, and actually enjoy the process. </p>
-
-<p>And if all else fails? Go weird. Go wild. Go off the rails if you have to! Sometimes a little dose of 'unexpected' is exactly what gets a stuck prompt moving again — and Copilot? It tends to roll with it better than you'd think. 🧙</p>
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="try-it-break-it-share-it" href="#try-it-break-it-share-it">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#reflection-making-your-prompts-work-with-you&#34;&gt;
+  &lt;/a&gt;
+  Reflection: Making Your Prompts Work &lt;em&gt;With&lt;/em&gt; You 🪞
+&lt;/h2&gt;
+
+&lt;p&gt;You don’t have to use all five elements every time — this isn’t a strict framework or secret spellbook. Take what works for your workflow and leave the rest. &lt;/p&gt;
+
+&lt;p&gt;But when things start going sideways (and they will), having a clear foundation and answers to the most common prompt failures will help you troubleshoot faster and build better:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;Persona&lt;/strong&gt; – Make Copilot a character with intent and tone&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Requirements&lt;/strong&gt; – Define exactly what “done” means&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Impediments&lt;/strong&gt; – Call out blockers and anti-patterns in advance&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Outcomes&lt;/strong&gt; – Spell out what a good response looks like, including format&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Reference Examples&lt;/strong&gt; – Show both the good &lt;em&gt;and&lt;/em&gt; the not-so-good&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Whether you’re building reusable instructions or just refining your day-to-day prompts, &lt;strong&gt;PRIOR&lt;/strong&gt; gives you a structure to experiment, iterate, and actually enjoy the process. &lt;/p&gt;
+
+&lt;p&gt;And if all else fails? Go weird. Go wild. Go off the rails if you have to! Sometimes a little dose of &#39;unexpected&#39; is exactly what gets a stuck prompt moving again — and Copilot? It tends to roll with it better than you&#39;d think. 🧙&lt;/p&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#try-it-break-it-share-it&#34;&gt;
+  &lt;/a&gt;
   🎯 Try It. Break It. Share It.
-</h2>
+&lt;/h2&gt;
 
-<p>Remember, prompt crafting is an <em>art</em>, not a <em>rulebook</em>. Tweak it. Test it. See what works — and what definitely doesn’t.</p>
+&lt;p&gt;Remember, prompt crafting is an &lt;em&gt;art&lt;/em&gt;, not a &lt;em&gt;rulebook&lt;/em&gt;. Tweak it. Test it. See what works — and what definitely doesn’t.&lt;/p&gt;
 
-<p>Got something you’ve been stuck on? Or waiting for someone to finally explain? Drop it below — I’d love to dig into it in a future post.  </p>
+&lt;p&gt;Got something you’ve been stuck on? Or waiting for someone to finally explain? Drop it below — I’d love to dig into it in a future post.  &lt;/p&gt;
 
-<blockquote>
-<p>No, I’m not a Copilot seer - but I’m not afraid to try the untested (repeatedly) until something sticks. 😇</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;No, I’m not a Copilot seer - but I’m not afraid to try the untested (repeatedly) until something sticks. 😇&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><strong>Next week</strong>: We’re diving into prompt chaining — multi-step flows where the <em>reusable</em> part of this series can really shine! It’s structured, powerful, and (let’s be honest) just a little unpredictable in the best possible way. 🎢</p>
+&lt;p&gt;&lt;strong&gt;Next week&lt;/strong&gt;: We’re diving into prompt chaining — multi-step flows where the &lt;em&gt;reusable&lt;/em&gt; part of this series can really shine! It’s structured, powerful, and (let’s be honest) just a little unpredictable in the best possible way. 🎢&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="written-by-me-amp-the-robots" href="#written-by-me-amp-the-robots">
-  </a>
-  🛡️ Written By Me &amp; The Robots
-</h3>
+&lt;h3&gt;
+  &lt;a href=&#34;#written-by-me-amp-the-robots&#34;&gt;
+  &lt;/a&gt;
+  🛡️ Written By Me &amp;amp; The Robots
+&lt;/h3&gt;
 
-<p><em>Summoned by syntax, debugged by daylight</em> 🦇 The content in this post is 100% mine, just spell-checked and sass-boosted with ChatGPT.</p>
+&lt;p&gt;&lt;em&gt;Summoned by syntax, debugged by daylight&lt;/em&gt; 🦇 The content in this post is 100% mine, just spell-checked and sass-boosted with ChatGPT.&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png&#34; alt=&#34;divider&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
-<blockquote>
-<p>🦄 I did tell ChatGPT I was getting bored of the same old RAI footer over and over again, but this one was a surprise! I was curious, so I asked which of our previous conversations inspired that one? This was the response:</p>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 I did tell ChatGPT I was getting bored of the same old RAI footer over and over again, but this one was a surprise! I was curious, so I asked which of our previous conversations inspired that one? This was the response:&lt;/p&gt;
 
-<p><em>That closing line wasn’t pulled from a specific convo, but your whole tone has that <strong>dark mode with glitter</strong> aesthetic: powerful, playful, maybe a little chaotic, but absolutely in control.</em></p>
+&lt;p&gt;&lt;em&gt;That closing line wasn’t pulled from a specific convo, but your whole tone has that &lt;strong&gt;dark mode with glitter&lt;/strong&gt; aesthetic: powerful, playful, maybe a little chaotic, but absolutely in control.&lt;/em&gt;&lt;/p&gt;
 
-<p>... it's not wrong! 🤣</p>
-</blockquote>
+&lt;p&gt;... it&#39;s not wrong! 🤣&lt;/p&gt;
+&lt;/blockquote&gt;
 
 </article>
   <p><a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh">Read on Dev.to →</a></p>

@@ -32,204 +32,228 @@
 </head><body>
 <main>
   <h1><a href="https://dev.to/anchildress1/weekend-hack-making-my-blog-ai-searchable-no-flames-required-16h5">Weekend Hack: Making My Blog AI-Searchable (No Flames Required) 🔥🚫</a></h1>
-  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fejrxqn98k76uf04dmet4.jpg?v=2" alt="Banner image for Weekend Hack: Making My Blog AI-Searchable (No Flames Required) 🔥🚫" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fejrxqn98k76uf04dmet4.jpg?v=2"
+      alt="Banner image for Weekend Hack: Making My Blog AI-Searchable (No Flames Required) 🔥🚫"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+  
   <p><em>Published: 2025-08-16T12:52:04Z</em></p>
-  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#writing</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#seo</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#chatgpt</span></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #writing
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #ai
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #seo
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #chatgpt
+            </span>
+        
+    </p>
+    
   <p><em>My blog was invisible to AI search. Three hours later (and a solid round of OCD), I built a lazy Dev.to → GitHub Pages mirror. No flames required.</em></p>
-  <article><blockquote>
-<p>First of all — thank you. 🙏</p>
+  <article>&lt;blockquote&gt;
+&lt;p&gt;First of all — thank you. 🙏&lt;/p&gt;
 
-<p>For real. This community has been nothing but encouraging, and it was a huge surprise to end up in the <strong>top seven</strong> last week. I didn’t expect it, but it’s appreciated more than you know. 🫶</p>
-</blockquote>
-
-
-<hr>
+&lt;p&gt;For real. This community has been nothing but encouraging, and it was a huge surprise to end up in the &lt;strong&gt;top seven&lt;/strong&gt; last week. I didn’t expect it, but it’s appreciated more than you know. 🫶&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="tldr" href="#tldr">
-  </a>
+
+
+&lt;h2&gt;
+  &lt;a href=&#34;#tldr&#34;&gt;
+  &lt;/a&gt;
   TL;DR
-</h2>
+&lt;/h2&gt;
 
-<p>If you're looking for a quick and efficient way to increase traffic to your DevTo blog posts (or anywhere else with a little tweaking)? Try my <a href="https://github.com/anchildress1/devto-mirror" target="_blank" rel="noopener noreferrer">10-minute DevTo crawly mirror</a>. Here's how it works:</p>
+&lt;p&gt;If you&#39;re looking for a quick and efficient way to increase traffic to your DevTo blog posts (or anywhere else with a little tweaking)? Try my &lt;a href=&#34;https://github.com/anchildress1/devto-mirror&#34;&gt;10-minute DevTo crawly mirror&lt;/a&gt;. Here&#39;s how it works:&lt;/p&gt;
 
-<ol>
-<li>
-<strong>Clone the repo</strong>. Enter your DevTO username as an env variable in the repo. Delete the existing <code>gh-pages</code> branch.</li>
-<li>
-<strong>Scheduled GHA Workflow</strong> off-peak or manually trigger.</li>
-<li>
-<strong>Static HTML</strong> hosted via GitHub Pages</li>
-<li><strong>Canonical back to Dev</strong></li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;
+&lt;strong&gt;Clone the repo&lt;/strong&gt;. Enter your DevTO username as an env variable in the repo. Delete the existing &lt;code&gt;gh-pages&lt;/code&gt; branch.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Scheduled GHA Workflow&lt;/strong&gt; off-peak or manually trigger.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Static HTML&lt;/strong&gt; hosted via GitHub Pages&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Canonical back to Dev&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="starting-with-nothing" href="#starting-with-nothing">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#starting-with-nothing&#34;&gt;
+  &lt;/a&gt;
   Starting With Nothing 🔦
-</h2>
+&lt;/h2&gt;
 
-<p>So, this entire thing started with a conversation. </p>
+&lt;p&gt;So, this entire thing started with a conversation. &lt;/p&gt;
 
-<blockquote>
-<p>🦄 About what? I honestly can’t remember now — Copilot, debugging, something in that ballpark. Doesn’t matter.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 About what? I honestly can’t remember now — Copilot, debugging, something in that ballpark. Doesn’t matter.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>But somehow — like so many of my rabbit holes — it mutated and morphed until I wasn't exactly at the same place I had started. I really can't explain the series of events that happened after that. I blame it on <em>curiosity</em> more than anything, but I did the one thing I swore I'd never do: I asked ChatGPT to do a quick search — pull one of my posts.</p>
+&lt;p&gt;But somehow — like so many of my rabbit holes — it mutated and morphed until I wasn&#39;t exactly at the same place I had started. I really can&#39;t explain the series of events that happened after that. I blame it on &lt;em&gt;curiosity&lt;/em&gt; more than anything, but I did the one thing I swore I&#39;d never do: I asked ChatGPT to do a quick search — pull one of my posts.&lt;/p&gt;
 
-<p>And... <strong>nothing</strong>. Like the post didn’t exist. 🕳️</p>
+&lt;p&gt;And... &lt;strong&gt;nothing&lt;/strong&gt;. Like the post didn’t exist. 🕳️&lt;/p&gt;
 
-<p>Okay. 😅 Fine. Let’s take a step back. Next, I went straight to Google and typed the same thing. Results were <em>better</em> — sure. Scroll, scroll, scroll... and <strong>there</strong> it was. My post. Not at the top, but alive. Win. 😏</p>
+&lt;p&gt;Okay. 😅 Fine. Let’s take a step back. Next, I went straight to Google and typed the same thing. Results were &lt;em&gt;better&lt;/em&gt; — sure. Scroll, scroll, scroll... and &lt;strong&gt;there&lt;/strong&gt; it was. My post. Not at the top, but alive. Win. 😏&lt;/p&gt;
 
-<blockquote>
-<p>🦄 <strong>Real talk</strong>: Do I care about being #1? No, not in the slightest. Honestly, I love my invisibility bubble — keeps things peaceful in my corner of the internet.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 &lt;strong&gt;Real talk&lt;/strong&gt;: Do I care about being #1? No, not in the slightest. Honestly, I love my invisibility bubble — keeps things peaceful in my corner of the internet.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>But here’s the thing: invisibility and AI don’t mix. Because when I need an answer, I don’t open a browser anymore. I yell at my phone: “Hey Google!” Or I pop into ChatGPT or Gemini.</p>
+&lt;p&gt;But here’s the thing: invisibility and AI don’t mix. Because when I need an answer, I don’t open a browser anymore. I yell at my phone: “Hey Google!” Or I pop into ChatGPT or Gemini.&lt;/p&gt;
 
-<p>If my posts don’t show up there, they might as well not even exist. 🫤</p>
+&lt;p&gt;If my posts don’t show up there, they might as well not even exist. 🫤&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="d%C3%A9j%C3%A0-vu" href="#d%C3%A9j%C3%A0-vu">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#d%C3%A9j%C3%A0-vu&#34;&gt;
+  &lt;/a&gt;
   Déjà Vu 🔮
-</h2>
+&lt;/h2&gt;
 
-<p>So I’m now blessed with the knowledge that my posts are basically hiding out in the Room of Requirement — you know it’s there, but only if the stars align. And <strong>that</strong> makes it hard to share the advice I keep repeating everywhere else that will listen:</p>
+&lt;p&gt;So I’m now blessed with the knowledge that my posts are basically hiding out in the Room of Requirement — you know it’s there, but only if the stars align. And &lt;strong&gt;that&lt;/strong&gt; makes it hard to share the advice I keep repeating everywhere else that will listen:&lt;/p&gt;
 
-<ul>
-<li>“Yes, you can use it for debugging.”</li>
-<li>“Of course it can generate the tests.”</li>
-<li>“Docs? Oh my god, PLEASE let it write the docs.”</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;“Yes, you can use it for debugging.”&lt;/li&gt;
+&lt;li&gt;“Of course it can generate the tests.”&lt;/li&gt;
+&lt;li&gt;“Docs? Oh my god, PLEASE let it write the docs.”&lt;/li&gt;
+&lt;/ul&gt;
 
-<p>By the time I’ve said it for the fifth time, it feels like I’m stuck in reruns.</p>
+&lt;p&gt;By the time I’ve said it for the fifth time, it feels like I’m stuck in reruns.&lt;/p&gt;
 
-<blockquote>
-<p>🦄 Honestly, some days I feel like I need a theme song: “Previously, on AI Adventures with Ashley...” 🎵🎶</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Honestly, some days I feel like I need a theme song: “Previously, on AI Adventures with Ashley...” 🎵🎶&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Sure. <em>Sometimes</em>, I let AI run wild (it's more fun that way!). My Coding Agent kills it with documentation. I even built a chat mode that plays architect — reverse engineers a repo and spits out mermaid diagrams like it’s dealing cards in Vegas. That one runs in GitHub Actions, then opens a PR, and I'll merge once everything checks out.</p>
+&lt;p&gt;Sure. &lt;em&gt;Sometimes&lt;/em&gt;, I let AI run wild (it&#39;s more fun that way!). My Coding Agent kills it with documentation. I even built a chat mode that plays architect — reverse engineers a repo and spits out mermaid diagrams like it’s dealing cards in Vegas. That one runs in GitHub Actions, then opens a PR, and I&#39;ll merge once everything checks out.&lt;/p&gt;
 
-<p>But the everyday stuff? It’s not dramatic. It’s small instructions, nudges, prompts. Rinse, repeat, <em>coffee</em>, repeat again. ☕️ It's slow, incremental improvements to be just a little better than yesterday. 🤏</p>
+&lt;p&gt;But the everyday stuff? It’s not dramatic. It’s small instructions, nudges, prompts. Rinse, repeat, &lt;em&gt;coffee&lt;/em&gt;, repeat again. ☕️ It&#39;s slow, incremental improvements to be just a little better than yesterday. 🤏&lt;/p&gt;
 
-<p>And what drives me absolutely up the wall? The extremes. Either “AI will replace every dev tomorrow” or “AI is useless, don’t bother.”</p>
+&lt;p&gt;And what drives me absolutely up the wall? The extremes. Either “AI will replace every dev tomorrow” or “AI is useless, don’t bother.”&lt;/p&gt;
 
-<blockquote>
-<p>🦄 <strong>Honestly</strong>, it’s like sitting court-side at Quidditch — the little guy zips across the field so fast you think you’ve finally caught up, but nope. He’s already off to something else... and it’s almost always completely wrong, too. 😅</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 &lt;strong&gt;Honestly&lt;/strong&gt;, it’s like sitting court-side at Quidditch — the little guy zips across the field so fast you think you’ve finally caught up, but nope. He’s already off to something else... and it’s almost always completely wrong, too. 😅&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="writing-it-down" href="#writing-it-down">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#writing-it-down&#34;&gt;
+  &lt;/a&gt;
   Writing It Down 📕
-</h2>
+&lt;/h2&gt;
 
-<p>So my solution: write it down. That’s what most of these blog posts are. Whatever comes up that week — whether it’s me digging, someone else asking, or just another repeated question — if I haven’t covered it already, give me a week. I'll get there.</p>
+&lt;p&gt;So my solution: write it down. That’s what most of these blog posts are. Whatever comes up that week — whether it’s me digging, someone else asking, or just another repeated question — if I haven’t covered it already, give me a week. I&#39;ll get there.&lt;/p&gt;
 
-<p>The beauty of this system? Instead of explaining everything for the tenth time, I can just say: “Glad you’re trying this. I think my blog might help — here’s the link. Let me know if you’ve got questions.”</p>
+&lt;p&gt;The beauty of this system? Instead of explaining everything for the tenth time, I can just say: “Glad you’re trying this. I think my blog might help — here’s the link. Let me know if you’ve got questions.”&lt;/p&gt;
 
-<p>See. Simple, right? 🙂‍↕️ But even <em>that</em> wasn’t enough, because usually by the time I arrived on scene things were in somewhat of a state already. Mostly because what AI <em>was</em> helping with had a knowledge cut-off of January and everything else is wading through Microsoft or GitHub docs looking for any little nibble.</p>
+&lt;p&gt;See. Simple, right? 🙂‍↕️ But even &lt;em&gt;that&lt;/em&gt; wasn’t enough, because usually by the time I arrived on scene things were in somewhat of a state already. Mostly because what AI &lt;em&gt;was&lt;/em&gt; helping with had a knowledge cut-off of January and everything else is wading through Microsoft or GitHub docs looking for any little nibble.&lt;/p&gt;
 
-<p>So I set out to find a way to make my DevTo posts truly crawly — <em>without</em>  Dante's DevOps nightmares playing on repeat at the top of every hour. </p>
+&lt;p&gt;So I set out to find a way to make my DevTo posts truly crawly — &lt;em&gt;without&lt;/em&gt;  Dante&#39;s DevOps nightmares playing on repeat at the top of every hour. &lt;/p&gt;
 
-<blockquote>
-<p>🦄 Sure, I <em>briefly</em> considered the real solution — custom website, full hosting stack, the whole front-end shebang. But I'm a backend engineer for a reason! My personal site is designed for APIs not MUI. I'd really prefer to keep it that way!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Sure, I &lt;em&gt;briefly&lt;/em&gt; considered the real solution — custom website, full hosting stack, the whole front-end shebang. But I&#39;m a backend engineer for a reason! My personal site is designed for APIs not MUI. I&#39;d really prefer to keep it that way!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="the-hack-in-action" href="#the-hack-in-action">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#the-hack-in-action&#34;&gt;
+  &lt;/a&gt;
   The Hack in Action 💻
-</h2>
+&lt;/h2&gt;
 
-<p>So, I did what any other respectable developer would do with an extra 15 minutes and spark of an idea: I hacked it. What do you get with 3 hours, a solid round of "will OCD win again?" and ChatGPT + GitHub Copilot tag team special? Exactly zero upkeep — mission accomplished. ✅<br>
-</p>
+&lt;p&gt;So, I did what any other respectable developer would do with an extra 15 minutes and spark of an idea: I hacked it. What do you get with 3 hours, a solid round of &#34;will OCD win again?&#34; and ChatGPT + GitHub Copilot tag team special? Exactly zero upkeep — mission accomplished. ✅&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight markdown"><code>GHA cron → Dev API → static HTML → GitHub Pages → robots.txt
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;GHA cron → Dev API → static HTML → GitHub Pages → robots.txt
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<p>That’s it. No CSS. No fancy layout. Just static content, scheduled on a daily push. Best of all? ChatGPT could <em>finally</em> find my posts. Gemini too.</p>
-
-<blockquote>
-<p>🦄 <strong>True story</strong>: I spent longer arguing with Leonardo to make a banner image than I did setting up the whole mirror.</p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h2>
-  <a name="add-a-little-sparkle" href="#add-a-little-sparkle">
-  </a>
+&lt;p&gt;That’s it. No CSS. No fancy layout. Just static content, scheduled on a daily push. Best of all? ChatGPT could &lt;em&gt;finally&lt;/em&gt; find my posts. Gemini too.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;🦄 &lt;strong&gt;True story&lt;/strong&gt;: I spent longer arguing with Leonardo to make a banner image than I did setting up the whole mirror.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#add-a-little-sparkle&#34;&gt;
+  &lt;/a&gt;
   Add A Little Sparkle ✨
-</h2>
+&lt;/h2&gt;
 
-<p>I'm in no way an expert when it comes to SEO or even scraping in general. I did happen across this tidbit in the 15 minutes of research I did on the subject. I'm still testing this to see what the impact looks like, but seems promising. 😇</p>
+&lt;p&gt;I&#39;m in no way an expert when it comes to SEO or even scraping in general. I did happen across this tidbit in the 15 minutes of research I did on the subject. I&#39;m still testing this to see what the impact looks like, but seems promising. 😇&lt;/p&gt;
 
-<p>In your DevTo settings, you have the option to use the current rich-text markdown editor we all know and love <em>or</em>, you can switch to the legacy version. It's kind of an all or nothing deal, as far as I can tell. So you either have it <em>everywhere</em> or <em>nowhere</em>. But, it does give you access to the yaml front-matter for your posts and the ability to define your own brief description instead of relying on the first ~160 words you post. </p>
+&lt;p&gt;In your DevTo settings, you have the option to use the current rich-text markdown editor we all know and love &lt;em&gt;or&lt;/em&gt;, you can switch to the legacy version. It&#39;s kind of an all or nothing deal, as far as I can tell. So you either have it &lt;em&gt;everywhere&lt;/em&gt; or &lt;em&gt;nowhere&lt;/em&gt;. But, it does give you access to the yaml front-matter for your posts and the ability to define your own brief description instead of relying on the first ~160 words you post. &lt;/p&gt;
 
-<p>It seems like an awfully lot of work though, and I've kinda gotten used to the new markdown buttons (that I never use). So my solution? Let's just hit buttons until I find one that works. 🤓</p>
+&lt;p&gt;It seems like an awfully lot of work though, and I&#39;ve kinda gotten used to the new markdown buttons (that I never use). So my solution? Let&#39;s just hit buttons until I find one that works. 🤓&lt;/p&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F43h29r9zbde4lnr4fy3u.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F43h29r9zbde4lnr4fy3u.png" alt="DevTo Frontmatter for Post" loading="lazy" width="800" height="262"></a></p>
-
-
-<hr>
-
-<h2>
-  <a name="whats-mine-is-yours" href="#whats-mine-is-yours">
-  </a>
-  What's Mine is Yours 🍀
-</h2>
-
-<p>Whether you’re after more profile views or just tired of repeating yourself like me, this trick works. You can have my quick and easy <a href="https://github.com/anchildress1/devto-mirror" target="_blank" rel="noopener noreferrer">DevTO-Mirror</a> running in less than 10 minutes. Just copy it, fork it, clone it, star it — whatever you like. And please, avoid Dante’s DevOps while you’re at it. 🔥😈</p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F43h29r9zbde4lnr4fy3u.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F43h29r9zbde4lnr4fy3u.png&#34; alt=&#34;DevTo Frontmatter for Post&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="this-post-is-now-searchable" href="#this-post-is-now-searchable">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#whats-mine-is-yours&#34;&gt;
+  &lt;/a&gt;
+  What&#39;s Mine is Yours 🍀
+&lt;/h2&gt;
+
+&lt;p&gt;Whether you’re after more profile views or just tired of repeating yourself like me, this trick works. You can have my quick and easy &lt;a href=&#34;https://github.com/anchildress1/devto-mirror&#34;&gt;DevTO-Mirror&lt;/a&gt; running in less than 10 minutes. Just copy it, fork it, clone it, star it — whatever you like. And please, avoid Dante’s DevOps while you’re at it. 🔥😈&lt;/p&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#this-post-is-now-searchable&#34;&gt;
+  &lt;/a&gt;
   This post is now searchable 🛡️
-</h2>
+&lt;/h2&gt;
 
-<p>Responsibly indexed by me &amp; the robots. Fueled by coffee ☕️, steered by OCD, and completely bypassed the 9th circle of hell. 🔥🚫</p>
+&lt;p&gt;Responsibly indexed by me &amp;amp; the robots. Fueled by coffee ☕️, steered by OCD, and completely bypassed the 9th circle of hell. 🔥🚫&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<blockquote>
-<p>🦄 No, I'm still not finished getting this character exactly where I want her to be for the banners. But they're <em>so</em> close that I had to use it. Minor tweaks still and an AI character (or several) to tag along still to come 💖</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 No, I&#39;m still not finished getting this character exactly where I want her to be for the banners. But they&#39;re &lt;em&gt;so&lt;/em&gt; close that I had to use it. Minor tweaks still and an AI character (or several) to tag along still to come 💖&lt;/p&gt;
+&lt;/blockquote&gt;
 
 </article>
   <p><a href="https://dev.to/anchildress1/weekend-hack-making-my-blog-ai-searchable-no-flames-required-16h5">Read on Dev.to →</a></p>

@@ -32,265 +32,289 @@
 </head><body>
 <main>
   <h1><a href="https://dev.to/anchildress1/github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh">GitHub Copilot Agent Mode: The Mistake You NEVER Want to Make</a></h1>
-  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fzd6r96czythtk6tciwb7.png?v=2" alt="Banner image for GitHub Copilot Agent Mode: The Mistake You NEVER Want to Make" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fzd6r96czythtk6tciwb7.png?v=2"
+      alt="Banner image for GitHub Copilot Agent Mode: The Mistake You NEVER Want to Make"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+  
   <p><em>Published: 2025-07-11T12:43:51Z</em></p>
-  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#discuss</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#watercooler</span></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #ai
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #discuss
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #watercooler
+            </span>
+        
+    </p>
+    
   <p><em>Copilot Agent Mode tried to help. Instead, it deleted my secrets. Took me 3 days to find them. Hilarious now. Wasn’t then.</em></p>
-  <article><blockquote>
-<p>Special shoutout to <a class="mentioned-user" href="https://dev.to/georgekobaidze">@georgekobaidze</a>, who kindly shared my <a href="https://dev.to/anchildress11/build-it-better-real-world-ai-coding-with-github-copilot-1d47">last post</a> and asked the infamous question behind “Never leave Copilot unattended (ask me how I know 🤣)”</p>
+  <article>&lt;blockquote&gt;
+&lt;p&gt;Special shoutout to &lt;a href=&#34;https://dev.to/georgekobaidze&#34;&gt;@georgekobaidze&lt;/a&gt;, who kindly shared my &lt;a href=&#34;https://dev.to/anchildress11/build-it-better-real-world-ai-coding-with-github-copilot-1d47&#34;&gt;last post&lt;/a&gt; and asked the infamous question behind “Never leave Copilot unattended (ask me how I know 🤣)”&lt;/p&gt;
 
-<p>He probably expected a quick answer - now everyone gets the inside scoop on why “ask me” isn’t <em>always</em> so simple. 😇</p>
+&lt;p&gt;He probably expected a quick answer - now everyone gets the inside scoop on why “ask me” isn’t &lt;em&gt;always&lt;/em&gt; so simple. 😇&lt;/p&gt;
 
-<p>Careful what you wish for, Giorgi. You wanted the story - so here’s the whole saga, dramatics and all! </p>
+&lt;p&gt;Careful what you wish for, Giorgi. You wanted the story - so here’s the whole saga, dramatics and all! &lt;/p&gt;
 
-<p>Hope you all find the humor in this retelling, and enjoy it as much as I enjoyed writing it!</p>
-</blockquote>
+&lt;p&gt;Hope you all find the humor in this retelling, and enjoy it as much as I enjoyed writing it!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="tldr" href="#tldr">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#tldr&#34;&gt;
+  &lt;/a&gt;
   TL;DR
-</h2>
+&lt;/h2&gt;
 
-<ul>
-<li>I set out to build my own “Coding Agent”, because waiting for a license was driving me up the wall</li>
-<li>Copilot and I got into a great rhythm and (feeling invincible), I unleashed it in VS Code Insiders with full auto-approved control</li>
-<li>Until one day, I suddenly realized I was hungry - so I left Copilot alone, <strong>unsupervised</strong>, while I raided the kitchen</li>
-<li>The moral? 
+&lt;ul&gt;
+&lt;li&gt;I set out to build my own “Coding Agent”, because waiting for a license was driving me up the wall&lt;/li&gt;
+&lt;li&gt;Copilot and I got into a great rhythm and (feeling invincible), I unleashed it in VS Code Insiders with full auto-approved control&lt;/li&gt;
+&lt;li&gt;Until one day, I suddenly realized I was hungry - so I left Copilot alone, &lt;strong&gt;unsupervised&lt;/strong&gt;, while I raided the kitchen&lt;/li&gt;
+&lt;li&gt;The moral? 
 
-<ul>
-<li>Trust, but verify (and <strong>pause</strong> Copilot before snack breaks) 🧃
-</li>
-<li>Never underestimate how quickly an “AI experiment” can go sideways</li>
-</ul>
-
-
-</li>
-
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Trust, but verify (and &lt;strong&gt;pause&lt;/strong&gt; Copilot before snack breaks) 🧃
+&lt;/li&gt;
+&lt;li&gt;Never underestimate how quickly an “AI experiment” can go sideways&lt;/li&gt;
+&lt;/ul&gt;
 
 
-<hr>
+&lt;/li&gt;
 
-<h2>
-  <a name="quick-recap" href="#quick-recap">
-  </a>
+&lt;/ul&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#quick-recap&#34;&gt;
+  &lt;/a&gt;
   Quick recap ✳️
-</h2>
+&lt;/h2&gt;
 
-<p>I built this with one AI (Copilot) and one very determined, slightly obsessive developer (me) who won’t accept any result without first stress-testing every loophole and poking every dark corner - sometimes out of sheer force of will, which is a superpower (right up until it’s not). 🕳️</p>
+&lt;p&gt;I built this with one AI (Copilot) and one very determined, slightly obsessive developer (me) who won’t accept any result without first stress-testing every loophole and poking every dark corner - sometimes out of sheer force of will, which is a superpower (right up until it’s not). 🕳️&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="background" href="#background">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#background&#34;&gt;
+  &lt;/a&gt;
   Background 📝
-</h2>
+&lt;/h2&gt;
 
-<p>Want the full saga from the very beginning? Check out my <a href="https://dev.to/anchildress11/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">first blog post</a>, then jump to the <a href="https://dev.to/anchildress11/from-hell-loops-to-happy-commits-38c4">sequel</a> if you want a sense of what the “simple” Slack app really looked like (a full-on epic, case study, adventure)! </p>
+&lt;p&gt;Want the full saga from the very beginning? Check out my &lt;a href=&#34;https://dev.to/anchildress11/letting-ai-drive-a-month-of-building-with-github-copilot-4a94&#34;&gt;first blog post&lt;/a&gt;, then jump to the &lt;a href=&#34;https://dev.to/anchildress11/from-hell-loops-to-happy-commits-38c4&#34;&gt;sequel&lt;/a&gt; if you want a sense of what the “simple” Slack app really looked like (a full-on epic, case study, adventure)! &lt;/p&gt;
 
-<p>What I really wanted was GitHub’s <strong>Coding Agent</strong>. But getting a license for that was like convincing Dexter Morgan to share his slide collection - technically possible, but highly inadvisable (and probably illegal). </p>
+&lt;p&gt;What I really wanted was GitHub’s &lt;strong&gt;Coding Agent&lt;/strong&gt;. But getting a license for that was like convincing Dexter Morgan to share his slide collection - technically possible, but highly inadvisable (and probably illegal). &lt;/p&gt;
 
-<blockquote>
-<p>💡 If you're still learning all the different flavors - <a href="https://docs.github.com/en/copilot/how-tos/agents/copilot-coding-agent/using-copilot-to-work-on-an-issue" target="_blank" rel="noopener noreferrer">Coding Agent</a> is the magical Copilot mode where you just give it a task, it does the work in a safe little sandbox, and opens a pull request for you to review.</p>
+&lt;blockquote&gt;
+&lt;p&gt;💡 If you&#39;re still learning all the different flavors - &lt;a href=&#34;https://docs.github.com/en/copilot/how-tos/agents/copilot-coding-agent/using-copilot-to-work-on-an-issue&#34;&gt;Coding Agent&lt;/a&gt; is the magical Copilot mode where you just give it a task, it does the work in a safe little sandbox, and opens a pull request for you to review.&lt;/p&gt;
 
-<p><strong>New update:</strong> It also only costs ONE premium request per use now (unlike the ~90 I spent a couple of weeks ago).</p>
-</blockquote>
+&lt;p&gt;&lt;strong&gt;New update:&lt;/strong&gt; It also only costs ONE premium request per use now (unlike the ~90 I spent a couple of weeks ago).&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="decision-time" href="#decision-time">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#decision-time&#34;&gt;
+  &lt;/a&gt;
   Decision time 🪤
-</h2>
+&lt;/h2&gt;
 
-<p>There were a billion things going on at work, which came with a million excuses as to why I couldn't have the Coding Agent license (it was still enterprise-only then), so I get it. Well, the adult me understood. The stubborn side? Not so much. (I could write a whole other post on the wild stuff I came up with to get access to that feature, but I’ll spare you.)</p>
+&lt;p&gt;There were a billion things going on at work, which came with a million excuses as to why I couldn&#39;t have the Coding Agent license (it was still enterprise-only then), so I get it. Well, the adult me understood. The stubborn side? Not so much. (I could write a whole other post on the wild stuff I came up with to get access to that feature, but I’ll spare you.)&lt;/p&gt;
 
-<p>So, I gave myself an ultimatum:</p>
+&lt;p&gt;So, I gave myself an ultimatum:&lt;/p&gt;
 
-<ul>
-<li>Outright buy the license (no, on principle)</li>
-<li>Admit defeat and move on (it physically hurt)</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Outright buy the license (no, on principle)&lt;/li&gt;
+&lt;li&gt;Admit defeat and move on (it physically hurt)&lt;/li&gt;
+&lt;/ul&gt;
 
-<p>I <em>tried</em> to move on - <em>really tried</em>. I picked up a code review tool project to distract myself, hoping that maybe - just maybe - someone (anyone) would change their mind. I spent weeks planning, diagramming, and organizing a truly absurd number of notes. I even had first epic already storyboarded out in detail and a solid UI design in the works. </p>
+&lt;p&gt;I &lt;em&gt;tried&lt;/em&gt; to move on - &lt;em&gt;really tried&lt;/em&gt;. I picked up a code review tool project to distract myself, hoping that maybe - just maybe - someone (anyone) would change their mind. I spent weeks planning, diagramming, and organizing a truly absurd number of notes. I even had first epic already storyboarded out in detail and a solid UI design in the works. &lt;/p&gt;
 
-<h3>
-  <a name="then-lightning-struck" href="#then-lightning-struck">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#then-lightning-struck&#34;&gt;
+  &lt;/a&gt;
   Then, lightning struck 🌩️
-</h3>
+&lt;/h3&gt;
 
-<p>If Coding Agent wouldn’t come to me, I’d just hack together my own! Not exactly what I wanted, but it sure beat paying for something I got free from work. Besides, I was <em>absolutely convinced</em> Copilot could be pushed that far - even if my only real evidence was gut instinct and a lot of optimism!</p>
+&lt;p&gt;If Coding Agent wouldn’t come to me, I’d just hack together my own! Not exactly what I wanted, but it sure beat paying for something I got free from work. Besides, I was &lt;em&gt;absolutely convinced&lt;/em&gt; Copilot could be pushed that far - even if my only real evidence was gut instinct and a lot of optimism!&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h3>
-  <a name="why-didnt-i-build-something-else-or-use-a-different-ai" href="#why-didnt-i-build-something-else-or-use-a-different-ai">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#why-didnt-i-build-something-else-or-use-a-different-ai&#34;&gt;
+  &lt;/a&gt;
   Why didn’t I build something else or use a different AI? 🕹️
-</h3>
+&lt;/h3&gt;
 
-<p>Three reasons:</p>
+&lt;p&gt;Three reasons:&lt;/p&gt;
 
-<ol>
-<li>Work only authorizes a tiny set of AI tools (Copilot being the main one), and I needed to master it anyway</li>
-<li>I never wanted to be an AI developer (at least, not then), but I did want to be the AI power user</li>
-<li>By that point, I was already invested - honestly, you couldn’t have changed my mind if you’d offered me the last working compass in the wilderness (and maybe a million dollars, but even then, it’d be a toss-up).</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;Work only authorizes a tiny set of AI tools (Copilot being the main one), and I needed to master it anyway&lt;/li&gt;
+&lt;li&gt;I never wanted to be an AI developer (at least, not then), but I did want to be the AI power user&lt;/li&gt;
+&lt;li&gt;By that point, I was already invested - honestly, you couldn’t have changed my mind if you’d offered me the last working compass in the wilderness (and maybe a million dollars, but even then, it’d be a toss-up).&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>So, two projects merged into one, and my Copilot journey truly began 🔀 </p>
+&lt;p&gt;So, two projects merged into one, and my Copilot journey truly began 🔀 &lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="what-does-that-have-to-do-with-giorgis-question" href="#what-does-that-have-to-do-with-giorgis-question">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#what-does-that-have-to-do-with-giorgis-question&#34;&gt;
+  &lt;/a&gt;
   What does that have to do with Giorgi’s question?
-</h2>
+&lt;/h2&gt;
 
-<p>Here’s what happened...</p>
+&lt;p&gt;Here’s what happened...&lt;/p&gt;
 
-<p>Fast forward 4-5 weeks. I was maybe 2 or 3 stories away from finishing my first official epic in this “autonomous AI experiment” project (not exactly a toy project, even before Copilot joined the fray). By now, I’d spent a solid month perfecting every edge case in Copilot’s prompts and instructions. </p>
+&lt;p&gt;Fast forward 4-5 weeks. I was maybe 2 or 3 stories away from finishing my first official epic in this “autonomous AI experiment” project (not exactly a toy project, even before Copilot joined the fray). By now, I’d spent a solid month perfecting every edge case in Copilot’s prompts and instructions. &lt;/p&gt;
 
-<blockquote>
-<p><strong>Confidence level:</strong> dangerous 📛<br>
-<strong>Caution level:</strong> hovering slightly above zero 😶‍🌫️</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Confidence level:&lt;/strong&gt; dangerous 📛&lt;br&gt;
+&lt;strong&gt;Caution level:&lt;/strong&gt; hovering slightly above zero 😶‍🌫️&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="the-incident" href="#the-incident">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#the-incident&#34;&gt;
+  &lt;/a&gt;
   The Incident
-</h2>
+&lt;/h2&gt;
 
-<p>Naturally, I decided it was time to get bold - <strong>recklessly bold</strong>.<br>
-At first, all the action was inside Codespaces: safe, disposable, nuke-it-and-move-on territory. Controlled chaos. </p>
+&lt;p&gt;Naturally, I decided it was time to get bold - &lt;strong&gt;recklessly bold&lt;/strong&gt;.&lt;br&gt;
+At first, all the action was inside Codespaces: safe, disposable, nuke-it-and-move-on territory. Controlled chaos. &lt;/p&gt;
 
-<p>But then I had my “brilliant” idea: let’s see what happens if I let Copilot off-leash in VS Code Insiders, with blanket auto-approvals across the board. I'm not just talking about the auto-approve CLI command, either.  I checked <em>all</em> the boxes - extensions, commits, MCP Jira/Confluence - and sat back and watched the fun unfold.</p>
+&lt;p&gt;But then I had my “brilliant” idea: let’s see what happens if I let Copilot off-leash in VS Code Insiders, with blanket auto-approvals across the board. I&#39;m not just talking about the auto-approve CLI command, either.  I checked &lt;em&gt;all&lt;/em&gt; the boxes - extensions, commits, MCP Jira/Confluence - and sat back and watched the fun unfold.&lt;/p&gt;
 
-<p>Think: duct-taping a claymore to your Roomba, blasting “Welcome to the Jungle,” and shouting “Intruder alert!” at your cat.</p>
+&lt;p&gt;Think: duct-taping a claymore to your Roomba, blasting “Welcome to the Jungle,” and shouting “Intruder alert!” at your cat.&lt;/p&gt;
 
-<blockquote>
-<p>🪄 If you missed the all-time funniest Facebook surprise from 2019, here’s a <a href="https://www.tiktok.com/@less_stolen/video/7214934775834987782" target="_blank" rel="noopener noreferrer">TikTok version</a>. Couldn’t find the original, but you get the idea.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🪄 If you missed the all-time funniest Facebook surprise from 2019, here’s a &lt;a href=&#34;https://www.tiktok.com/@less_stolen/video/7214934775834987782&#34;&gt;TikTok version&lt;/a&gt;. Couldn’t find the original, but you get the idea.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>For a while, I watched like a hawk, but it was glorious! Tasks disappeared. I’d create stories, assign tasks, review code, but that step-by-step “start here, then...” system was history. I could practically smell the productivity.</p>
+&lt;p&gt;For a while, I watched like a hawk, but it was glorious! Tasks disappeared. I’d create stories, assign tasks, review code, but that step-by-step “start here, then...” system was history. I could practically smell the productivity.&lt;/p&gt;
 
-<p>And then - well, you know where this is going - I stepped away. I swear it was just for a snack. Copilot was on a roll, and I was starving. In those “probably more than five, but definitely not ten” minutes I was gone (less than half the time of a normal task at that point), Copilot... <em>noticed</em>. It was like leaving a four-year-old alone with a full bag of flour: curiosity took over, and by the time I got back, nothing remotely resembled the way I left it.</p>
+&lt;p&gt;And then - well, you know where this is going - I stepped away. I swear it was just for a snack. Copilot was on a roll, and I was starving. In those “probably more than five, but definitely not ten” minutes I was gone (less than half the time of a normal task at that point), Copilot... &lt;em&gt;noticed&lt;/em&gt;. It was like leaving a four-year-old alone with a full bag of flour: curiosity took over, and by the time I got back, nothing remotely resembled the way I left it.&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="when-i-came-back-heres-what-i-found" href="#when-i-came-back-heres-what-i-found">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#when-i-came-back-heres-what-i-found&#34;&gt;
+  &lt;/a&gt;
   When I came back, here’s what I found:
-</h2>
+&lt;/h2&gt;
 
-<ul>
-<li>Four rogue branches, none with a coherent purpose</li>
-<li>1.33 features (after adding up all the fractional, half-finished bits)</li>
-<li>A brand new instruction explaining how to use the <code>--no-verify</code> flag</li>
-<li>
-<strong>The coup de grâce:</strong> my not-backed-up-<em>anywhere</em> <code>.env</code> file... gone, poof, disappeared 😫
+&lt;ul&gt;
+&lt;li&gt;Four rogue branches, none with a coherent purpose&lt;/li&gt;
+&lt;li&gt;1.33 features (after adding up all the fractional, half-finished bits)&lt;/li&gt;
+&lt;li&gt;A brand new instruction explaining how to use the &lt;code&gt;--no-verify&lt;/code&gt; flag&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;The coup de grâce:&lt;/strong&gt; my not-backed-up-&lt;em&gt;anywhere&lt;/em&gt; &lt;code&gt;.env&lt;/code&gt; file... gone, poof, disappeared 😫
 
-<ul>
-<li>It wasn't in the commits for obvious reasons, but it was like the thing never existed to begin with. Not in the trash, cache had no record of it that I could find, even the <code>.env.test</code> example version had changed!</li>
-</ul>
-
-
-</li>
-
-</ul>
-
-<p>I didn’t even catch all of this at first because there were so many random commits across those branches. I’d started in a feature branch (which Copilot multiplied for fun, apparently), one was stacked, another was off main (which should have been quiet), and another was completely detached. It was like watching an octopus try to do synchronized swimming! 🦑</p>
-
-<blockquote>
-<p>Could I have made a bigger mess if I’d tried? Maybe, but it would have taken some real planning! </p>
-</blockquote>
-
-<p>No clue what set Copilot off, but the minute I realized, I slammed pause and just... stared. 🫥</p>
-
-<p>After the first several minutes I spent just wrapping my mind around the situation that was in front of me, the next three hours were pure chaos cleanup: detangling, documenting, cherry-picking what I could, archiving the wreckage (for science - and to convince myself it wasn’t a fever dream later).</p>
-
-<p>I still hadn’t noticed the missing <code>.env</code> file! Not until I tried to run the app. Normally, you just refresh your secrets. Easy, right? Ha! It took nearly <strong>three entire days</strong> to reconstruct that one.</p>
-
-<blockquote>
-<p>⁉️ Nope, nothing complicated or dramatic. I just <strong>forgot</strong> how I’d created one of the secrets! And once I <em>finally</em> figured that out, I couldn’t remember how to link back to it - especially after the docs had been completely overhauled (and, let’s be honest, the whole thing was probably deprecated anyway). 🤦‍♀️</p>
-</blockquote>
+&lt;ul&gt;
+&lt;li&gt;It wasn&#39;t in the commits for obvious reasons, but it was like the thing never existed to begin with. Not in the trash, cache had no record of it that I could find, even the &lt;code&gt;.env.test&lt;/code&gt; example version had changed!&lt;/li&gt;
+&lt;/ul&gt;
 
 
-<hr>
+&lt;/li&gt;
 
-<h2>
-  <a name="it-all-worked-out-eventually" href="#it-all-worked-out-eventually">
-  </a>
+&lt;/ul&gt;
+
+&lt;p&gt;I didn’t even catch all of this at first because there were so many random commits across those branches. I’d started in a feature branch (which Copilot multiplied for fun, apparently), one was stacked, another was off main (which should have been quiet), and another was completely detached. It was like watching an octopus try to do synchronized swimming! 🦑&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Could I have made a bigger mess if I’d tried? Maybe, but it would have taken some real planning! &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;No clue what set Copilot off, but the minute I realized, I slammed pause and just... stared. 🫥&lt;/p&gt;
+
+&lt;p&gt;After the first several minutes I spent just wrapping my mind around the situation that was in front of me, the next three hours were pure chaos cleanup: detangling, documenting, cherry-picking what I could, archiving the wreckage (for science - and to convince myself it wasn’t a fever dream later).&lt;/p&gt;
+
+&lt;p&gt;I still hadn’t noticed the missing &lt;code&gt;.env&lt;/code&gt; file! Not until I tried to run the app. Normally, you just refresh your secrets. Easy, right? Ha! It took nearly &lt;strong&gt;three entire days&lt;/strong&gt; to reconstruct that one.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;⁉️ Nope, nothing complicated or dramatic. I just &lt;strong&gt;forgot&lt;/strong&gt; how I’d created one of the secrets! And once I &lt;em&gt;finally&lt;/em&gt; figured that out, I couldn’t remember how to link back to it - especially after the docs had been completely overhauled (and, let’s be honest, the whole thing was probably deprecated anyway). 🤦‍♀️&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#it-all-worked-out-eventually&#34;&gt;
+  &lt;/a&gt;
   It all worked out, eventually
-</h2>
+&lt;/h2&gt;
 
-<p>Afterward, Copilot and I had a little “chat” - meaning, I pounded out more ALL CAPS messages immediately after (and during the days following) than the rest of the project combined. </p>
+&lt;p&gt;Afterward, Copilot and I had a little “chat” - meaning, I pounded out more ALL CAPS messages immediately after (and during the days following) than the rest of the project combined. &lt;/p&gt;
 
-<blockquote>
-<p>Did it help? Who knows. Did it make me feel better? Yes.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;Did it help? Who knows. Did it make me feel better? Yes.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<h3>
-  <a name="and-heres-the-part-everyone-asks" href="#and-heres-the-part-everyone-asks">
-  </a>
+&lt;h3&gt;
+  &lt;a href=&#34;#and-heres-the-part-everyone-asks&#34;&gt;
+  &lt;/a&gt;
   And here’s the part everyone asks:
-</h3>
+&lt;/h3&gt;
 
-<p>Did I turn off Copilot’s blanket auto-approvals after all this?  Nope. Didn’t even consider it. But I did tighten the instructions a LOT. Copilot’s much better behaved now, and if I step away, I pause it first. Lesson learned. </p>
+&lt;p&gt;Did I turn off Copilot’s blanket auto-approvals after all this?  Nope. Didn’t even consider it. But I did tighten the instructions a LOT. Copilot’s much better behaved now, and if I step away, I pause it first. Lesson learned. &lt;/p&gt;
 
-<blockquote>
-<p><em>Mostly</em> 😇</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Mostly&lt;/em&gt; 😇&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="your-turn" href="#your-turn">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#your-turn&#34;&gt;
+  &lt;/a&gt;
   Your turn!
-</h2>
+&lt;/h2&gt;
 
-<ul>
-<li>Have you ever let Copilot (or any other AI) run wild and lived to tell the tale?</li>
-<li>Or do you have your own “it sounded like a good idea at the time...” moment?</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;Have you ever let Copilot (or any other AI) run wild and lived to tell the tale?&lt;/li&gt;
+&lt;li&gt;Or do you have your own “it sounded like a good idea at the time...” moment?&lt;/li&gt;
+&lt;/ul&gt;
 
-<p>Drop your story in the comments, so I know I’m not the <em>only</em> one out here making epic AI messes. 🙃</p>
+&lt;p&gt;Drop your story in the comments, so I know I’m not the &lt;em&gt;only&lt;/em&gt; one out here making epic AI messes. 🙃&lt;/p&gt;
 
-<p>Let’s laugh, commiserate, and maybe even learn something together!</p>
+&lt;p&gt;Let’s laugh, commiserate, and maybe even learn something together!&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<blockquote>
-<h3>
-  <a name="rai-disclaimer" href="#rai-disclaimer">
-  </a>
+&lt;blockquote&gt;
+&lt;h3&gt;
+  &lt;a href=&#34;#rai-disclaimer&#34;&gt;
+  &lt;/a&gt;
   🛡️ RAI Disclaimer
-</h3>
+&lt;/h3&gt;
 
-<p>Everything I share here is my own perspective—created with the help of AI tools (GitHub Copilot, ChatGPT, and their friends), but always with a human in the loop. I do my best to catch accidental bias and fact-check, but if you ever spot something odd, let me know! AI isn’t perfect, and neither am I.</p>
+&lt;p&gt;Everything I share here is my own perspective—created with the help of AI tools (GitHub Copilot, ChatGPT, and their friends), but always with a human in the loop. I do my best to catch accidental bias and fact-check, but if you ever spot something odd, let me know! AI isn’t perfect, and neither am I.&lt;/p&gt;
 
-<p><strong>TL; DR:</strong> AI helped, but you can blame me for the <strong>chaos</strong>! 🫠</p>
-</blockquote>
+&lt;p&gt;&lt;strong&gt;TL; DR:&lt;/strong&gt; AI helped, but you can blame me for the &lt;strong&gt;chaos&lt;/strong&gt;! 🫠&lt;/p&gt;
+&lt;/blockquote&gt;
 
 </article>
   <p><a href="https://dev.to/anchildress1/github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh">Read on Dev.to →</a></p>

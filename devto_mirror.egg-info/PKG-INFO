@@ -1,0 +1,20 @@
+Metadata-Version: 2.4
+Name: devto-mirror
+Version: 0.1.0
+Summary: Static HTML mirror of Dev.to blog posts for better search engine discoverability
+Author-email: Ashley Childress <6563688+anchildress1@users.noreply.github.com>
+Requires-Python: >=3.11
+License-File: LICENSE
+Requires-Dist: requests>=2.31.0
+Requires-Dist: jinja2>=3.1.2
+Requires-Dist: python-slugify>=8.0.1
+Requires-Dist: bleach>=6.0.0
+Provides-Extra: dev
+Requires-Dist: bandit>=1.8.0; extra == "dev"
+Requires-Dist: pip-audit>=2.0.0; extra == "dev"
+Requires-Dist: flake8>=6.1.0; extra == "dev"
+Requires-Dist: pre-commit>=3.4.0; extra == "dev"
+Requires-Dist: gitlint>=0.16.0; extra == "dev"
+Requires-Dist: detect-secrets>=1.0.0; extra == "dev"
+Requires-Dist: black>=24.0.0; extra == "dev"
+Dynamic: license-file

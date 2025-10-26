@@ -32,343 +32,367 @@
 </head><body>
 <main>
   <h1><a href="https://dev.to/anchildress1/is-github-copilot-safe-the-fun-and-hard-truth-about-responsible-ai-3b95">Is GitHub Copilot Safe? The Fun (and Hard) Truth About Responsible AI 🚦</a></h1>
-  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fdbk6nvlain3f3i33cmli.png?v=2" alt="Banner image for Is GitHub Copilot Safe? The Fun (and Hard) Truth About Responsible AI 🚦" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fdbk6nvlain3f3i33cmli.png?v=2"
+      alt="Banner image for Is GitHub Copilot Safe? The Fun (and Hard) Truth About Responsible AI 🚦"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+  
   <p><em>Published: 2025-07-16T12:05:00Z</em></p>
-  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#tutorial</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#discuss</span></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #ai
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #tutorial
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #discuss
+            </span>
+        
+    </p>
+    
   <p><em>It hit me the other day - I haven’t been great about adding RAI disclaimers (especially around here)....</em></p>
-  <article><p>It hit me the other day - I haven’t been great about adding RAI disclaimers (especially around here). Most of the time I remember, but when I’m deep in the zone - or stuck on that “Copilot, just LISTEN!” rollercoaster - it’s easy to forget.</p>
+  <article>&lt;p&gt;It hit me the other day - I haven’t been great about adding RAI disclaimers (especially around here). Most of the time I remember, but when I’m deep in the zone - or stuck on that “Copilot, just LISTEN!” rollercoaster - it’s easy to forget.&lt;/p&gt;
 
-<p>Now that I’ve gone back and added those RAI footers (like I should’ve from the start), let’s take a real look at what actually matters - and how you can handle it, too.</p>
+&lt;p&gt;Now that I’ve gone back and added those RAI footers (like I should’ve from the start), let’s take a real look at what actually matters - and how you can handle it, too.&lt;/p&gt;
 
-<blockquote>
-<p>🙏 Not an expert - just someone sharing what I’ve learned in the wild. If you spot something out-of-date or just plain wrong, drop a comment. Help me help <em>everyone</em> - no shame, just learning!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🙏 Not an expert - just someone sharing what I’ve learned in the wild. If you spot something out-of-date or just plain wrong, drop a comment. Help me help &lt;em&gt;everyone&lt;/em&gt; - no shame, just learning!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="tldr" href="#tldr">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#tldr&#34;&gt;
+  &lt;/a&gt;
   ⚡ TL;DR
-</h2>
+&lt;/h2&gt;
 
-<ul>
-<li>🧰 <strong>Copilot is a tool, not a magic wand.</strong> Your name’s on the code - no matter who (or what) wrote it.</li>
-<li>👀 <strong>RAI is everyone’s job.</strong> Know Copilot’s strengths <em>and</em> blind spots before you release.</li>
-<li>📝 <strong>Disclose everything!</strong> If Copilot helped, make it obvious - especially in reports, docs, and commits.</li>
-<li>🫱🏾‍🫲🏼 <strong>Not every fix is an AI job</strong> - there are times only you (with your team) can solve it.</li>
-<li>🔬 <strong>Don’t skip basics:</strong> Plan, test, document - don’t get lazy just because AI’s fast.</li>
-<li>🧃 <strong>No AI scapegoats:</strong> Copilot’s just a sidekick. If it leads you off a cliff, you were still in the captain’s chair.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;🧰 &lt;strong&gt;Copilot is a tool, not a magic wand.&lt;/strong&gt; Your name’s on the code - no matter who (or what) wrote it.&lt;/li&gt;
+&lt;li&gt;👀 &lt;strong&gt;RAI is everyone’s job.&lt;/strong&gt; Know Copilot’s strengths &lt;em&gt;and&lt;/em&gt; blind spots before you release.&lt;/li&gt;
+&lt;li&gt;📝 &lt;strong&gt;Disclose everything!&lt;/strong&gt; If Copilot helped, make it obvious - especially in reports, docs, and commits.&lt;/li&gt;
+&lt;li&gt;🫱🏾‍🫲🏼 &lt;strong&gt;Not every fix is an AI job&lt;/strong&gt; - there are times only you (with your team) can solve it.&lt;/li&gt;
+&lt;li&gt;🔬 &lt;strong&gt;Don’t skip basics:&lt;/strong&gt; Plan, test, document - don’t get lazy just because AI’s fast.&lt;/li&gt;
+&lt;li&gt;🧃 &lt;strong&gt;No AI scapegoats:&lt;/strong&gt; Copilot’s just a sidekick. If it leads you off a cliff, you were still in the captain’s chair.&lt;/li&gt;
+&lt;/ul&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="what-is-responsible-ai-and-why-care" href="#what-is-responsible-ai-and-why-care">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#what-is-responsible-ai-and-why-care&#34;&gt;
+  &lt;/a&gt;
   🌈 What Is Responsible AI (and Why Care)?
-</h2>
+&lt;/h2&gt;
 
-<p>Think “college ethics class” plus a heavy sprinkle of real-world weirdness. RAI is primarily about two things:</p>
+&lt;p&gt;Think “college ethics class” plus a heavy sprinkle of real-world weirdness. RAI is primarily about two things:&lt;/p&gt;
 
-<ol>
-<li>
-<p><strong>How the provider (GitHub, Microsoft, etc.) designs and delivers Copilot</strong> - safe, fair, and transparent. </p>
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;How the provider (GitHub, Microsoft, etc.) designs and delivers Copilot&lt;/strong&gt; - safe, fair, and transparent. &lt;/p&gt;
 
-<blockquote>
-<p>Want the official version? <a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai" target="_blank" rel="noopener noreferrer">Check Microsoft's builders page</a>!</p>
-</blockquote>
-</li>
-<li><p><strong>How you use Copilot (or any AI)</strong> - what you build, how you share it, and what you let out into the world. That’s the half I’m tackling here.</p></li>
-</ol>
+&lt;blockquote&gt;
+&lt;p&gt;Want the official version? &lt;a href=&#34;https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai&#34;&gt;Check Microsoft&#39;s builders page&lt;/a&gt;!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;How you use Copilot (or any AI)&lt;/strong&gt; - what you build, how you share it, and what you let out into the world. That’s the half I’m tackling here.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="the-yeah-but-list-copilot-limitations" href="#the-yeah-but-list-copilot-limitations">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#the-yeah-but-list-copilot-limitations&#34;&gt;
+  &lt;/a&gt;
   🔒 The “Yeah, But” List: Copilot Limitations
-</h2>
+&lt;/h2&gt;
 
-<p>Based on <a href="https://docs.github.com/en/copilot/responsible-use-of-github-copilot-features/responsible-use-of-github-copilot-chat-in-your-ide?tool=vscode#limitations-of-github-copilot-chat" target="_blank" rel="noopener noreferrer">GitHub’s official docs</a>, plus my spin for maximum realness:</p>
+&lt;p&gt;Based on &lt;a href=&#34;https://docs.github.com/en/copilot/responsible-use-of-github-copilot-features/responsible-use-of-github-copilot-chat-in-your-ide?tool=vscode#limitations-of-github-copilot-chat&#34;&gt;GitHub’s official docs&lt;/a&gt;, plus my spin for maximum realness:&lt;/p&gt;
 
-<ul>
-<li>
-<strong>Limited Scope:</strong> Obscure tech? Weird edge case? Copilot’s probably lost before you get started.</li>
-<li>
-<strong>Potential Biases:</strong> Yes, it can <em>learn</em> and <em>perpetuate biases</em>, just like people do. Keep your eyes peeled.</li>
-<li>
-<strong>Security Risks:</strong> AI can accidentally leak secrets or create vulnerabilities. Don’t copy-paste blindly!</li>
-<li>
-<strong>Matches with Public Code:</strong> That “original” Copilot snippet might be living its best life somewhere else on GitHub already.</li>
-<li>
-<strong>Inaccurate Code:</strong> Looks right, compiles... until it doesn’t. 🤷‍♀️</li>
-<li>
-<strong>Terrible at Non-Code Stuff:</strong> If you ask Copilot about philosophy or pop stars, prepare to get answers from another galaxy.</li>
-<li>
-<p><strong>Web Search Responses:</strong> If your org allows, Copilot sometimes Googles and pastes.</p>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;Limited Scope:&lt;/strong&gt; Obscure tech? Weird edge case? Copilot’s probably lost before you get started.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Potential Biases:&lt;/strong&gt; Yes, it can &lt;em&gt;learn&lt;/em&gt; and &lt;em&gt;perpetuate biases&lt;/em&gt;, just like people do. Keep your eyes peeled.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Security Risks:&lt;/strong&gt; AI can accidentally leak secrets or create vulnerabilities. Don’t copy-paste blindly!&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Matches with Public Code:&lt;/strong&gt; That “original” Copilot snippet might be living its best life somewhere else on GitHub already.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Inaccurate Code:&lt;/strong&gt; Looks right, compiles... until it doesn’t. 🤷‍♀️&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Terrible at Non-Code Stuff:&lt;/strong&gt; If you ask Copilot about philosophy or pop stars, prepare to get answers from another galaxy.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Web Search Responses:&lt;/strong&gt; If your org allows, Copilot sometimes Googles and pastes.&lt;/p&gt;
 
-<blockquote>
-<p>That’s about as reliable as Rachel Berry mid-song, checking her phone for lyrics - confident, but don’t trust it for your solo! 🎤</p>
-</blockquote>
-</li>
-</ul>
+&lt;blockquote&gt;
+&lt;p&gt;That’s about as reliable as Rachel Berry mid-song, checking her phone for lyrics - confident, but don’t trust it for your solo! 🎤&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="if-you-code-it-you-own-it" href="#if-you-code-it-you-own-it">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#if-you-code-it-you-own-it&#34;&gt;
+  &lt;/a&gt;
   🕹️ If You Code It, You Own It!
-</h2>
+&lt;/h2&gt;
 
-<p>Heard “you break it, you bought it”? Copilot’s version: “you code it, you’re on the hook.” No late-night support call will blame the AI. The only fee you’ll pay is in lost sleep and an overage of Slack messages.</p>
+&lt;p&gt;Heard “you break it, you bought it”? Copilot’s version: “you code it, you’re on the hook.” No late-night support call will blame the AI. The only fee you’ll pay is in lost sleep and an overage of Slack messages.&lt;/p&gt;
 
-<p>If you sneak in a “five-minute fix” without tests, it <em>will</em> bite back - and guess whose name is at the top of <code>git blame</code>?</p>
+&lt;p&gt;If you sneak in a “five-minute fix” without tests, it &lt;em&gt;will&lt;/em&gt; bite back - and guess whose name is at the top of &lt;code&gt;git blame&lt;/code&gt;?&lt;/p&gt;
 
-<blockquote>
-<p>🙏 Don’t be that person whose only excuse is, “Copilot said it was fine!” That’s not the new “it was like that when I got here” - don’t let it start.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🙏 Don’t be that person whose only excuse is, “Copilot said it was fine!” That’s not the new “it was like that when I got here” - don’t let it start.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="now-what-ai-out-loud" href="#now-what-ai-out-loud">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#now-what-ai-out-loud&#34;&gt;
+  &lt;/a&gt;
   👀 Now What? AI Out Loud
-</h2>
+&lt;/h2&gt;
 
-<p>Wondering what all this RAI talk means for you in the real world? Here’s the deal: any time AI helps out - own it, label it, and make sure everyone else can see it too. Transparency is the new black.</p>
+&lt;p&gt;Wondering what all this RAI talk means for you in the real world? Here’s the deal: any time AI helps out - own it, label it, and make sure everyone else can see it too. Transparency is the new black.&lt;/p&gt;
 
-<h3>
-  <a name="for-generated-reports-amp-docs" href="#for-generated-reports-amp-docs">
-  </a>
-  For Generated Reports &amp; Docs
-</h3>
+&lt;h3&gt;
+  &lt;a href=&#34;#for-generated-reports-amp-docs&#34;&gt;
+  &lt;/a&gt;
+  For Generated Reports &amp;amp; Docs
+&lt;/h3&gt;
 
-<p>If Copilot whipped up your report (and it’s not code), just tack on a quick footer. Seriously - a copy, a paste, and you’re done. Want to automate it? Set up a user instruction and let Copilot add the credit line for you:<br>
-</p>
+&lt;p&gt;If Copilot whipped up your report (and it’s not code), just tack on a quick footer. Seriously - a copy, a paste, and you’re done. Want to automate it? Set up a user instruction and let Copilot add the credit line for you:&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>---
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;---
 
 Generated with the help of GitHub Copilot, as directed by [YOUR NAME]
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<blockquote>
-<p>🕰️ If you want a timestamp, copy it in yourself. Trusting Copilot with dates is like asking your dog to set your alarm - cute, but you’re gonna be late.</p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h3>
-  <a name="for-commits" href="#for-commits">
-  </a>
+&lt;blockquote&gt;
+&lt;p&gt;🕰️ If you want a timestamp, copy it in yourself. Trusting Copilot with dates is like asking your dog to set your alarm - cute, but you’re gonna be late.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h3&gt;
+  &lt;a href=&#34;#for-commits&#34;&gt;
+  &lt;/a&gt;
   🏷️ For Commits
-</h3>
+&lt;/h3&gt;
 
-<h4>
-  <a name="step-one-embrace-conventional-commits" href="#step-one-embrace-conventional-commits">
-  </a>
+&lt;h4&gt;
+  &lt;a href=&#34;#step-one-embrace-conventional-commits&#34;&gt;
+  &lt;/a&gt;
   Step One: Embrace Conventional Commits
-</h4>
+&lt;/h4&gt;
 
-<blockquote>
-<p>🪦 Confession: I used to be the world’s <strong>worst committer</strong>! think “welp, THAT didn’t work” as a real commit message. And yes, it happened more than once...</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🪦 Confession: I used to be the world’s &lt;strong&gt;worst committer&lt;/strong&gt;! think “welp, THAT didn’t work” as a real commit message. And yes, it happened more than once...&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Eventually, I went on a mission to find a clear, repeatable way to flag my AI-assisted commits. The answer? <a href="https://www.conventionalcommits.org/en/v1.0.0/#summary" target="_blank" rel="noopener noreferrer">Conventional Commits</a> (plus a linter for good measure). </p>
+&lt;p&gt;Eventually, I went on a mission to find a clear, repeatable way to flag my AI-assisted commits. The answer? &lt;a href=&#34;https://www.conventionalcommits.org/en/v1.0.0/#summary&#34;&gt;Conventional Commits&lt;/a&gt; (plus a linter for good measure). &lt;/p&gt;
 
-<p>Never seen one? Here’s what it looks like:<br>
-</p>
+&lt;p&gt;Never seen one? Here’s what it looks like:&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>feat(api): [JIRA-123] Add api for xyz
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;feat(api): [JIRA-123] Add api for xyz
 
 [optional bulleted list of changes]
 
 [footers - where the magic happens]
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<blockquote>
-<p>🦄 <strong>Bonus:</strong> You get automated changelogs for just a <em>little</em> extra setup! Honestly, that’s what finally convinced me to use them every single time - no turning back.</p>
-
-<p>🪧 There are plenty of tools out there to help, too! Everything from classic git templates to handy CLI fill-in-the-blanks.</p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h4>
-  <a name="step-two-my-diy-commit-disclosure-guide" href="#step-two-my-diy-commit-disclosure-guide">
-  </a>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 &lt;strong&gt;Bonus:&lt;/strong&gt; You get automated changelogs for just a &lt;em&gt;little&lt;/em&gt; extra setup! Honestly, that’s what finally convinced me to use them every single time - no turning back.&lt;/p&gt;
+
+&lt;p&gt;🪧 There are plenty of tools out there to help, too! Everything from classic git templates to handy CLI fill-in-the-blanks.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h4&gt;
+  &lt;a href=&#34;#step-two-my-diy-commit-disclosure-guide&#34;&gt;
+  &lt;/a&gt;
   Step Two: My DIY Commit Disclosure Guide
-</h4>
+&lt;/h4&gt;
 
-<p>Since there's no true standard for this (at least, not yet), I want to share my (no-royalties-required) system for full commit-styled AI disclosure. </p>
+&lt;p&gt;Since there&#39;s no true standard for this (at least, not yet), I want to share my (no-royalties-required) system for full commit-styled AI disclosure. &lt;/p&gt;
 
-<p>In every single commit, I add 2 separate footers: one stating exactly how Copilot was involved (cause it <em>always</em> does something) and one is my "signature" that I reviewed, tested, and approved the implementation. </p>
+&lt;p&gt;In every single commit, I add 2 separate footers: one stating exactly how Copilot was involved (cause it &lt;em&gt;always&lt;/em&gt; does something) and one is my &#34;signature&#34; that I reviewed, tested, and approved the implementation. &lt;/p&gt;
 
-<p>If Copilot played multiple roles? Keep it simple - go with the footer that best matches the most AI hands-on contribution.</p>
+&lt;p&gt;If Copilot played multiple roles? Keep it simple - go with the footer that best matches the most AI hands-on contribution.&lt;/p&gt;
 
-<ul>
-<li>
-<p>If Copilot only wrote the commit message:<br>
-</p>
-<pre class="highlight plaintext"><code>  Commit-generated-by: GitHub Copilot &lt;copilot@github.com&gt;
-</code></pre>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If Copilot only wrote the commit message:&lt;br&gt;
+&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  Commit-generated-by: GitHub Copilot &amp;lt;copilot@github.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-</li>
-</ul>
-
-
-
-<ul>
-<li>
-<p>If I paired with Copilot (clear prompt and step-by-step direction):<br>
-</p>
-<pre class="highlight plaintext"><code>Co-authored-by: GitHub Copilot &lt;copilot@github.com&gt;
-</code></pre>
-
-</li>
-</ul>
+&lt;/li&gt;
+&lt;/ul&gt;
 
 
 
-<ul>
-<li>
-<p>If Copilot wrote most of the code (here, go implement this story):<br>
-</p>
-<pre class="highlight plaintext"><code>  Generated-by: GitHub Copilot &lt;copilot@github.com&gt;
-</code></pre>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If I paired with Copilot (clear prompt and step-by-step direction):&lt;br&gt;
+&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Co-authored-by: GitHub Copilot &amp;lt;copilot@github.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-</li>
-</ul>
-
-
-
-<ul>
-<li>
-<p>Always:<br>
-</p>
-<pre class="highlight plaintext"><code>  Signed-off-by: Ashley Childress &lt;1234-no-reply@github.com&gt;
-</code></pre>
+&lt;/li&gt;
+&lt;/ul&gt;
 
 
 
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;If Copilot wrote most of the code (here, go implement this story):&lt;br&gt;
+&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  Generated-by: GitHub Copilot &amp;lt;copilot@github.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
-<blockquote>
-<p>(or your name - unless you really want to blame me 😆)</p>
-</blockquote>
-</li>
-</ul>
-
-<p>So at 3am, when Future You (or some poor teammate) <code>git blame</code>s a file, you’ll know who did what. There's really no official standard yet, so go wild - or just slap a robot emoji 🤖 in there and call it done. <strong>Just make it clear and take credit (or blame).</strong></p>
+&lt;/li&gt;
+&lt;/ul&gt;
 
 
-<hr>
 
-<h2>
-  <a name="top-3-copilot-stay-in-your-lane-moments" href="#top-3-copilot-stay-in-your-lane-moments">
-  </a>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Always:&lt;br&gt;
+&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  Signed-off-by: Ashley Childress &amp;lt;1234-no-reply@github.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+
+
+
+&lt;blockquote&gt;
+&lt;p&gt;(or your name - unless you really want to blame me 😆)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So at 3am, when Future You (or some poor teammate) &lt;code&gt;git blame&lt;/code&gt;s a file, you’ll know who did what. There&#39;s really no official standard yet, so go wild - or just slap a robot emoji 🤖 in there and call it done. &lt;strong&gt;Just make it clear and take credit (or blame).&lt;/strong&gt;&lt;/p&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#top-3-copilot-stay-in-your-lane-moments&#34;&gt;
+  &lt;/a&gt;
   🚫 Top 3 “Copilot, Stay in Your Lane!” Moments
-</h2>
+&lt;/h2&gt;
 
-<p>When I was little, my Granny would always say, “Sometimes, you’ve just got to wear your big girl panties.” Translation: there are times when you have to face the music and just deal with what’s in front of you - no shortcuts. If you let Copilot trash production... well, those are the only pants you’re getting.</p>
+&lt;p&gt;When I was little, my Granny would always say, “Sometimes, you’ve just got to wear your big girl panties.” Translation: there are times when you have to face the music and just deal with what’s in front of you - no shortcuts. If you let Copilot trash production... well, those are the only pants you’re getting.&lt;/p&gt;
 
-<ol>
-<li>
-<p><strong>Copilot is a tool, not a magician.</strong> It’s been <em>confidently wrong</em> enough times to make me seriously question reality.</p>
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Copilot is a tool, not a magician.&lt;/strong&gt; It’s been &lt;em&gt;confidently wrong&lt;/em&gt; enough times to make me seriously question reality.&lt;/p&gt;
 
-<blockquote>
-<p>Me: “Where’s that logic <em>actually</em> coded?" <br>
-Copilot: *conjuring code like a magician’s neverending handkerchief*<br>
-Me: “You’ve got to be kidding me...”</p>
-</blockquote>
-</li>
-<li><p><strong>You’re the adult in the room.</strong> You have to know not just what Copilot <em>can</em> do, but also what it <em>can't</em> (or <em>shouldn't</em>).</p></li>
-<li><p><strong>Don't be afraid to bench Copilot.</strong> Real debugging is sometimes just you, four friends, and a bunch of “what if...” ideas. AI’s not built for that kind of chaos. 🫠</p></li>
-</ol>
+&lt;blockquote&gt;
+&lt;p&gt;Me: “Where’s that logic &lt;em&gt;actually&lt;/em&gt; coded?&#34; &lt;br&gt;
+Copilot: *conjuring code like a magician’s neverending handkerchief*&lt;br&gt;
+Me: “You’ve got to be kidding me...”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;You’re the adult in the room.&lt;/strong&gt; You have to know not just what Copilot &lt;em&gt;can&lt;/em&gt; do, but also what it &lt;em&gt;can&#39;t&lt;/em&gt; (or &lt;em&gt;shouldn&#39;t&lt;/em&gt;).&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Don&#39;t be afraid to bench Copilot.&lt;/strong&gt; Real debugging is sometimes just you, four friends, and a bunch of “what if...” ideas. AI’s not built for that kind of chaos. 🫠&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="avoid-git-blame-drama" href="#avoid-git-blame-drama">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#avoid-git-blame-drama&#34;&gt;
+  &lt;/a&gt;
   🥊 Avoid Git Blame Drama
-</h2>
+&lt;/h2&gt;
 
-<ul>
-<li>
-<strong>Start with a plan</strong> - don’t just wing it.</li>
-<li>
-<strong>Try prompting Copilot with TDD</strong>, but know its tests can be as shallow as a kiddie pool if you don't provide the right context and criteria.</li>
-<li>
-<strong>Never accept code you don’t understand</strong> - have Copilot ELI5 every step until you do.</li>
-<li>
-<strong>When it matters, write your own tests (or code)</strong>. Copilot sometimes invents magical shortcuts - don’t follow the Keebler Elves into the tree!</li>
-<li>
-<strong>Disclose everything!</strong> Tag Copilot’s work in your commit messages, READMEs, or reports. Future You will thank you.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;Start with a plan&lt;/strong&gt; - don’t just wing it.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Try prompting Copilot with TDD&lt;/strong&gt;, but know its tests can be as shallow as a kiddie pool if you don&#39;t provide the right context and criteria.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Never accept code you don’t understand&lt;/strong&gt; - have Copilot ELI5 every step until you do.&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;When it matters, write your own tests (or code)&lt;/strong&gt;. Copilot sometimes invents magical shortcuts - don’t follow the Keebler Elves into the tree!&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Disclose everything!&lt;/strong&gt; Tag Copilot’s work in your commit messages, READMEs, or reports. Future You will thank you.&lt;/li&gt;
+&lt;/ul&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="your-turn" href="#your-turn">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#your-turn&#34;&gt;
+  &lt;/a&gt;
   💬 Your turn!
-</h2>
+&lt;/h2&gt;
 
-<p>Have a Copilot win, a fail, or an epic facepalm moment? Drop it in the comments - bonus points for memes, hot takes, or your best "AI tried, I survived" story. Let’s make RAI actually fun (or at least not completely boring)! ✨</p>
+&lt;p&gt;Have a Copilot win, a fail, or an epic facepalm moment? Drop it in the comments - bonus points for memes, hot takes, or your best &#34;AI tried, I survived&#34; story. Let’s make RAI actually fun (or at least not completely boring)! ✨&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="ai-helped-im-still-to-blame" href="#ai-helped-im-still-to-blame">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#ai-helped-im-still-to-blame&#34;&gt;
+  &lt;/a&gt;
   🛡️ AI Helped, I’m Still to Blame
-</h2>
+&lt;/h2&gt;
 
-<p>This post was brewed by me - with a shot of ChatGPT, a splash of sarcasm, and zero disclaimers skipped. If you catch bias or a goof, call it out. AI isn’t perfect (neither am I).</p>
+&lt;p&gt;This post was brewed by me - with a shot of ChatGPT, a splash of sarcasm, and zero disclaimers skipped. If you catch bias or a goof, call it out. AI isn’t perfect (neither am I).&lt;/p&gt;
 
 </article>
   <p><a href="https://dev.to/anchildress1/is-github-copilot-safe-the-fun-and-hard-truth-about-responsible-ai-3b95">Read on Dev.to →</a></p>

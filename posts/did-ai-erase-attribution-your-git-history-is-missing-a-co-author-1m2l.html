@@ -32,214 +32,238 @@
 </head><body>
 <main>
   <h1><a href="https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l">Did AI Erase Attribution? Your Git History Is Missing a Co-Author</a></h1>
-  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fzov49ch65du2r34tqmd5.png%3Fv%3D2025?v=2" alt="Banner image for Did AI Erase Attribution? Your Git History Is Missing a Co-Author" style="width: 100%; max-width: 1000px; height: auto; margin: 1em 0;">
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fzov49ch65du2r34tqmd5.png%3Fv%3D2025?v=2"
+      alt="Banner image for Did AI Erase Attribution? Your Git History Is Missing a Co-Author"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+  
   <p><em>Published: 2025-10-15T13:29:51Z</em></p>
-  <p><strong>Tags:</strong> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#githubcopilot</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#ai</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#productivity</span> <span style="background: #f0f0f0; padding: 2px 6px; margin: 2px; border-radius: 3px; font-size: 0.9em;">#automation</span></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #ai
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #productivity
+            </span> 
+        
+            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+                #automation
+            </span>
+        
+    </p>
+    
   <p><em>Your AI assistant might be the most productive co-author you’ve ever had, but your git history doesn’t know it. Here’s how to fix that.</em></p>
-  <article><blockquote>
-<p>🦄 I've been trying to get to this post for a while and I was likely working on it when I <em>definitely</em> should have been doing something else entirely. I wrote about this topic briefly in a previous post, but that brief aside does the whole concept a disservice.  </p>
+  <article>&lt;blockquote&gt;
+&lt;p&gt;🦄 I&#39;ve been trying to get to this post for a while and I was likely working on it when I &lt;em&gt;definitely&lt;/em&gt; should have been doing something else entirely. I wrote about this topic briefly in a previous post, but that brief aside does the whole concept a disservice.  &lt;/p&gt;
 
-<p>I've been begging anyone who will listen to <em>please</em> steal this idea from me, 🙏 use it in real projects, personal projects, and then give it to a friend like a party favor nobody asked for. So far, feedback is positive and change is very slow. This is my attempt to nudge it along while I figure out the next piece of the puzzle—which is language-agnostic enforcement at scale (yes, I know—<em>that</em> sounds simple, right?).  </p>
+&lt;p&gt;I&#39;ve been begging anyone who will listen to &lt;em&gt;please&lt;/em&gt; steal this idea from me, 🙏 use it in real projects, personal projects, and then give it to a friend like a party favor nobody asked for. So far, feedback is positive and change is very slow. This is my attempt to nudge it along while I figure out the next piece of the puzzle—which is language-agnostic enforcement at scale (yes, I know—&lt;em&gt;that&lt;/em&gt; sounds simple, right?).  &lt;/p&gt;
 
-<p>So while I've been patiently waiting on Father Time to drop off some 36-hour days from the cosmos, I managed to throw together the first little helper in a much larger puzzle: <strong>self-reporting Responsible AI (RAI) statistics within the existing confines of the Software Development Life Cycle (SDLC).</strong> </p>
+&lt;p&gt;So while I&#39;ve been patiently waiting on Father Time to drop off some 36-hour days from the cosmos, I managed to throw together the first little helper in a much larger puzzle: &lt;strong&gt;self-reporting Responsible AI (RAI) statistics within the existing confines of the Software Development Life Cycle (SDLC).&lt;/strong&gt; &lt;/p&gt;
 
-<p>Also (because it's me), this is the dramatic story version of this entire concept from the very first time I tried to define AI attribution. I <em>really tried</em> to fit the whole concept into one post instead of spreading it out over a series—<strong>spoiler: I failed.</strong> 🛋️🍿</p>
-</blockquote>
+&lt;p&gt;Also (because it&#39;s me), this is the dramatic story version of this entire concept from the very first time I tried to define AI attribution. I &lt;em&gt;really tried&lt;/em&gt; to fit the whole concept into one post instead of spreading it out over a series—&lt;strong&gt;spoiler: I failed.&lt;/strong&gt; 🛋️🍿&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F7d1jwk012kw5jswm0mp8.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F7d1jwk012kw5jswm0mp8.png" alt="Human-content, AI-edited badge" loading="lazy" width="200" height="200"></a></p>
+&lt;p&gt;&lt;a href=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F7d1jwk012kw5jswm0mp8.png&#34;&gt;&lt;img src=&#34;https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F7d1jwk012kw5jswm0mp8.png&#34; alt=&#34;Human-content, AI-edited badge&#34;&gt;&lt;/a&gt;&lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="where-things-started" href="#where-things-started">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#where-things-started&#34;&gt;
+  &lt;/a&gt;
   Where Things Started 🧨
-</h2>
+&lt;/h2&gt;
 
-<p>When I first started this “experiment” with Copilot, I set out to prove that AI was capable of self-directed implementation, at least for very specific and tightly controlled scenarios. I began by writing a small ecosystem of customizations that would not only track the overall effectiveness of this “new AI thing,” but also standardize it in a way that essentially mimicked my own workflow. What ended up being my first working system of reporting was effective, but also overly verbose and only traceable if you take every word I documented as gospel.</p>
+&lt;p&gt;When I first started this “experiment” with Copilot, I set out to prove that AI was capable of self-directed implementation, at least for very specific and tightly controlled scenarios. I began by writing a small ecosystem of customizations that would not only track the overall effectiveness of this “new AI thing,” but also standardize it in a way that essentially mimicked my own workflow. What ended up being my first working system of reporting was effective, but also overly verbose and only traceable if you take every word I documented as gospel.&lt;/p&gt;
 
-<p>To be fair, I was very much learning how to work with these LLMs with any degree of accuracy at all whatsoever. There were no tutorials. No how-to videos. Not even a boilerplate to get me started. Just me, Copilot Agent Mode, the official GitHub docs, and <strong>a stubborn determination that this project was absolutely happening.</strong> The only “proof” I had that my initial plan was even plausible was my completely baseless gut instinct that AI was far more capable than anything I saw anybody using it for at the time.</p>
+&lt;p&gt;To be fair, I was very much learning how to work with these LLMs with any degree of accuracy at all whatsoever. There were no tutorials. No how-to videos. Not even a boilerplate to get me started. Just me, Copilot Agent Mode, the official GitHub docs, and &lt;strong&gt;a stubborn determination that this project was absolutely happening.&lt;/strong&gt; The only “proof” I had that my initial plan was even plausible was my completely baseless gut instinct that AI was far more capable than anything I saw anybody using it for at the time.&lt;/p&gt;
 
-<p>I started this nights-and-weekends project sometime late in April 2025 with ChatGPT as acting project manager, and by mid-May I had the initial architecture designed, the first epic storyboarded, and I had somehow managed to wrangle Copilot enough to successfully generate enough code for the first official commit. GPT-4.1 was still a good month away from its preview release. That puts my default baseline somewhere between Claude 3.7 and GPT-4.0.</p>
+&lt;p&gt;I started this nights-and-weekends project sometime late in April 2025 with ChatGPT as acting project manager, and by mid-May I had the initial architecture designed, the first epic storyboarded, and I had somehow managed to wrangle Copilot enough to successfully generate enough code for the first official commit. GPT-4.1 was still a good month away from its preview release. That puts my default baseline somewhere between Claude 3.7 and GPT-4.0.&lt;/p&gt;
 
-<p>For anyone still decoding the quirks between LLM models, this was like revving a rusty 20-year-old Corolla and expecting an 8-speed Corvette. Not a great outlook for success, really, but <strong>I did not care—the target was an enterprise-grade, AI-generated POC</strong> that could be implemented piecewise without any form of human intervention (outside of the review cycles). As far as I was concerned, <em>that’s exactly what was going to happen</em>, regardless of whether the tech was ready for that fact or not.</p>
+&lt;p&gt;For anyone still decoding the quirks between LLM models, this was like revving a rusty 20-year-old Corolla and expecting an 8-speed Corvette. Not a great outlook for success, really, but &lt;strong&gt;I did not care—the target was an enterprise-grade, AI-generated POC&lt;/strong&gt; that could be implemented piecewise without any form of human intervention (outside of the review cycles). As far as I was concerned, &lt;em&gt;that’s exactly what was going to happen&lt;/em&gt;, regardless of whether the tech was ready for that fact or not.&lt;/p&gt;
 
-<blockquote>
-<p>🦄 Yes—<em>ambitious</em> might have been a tiny understatement. 🤏 At the time though, this was my all-in project. Remember that I don’t do partial amounts of anything? This version of all-in was <strong>a whole other level</strong> that I’ve filed under <em>“intense determination”</em> (but obsession is also accurate).  </p>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Yes—&lt;em&gt;ambitious&lt;/em&gt; might have been a tiny understatement. 🤏 At the time though, this was my all-in project. Remember that I don’t do partial amounts of anything? This version of all-in was &lt;strong&gt;a whole other level&lt;/strong&gt; that I’ve filed under &lt;em&gt;“intense determination”&lt;/em&gt; (but obsession is also accurate).  &lt;/p&gt;
 
-<p>Also, no—it did not go smoothly <em>at all</em>, especially at first! Curious? Check out one of my favorite stories describing <a href="https://dev.to/anchildress1/github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh">what you should never do after handing AI the keys</a>.</p>
-</blockquote>
+&lt;p&gt;Also, no—it did not go smoothly &lt;em&gt;at all&lt;/em&gt;, especially at first! Curious? Check out one of my favorite stories describing &lt;a href=&#34;https://dev.to/anchildress1/github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh&#34;&gt;what you should never do after handing AI the keys&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Ultimately Copilot and I settled into a solid soccer-van approach and that worked well for a while. After a month or so, I’d perfected several sets of specialized instructions and custom prompts that would allow me to use a slash command and a Jira ID to direct every single thing Copilot would do. I’d sit back and enjoy popcorn (and occasional fireworks) while stories were implemented in record time and, for the most part, in the exact same way I would have done it myself.</p>
+&lt;p&gt;Ultimately Copilot and I settled into a solid soccer-van approach and that worked well for a while. After a month or so, I’d perfected several sets of specialized instructions and custom prompts that would allow me to use a slash command and a Jira ID to direct every single thing Copilot would do. I’d sit back and enjoy popcorn (and occasional fireworks) while stories were implemented in record time and, for the most part, in the exact same way I would have done it myself.&lt;/p&gt;
 
-<p>Self-correcting reviews were baked in from several different perspectives—as were both tech and user documentation. Basic unit and integration tests were enforced with a 90% coverage goal. Short of a couple markdown files I used for personal notes and exactly four well-documented blocks of code (that were later replaced), that entire project is <strong>100% AI-generated</strong>. It’s also <strong>a fully tested, production-grade, mostly-secure enterprise POC with attribution</strong> (albeit, very ugly attribution) at every single step.</p>
+&lt;p&gt;Self-correcting reviews were baked in from several different perspectives—as were both tech and user documentation. Basic unit and integration tests were enforced with a 90% coverage goal. Short of a couple markdown files I used for personal notes and exactly four well-documented blocks of code (that were later replaced), that entire project is &lt;strong&gt;100% AI-generated&lt;/strong&gt;. It’s also &lt;strong&gt;a fully tested, production-grade, mostly-secure enterprise POC with attribution&lt;/strong&gt; (albeit, very ugly attribution) at every single step.&lt;/p&gt;
 
-<blockquote>
-<p>🦄 This project is also <em>still</em> trapped behind work’s seemingly non-existent OS program where it’s currently dying a slow, solitary death—I do have a plan, though! Once I address this non-existent time situation, this project is definitely on the list of planned revivals. Seriously—if enterprise work didn’t require at least six independently repetitive forms with accompanying blood draw for nearly everything, this would not be such an issue!</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 This project is also &lt;em&gt;still&lt;/em&gt; trapped behind work’s seemingly non-existent OS program where it’s currently dying a slow, solitary death—I do have a plan, though! Once I address this non-existent time situation, this project is definitely on the list of planned revivals. Seriously—if enterprise work didn’t require at least six independently repetitive forms with accompanying blood draw for nearly everything, this would not be such an issue!&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="rai-as-a-default" href="#rai-as-a-default">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#rai-as-a-default&#34;&gt;
+  &lt;/a&gt;
   RAI As A Default ⚖️
-</h2>
+&lt;/h2&gt;
 
-<p>Responsible AI spans the whole chain—from model builders to end-users prompting outputs. I’ll try to explain my thinking and leave the soapbox alone, but let’s establish a baseline first:  </p>
+&lt;p&gt;Responsible AI spans the whole chain—from model builders to end-users prompting outputs. I’ll try to explain my thinking and leave the soapbox alone, but let’s establish a baseline first:  &lt;/p&gt;
 
-<ol>
-<li>
-<strong>Attribution is expected for production code.</strong> I could probably write a post just on attribution alone, but let’s assume the requirement for simplicity’s sake—not only for legal reasons but because two years from now I’m going to be trying to figure out <em>what sort of fever dream inspired this insanity</em>, and every tiny bit of information helps.
-</li>
-<li>
-<strong>Assume AI helps every dev, every day.</strong> Maybe not with code generation, but AI is lurking there somewhere. <em>Welcome to the future!</em> 🔮
-</li>
-</ol>
+&lt;ol&gt;
+&lt;li&gt;
+&lt;strong&gt;Attribution is expected for production code.&lt;/strong&gt; I could probably write a post just on attribution alone, but let’s assume the requirement for simplicity’s sake—not only for legal reasons but because two years from now I’m going to be trying to figure out &lt;em&gt;what sort of fever dream inspired this insanity&lt;/em&gt;, and every tiny bit of information helps.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;Assume AI helps every dev, every day.&lt;/strong&gt; Maybe not with code generation, but AI is lurking there somewhere. &lt;em&gt;Welcome to the future!&lt;/em&gt; 🔮
+&lt;/li&gt;
+&lt;/ol&gt;
 
-<p>Ever since this AI craze started, the one thing I never hear about is traceability for AI assistance. I touched on this topic briefly a few weeks back in my <a href="https://dev.to/anchildress1/can-we-set-the-record-straight-ai-content-and-a-bit-of-sanity-1inj">AI, Content, and a Bit of Sanity</a> post. It really deserves its own special callout, though, because <strong>since when is it okay for us to collectively ignore attribution in production codebases?</strong>  </p>
+&lt;p&gt;Ever since this AI craze started, the one thing I never hear about is traceability for AI assistance. I touched on this topic briefly a few weeks back in my &lt;a href=&#34;https://dev.to/anchildress1/can-we-set-the-record-straight-ai-content-and-a-bit-of-sanity-1inj&#34;&gt;AI, Content, and a Bit of Sanity&lt;/a&gt; post. It really deserves its own special callout, though, because &lt;strong&gt;since when is it okay for us to collectively ignore attribution in production codebases?&lt;/strong&gt;  &lt;/p&gt;
 
-<p>I don’t know if you’ve ever had a true pair-programming experience or not, but in that scenario it’s perfectly normal—if not absolutely required—for both devs to sign every single commit, even if one never touches a keyboard. So why does the assistant get erased just because it’s silicon?  </p>
+&lt;p&gt;I don’t know if you’ve ever had a true pair-programming experience or not, but in that scenario it’s perfectly normal—if not absolutely required—for both devs to sign every single commit, even if one never touches a keyboard. So why does the assistant get erased just because it’s silicon?  &lt;/p&gt;
 
-<p><em>Yes</em>—I’ve heard the arguments that AI is no better than a faster, closer Stack Overflow. To those devs, I simply reply <em>“that’s cause you’re using it wrong!”</em> and I’m happy to share everything I know about the <em>right</em> way to use AI. Don’t expect a simple solution though—it takes practice just like every other thing on the planet. 🌎  </p>
+&lt;p&gt;&lt;em&gt;Yes&lt;/em&gt;—I’ve heard the arguments that AI is no better than a faster, closer Stack Overflow. To those devs, I simply reply &lt;em&gt;“that’s cause you’re using it wrong!”&lt;/em&gt; and I’m happy to share everything I know about the &lt;em&gt;right&lt;/em&gt; way to use AI. Don’t expect a simple solution though—it takes practice just like every other thing on the planet. 🌎  &lt;/p&gt;
 
-<blockquote>
-<p>🦄 This gap doesn’t have a single thing to do with blame or even productivity. It’s a <strong>process failure</strong> that previously would’ve been corrected with training, maybe with new tooling—but definitely corrected.</p>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 This gap doesn’t have a single thing to do with blame or even productivity. It’s a &lt;strong&gt;process failure&lt;/strong&gt; that previously would’ve been corrected with training, maybe with new tooling—but definitely corrected.&lt;/p&gt;
 
-<p>Right now, everyone seems perfectly content with the “maybe AI helped, maybe not, <em>let’s make it a mystery!</em>” approach. This approach leaves a constant trail of reflective glitter dots in my head where attribution should be living instead. 🪩😒</p>
-</blockquote>
+&lt;p&gt;Right now, everyone seems perfectly content with the “maybe AI helped, maybe not, &lt;em&gt;let’s make it a mystery!&lt;/em&gt;” approach. This approach leaves a constant trail of reflective glitter dots in my head where attribution should be living instead. 🪩😒&lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="imagining-a-solution" href="#imagining-a-solution">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#imagining-a-solution&#34;&gt;
+  &lt;/a&gt;
   Imagining A Solution 💭
-</h2>
+&lt;/h2&gt;
 
-<p>If I haven’t lost you yet, we can probably agree we need to document AI assistance somewhere we can find it later. But what does that really look like? I had no clue, but became <em>“peripherally aware”</em> of every possibility from that point forward.</p>
+&lt;p&gt;If I haven’t lost you yet, we can probably agree we need to document AI assistance somewhere we can find it later. But what does that really look like? I had no clue, but became &lt;em&gt;“peripherally aware”&lt;/em&gt; of every possibility from that point forward.&lt;/p&gt;
 
-<p>I suppose it’s worth calling out that I was literally the world’s <em>worst committer.</em> No joke—I’m sure I hold some kind of unbeatable world record when it comes to bad commits. That message was nothing more than an empty box that accepted random text—sentences were nonexistent and sometimes even a complete string of semi-coherent words was asking too much.  </p>
+&lt;p&gt;I suppose it’s worth calling out that I was literally the world’s &lt;em&gt;worst committer.&lt;/em&gt; No joke—I’m sure I hold some kind of unbeatable world record when it comes to bad commits. That message was nothing more than an empty box that accepted random text—sentences were nonexistent and sometimes even a complete string of semi-coherent words was asking too much.  &lt;/p&gt;
 
-<p>Honestly, it took me far too long to think up anything remotely legit to put in that box. That required a completely separate thought process that interrupted my whole train of code thoughts, and I was making fast progress (even if nobody could tell what that progress was supposed to be)! My name was there, though, and regardless of what randomness went into the text box (or not), <strong>that code change was permanently stamped as <em>mine</em>.</strong>  </p>
+&lt;p&gt;Honestly, it took me far too long to think up anything remotely legit to put in that box. That required a completely separate thought process that interrupted my whole train of code thoughts, and I was making fast progress (even if nobody could tell what that progress was supposed to be)! My name was there, though, and regardless of what randomness went into the text box (or not), &lt;strong&gt;that code change was permanently stamped as &lt;em&gt;mine&lt;/em&gt;.&lt;/strong&gt;  &lt;/p&gt;
 
-<p>When I first ran across this thing called <a href="https://www.conventionalcommits.org/en/v1.0.0/" target="_blank" rel="noopener noreferrer">Conventional Commits</a>, I immediately dismissed it as far too much effort for very little return. Then it would come up again, I’d take another look, and again dismiss the whole concept. Then on some random side quest (probably driven by inane curiosity), I read that I could automate the entire release process with conventional commits.  </p>
+&lt;p&gt;When I first ran across this thing called &lt;a href=&#34;https://www.conventionalcommits.org/en/v1.0.0/&#34;&gt;Conventional Commits&lt;/a&gt;, I immediately dismissed it as far too much effort for very little return. Then it would come up again, I’d take another look, and again dismiss the whole concept. Then on some random side quest (probably driven by inane curiosity), I read that I could automate the entire release process with conventional commits.  &lt;/p&gt;
 
-<blockquote>
-<p>🛑 <strong>Full Stop</strong>: You mean valid documentation? Automatically added to every GitHub release for me? Standardized? Customizable? Repeatable? And my very own built-in “go look over there 👉” shortcut to a whole suite of incessant questions?  </p>
+&lt;blockquote&gt;
+&lt;p&gt;🛑 &lt;strong&gt;Full Stop&lt;/strong&gt;: You mean valid documentation? Automatically added to every GitHub release for me? Standardized? Customizable? Repeatable? And my very own built-in “go look over there 👉” shortcut to a whole suite of incessant questions?  &lt;/p&gt;
 
-<p><em>GUYS! Why had I not heard of this sorcery before then?!</em> Seriously, somebody could have passed along that tidbit of information at literally any point in the last <em>five plus years!</em> 😫</p>
+&lt;p&gt;&lt;em&gt;GUYS! Why had I not heard of this sorcery before then?!&lt;/em&gt; Seriously, somebody could have passed along that tidbit of information at literally any point in the last &lt;em&gt;five plus years!&lt;/em&gt; 😫&lt;/p&gt;
 
-<p>For future reference, in case any pertinent info like this surfaces in the future: I can accept messages via comments below, LinkedIn, email, newspaper, postcard, Morse code, carrier pigeon, smoke signals, telepathy, or interstellar vinyl—there's plenty of options available!  </p>
-</blockquote>
+&lt;p&gt;For future reference, in case any pertinent info like this surfaces in the future: I can accept messages via comments below, LinkedIn, email, newspaper, postcard, Morse code, carrier pigeon, smoke signals, telepathy, or interstellar vinyl—there&#39;s plenty of options available!  &lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Back to my point—now somebody was finally speaking a language I could comprehend! I could <em>absolutely</em> write commit messages if I was going to get automation out of the deal. Anything is worth me not having to manually copy-paste that information from one place to another or send an email of any kind.  </p>
+&lt;p&gt;Back to my point—now somebody was finally speaking a language I could comprehend! I could &lt;em&gt;absolutely&lt;/em&gt; write commit messages if I was going to get automation out of the deal. Anything is worth me not having to manually copy-paste that information from one place to another or send an email of any kind.  &lt;/p&gt;
 
-<p>What I’d dismissed several times already as completely unnecessary had instantly transformed into a personal magic wand. At this point, my entire view of commits made an abrupt 180º, and this new me is completely invested in conventional commits. I will be the best damn committer anybody has ever seen and release notes are going to <em>write themselves!</em>  </p>
+&lt;p&gt;What I’d dismissed several times already as completely unnecessary had instantly transformed into a personal magic wand. At this point, my entire view of commits made an abrupt 180º, and this new me is completely invested in conventional commits. I will be the best damn committer anybody has ever seen and release notes are going to &lt;em&gt;write themselves!&lt;/em&gt;  &lt;/p&gt;
 
-<p>I researched every possible setting under the sun and started adding commitlint to all of my personal projects (work is slower, but I’m on it). I’d constantly play with one option or another just to see which sparks would fly when something was a little off. Then, out of nowhere really, it hit me—<strong>the answer had been staring right at me this whole time!</strong><br>
-</p>
+&lt;p&gt;I researched every possible setting under the sun and started adding commitlint to all of my personal projects (work is slower, but I’m on it). I’d constantly play with one option or another just to see which sparks would fly when something was a little off. Then, out of nowhere really, it hit me—&lt;strong&gt;the answer had been staring right at me this whole time!&lt;/strong&gt;&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>Co-authored-by: GitHub Copilot &lt;copilot@github.com&gt;
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;Co-authored-by: GitHub Copilot &amp;lt;copilot@github.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<blockquote>
-<p>🦄 It’s so incredibly simple and <em>exactly</em> where this whole RAI attribution thing belongs. I mean, that’s exactly where attribution would be for a human pair, right? So, I see zero reason I can’t use it for my AI pair, too. And that’s exactly what I did! GitHub Copilot became my constant co-author in nearly every commit I made from that point forward.  </p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h2>
-  <a name="evolution-in-play" href="#evolution-in-play">
-  </a>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 It’s so incredibly simple and &lt;em&gt;exactly&lt;/em&gt; where this whole RAI attribution thing belongs. I mean, that’s exactly where attribution would be for a human pair, right? So, I see zero reason I can’t use it for my AI pair, too. And that’s exactly what I did! GitHub Copilot became my constant co-author in nearly every commit I made from that point forward.  &lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#evolution-in-play&#34;&gt;
+  &lt;/a&gt;
   Evolution In Play 🌱
-</h2>
+&lt;/h2&gt;
 
-<p>A co-author tag isn’t enough—it’s only the start. What I really needed was a way to differentiate between code I wrote myself and what I prompted AI to write for me without a complicated system of “this line, that line” nonsense. So that’s been evolving slowly over the last few weeks, and I’ve finally landed on something that’s stabilized enough to share.</p>
+&lt;p&gt;A co-author tag isn’t enough—it’s only the start. What I really needed was a way to differentiate between code I wrote myself and what I prompted AI to write for me without a complicated system of “this line, that line” nonsense. So that’s been evolving slowly over the last few weeks, and I’ve finally landed on something that’s stabilized enough to share.&lt;/p&gt;
 
-<p>I started with a system that split attribution by thirds:  </p>
+&lt;p&gt;I started with a system that split attribution by thirds:  &lt;/p&gt;
 
-<ul>
-<li>
-<strong><code>Assisted-by</code></strong> means I wrote the code and AI helped either through prompts or inline completions up to roughly 33% generated code.
-</li>
-<li>
-<strong><code>Co-authored-by</code></strong> is the 50/50-ish bucket ranging from 34–66% generated code.
-</li>
-<li>
-<strong><code>Generated-by</code></strong> means the majority of this code came from AI—roughly 67–100%.</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;code&gt;Assisted-by&lt;/code&gt;&lt;/strong&gt; means I wrote the code and AI helped either through prompts or inline completions up to roughly 33% generated code.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;code&gt;Co-authored-by&lt;/code&gt;&lt;/strong&gt; is the 50/50-ish bucket ranging from 34–66% generated code.
+&lt;/li&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;code&gt;Generated-by&lt;/code&gt;&lt;/strong&gt; means the majority of this code came from AI—roughly 67–100%.&lt;/li&gt;
+&lt;/ul&gt;
 
-<blockquote>
-<p>🦄 Originally I tried using <code>with</code> instead of <code>by</code>—the friendlier industry term—but ultimately I stuck with <code>by</code> for consistency with existing Conventional Commit footers.  </p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Originally I tried using &lt;code&gt;with&lt;/code&gt; instead of &lt;code&gt;by&lt;/code&gt;—the friendlier industry term—but ultimately I stuck with &lt;code&gt;by&lt;/code&gt; for consistency with existing Conventional Commit footers.  &lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>The next step was to stop guessing how much AI assisted and let AI figure out the math for me. So I created a reusable prompt for Copilot (and Verdent) to do that calculation on its own. I already had a much older prompt that was generating commit messages, so I rewrote that one for the newer models and added attribution as a requirement.</p>
+&lt;p&gt;The next step was to stop guessing how much AI assisted and let AI figure out the math for me. So I created a reusable prompt for Copilot (and Verdent) to do that calculation on its own. I already had a much older prompt that was generating commit messages, so I rewrote that one for the newer models and added attribution as a requirement.&lt;/p&gt;
 
-<blockquote>
-<p>‼️ <strong>Brief aside:</strong> I’m looking for testers to see how this prompt operates outside of my workflows. It does not touch your <em>actual</em> commits in any way—it adds a <code>./commit.tmp</code> file that you can add to <code>.gitignore</code> (I use <code>*.tmp</code> and have a whole set of local tracking files that use this extension).  </p>
+&lt;blockquote&gt;
+&lt;p&gt;‼️ &lt;strong&gt;Brief aside:&lt;/strong&gt; I’m looking for testers to see how this prompt operates outside of my workflows. It does not touch your &lt;em&gt;actual&lt;/em&gt; commits in any way—it adds a &lt;code&gt;./commit.tmp&lt;/code&gt; file that you can add to &lt;code&gt;.gitignore&lt;/code&gt; (I use &lt;code&gt;*.tmp&lt;/code&gt; and have a whole set of local tracking files that use this extension).  &lt;/p&gt;
 
-<p>So <em>please</em> 🙏 go steal a copy from my <a href="https://github.com/anchildress1/awesome-github-copilot/blob/main/.github/prompts/generate-commit-message.prompt.md" target="_blank" rel="noopener noreferrer">awesome-github-copilot</a> and report back any problems. If you’ve never set up a prompt before, you’ll need either VS Code or Visual Studio for a global setup. JetBrains, Eclipse, and Xcode can all use prompts stored in <code>.github/prompts/*.prompt.md</code>. See my <a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">blog series on reusable prompts</a> for details.</p>
-</blockquote>
+&lt;p&gt;So &lt;em&gt;please&lt;/em&gt; 🙏 go steal a copy from my &lt;a href=&#34;https://github.com/anchildress1/awesome-github-copilot/blob/main/.github/prompts/generate-commit-message.prompt.md&#34;&gt;awesome-github-copilot&lt;/a&gt; and report back any problems. If you’ve never set up a prompt before, you’ll need either VS Code or Visual Studio for a global setup. JetBrains, Eclipse, and Xcode can all use prompts stored in &lt;code&gt;.github/prompts/*.prompt.md&lt;/code&gt;. See my &lt;a href=&#34;https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff&#34;&gt;blog series on reusable prompts&lt;/a&gt; for details.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>This “thirds” breakdown works great for just about everything I do, but there are times I write all the code myself and then use a quick <code>/generate-commit-message</code> command. Well, that needs one too—so a fourth attribution was added to the list:</p>
+&lt;p&gt;This “thirds” breakdown works great for just about everything I do, but there are times I write all the code myself and then use a quick &lt;code&gt;/generate-commit-message&lt;/code&gt; command. Well, that needs one too—so a fourth attribution was added to the list:&lt;/p&gt;
 
-<ul>
-<li>
-<strong><code>Commit-generated-by</code></strong> means AI summarized a conventional commit message for me (or similar trivial contribution) but none of the code was AI-modified in any meaningful way.
-</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;code&gt;Commit-generated-by&lt;/code&gt;&lt;/strong&gt; means AI summarized a conventional commit message for me (or similar trivial contribution) but none of the code was AI-modified in any meaningful way.
+&lt;/li&gt;
+&lt;/ul&gt;
 
-<p>The catch: you only need one footer to make the point. So what happens if AI generates some portion of code <em>and</em> the commit message? I solved that quickly and turned the whole system into <strong>a majority-wins situation</strong>. Just <strong>pick whichever one represents the most AI</strong>. Still accurate enough to matter while not overcomplicating things. <em>Perfect!</em>  </p>
+&lt;p&gt;The catch: you only need one footer to make the point. So what happens if AI generates some portion of code &lt;em&gt;and&lt;/em&gt; the commit message? I solved that quickly and turned the whole system into &lt;strong&gt;a majority-wins situation&lt;/strong&gt;. Just &lt;strong&gt;pick whichever one represents the most AI&lt;/strong&gt;. Still accurate enough to matter while not overcomplicating things. &lt;em&gt;Perfect!&lt;/em&gt;  &lt;/p&gt;
 
-<p>There is one final latecomer for completeness, which really only becomes important in a future <em>“enforcement”</em> stage of the game. You can’t create a rule that enforces at least one AI-attribution footer <em>and</em> make the absence of a footer equivalent to human-authored content. Obviously you can’t prompt AI for human content, so until I think of a better way this one is up to you:  </p>
+&lt;p&gt;There is one final latecomer for completeness, which really only becomes important in a future &lt;em&gt;“enforcement”&lt;/em&gt; stage of the game. You can’t create a rule that enforces at least one AI-attribution footer &lt;em&gt;and&lt;/em&gt; make the absence of a footer equivalent to human-authored content. Obviously you can’t prompt AI for human content, so until I think of a better way this one is up to you:  &lt;/p&gt;
 
-<ul>
-<li>
-<strong><code>Authored-by</code></strong> is the human author to whom all code should ultimately be attributed.
-</li>
-</ul>
+&lt;ul&gt;
+&lt;li&gt;
+&lt;strong&gt;&lt;code&gt;Authored-by&lt;/code&gt;&lt;/strong&gt; is the human author to whom all code should ultimately be attributed.
+&lt;/li&gt;
+&lt;/ul&gt;
 
-<blockquote>
-<p>💡 <strong>ProTip:</strong> Keep reading through this next part if you decide to grab the prompt. Understanding how it works is important if you want a reliable result out of it!  </p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; Keep reading through this next part if you decide to grab the prompt. Understanding how it works is important if you want a reliable result out of it!  &lt;/p&gt;
+&lt;/blockquote&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="under-the-hood" href="#under-the-hood">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#under-the-hood&#34;&gt;
+  &lt;/a&gt;
   Under the Hood 🚗
-</h2>
+&lt;/h2&gt;
 
-<p>The prompt is just a start—not a miracle worker. The biggest problem is that Copilot doesn’t retain long-term memory; it only remembers what’s inside the active IDE session. Which means <strong>you have to keep things tidy enough that it can actually follow the instructions</strong>.  </p>
+&lt;p&gt;The prompt is just a start—not a miracle worker. The biggest problem is that Copilot doesn’t retain long-term memory; it only remembers what’s inside the active IDE session. Which means &lt;strong&gt;you have to keep things tidy enough that it can actually follow the instructions&lt;/strong&gt;.  &lt;/p&gt;
 
-<p>My current workflow—starting the moment any story moves to “in progress”—is pretty much set. I usually start with the Atlassian MCP to grab the story info plus any linked Confluence docs, the repo needing work is open in VS Code with nothing open in the editor, and a brand-new Copilot chat session ready to go. The first prompt always looks something like this (I added the comments to make it easier to read):<br>
-</p>
+&lt;p&gt;My current workflow—starting the moment any story moves to “in progress”—is pretty much set. I usually start with the Atlassian MCP to grab the story info plus any linked Confluence docs, the repo needing work is open in VS Code with nothing open in the editor, and a brand-new Copilot chat session ready to go. The first prompt always looks something like this (I added the comments to make it easier to read):&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code># ─────────────── CONTEXT ───────────────
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;# ─────────────── CONTEXT ───────────────
 • Using #atlassian/atlassian-mcp-server, pull info for JIRA-123, including any linked documentation in Confluence.  
 • Gather info to assess changes required in this #codebase.  
 
@@ -260,77 +284,77 @@
 # ─────────────── ADMIN NOTES ───────────────
 • Include documentation updates and any relevant deployment tasks.  
 • Save this concise story breakdown in a new file named `./progress.tmp`.  
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<blockquote>
-<p>🦄 Yes, I know that’s <em>a lot.</em> Chain-of-thought prompting like this works best with the bigger models—Claude-4, GPT-5, or even Gemini. It’s similar to the flow used by <a href="https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/" target="_blank" rel="noopener noreferrer">Spec-kit</a> that’s been making rounds recently. Honestly though? I’ve been doing it this way for so long that the extra structure usually adds time without much payoff. Still, I’m testing it, and I recommend you give it a try, too!  </p>
-</blockquote>
-
-<p>It took me a good bit to squash the instinct to immediately jump into implementation. Before you do that, <strong>read every single line in that new implementation plan.</strong> Does it make sense? Are there any incorrect assumptions? Are there prerequisites that need attention first? Look for inconsistencies or logic gaps before handing it over. <a href="https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/" target="_blank" rel="noopener noreferrer">Spec-kit</a> helps simplify that analysis step, too!  </p>
-
-<blockquote>
-<p>💡 <strong>ProTip:</strong> After you’ve reviewed the plan, close all open files and run <code>/clear</code> to start a fresh chat session. A clean slate at every step is key.  </p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h2>
-  <a name="insert-magic-here" href="#insert-magic-here">
-  </a>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 Yes, I know that’s &lt;em&gt;a lot.&lt;/em&gt; Chain-of-thought prompting like this works best with the bigger models—Claude-4, GPT-5, or even Gemini. It’s similar to the flow used by &lt;a href=&#34;https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/&#34;&gt;Spec-kit&lt;/a&gt; that’s been making rounds recently. Honestly though? I’ve been doing it this way for so long that the extra structure usually adds time without much payoff. Still, I’m testing it, and I recommend you give it a try, too!  &lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It took me a good bit to squash the instinct to immediately jump into implementation. Before you do that, &lt;strong&gt;read every single line in that new implementation plan.&lt;/strong&gt; Does it make sense? Are there any incorrect assumptions? Are there prerequisites that need attention first? Look for inconsistencies or logic gaps before handing it over. &lt;a href=&#34;https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/&#34;&gt;Spec-kit&lt;/a&gt; helps simplify that analysis step, too!  &lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; After you’ve reviewed the plan, close all open files and run &lt;code&gt;/clear&lt;/code&gt; to start a fresh chat session. A clean slate at every step is key.  &lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#insert-magic-here&#34;&gt;
+  &lt;/a&gt;
   Insert Magic Here 🔮
-</h2>
+&lt;/h2&gt;
 
-<p>Once I’m comfortable with the implementation plan and I’ve got a pretty good idea of which Copilot models can safely (and most cheaply) handle each step, then <strong>with a fresh chat session,</strong> each task begins with a prompt that looks something like:<br>
-</p>
+&lt;p&gt;Once I’m comfortable with the implementation plan and I’ve got a pretty good idea of which Copilot models can safely (and most cheaply) handle each step, then &lt;strong&gt;with a fresh chat session,&lt;/strong&gt; each task begins with a prompt that looks something like:&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>Implement step N in #progress.tmp
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;Implement step N in #progress.tmp
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
 
-<p>This is exactly how I progress through 3–4 different projects at once. Each prompt may take Copilot up to 10-ish minutes to execute. So, while that’s running I’ll rotate to the next in line to review changes via a PR-style feedback prompt sent back as a single chat message (saving as many premium requests as possible). Sometimes the code is accurate the first time, but more often it takes a couple of turns to work out the kinks. All code gets staged for commit as soon as I review it. That way I know if Copilot changes anything again after the fact.</p>
+&lt;p&gt;This is exactly how I progress through 3–4 different projects at once. Each prompt may take Copilot up to 10-ish minutes to execute. So, while that’s running I’ll rotate to the next in line to review changes via a PR-style feedback prompt sent back as a single chat message (saving as many premium requests as possible). Sometimes the code is accurate the first time, but more often it takes a couple of turns to work out the kinks. All code gets staged for commit as soon as I review it. That way I know if Copilot changes anything again after the fact.&lt;/p&gt;
 
-<blockquote>
-<p>💡 <strong>ProTip:</strong> You can use the keep/undo feature if you prefer that version, but honestly I skip it. It’s just an extra click between me and toast. I keep everything and let source control be my truth.</p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;💡 &lt;strong&gt;ProTip:&lt;/strong&gt; You can use the keep/undo feature if you prefer that version, but honestly I skip it. It’s just an extra click between me and toast. I keep everything and let source control be my truth.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>Next up is the fun part. Copilot started with a clean session and it tracks every code change made behind the scenes already, including which one of us made that change. So the commit prompt instructs it to use that existing information to generate a commit message with the appropriate attribution footer. It all runs with a single slash command (after the initial prompt setup): <code>/generate-commit-message</code>.</p>
+&lt;p&gt;Next up is the fun part. Copilot started with a clean session and it tracks every code change made behind the scenes already, including which one of us made that change. So the commit prompt instructs it to use that existing information to generate a commit message with the appropriate attribution footer. It all runs with a single slash command (after the initial prompt setup): &lt;code&gt;/generate-commit-message&lt;/code&gt;.&lt;/p&gt;
 
-<p>This prompt is designed with commits in mind first and attribution second, so you end up with a valid commit message tucked neatly away in a <code>./commit.tmp</code> file. Here’s an example of a message it generated recently for one of my utility projects:<br>
-</p>
+&lt;p&gt;This prompt is designed with commits in mind first and attribution second, so you end up with a valid commit message tucked neatly away in a &lt;code&gt;./commit.tmp&lt;/code&gt; file. Here’s an example of a message it generated recently for one of my utility projects:&lt;br&gt;
+&lt;/p&gt;
 
-<div class="highlight js-code-highlight">
-<pre class="highlight plaintext"><code>fix(security): Sanitize jinja templates and add `CI` security checks
+&amp;lt;div class=&#34;highlight js-code-highlight&#34;&amp;gt;
+&lt;pre&gt;&lt;code&gt;fix(security): Sanitize jinja templates and add `CI` security checks
 
 - Replace raw Jinja2 Template with Environment in `utils.py` and `generate_site.py`
 - Sanitize Dev.to post HTML with bleach and render sanitized content safely
@@ -338,55 +362,55 @@
 - Remove unused imports and perform small refactors to resolve CodeQL unused-import alerts
 - Add CI security workflow (pip-audit, bandit, flake8) and developer tooling
 
-Generated-by: GitHub Copilot &lt;copilot@github.com&gt;
-</code></pre>
-<div class="highlight__panel js-actions-panel">
-<div class="highlight__panel-action js-fullscreen-code-action">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"><title>Enter fullscreen mode</title>
-    <path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"></path>
-</svg>
+Generated-by: GitHub Copilot &amp;lt;copilot@github.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&amp;lt;div class=&#34;highlight__panel js-actions-panel&#34;&amp;gt;
+&amp;lt;div class=&#34;highlight__panel-action js-fullscreen-code-action&#34;&amp;gt;
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-on&#34;&amp;gt;&amp;lt;title&amp;gt;Enter fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"><title>Exit fullscreen mode</title>
-    <path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"></path>
-</svg>
+    &amp;lt;svg xmlns=&#34;http://www.w3.org/2000/svg&#34; width=&#34;20px&#34; height=&#34;20px&#34; viewbox=&#34;0 0 24 24&#34; class=&#34;highlight-action crayons-icon highlight-action--fullscreen-off&#34;&amp;gt;&amp;lt;title&amp;gt;Exit fullscreen mode&amp;lt;/title&amp;gt;
+    &amp;lt;path d=&#34;M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z&#34;&amp;gt;&amp;lt;/path&amp;gt;
+&amp;lt;/svg&amp;gt;
 
-</div>
-</div>
-</div>
-
-
-
-<blockquote>
-<p>🦄 This entire concept only becomes usable if you’re not asking for a complete overhaul in any single dev’s workflow. Well... unless they’re <em>my devs,</em> in which case they’re used to my shenanigans already. Besides, I <em>really do</em> try to make changes as painless as possible!</p>
-</blockquote>
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
 
 
-<hr>
 
-<h2>
-  <a name="its-really-just-a-start" href="#its-really-just-a-start">
-  </a>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 This entire concept only becomes usable if you’re not asking for a complete overhaul in any single dev’s workflow. Well... unless they’re &lt;em&gt;my devs,&lt;/em&gt; in which case they’re used to my shenanigans already. Besides, I &lt;em&gt;really do&lt;/em&gt; try to make changes as painless as possible!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+&amp;lt;hr&amp;gt;
+
+&lt;h2&gt;
+  &lt;a href=&#34;#its-really-just-a-start&#34;&gt;
+  &lt;/a&gt;
   It’s Really Just a Start 🎬
-</h2>
+&lt;/h2&gt;
 
-<p>Despite testing this prompt extensively, that doesn’t mean much unless it’s repeatable beyond my workflow. So help me out and give it a try! Let me know if you find any gaps up to this point. Do you have any other ideas for more accurate tracking or a different way to memorialize attribution that I haven’t thought of?  </p>
+&lt;p&gt;Despite testing this prompt extensively, that doesn’t mean much unless it’s repeatable beyond my workflow. So help me out and give it a try! Let me know if you find any gaps up to this point. Do you have any other ideas for more accurate tracking or a different way to memorialize attribution that I haven’t thought of?  &lt;/p&gt;
 
-<blockquote>
-<p>🦄 For the record, this is me asking you to <em>aggressively</em> poke holes in my theory. Point out all the fallacies that might corrupt the system. Beyond the fact that a real tool would be preferable, do you think it can work?  </p>
-</blockquote>
+&lt;blockquote&gt;
+&lt;p&gt;🦄 For the record, this is me asking you to &lt;em&gt;aggressively&lt;/em&gt; poke holes in my theory. Point out all the fallacies that might corrupt the system. Beyond the fact that a real tool would be preferable, do you think it can work?  &lt;/p&gt;
+&lt;/blockquote&gt;
 
-<p>There’s more still built on top of this, which I’ll cover in my next post—but for devs who are still pushing commits that look like mine used to, this is a huge change in itself! My hope is that it’s enough of a simplification to at least start the conversation.  </p>
+&lt;p&gt;There’s more still built on top of this, which I’ll cover in my next post—but for devs who are still pushing commits that look like mine used to, this is a huge change in itself! My hope is that it’s enough of a simplification to at least start the conversation.  &lt;/p&gt;
 
 
-<hr>
+&amp;lt;hr&amp;gt;
 
-<h2>
-  <a name="commits-and-consequences" href="#commits-and-consequences">
-  </a>
+&lt;h2&gt;
+  &lt;a href=&#34;#commits-and-consequences&#34;&gt;
+  &lt;/a&gt;
   🛡️ Commits and Consequences
-</h2>
+&lt;/h2&gt;
 
-<p>ChatGPT helped edit this post—tightening sentences, trimming tangents, and arguing over punctuation until we both gave up. No attributions were erased in the making of this story. 💫</p>
+&lt;p&gt;ChatGPT helped edit this post—tightening sentences, trimming tangents, and arguing over punctuation until we both gave up. No attributions were erased in the making of this story. 💫&lt;/p&gt;
 
 </article>
   <p><a href="https://dev.to/anchildress1/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l">Read on Dev.to →</a></p>
