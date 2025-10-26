@@ -27,8 +27,8 @@ This repository now includes comprehensive security analysis through GitHub's bu
 
 To fully enable GitHub's security features, consider enabling these in repository settings:
 
-1. **Dependabot security updates** (Settings → Security & analysis)
-2. **Dependabot alerts** (Settings → Security & analysis)
+1. **Security updates** and automated scanning (Settings → Security & analysis)
+2. **Security alerts** (Settings → Security & analysis)
 3. **Secret scanning** (Settings → Security & analysis)
 4. **Private vulnerability reporting** (Settings → Security & analysis)
 
@@ -51,15 +51,14 @@ These checks are intentionally lightweight — they won't find everything, but t
 ## How It Works
 
 - **CodeQL** scans all Python code for security vulnerabilities and code quality issues
-- **Dependabot** monitors dependencies for known vulnerabilities and creates PRs for updates
+- The repository uses CI and manual review to monitor dependencies for known vulnerabilities and to create PRs or advisories for updates when needed
 - **Security alerts** notify maintainers of potential issues
 - **Regular scanning** ensures ongoing security posture
 
 ## Viewing Results
 
 - **CodeQL results**: Go to Security → Code scanning alerts
-- **Dependabot alerts**: Go to Security → Dependabot alerts
-- **Dependency updates**: Dependabot will create PRs automatically
+- **Dependency alerts & updates**: Check Security → Dependabot alerts or your configured dependency monitoring tools in repository settings
 
 ---
 

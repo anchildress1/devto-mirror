@@ -2,7 +2,11 @@
 
 🔗 **Live Site:** [anchildress1.github.io/devto-mirror](https://anchildress1.github.io/devto-mirror/)
 
+
+
 ![anchildress1/devto-mirror social card: A colorful crawler](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror.jpg)
+
+This Copilot generated utility helps make your Dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante’s DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.tx — _that's it_ (although I'm slowly working through enhancements). If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
 
 > [!NOTE]
 >
@@ -88,6 +92,17 @@ Run checks: `pre-commit run --all-files`
 Manual audit: `pip-audit --progress-spinner=off`
 
 Runs: `bandit`, `flake8`, `detect-secrets`, `pip-audit`
+
+## Workflows
+
+We maintain four primary GitHub Actions workflows. Key changes in this branch:
+
+- `security-ci.yml`: Uses Python 3.11 for dependency installation, runs `pip-audit`, `bandit`, and `flake8`. Adds `workflow_dispatch` for manual testing and enforces least-privilege permissions.
+- `codeql.yml`: Runs CodeQL analysis via `github/codeql-action@v3` with Python analysis enabled. Includes `workflow_dispatch` and explicit permissions.
+- `publish.yaml`: Now scheduled weekly on Wednesdays at `09:38 AM EDT` (cron `38 13 * * 3`), uses Python 3.11 and deploys to `gh-pages`.
+- `refresh.yaml`: Manual `workflow_dispatch` trigger that creates a backup branch, resets `last_run.txt`, and triggers the publish workflow.
+
+All workflows include `workflow_dispatch` to allow manual runs from the Actions UI and use `actions/setup-python@v6` with caching enabled for `pip`.
 
 ---
 

@@ -12,9 +12,14 @@ permissions:
   contents: write
   actions: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v5
         with:
@@ -24,6 +29,7 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+          cache: 'pip'
 
       - name: Create backup branch
         run: |
@@ -33,28 +39,28 @@ jobs:
           else
             BACKUP_BRANCH="${{ inputs.backup_branch }}"
           fi
-          
+
           echo "BACKUP_BRANCH=$BACKUP_BRANCH" >> $GITHUB_ENV
           echo "Creating backup branch: $BACKUP_BRANCH"
-          
+
           # Configure git
           git config user.name "ci-bot"
           git config user.email "actions@users.noreply.github.com"
-          
+
           # Fetch all branches to ensure we have the latest state
           git fetch --all --prune || true
-          
+
           # Check if gh-pages branch exists and has content to backup
           if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
             echo "Found gh-pages branch, creating backup..."
             git checkout gh-pages
             git reset --hard origin/gh-pages
-            
+
             # Create backup branch from current gh-pages state
             git checkout -b "$BACKUP_BRANCH"
             git push origin "$BACKUP_BRANCH"
             echo "✅ Backup created in branch: $BACKUP_BRANCH"
-            
+
             # Return to main branch
             git checkout main
           else
@@ -64,18 +70,18 @@ jobs:
       - name: Reset last run timestamp
         run: |
           echo "🔄 Resetting last run timestamp to force full regeneration..."
-          
+
           # Remove last_run.txt if it exists to force full regeneration
           if [ -f last_run.txt ]; then
             rm last_run.txt
             echo "Removed existing last_run.txt"
           fi
-          
+
           # Also check and reset timestamp in gh-pages if it exists
           if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
             git checkout gh-pages
             git reset --hard origin/gh-pages
-            
+
             if [ -f last_run.txt ]; then
               rm last_run.txt
               git add -A
@@ -83,18 +89,18 @@ jobs:
               git push origin gh-pages
               echo "Reset last_run.txt in gh-pages branch"
             fi
-            
+
             git checkout main
           fi
 
       - name: Trigger publish workflow
         run: |
           echo "🚀 Triggering the main publish workflow for full regeneration..."
-          
+
           # Use GitHub CLI to trigger the publish workflow
           gh workflow run publish.yaml \
             --ref main
-          
+
           echo "✅ Publish workflow triggered successfully"
           echo "🔍 Monitor the workflow at: ${{ github.server_url }}/${{ github.repository }}/actions"
           echo "📦 Backup available in branch: $BACKUP_BRANCH"
