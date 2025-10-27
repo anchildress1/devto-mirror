@@ -2,9 +2,10 @@
 
 This document outlines the changes made to implement the three requested tasks:
 
-## Task 1: Post Banner Images ✅
+## Post Banner Images ✅
 
-### Changes Made:
+### Changes Made
+
 - **Modified `Post` class in `scripts/generate_site.py`**:
   - Added `cover_image` field to capture banner images from Dev.to API
   - Updated `to_dict()` and `from_dict()` methods to handle `cover_image`
@@ -19,25 +20,18 @@ This document outlines the changes made to implement the three requested tasks:
 - **Updated template rendering call**:
   - Added `cover_image=p.cover_image` to `PAGE_TMPL.render()` call
 
-### Result:
+### Result
+
 Posts with banner images now display them prominently at the top of detail pages with proper SEO attributes.
 
-## Task 2: Comments Display ✅
+## Description Analysis ✅
 
-### Verification:
-Comments are already working correctly in both locations:
+### New Script Created
 
-- **index.html**: Comments appear under "Comment Notes" section with personal blurb context
-- **sitemap.xml**: Comments are included as separate URL entries
-
-The existing implementation in `utils.py` (INDEX_TMPL) and render logic correctly handles comment display.
-
-## Task 3: Description Analysis ✅
-
-### New Script Created:
 - **`scripts/analyze_descriptions.py`**: Comprehensive analysis tool
 
-### Features:
+### Features
+
 - Analyzes `posts_data.json` for description length violations
 - Identifies posts exceeding 140-145 character SEO limits
 - Identifies posts with missing descriptions (using fallback)
@@ -46,13 +40,15 @@ The existing implementation in `utils.py` (INDEX_TMPL) and render logic correctl
   - Detailed violation listings
   - Markdown format for PR follow-up comments
 
-### Usage:
+### Usage
+
 ```bash
 python scripts/analyze_descriptions.py [posts_file]
 ```
 
-### Sample Output:
-```
+### Sample Output
+
+```plaintext
 📊 SUMMARY
 Posts with descriptions exceeding 140-145 characters: 1
 Posts with missing descriptions: 1
@@ -67,21 +63,22 @@ Posts with missing descriptions: 1
    URL: https://dev.to/user/post-url
 ```
 
-## Testing Performed:
+## Testing Performed
 
 1. **Template Rendering**: Verified banner images render correctly with all required attributes
 2. **Post Creation**: Confirmed `cover_image` field is captured and preserved
 3. **Description Analysis**: Tested with sample data containing violations
 4. **Comments Display**: Verified existing functionality works as expected
 
-## Files Modified:
+## Files Modified
 
 - `scripts/generate_site.py`: Updated Post class and PAGE_TMPL template
 - `scripts/analyze_descriptions.py`: New analysis script (added)
 
-## Backward Compatibility:
+## Backward Compatibility
 
 All changes are backward compatible:
+
 - Existing posts without `cover_image` field are handled gracefully
 - Banner images only display when `cover_image` is present and non-empty
 - Description analysis works with any `posts_data.json` format
