@@ -7,9 +7,7 @@ import sys
 def main():
     try:
         result = subprocess.run(  # nosec B603
-            [sys.executable, "-m", "pip_audit", "--progress-spinner=off"],
-            capture_output=True,
-            text=True
+            [sys.executable, "-m", "pip_audit", "--progress-spinner=off"], capture_output=True, text=True
         )
         if result.returncode != 0:
             print("WARNING: pip-audit found vulnerabilities:")

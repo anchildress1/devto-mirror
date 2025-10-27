@@ -2,8 +2,6 @@
 
 🔗 **Live Site:** [anchildress1.github.io/devto-mirror](https://anchildress1.github.io/devto-mirror/)
 
-
-
 ![anchildress1/devto-mirror social card: A colorful crawler](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror.jpg)
 
 This Copilot generated utility helps make your Dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante’s DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.tx — _that's it_ (although I'm slowly working through enhancements). If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
@@ -13,8 +11,9 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 > I'm slowly accepting that one or two brave souls might actually read my strong (and usually correct) opinions. 😅 I'm also always looking for ways to improve AI results across the board, because... well, _somebody_ has to. 🧠
 >
 > The internet already changed — blink and you missed it. We don't Google anymore; we ask ChatGPT (the wise ones even ask for sources). 🤖
->  - **When I searched**: my [Dev.to](https://dev.to/anchildress1) showed up just as expected
->  - **When I asked Gemini the same thing**: crickets. 🦗
+>
+> - **When I searched**: my [Dev.to](https://dev.to/anchildress1) showed up just as expected
+> - **When I asked Gemini the same thing**: crickets. 🦗
 >
 > So yeah, obvious disconnect... Also, I'm _not_ hosting a blog on my domain (I'm a backend dev; hosting a pretty blog + analytics sounds like a relaxing afternoon with Dante's DevOps. Hard pass. 🔥🫠), but I still want control of `robots.txt.`
 >
@@ -67,6 +66,9 @@ Done. Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
 
 ## Local Development
 
+> [!NOTE]
+> **Code Refactoring in Progress**: The AI optimization components are being migrated from the monolithic `scripts/ai_optimization.py` to a proper package structure under `devto_mirror/ai_optimization/`. See [`docs/MIGRATION_PLAN.md`](docs/MIGRATION_PLAN.md) for details.
+
 ```bash
 git clone https://github.com/anchildress1/devto-mirror.git
 cd devto-mirror
@@ -77,12 +79,21 @@ export PAGES_REPO="your-username/devto-mirror"
 
 # Run tests
 python -m unittest
+# OR: make test
+
+# Run tests with coverage
+python scripts/run_tests_with_coverage.py
+# OR: make coverage
 
 # Run quality checks
 pre-commit run --all-files
+# OR: make lint
 
 # Generate site
 python scripts/generate_site.py
+
+# See all available development commands
+make help
 ```
 
 ### Local Security & Linting

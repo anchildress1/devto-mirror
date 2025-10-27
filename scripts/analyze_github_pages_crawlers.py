@@ -6,14 +6,15 @@ This script analyzes the current GitHub Pages deployment for crawler accessibili
 documents findings, and compares actual access with robots.txt permissions.
 """
 
-import os
-import sys
 import json
-import requests
-from pathlib import Path
-from datetime import datetime
-from urllib.parse import urljoin
+import os
 import re
+import sys
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import urljoin
+
+import requests
 
 
 class GitHubPagesCrawlerAnalyzer:

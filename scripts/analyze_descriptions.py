@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 
-def analyze_posts_data(posts_file='posts_data.json'):
+def analyze_posts_data(posts_file="posts_data.json"):
     """Analyze posts data for description length violations and missing descriptions"""
     posts_path = Path(posts_file)
 
@@ -25,7 +25,7 @@ def analyze_posts_data(posts_file='posts_data.json'):
         return [], []
 
     try:
-        with posts_path.open('r', encoding='utf-8') as f:
+        with posts_path.open("r", encoding="utf-8") as f:
             posts_data = json.load(f)
     except Exception as e:
         print(f"Error reading {posts_file}: {e}")
@@ -37,35 +37,35 @@ def analyze_posts_data(posts_file='posts_data.json'):
     missing_descriptions = []
 
     for post in posts_data:
-        title = post.get('title', 'Untitled')
-        description = post.get('description', '')
-        url = post.get('link', 'No URL')
+        title = post.get("title", "Untitled")
+        description = post.get("description", "")
+        url = post.get("link", "No URL")
 
         # Check for missing descriptions
         if not description or len(description.strip()) == 0:
-            missing_descriptions.append({
-                'title': title,
-                'url': url,
-                'reason': 'Empty or missing description'
-            })
+            missing_descriptions.append({"title": title, "url": url, "reason": "Empty or missing description"})
             print(f"⚠️  WARNING: Missing description for post '{title}'")
         # Check for descriptions that exceed the 140-145 char limit
         elif len(description) > 145:
-            long_descriptions.append({
-                'title': title,
-                'url': url,
-                'description': description,
-                'length': len(description),
-                'status': 'EXCEEDS LIMIT'
-            })
+            long_descriptions.append(
+                {
+                    "title": title,
+                    "url": url,
+                    "description": description,
+                    "length": len(description),
+                    "status": "EXCEEDS LIMIT",
+                }
+            )
         elif len(description) > 140:
-            long_descriptions.append({
-                'title': title,
-                'url': url,
-                'description': description,
-                'length': len(description),
-                'status': 'NEAR LIMIT'
-            })
+            long_descriptions.append(
+                {
+                    "title": title,
+                    "url": url,
+                    "description": description,
+                    "length": len(description),
+                    "status": "NEAR LIMIT",
+                }
+            )
 
     return long_descriptions, missing_descriptions
 
@@ -86,7 +86,7 @@ def print_long_descriptions(long_descriptions):
     print("\n📏 POSTS WITH LONG DESCRIPTIONS (>140 chars)")
     print("-" * 50)
     for i, item in enumerate(long_descriptions, 1):
-        status_icon = "🔴" if item['status'] == 'EXCEEDS LIMIT' else "🟡"
+        status_icon = "🔴" if item["status"] == "EXCEEDS LIMIT" else "🟡"
         print(f"{i}. {status_icon} {item['title']} ({item['length']} chars) [{item['status']}]")
         print(f"   URL: {item['url']}")
         print(f"   Description: {item['description'][:100]}...")
@@ -115,7 +115,7 @@ def print_markdown_comment(long_descriptions, missing_descriptions):
     if long_descriptions:
         print("### Posts with descriptions exceeding 140-145 character limit:")
         for item in long_descriptions:
-            status = "⚠️ Near limit" if item['status'] == 'NEAR LIMIT' else "🔴 Exceeds limit"
+            status = "⚠️ Near limit" if item["status"] == "NEAR LIMIT" else "🔴 Exceeds limit"
             print(f"- **{item['title']}** ({item['length']} chars) - {status}")
             print(f"  - URL: {item['url']}")
             print(f"  - Description: `{item['description'][:100]}...`")
@@ -143,7 +143,7 @@ def generate_report(long_descriptions, missing_descriptions):
         print("\n📏 POSTS WITH LONG DESCRIPTIONS (>140 chars)")
         print("-" * 50)
         for i, item in enumerate(long_descriptions, 1):
-            status_icon = "🔴" if item['status'] == 'EXCEEDS LIMIT' else "🟡"
+            status_icon = "🔴" if item["status"] == "EXCEEDS LIMIT" else "🟡"
             print(f"{i}. {status_icon} {item['title']} ({item['length']} chars) [{item['status']}]")
             print(f"   URL: {item['url']}")
             print(f"   Description: {item['description'][:100]}...")
@@ -167,7 +167,7 @@ def generate_report(long_descriptions, missing_descriptions):
         if long_descriptions:
             print("### Posts with descriptions exceeding 140-145 character limit:")
             for item in long_descriptions:
-                status = "⚠️ Near limit" if item['status'] == 'NEAR LIMIT' else "🔴 Exceeds limit"
+                status = "⚠️ Near limit" if item["status"] == "NEAR LIMIT" else "🔴 Exceeds limit"
                 print(f"- **{item['title']}** ({item['length']} chars) - {status}")
                 print(f"  - URL: {item['url']}")
                 print(f"  - Description: `{item['description'][:100]}...`")
@@ -185,7 +185,7 @@ def generate_report(long_descriptions, missing_descriptions):
 
 def main():
     # Analyze the current posts_data.json file or provided argument
-    posts_file = sys.argv[1] if len(sys.argv) > 1 else 'posts_data.json'
+    posts_file = sys.argv[1] if len(sys.argv) > 1 else "posts_data.json"
     long_descriptions, missing_descriptions = analyze_posts_data(posts_file)
     generate_report(long_descriptions, missing_descriptions)
 

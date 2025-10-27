@@ -1,15 +1,18 @@
 """
 Shared utilities for devto-mirror scripts
 """
+
 from datetime import datetime
 from email.utils import parsedate_to_datetime
+
 from jinja2 import Environment, select_autoescape
 
 # Use a Jinja environment with autoescape enabled for HTML/XML templates
-env = Environment(autoescape=select_autoescape(['html', 'xml']))
+env = Environment(autoescape=select_autoescape(["html", "xml"]))
 
 # Shared templates
-INDEX_TMPL = env.from_string("""<!doctype html><html lang="en"><head>
+INDEX_TMPL = env.from_string(
+    """<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ username }} — Dev.to Mirror</title>
 <link rel="canonical" href="{{ canonical }}">
@@ -67,9 +70,11 @@ INDEX_TMPL = env.from_string("""<!doctype html><html lang="en"><head>
   <p>Canonical lives on Dev.to. This is just a crawler-friendly mirror.</p>
 </main>
 </body></html>
-""")
+"""
+)
 
-SITEMAP_TMPL = env.from_string("""<?xml version="1.0" encoding="UTF-8"?>
+SITEMAP_TMPL = env.from_string(
+    """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{{ home }}</loc></url>
   {% for p in posts %}
@@ -80,7 +85,8 @@ SITEMAP_TMPL = env.from_string("""<?xml version="1.0" encoding="UTF-8"?>
     <url><loc>{{ c.url or (home + c.local) }}</loc></url>
   {% endfor %}
 </urlset>
-""")
+"""
+)
 
 
 def parse_date(date_str):
@@ -104,8 +110,8 @@ def parse_date(date_str):
 
     # Handle trailing Z (ISO format)
     try:
-        if s.endswith('Z'):
-            s = s.replace('Z', '+00:00')
+        if s.endswith("Z"):
+            s = s.replace("Z", "+00:00")
         return datetime.fromisoformat(s)
     except (ValueError, TypeError):
         # Failed to parse as ISO format, try RFC format
@@ -120,7 +126,7 @@ def parse_date(date_str):
 
     # Try basic ISO without timezone
     try:
-        return datetime.strptime(s, '%Y-%m-%dT%H:%M:%S')
+        return datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
     except Exception:
         return None
 
@@ -137,25 +143,25 @@ def dedupe_posts_by_link(posts_list):
     posts_map = {}
 
     for post in posts_list:
-        link = post.get('link') if isinstance(post, dict) else getattr(post, 'link', None)
+        link = post.get("link") if isinstance(post, dict) else getattr(post, "link", None)
         if not link:
             continue
 
-        post_dict = post.to_dict() if hasattr(post, 'to_dict') else post
-        new_date = parse_date(post_dict.get('date'))
+        post_dict = post.to_dict() if hasattr(post, "to_dict") else post
+        new_date = parse_date(post_dict.get("date"))
 
         existing = posts_map.get(link)
         if existing is None:
             posts_map[link] = post_dict
             continue
 
-        existing_date = parse_date(existing.get('date'))
+        existing_date = parse_date(existing.get("date"))
         # Keep the newer post when possible
         if new_date and (not existing_date or new_date > existing_date):
             posts_map[link] = post_dict
 
     def _post_date_key(p):
-        return parse_date(p.get('date')) or datetime.min
+        return parse_date(p.get("date")) or datetime.min
 
     deduped = sorted(posts_map.values(), key=_post_date_key, reverse=True)
     return deduped

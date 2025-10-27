@@ -21,7 +21,8 @@ dev = [
     "pre-commit>=3.4.0",
     "gitlint>=0.16.0",
     "detect-secrets>=1.0.0",
-    "black>=24.0.0"
+    "black>=24.0.0",
+    "coverage>=7.0.0"
 ]
 
 [tool.setuptools.packages.find]
@@ -31,6 +32,33 @@ exclude = ["specs*", "assets*", "tests*", ".github*"]
 line-length = 120
 skip-string-normalization = false
 target-version = ['py311']
+
+[tool.coverage.run]
+source = ["devto_mirror", "scripts"]
+omit = [
+    "tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    ".venv/*",
+    "setup.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+]
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"
 
 [build-system]
 requires = ["setuptools>=61.0"]

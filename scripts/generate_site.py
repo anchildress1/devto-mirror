@@ -1,9 +1,16 @@
-import os, pathlib, re, html, json, requests, time
+import html
+import json
+import os
+import pathlib
+import re
+import time
 from datetime import datetime, timezone
-from slugify import slugify
-from jinja2 import Environment, select_autoescape
-from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
+
 import bleach
+import requests
+from jinja2 import Environment, select_autoescape
+from slugify import slugify
+from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
@@ -144,6 +151,13 @@ PAGE_TMPL = env.from_string(
 <meta name="author" content="{{ author }}">
 {% if tags %}<meta name="keywords" content="{{ tags|join(', ') }}">{% endif %}
 
+<!-- AI-Specific Enhanced Metadata -->
+{% if enhanced_metadata %}
+{% for name, content in enhanced_metadata.items() %}
+<meta name="{{ name }}" content="{{ content }}">
+{% endfor %}
+{% endif %}
+
 <!-- JSON-LD Structured Data -->
 {% if json_ld_schemas %}
 {% for schema in json_ld_schemas %}
@@ -208,6 +222,13 @@ COMMENT_NOTE_TMPL = env.from_string(
 <!-- Additional Social Meta -->
 <meta name="image" content="{{ social_image }}">
 <meta name="author" content="{{ author }}">
+
+<!-- AI-Specific Enhanced Metadata -->
+{% if enhanced_metadata %}
+{% for name, content in enhanced_metadata.items() %}
+<meta name="{{ name }}" content="{{ content }}">
+{% endfor %}
+{% endif %}
 
 <!-- JSON-LD Structured Data -->
 {% if json_ld_schemas %}
@@ -561,6 +582,7 @@ for p in all_posts:
         social_image=social_image,
         site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
         author=DEVTO_USERNAME,
+        enhanced_metadata=getattr(p, "enhanced_metadata", {}),
     )
     # Prevent path traversal or unsafe filenames in slugs
     safe_slug = re.sub(SAFE_FILENAME_PATTERN, "-", p.slug)[:120]
@@ -598,6 +620,7 @@ if comment_items:
             social_image=social_image,
             site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
             author=DEVTO_USERNAME,
+            enhanced_metadata={},  # Comments don't have enhanced metadata yet
         )
         # Ensure local path is safe. Re-sanitize the filename component to be defensive
         # (load_comment_manifest already attempts sanitization, but double-check here).
