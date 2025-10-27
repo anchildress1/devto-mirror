@@ -178,7 +178,7 @@ class CrawlerAccessTester:
         """Generate a detailed report of crawler access results."""
         if not self.results:
             print("No test results available. Run tests first.")
-            return
+            return None
 
         report = {
             "test_timestamp": datetime.now().isoformat(),
