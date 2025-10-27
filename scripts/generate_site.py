@@ -143,6 +143,15 @@ PAGE_TMPL = env.from_string(
 <meta name="image" content="{{ social_image }}">
 <meta name="author" content="{{ author }}">
 {% if tags %}<meta name="keywords" content="{{ tags|join(', ') }}">{% endif %}
+
+<!-- JSON-LD Structured Data -->
+{% if json_ld_schemas %}
+{% for schema in json_ld_schemas %}
+<script type="application/ld+json">
+{{ schema | tojson }}
+</script>
+{% endfor %}
+{% endif %}
 </head><body>
 <main>
   <h1><a href="{{ canonical }}">{{ title }}</a></h1>
@@ -199,6 +208,15 @@ COMMENT_NOTE_TMPL = env.from_string(
 <!-- Additional Social Meta -->
 <meta name="image" content="{{ social_image }}">
 <meta name="author" content="{{ author }}">
+
+<!-- JSON-LD Structured Data -->
+{% if json_ld_schemas %}
+{% for schema in json_ld_schemas %}
+<script type="application/ld+json">
+{{ schema | tojson }}
+</script>
+{% endfor %}
+{% endif %}
 </head><body>
 <main>
   <h1>{{ title }}</h1>
@@ -312,6 +330,9 @@ def sanitize_html_content(content):
 
 class Post:
     def __init__(self, api_data):
+        # Store the original API data for AI optimization
+        self.api_data = api_data
+
         self.title = api_data.get("title", "Untitled")
         self.link = api_data.get("url", HOME)
         self.date = api_data.get("published_at", "")
@@ -391,6 +412,7 @@ class Post:
             "slug": self.slug,
             "cover_image": self.cover_image,
             "tags": self.tags,
+            "api_data": getattr(self, "api_data", {}),  # Store original API data
         }
 
     @classmethod
@@ -405,6 +427,7 @@ class Post:
         post.slug = data["slug"]
         post.cover_image = data.get("cover_image", "")  # Handle legacy data without cover_image
         post.tags = post._normalize_tags(data.get("tags", []))  # Handle legacy data without tags and normalize
+        post.api_data = data.get("api_data", {})  # Restore original API data
         return post
 
 
