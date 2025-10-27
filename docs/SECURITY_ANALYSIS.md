@@ -5,12 +5,14 @@ This repository now includes comprehensive security analysis through GitHub's bu
 ## Enabled Security Features
 
 ### 1. CodeQL Analysis
+
 - **File**: `.github/workflows/codeql.yml`
 - **Frequency**: Weekly (Mondays at 2:15 AM UTC) + on pushes/PRs to main
 - **Coverage**: Python code security scanning with extended security and quality queries
 - **Manual Trigger**: Available via GitHub Actions
 
 ### 2. Dependabot
+
 - **File**: `.github/dependabot.yml`
 - **Frequency**: Weekly (Mondays at 4:00 AM UTC)
 - **Coverage**:
@@ -19,6 +21,7 @@ This repository now includes comprehensive security analysis through GitHub's bu
 - **Auto-assignment**: PRs are auto-assigned to repository owner
 
 ### 3. Dependencies
+
 - **File**: `requirements.txt`
 - **Purpose**: Explicit dependency tracking for security scanning
 - **Contents**: Core dependencies used in GitHub Actions workflows

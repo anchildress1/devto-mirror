@@ -106,6 +106,13 @@ All workflows include `workflow_dispatch` to allow manual runs from the Actions 
 
 ---
 
+## Documentation 📚
+
+Additional documentation is available in the [`docs/`](./docs/) directory:
+
+- [Security Analysis](./docs/SECURITY_ANALYSIS.md) - Security recommendations; added workflows
+- [Crawler Testing](./docs/20251026_CRAWLER_TESTING.md) - Testing crawler accessibility
+
 ## License 📄
 
 Every project has to have a stack of fine print somewhere. _Keep going, keep going, keep going..._ Here's mine, as painless as possible:

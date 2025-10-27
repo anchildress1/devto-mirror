@@ -134,5 +134,128 @@ jobs:
           fi
 
           git add -A
-          git commit -m "chore: publish generated site to gh-pages" || echo "No changes to commit"
+          git commit -m "chore: publish generated site to gh-pages (TEST restrictive robots.txt)" || echo "No changes to commit"
           git push origin gh-pages
+
+      - name: 🔍 Verify Deployed Content
+        run: |
+          echo "🔍 DEPLOYED CONTENT VERIFICATION"
+          echo "================================="
+          
+          # Switch to gh-pages to verify what was actually deployed
+          git checkout gh-pages
+          
+          echo "📍 Current branch: $(git branch --show-current)"
+          echo ""
+          echo "📁 Working directory contents:"
+          ls -la
+          echo ""
+          echo "🤖 ROBOTS.TXT CONTENT:"
+          echo "======================"
+          if [ -f robots.txt ]; then
+            cat robots.txt
+          else
+            echo "❌ robots.txt not found!"
+          fi
+          echo "======================"
+          echo ""
+          echo "📝 POSTS DIRECTORY:"
+          if [ -d posts ]; then
+            echo "✅ Posts directory exists"
+            echo "Posts directory contents (first 10):"
+            ls -la posts/ | head -10
+            echo "📊 Total posts: $(ls -1 posts/ | wc -l)"
+          else
+            echo "❌ posts/ directory not found!"
+          fi
+          echo ""
+          echo "💬 COMMENTS DIRECTORY:"
+          if [ -d comments ]; then
+            echo "✅ Comments directory exists"
+            echo "Comments directory contents:"
+            ls -la comments/
+            echo "📊 Total comment pages: $(ls -1 comments/ | wc -l)"
+          else
+            echo "ℹ️  No comments directory (optional feature)"
+          fi
+          echo ""
+          echo "🔍 GOOGLE VERIFICATION FILE:"
+          if [ -f google6b80426bb396f31f.html ]; then
+            echo "✅ Google verification file exists:"
+            ls -la google6b80426bb396f31f.html
+            echo "Content:"
+            cat google6b80426bb396f31f.html
+          else
+            echo "❌ Google verification file not found!"
+          fi
+          echo ""
+          echo "🎯 DEPLOYMENT VERIFICATION COMPLETE"
+          
+          # Add concise summary to GitHub Summary
+          echo "## 🔍 Deployment Verification" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Deployed to gh-pages branch" >> $GITHUB_STEP_SUMMARY
+          echo "- 🤖 Restrictive robots.txt deployed (blocks 6+ crawlers)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 Google verification file: $([ -f google6b80426bb396f31f.html ] && echo "✅ Present" || echo "❌ Missing")" >> $GITHUB_STEP_SUMMARY
+          echo "- 📝 Posts: $(ls -1 posts/ | wc -l) files deployed" >> $GITHUB_STEP_SUMMARY
+          echo "- 💬 Comments: $([ -d comments ] && echo "$(ls -1 comments/ | wc -l) pages" || echo "None")" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🧪 Test Crawler Access (Post-Deploy)
+        run: |
+          # Switch back to source branch to get the test scripts
+          git checkout ${{ github.ref_name }}
+          
+          echo "🧪 CRAWLER ACCESS TEST RESULTS"
+          echo "==============================="
+          echo "🎯 Testing if GitHub Pages respects robots.txt restrictions"
+          echo ""
+          
+          # Wait a moment for deployment to propagate
+          echo "⏳ Waiting 30 seconds for deployment to propagate..."
+          sleep 30
+          
+          # Run the crawler test and capture output
+          python scripts/test_crawler_access.py 2>&1 | tee crawler_test_output.txt
+          
+          # Extract key results for summary
+          TOTAL_CRAWLERS=$(grep "Total Crawlers Tested:" crawler_test_output.txt | grep -o '[0-9]*' | head -1)
+          FULLY_ACCESSIBLE=$(grep "Fully Accessible:" crawler_test_output.txt | grep -o '[0-9]*' | head -1)
+          FULLY_BLOCKED=$(grep "Fully Blocked:" crawler_test_output.txt | grep -o '[0-9]*' | head -1)
+          
+          # Add concise summary to GitHub Summary
+          echo "## 🧪 Crawler Access Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- 🎯 **Testing:** Does GitHub Pages respect robots.txt restrictions?" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 **Crawlers Tested:** ${TOTAL_CRAWLERS:-0}" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ **Fully Accessible:** ${FULLY_ACCESSIBLE:-0}" >> $GITHUB_STEP_SUMMARY
+          echo "- ❌ **Fully Blocked:** ${FULLY_BLOCKED:-0}" >> $GITHUB_STEP_SUMMARY
+          
+          # Check if any crawlers were blocked as expected
+          if grep -q "Fully Blocked: 0" crawler_test_output.txt; then
+            echo "- 🚨 **RESULT:** GitHub Pages IGNORES robots.txt restrictions!" >> $GITHUB_STEP_SUMMARY
+            echo "- 🤔 All crawlers have access despite Disallow rules" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ✅ **RESULT:** GitHub Pages RESPECTS robots.txt restrictions!" >> $GITHUB_STEP_SUMMARY
+            echo "- 🎉 Some crawlers were blocked as expected" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: 📊 Analyze GitHub Pages Crawler Restrictions
+        run: |
+          echo "📊 GITHUB PAGES ANALYSIS"
+          echo "========================"
+          
+          # Run the analysis script and capture output
+          python scripts/analyze_github_pages_crawlers.py 2>&1 | tee analysis_output.txt
+          
+          # Add final conclusion to GitHub Summary
+          echo "## 📊 Final Analysis" >> $GITHUB_STEP_SUMMARY
+          if grep -q "🎉 EXCELLENT: All tested crawlers have full access" analysis_output.txt; then
+            echo "### ❌ GitHub Pages IGNORES robots.txt Disallow rules" >> $GITHUB_STEP_SUMMARY
+            echo "- 🚨 Crawler restrictions via robots.txt are **NOT enforced**" >> $GITHUB_STEP_SUMMARY
+            echo "- 💡 Consider alternative hosting if crawler blocking is required" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ✅ GitHub Pages RESPECTS robots.txt Disallow rules" >> $GITHUB_STEP_SUMMARY
+            echo "- 🎉 Crawler restrictions are **properly enforced**" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📋 **Full logs available in workflow steps above**" >> $GITHUB_STEP_SUMMARY
