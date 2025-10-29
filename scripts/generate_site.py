@@ -158,6 +158,13 @@ PAGE_TMPL = env.from_string(
 {% endfor %}
 {% endif %}
 
+<!-- Cross-Reference Attribution Meta Tags -->
+{% if cross_references and cross_references.attribution and cross_references.attribution.meta_tags %}
+{% for name, content in cross_references.attribution.meta_tags.items() %}
+<meta name="{{ name }}" content="{{ content }}">
+{% endfor %}
+{% endif %}
+
 <!-- JSON-LD Structured Data -->
 {% if json_ld_schemas %}
 {% for schema in json_ld_schemas %}
@@ -185,7 +192,52 @@ PAGE_TMPL = env.from_string(
     </p>
     {% endif %}
   {% if description %}<p><em>{{ description }}</em></p>{% endif %}
+
+  <!-- Enhanced Dev.to Attribution -->
+  {% if cross_references and cross_references.attribution and cross_references.has_attribution %}
+  {{ cross_references.attribution.attribution_html | safe }}
+  {% endif %}
+
   <article>{{ content }}</article>
+
+  <!-- Dev.to Backlinks -->
+  {% if cross_references and cross_references.backlinks and cross_references.has_backlinks %}
+  {{ cross_references.backlinks.backlink_html | safe }}
+  {% endif %}
+
+  <!-- Related Posts Section -->
+  {% if cross_references and cross_references.related_posts and cross_references.has_related_posts %}
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      {% for related in cross_references.related_posts %}
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #007bff;">
+        <div>
+          <a href="{{ related.local_link }}" style="color: #007bff; text-decoration: none; font-weight: bold;">
+            {{ related.title }}
+          </a>
+          {% if related.description %}
+          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">{{ related.description }}</p>
+          {% endif %}
+          {% if related.shared_tags %}
+          <div style="margin: 5px 0;">
+            <small style="color: #868e96;">Shared tags:
+              {% for tag in related.shared_tags %}
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px;">#{{ tag }}</span>
+              {% endfor %}
+            </small>
+          </div>
+          {% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
   <p><a href="{{ canonical }}">Read on Dev.to →</a></p>
 </main>
 </body></html>"""

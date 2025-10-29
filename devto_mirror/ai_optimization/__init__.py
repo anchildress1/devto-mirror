@@ -10,9 +10,19 @@ to provide better modularity and maintainability.
 """
 
 from .content_analyzer import DevToContentAnalyzer
+from .cross_reference import (
+    add_source_attribution,
+    create_dev_to_backlinks,
+    enhance_post_with_cross_references,
+    generate_related_links,
+)
 from .optimized_post import AIOptimizedPost
 
 __all__ = [
     "DevToContentAnalyzer",
     "AIOptimizedPost",
+    "add_source_attribution",
+    "generate_related_links",
+    "create_dev_to_backlinks",
+    "enhance_post_with_cross_references",
 ]

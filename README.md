@@ -31,7 +31,7 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 
 [![Publish Dev.to Mirror Site](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml/badge.svg?branch=main&style=flat)](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml) [![CodeQL Analysis](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml/badge.svg?style=flat)](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml) [![Security and Lint CI](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml/badge.svg?style=flat)](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml)
 
-![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Fdevto-mirror%2Frefs%2Fheads%2F001-upgrade-the-python%2Fpyproject.toml&query=%24.project.requires-python&style=flat&logo=python&logoColor=fff&label=Python&color=3776AB) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=flat) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=flat) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=flat) ![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=flat)
+![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Fdevto-mirror%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.project.requires-python&style=flat&logo=python&logoColor=fff&label=Python&color=3776AB) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=flat) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=flat) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=flat) ![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=flat)
 
  [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black&style=flat)](https://www.buymeacoffee.com/anchildress1) [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto&logoColor=fff&style=flat)](https://dev.to/anchildress1) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin\&logoColor=white&style=flat)](https://www.linkedin.com/in/anchildress1/)
 
@@ -49,7 +49,7 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 4. Run workflow: [Actions → "Generate and Publish Dev.to Mirror Site" → Run workflow](https://github.com/anchildress1/devto-mirror/actions)
 5. Enable Pages: Settings → Pages → Deploy from branch → `gh-pages`
 
-Done. Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
+> Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
 
 ---
 
@@ -67,6 +67,7 @@ Done. Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
 ## Local Development
 
 > [!NOTE]
+>
 > **Code Refactoring in Progress**: The AI optimization components are being migrated from the monolithic `scripts/ai_optimization.py` to a proper package structure under `devto_mirror/ai_optimization/`. See [`docs/MIGRATION_PLAN.md`](docs/MIGRATION_PLAN.md) for details.
 
 ```bash

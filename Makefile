@@ -14,14 +14,16 @@ test:  ## Run unit tests
 	python -m unittest discover -s tests -p 'test_*.py' -v
 
 test-coverage:  ## Run tests with coverage report
-	python scripts/run_tests_with_coverage.py
+	coverage run -m unittest discover -s tests -p 'test_*.py'
+	coverage report
+	coverage html
 
-lint:  ## Run linting and security checks
+lint:  ## Run pre-commit checks (formatting, linting, security)
 	pre-commit run --all-files
 
-format:  ## Format code with Black and isort
+format:  ## Format code with Black
 	black devto_mirror/ tests/ scripts/ --line-length 120
-	isort devto_mirror/ tests/ scripts/ --profile black --line-length 120
+
 
 clean:  ## Clean up generated files
 	rm -rf htmlcov/
@@ -32,4 +34,3 @@ clean:  ## Clean up generated files
 
 # Quick aliases
 coverage: test-coverage  ## Alias for test-coverage
-check: lint  ## Alias for lint
