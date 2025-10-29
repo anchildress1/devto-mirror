@@ -75,46 +75,19 @@ git clone https://github.com/anchildress1/devto-mirror.git
 cd devto-mirror
 python -m venv .venv && source .venv/bin/activate
 pip install -e '.[dev]'
-export DEVTO_USERNAME="your-username"
-export PAGES_REPO="your-username/devto-mirror"
 
-# Run tests
-python -m unittest
-# OR: make test
+# Copy and configure environment variables
+cp .env.example .env
+# Edit .env with your DEVTO_USERNAME and PAGES_REPO
 
-# Run tests with coverage
-python scripts/run_tests_with_coverage.py
-# OR: make coverage
+# Run full validation
+make validate
 
-# Run quality checks
-pre-commit run --all-files
-# OR: make lint
-
-# Generate site
+# Generate site locally
 python scripts/generate_site.py
-
-# See all available development commands
-make help
 ```
 
-### Local Security & Linting
-
-Install hooks: `pre-commit install`
-Run checks: `pre-commit run --all-files`
-Manual audit: `pip-audit --progress-spinner=off`
-
-Runs: `bandit`, `flake8`, `detect-secrets`, `pip-audit`
-
-## Workflows
-
-We maintain four primary GitHub Actions workflows. Key changes in this branch:
-
-- `security-ci.yml`: Uses Python 3.11 for dependency installation, runs `pip-audit`, `bandit`, and `flake8`. Adds `workflow_dispatch` for manual testing and enforces least-privilege permissions.
-- `codeql.yml`: Runs CodeQL analysis via `github/codeql-action@v3` with Python analysis enabled. Includes `workflow_dispatch` and explicit permissions.
-- `publish.yaml`: Now scheduled weekly on Wednesdays at `09:38 AM EDT` (cron `38 13 * * 3`), uses Python 3.11 and deploys to `gh-pages`.
-- `refresh.yaml`: Manual `workflow_dispatch` trigger that creates a backup branch, resets `last_run.txt`, and triggers the publish workflow.
-
-All workflows include `workflow_dispatch` to allow manual runs from the Actions UI and use `actions/setup-python@v6` with caching enabled for `pip`.
+**For detailed development setup, CI/CD workflows, and troubleshooting**: See [`docs/DEV_GUIDE.md`](docs/DEV_GUIDE.md)
 
 ---
 
@@ -122,8 +95,10 @@ All workflows include `workflow_dispatch` to allow manual runs from the Actions 
 
 Additional documentation is available in the [`docs/`](./docs/) directory:
 
-- [Security Analysis](./docs/SECURITY_ANALYSIS.md) - Security recommendations; added workflows
-- [Crawler Testing](./docs/20251026_CRAWLER_TESTING.md) - Testing crawler accessibility
+- [Development Guide](./docs/DEV_GUIDE.md) - Local development setup and commands
+- [CI/CD Guide](./docs/CI_GUIDE.md) - GitHub Actions workflows and deployment
+- [Security Analysis](./docs/SECURITY_ANALYSIS.md) - Security recommendations and workflows
+- [Migration Plan](./docs/MIGRATION_PLAN.md) - AI optimization refactoring progress
 
 ## License 📄
 

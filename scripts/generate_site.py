@@ -8,14 +8,19 @@ from datetime import datetime, timezone
 
 import bleach
 import requests
+from dotenv import load_dotenv
 from jinja2 import Environment, select_autoescape
 from slugify import slugify
 from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
+
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
 LAST_RUN_FILE = "last_run.txt"
 POSTS_DATA_FILE = "posts_data.json"
+VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes")
 
 # Filename sanitization pattern - prevents path traversal and unsafe characters
 SAFE_FILENAME_PATTERN = r"[^A-Za-z0-9_-]"
@@ -110,6 +115,24 @@ def fetch_all_articles_from_api(last_run_iso=None):
     """Public API that returns full-article objects after pagination.
     Delegates to smaller helpers to keep complexity low.
     """
+    if VALIDATION_MODE:
+        # Return mock data for validation
+        # Uncomment the next line to test validation failure detection:
+        # raise RuntimeError("Test validation failure")
+        return [
+            {
+                "id": 1,
+                "title": "Test Article",
+                "url": f"https://dev.to/{DEVTO_USERNAME}/test-article",
+                "published_at": "2024-01-01T00:00:00Z",
+                "body_html": "<p>Test content</p>",
+                "description": "Test description",
+                "cover_image": "",
+                "tag_list": ["test", "validation"],
+                "slug": "test-article",
+            }
+        ]
+
     summaries = _fetch_article_pages(last_run_iso=last_run_iso)
     return _fetch_full_articles(summaries)
 

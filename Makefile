@@ -11,7 +11,7 @@ install:  ## Install development dependencies
 	pre-commit install
 
 test:  ## Run unit tests
-	python -m unittest discover -s tests -p 'test_*.py' -v
+	python -m unittest discover -s tests -p 'test_*.py'
 
 test-coverage:  ## Run tests with coverage report
 	coverage run -m unittest discover -s tests -p 'test_*.py'
