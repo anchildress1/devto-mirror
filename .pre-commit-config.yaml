@@ -29,3 +29,11 @@ repos:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
         stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: validate-site-generation
+        name: Validate site generation
+        entry: python scripts/validate_site_generation.py
+        language: system
+        stages: [pre-commit]
+        pass_filenames: false
