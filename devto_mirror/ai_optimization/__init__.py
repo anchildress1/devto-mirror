@@ -16,6 +16,7 @@ from .cross_reference import (
     enhance_post_with_cross_references,
     generate_related_links,
 )
+from .metadata_enhancer import DevToMetadataEnhancer
 from .optimized_post import AIOptimizedPost
 from .schema_generator import DevToSchemaGenerator, validate_json_ld_schema
 
@@ -26,6 +27,7 @@ __all__ = [
     "generate_related_links",
     "create_dev_to_backlinks",
     "enhance_post_with_cross_references",
+    "DevToMetadataEnhancer",
     "DevToSchemaGenerator",
     "validate_json_ld_schema",
 ]
