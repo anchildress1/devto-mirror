@@ -16,10 +16,12 @@ from .cross_reference import (
     enhance_post_with_cross_references,
     generate_related_links,
 )
+from .manager import AIOptimizationManager, create_default_ai_optimization_manager
 from .metadata_enhancer import DevToMetadataEnhancer
 from .optimized_post import AIOptimizedPost
-from .schema_generator import DevToSchemaGenerator, validate_json_ld_schema
+from .schema_generator import DevToSchemaGenerator
 from .sitemap_generator import DevToAISitemapGenerator
+from .utils import validate_json_ld_schema
 
 __all__ = [
     "DevToContentAnalyzer",
@@ -28,6 +30,8 @@ __all__ = [
     "generate_related_links",
     "create_dev_to_backlinks",
     "enhance_post_with_cross_references",
+    "AIOptimizationManager",
+    "create_default_ai_optimization_manager",
     "DevToMetadataEnhancer",
     "DevToSchemaGenerator",
     "validate_json_ld_schema",

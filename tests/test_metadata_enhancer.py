@@ -64,7 +64,7 @@ class TestDevToMetadataEnhancer(unittest.TestCase):
 
         # Check content fingerprint
         self.assertIn("content-fingerprint", metadata)
-        self.assertTrue(len(metadata["content-fingerprint"]) == 16)
+        self.assertEqual(len(metadata["content-fingerprint"]), 16)
 
     def test_enhance_post_metadata_with_api_data(self):
         """Test post metadata enhancement with API data."""
