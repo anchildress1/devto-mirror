@@ -823,7 +823,7 @@ class AIOptimizationManager:
 
     def __init__(
         self,
-        schema_generator: Optional[SchemaGenerator] = None,
+        schema_generator: Optional[Any] = None,  # SchemaGenerator from devto_mirror.ai_optimization
         metadata_enhancer: Optional[MetadataEnhancer] = None,
         content_analyzer: Optional[Any] = None,
         cross_reference_manager: Optional[CrossReferenceManager] = None,
@@ -1017,10 +1017,10 @@ def create_default_ai_optimization_manager(
         Configured AIOptimizationManager instance
     """
     # Create all component implementations
+    from devto_mirror.ai_optimization import DevToContentAnalyzer, DevToSchemaGenerator
+
     schema_generator = DevToSchemaGenerator(site_name, site_url)
     metadata_enhancer = DevToMetadataEnhancer(site_name, site_url)
-    from devto_mirror.ai_optimization import DevToContentAnalyzer
-
     content_analyzer = DevToContentAnalyzer()
 
     # Note: CrossReferenceManager and AISitemapGenerator implementations
