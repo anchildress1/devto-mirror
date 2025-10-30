@@ -19,6 +19,7 @@ from .cross_reference import (
 from .metadata_enhancer import DevToMetadataEnhancer
 from .optimized_post import AIOptimizedPost
 from .schema_generator import DevToSchemaGenerator, validate_json_ld_schema
+from .sitemap_generator import DevToAISitemapGenerator
 
 __all__ = [
     "DevToContentAnalyzer",
@@ -30,4 +31,5 @@ __all__ = [
     "DevToMetadataEnhancer",
     "DevToSchemaGenerator",
     "validate_json_ld_schema",
+    "DevToAISitemapGenerator",
 ]
