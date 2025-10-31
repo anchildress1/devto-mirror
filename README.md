@@ -66,9 +66,7 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 
 ## Local Development
 
-> [!NOTE]
->
-> **Code Refactoring in Progress**: The AI optimization components are being migrated from the monolithic `scripts/ai_optimization.py` to a proper package structure under `devto_mirror/ai_optimization/`. See [`docs/MIGRATION_PLAN.md`](docs/MIGRATION_PLAN.md) for details.
+
 
 ```bash
 git clone https://github.com/anchildress1/devto-mirror.git

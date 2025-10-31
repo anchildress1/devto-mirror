@@ -164,6 +164,55 @@ class DevToSchemaGenerator:
         if api_data and "language" in api_data:
             schema["inLanguage"] = api_data["language"]
 
+        # Add engagement metrics from Dev.to API
+        if api_data:
+            # Add interaction statistics
+            interaction_stats = {}
+
+            # Comments count
+            comments_count = api_data.get("comments_count")
+            if comments_count is not None and comments_count >= 0:
+                interaction_stats["commentCount"] = comments_count
+
+            # Reactions count (likes, hearts, etc.)
+            reactions_count = api_data.get("public_reactions_count")
+            if reactions_count is not None and reactions_count >= 0:
+                interaction_stats["interactionCount"] = reactions_count
+
+            # Page views if available
+            page_views = api_data.get("page_views_count")
+            if page_views is not None and page_views >= 0:
+                interaction_stats["pageViews"] = page_views
+
+            # Add interaction statistics as structured data
+            if interaction_stats:
+                schema["interactionStatistic"] = []
+
+                if "commentCount" in interaction_stats:
+                    schema["interactionStatistic"].append(
+                        {
+                            "@type": "InteractionCounter",
+                            "interactionType": "https://schema.org/CommentAction",
+                            "userInteractionCount": interaction_stats["commentCount"],
+                        }
+                    )
+
+                if "interactionCount" in interaction_stats:
+                    schema["interactionStatistic"].append(
+                        {
+                            "@type": "InteractionCounter",
+                            "interactionType": "https://schema.org/LikeAction",
+                            "userInteractionCount": interaction_stats["interactionCount"],
+                        }
+                    )
+
+                # Add page views as additional property (not standard schema.org but useful for AI)
+                if "pageViews" in interaction_stats:
+                    schema["additionalProperty"] = schema.get("additionalProperty", [])
+                    schema["additionalProperty"].append(
+                        {"@type": "PropertyValue", "name": "pageViews", "value": interaction_stats["pageViews"]}
+                    )
+
         # Validate schema before returning
         if validate_json_ld_schema(schema):
             return schema

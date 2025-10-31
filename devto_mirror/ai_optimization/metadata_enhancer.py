@@ -293,10 +293,23 @@ class DevToMetadataEnhancer:
             if reading_time and reading_time > 0:
                 metadata["reading-time"] = f"{reading_time} minutes"
 
-            # Add reaction count if available
-            reactions_count = api_data.get("public_reactions_count", 0)
-            if reactions_count > 0:
-                metadata["original-reactions"] = str(reactions_count)
+            # Add engagement metrics from Dev.to API
+            reactions_count = api_data.get("public_reactions_count")
+            if reactions_count is not None and reactions_count >= 0:
+                metadata["devto:reactions"] = str(reactions_count)
+
+            comments_count = api_data.get("comments_count")
+            if comments_count is not None and comments_count >= 0:
+                metadata["devto:comments"] = str(comments_count)
+
+            page_views = api_data.get("page_views_count")
+            if page_views is not None and page_views >= 0:
+                metadata["devto:page_views"] = str(page_views)
+
+            # Add community engagement score (calculated from reactions and comments)
+            if reactions_count is not None and comments_count is not None:
+                engagement_score = reactions_count + (comments_count * 2)  # Comments weighted higher
+                metadata["devto:engagement_score"] = str(engagement_score)
 
         return metadata
 

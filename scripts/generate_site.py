@@ -1,5 +1,6 @@
 import html
 import json
+import logging
 import os
 import pathlib
 import re
@@ -11,7 +12,16 @@ import requests
 from dotenv import load_dotenv
 from jinja2 import Environment, select_autoescape
 from slugify import slugify
-from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
+from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link, get_post_template
+
+# Import AI optimization components
+try:
+    from devto_mirror.ai_optimization import create_default_ai_optimization_manager, enhance_post_with_cross_references
+
+    AI_OPTIMIZATION_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"AI optimization not available: {e}")
+    AI_OPTIMIZATION_AVAILABLE = False
 
 # Load environment variables from .env file if it exists
 load_dotenv()
@@ -36,6 +46,17 @@ HOME = f"https://{username}.github.io/{repo}/"
 ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
 POSTS_DIR.mkdir(parents=True, exist_ok=True)
+
+# Initialize AI optimization manager
+ai_manager = None
+if AI_OPTIMIZATION_AVAILABLE:
+    try:
+        site_name = f"{DEVTO_USERNAME} — Dev.to Mirror"
+        ai_manager = create_default_ai_optimization_manager(site_name, HOME)
+        logging.info("AI optimization manager initialized successfully")
+    except Exception as e:
+        logging.warning(f"Failed to initialize AI optimization manager: {e}")
+        ai_manager = None
 
 
 def get_last_run_timestamp():
@@ -141,130 +162,9 @@ def fetch_all_articles_from_api(last_run_iso=None):
 # Templates (posts + index)
 # ----------------------------
 env = Environment(autoescape=select_autoescape(["html", "xml"]))
-PAGE_TMPL = env.from_string(
-    """<!doctype html><html lang="en"><head>
-<meta charset="utf-8">
-<title>{{ title }}</title>
-<link rel="canonical" href="{{ canonical }}">
-<meta name="description" content="{{ description }}">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="article">
-<meta property="og:url" content="{{ canonical }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
-<meta property="og:image" content="{{ social_image }}">
-<meta property="og:site_name" content="{{ site_name }}">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="{{ canonical }}">
-<meta name="twitter:title" content="{{ title }}">
-<meta name="twitter:description" content="{{ description }}">
-<meta name="twitter:image" content="{{ social_image }}">
-
-<!-- LinkedIn -->
-<meta property="linkedin:title" content="{{ title }}">
-<meta property="linkedin:description" content="{{ description }}">
-<meta property="linkedin:image" content="{{ social_image }}">
-
-<!-- Additional Social Meta -->
-<meta name="image" content="{{ social_image }}">
-<meta name="author" content="{{ author }}">
-{% if tags %}<meta name="keywords" content="{{ tags|join(', ') }}">{% endif %}
-
-<!-- AI-Specific Enhanced Metadata -->
-{% if enhanced_metadata %}
-{% for name, content in enhanced_metadata.items() %}
-<meta name="{{ name }}" content="{{ content }}">
-{% endfor %}
-{% endif %}
-
-<!-- Cross-Reference Attribution Meta Tags -->
-{% if cross_references and cross_references.attribution and cross_references.attribution.meta_tags %}
-{% for name, content in cross_references.attribution.meta_tags.items() %}
-<meta name="{{ name }}" content="{{ content }}">
-{% endfor %}
-{% endif %}
-
-<!-- JSON-LD Structured Data -->
-{% if json_ld_schemas %}
-{% for schema in json_ld_schemas %}
-<script type="application/ld+json">
-{{ schema | tojson }}
-</script>
-{% endfor %}
-{% endif %}
-</head><body>
-<main>
-  <h1><a href="{{ canonical }}">{{ title }}</a></h1>
-  {% if cover_image %}
-  <img src="{{ cover_image }}?v=2"
-      alt="Banner image for {{ title }}"
-      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
-  {% endif %}
-  {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
-    {% if tags %}
-    <p><strong>Tags:</strong>
-        {% for tag in tags %}
-            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
-                #{{ tag }}
-            </span>{% if not loop.last %} {% endif %}
-        {% endfor %}
-    </p>
-    {% endif %}
-  {% if description %}<p><em>{{ description }}</em></p>{% endif %}
-
-  <!-- Enhanced Dev.to Attribution -->
-  {% if cross_references and cross_references.attribution and cross_references.has_attribution %}
-  {{ cross_references.attribution.attribution_html | safe }}
-  {% endif %}
-
-  <article>{{ content }}</article>
-
-  <!-- Dev.to Backlinks -->
-  {% if cross_references and cross_references.backlinks and cross_references.has_backlinks %}
-  {{ cross_references.backlinks.backlink_html | safe }}
-  {% endif %}
-
-  <!-- Related Posts Section -->
-  {% if cross_references and cross_references.related_posts and cross_references.has_related_posts %}
-  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
-                  border: 1px solid #e9ecef;">
-    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
-    <ul style="list-style: none; padding: 0; margin: 0;">
-      {% for related in cross_references.related_posts %}
-      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
-                 border-left: 3px solid #007bff;">
-        <div>
-          <a href="{{ related.local_link }}" style="color: #007bff; text-decoration: none; font-weight: bold;">
-            {{ related.title }}
-          </a>
-          {% if related.description %}
-          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">{{ related.description }}</p>
-          {% endif %}
-          {% if related.shared_tags %}
-          <div style="margin: 5px 0;">
-            <small style="color: #868e96;">Shared tags:
-              {% for tag in related.shared_tags %}
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#{{ tag }}</span>
-              {% endfor %}
-            </small>
-          </div>
-          {% endif %}
-        </div>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endif %}
-
-  <p><a href="{{ canonical }}">Read on Dev.to →</a></p>
-</main>
-</body></html>"""
-)
+# Get the post template (from file or inline fallback)
+PAGE_TMPL = get_post_template()
 
 COMMENT_NOTE_TMPL = env.from_string(
     """<!doctype html><html lang="en"><head>
@@ -646,6 +546,23 @@ for p in all_posts:
     # Use cover image as social image, fallback to default banner
     social_image = p.cover_image or f"{HOME}assets/devto-mirror.jpg"
 
+    # Apply AI optimizations if available
+    optimization_data = {}
+    cross_references = {}
+
+    if ai_manager:
+        try:
+            # Get AI optimization data for this post
+            optimization_data = ai_manager.optimize_post(p, all_posts=all_posts)
+
+            # Get cross-reference data using the cross-reference functions
+            cross_references = enhance_post_with_cross_references(p, all_posts)
+
+            print(f"Applied AI optimizations to: {p.slug}")
+        except Exception as e:
+            logging.warning(f"AI optimization failed for post {p.slug}: {e}")
+            # Continue with graceful fallback - no optimization data
+
     html_out = PAGE_TMPL.render(
         title=p.title,
         canonical=canonical,
@@ -657,7 +574,9 @@ for p in all_posts:
         social_image=social_image,
         site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
         author=DEVTO_USERNAME,
-        enhanced_metadata=getattr(p, "enhanced_metadata", {}),
+        enhanced_metadata=optimization_data.get("enhanced_metadata", {}),
+        json_ld_schemas=optimization_data.get("json_ld_schemas", []),
+        cross_references=cross_references,
     )
     # Prevent path traversal or unsafe filenames in slugs
     safe_slug = re.sub(SAFE_FILENAME_PATTERN, "-", p.slug)[:120]
@@ -733,7 +652,21 @@ pathlib.Path("robots.txt").write_text(
     ROBOTS_TMPL.format(home=HOME, timestamp=datetime.now(timezone.utc).isoformat()), encoding="utf-8"
 )
 
-smap = SITEMAP_TMPL.render(home=HOME, posts=all_posts, comments=comment_items)
-pathlib.Path("sitemap.xml").write_text(smap, encoding="utf-8")
+# Generate sitemap - use AI-optimized version if available
+sitemap_content = None
+if ai_manager:
+    try:
+        sitemap_content = ai_manager.generate_optimized_sitemap(all_posts, comment_items)
+        if sitemap_content:
+            print("Generated AI-optimized sitemap")
+    except Exception as e:
+        logging.warning(f"AI sitemap generation failed: {e}")
+
+# Fallback to standard sitemap if AI optimization failed or unavailable
+if not sitemap_content:
+    sitemap_content = SITEMAP_TMPL.render(home=HOME, posts=all_posts, comments=comment_items)
+    print("Generated standard sitemap")
+
+pathlib.Path("sitemap.xml").write_text(sitemap_content, encoding="utf-8")
 
 # Generated with the help of ChatGPT

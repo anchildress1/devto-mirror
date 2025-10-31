@@ -75,6 +75,7 @@ class TestDevToMetadataEnhancer(unittest.TestCase):
             "tags": ["javascript", "webdev"],
             "reading_time_minutes": 5,
             "public_reactions_count": 42,
+            "comments_count": 10,
             "id": 12345,
         }
 
@@ -100,7 +101,9 @@ class TestDevToMetadataEnhancer(unittest.TestCase):
         self.assertEqual(metadata["source-post-id"], "12345")
         self.assertEqual(metadata["original-published-date"], "2023-01-01T12:00:00Z")
         self.assertEqual(metadata["reading-time"], "5 minutes")
-        self.assertEqual(metadata["original-reactions"], "42")
+        self.assertEqual(metadata["devto:reactions"], "42")
+        self.assertEqual(metadata["devto:comments"], "10")
+        self.assertEqual(metadata["devto:engagement_score"], "62")
 
     def test_determine_content_type(self):
         """Test content type determination based on tags."""
@@ -251,6 +254,7 @@ class TestDevToMetadataEnhancer(unittest.TestCase):
             "published_at": "2023-01-01T12:00:00Z",
             "reading_time_minutes": 5,
             "public_reactions_count": 42,
+            "comments_count": 10,
         }
 
         mock_post = Mock()
@@ -270,7 +274,9 @@ class TestDevToMetadataEnhancer(unittest.TestCase):
         self.assertEqual(metadata["source-post-id"], "12345")
         self.assertEqual(metadata["original-published-date"], "2023-01-01T12:00:00Z")
         self.assertEqual(metadata["reading-time"], "5 minutes")
-        self.assertEqual(metadata["original-reactions"], "42")
+        self.assertEqual(metadata["devto:reactions"], "42")
+        self.assertEqual(metadata["devto:comments"], "10")
+        self.assertEqual(metadata["devto:engagement_score"], "62")
 
     def test_add_source_attribution_metadata_no_api_data(self):
         """Test source attribution metadata with no API data."""
@@ -294,7 +300,9 @@ class TestDevToMetadataEnhancer(unittest.TestCase):
         self.assertNotIn("source-post-id", metadata)
         self.assertNotIn("original-published-date", metadata)
         self.assertNotIn("reading-time", metadata)
-        self.assertNotIn("original-reactions", metadata)
+        self.assertNotIn("devto:reactions", metadata)
+        self.assertNotIn("devto:comments", metadata)
+        self.assertNotIn("devto:engagement_score", metadata)
 
 
 if __name__ == "__main__":

@@ -73,9 +73,8 @@ class DevToContentAnalyzer:
             # Determine content type
             analysis_result["content_type"] = self._determine_content_type(post, api_data)
 
-            # Extract programming languages from code blocks
-            if content_html:
-                analysis_result["code_languages"] = self.extract_code_languages(content_html)
+            # Extract programming languages from code blocks and tags
+            analysis_result["code_languages"] = self.extract_code_languages(content_html, api_data)
 
             # Add timestamp
             analysis_result["analysis_timestamp"] = datetime.now(timezone.utc).isoformat()
@@ -210,20 +209,26 @@ class DevToContentAnalyzer:
 
         return metrics
 
-    def extract_code_languages(self, content: str) -> List[str]:
+    def extract_code_languages(self, content: str, api_data: Dict[str, Any] = None) -> List[str]:
         """
-        Identify programming languages from code blocks in content.
+        Identify programming languages from code blocks in content and Dev.to tags.
 
         Args:
             content: HTML content containing code blocks
+            api_data: Optional Dev.to API data containing tag_list
 
         Returns:
             List of detected programming language identifiers
         """
         languages = set()
 
+        # First, extract languages from Dev.to tag_list (most reliable source)
+        if api_data:
+            tag_languages = self._extract_languages_from_tags(api_data)
+            languages.update(tag_languages)
+
         if not content or not isinstance(content, str):
-            return []
+            return sorted(list(languages))
 
         try:
             # Pattern 1: Look for class="language-*" or class="lang-*" attributes
@@ -365,6 +370,177 @@ class DevToContentAnalyzer:
             return ""
 
         return normalized
+
+    def _extract_languages_from_tags(self, api_data: Dict[str, Any]) -> List[str]:
+        """
+        Extract programming languages from Dev.to tag_list.
+
+        Args:
+            api_data: Dev.to API response data
+
+        Returns:
+            List of programming languages found in tags
+        """
+        languages = set()
+
+        if not api_data or not isinstance(api_data, dict):
+            return []
+
+        # Get tags from API data
+        tags = api_data.get("tag_list", [])
+        if not tags and "tags" in api_data:
+            tags = api_data.get("tags", [])
+
+        if not isinstance(tags, list):
+            return []
+
+        # Common programming language tags used on Dev.to
+        programming_language_tags = {
+            "javascript",
+            "js",
+            "typescript",
+            "ts",
+            "python",
+            "py",
+            "java",
+            "csharp",
+            "c#",
+            "cs",
+            "cpp",
+            "c++",
+            "c",
+            "go",
+            "golang",
+            "rust",
+            "php",
+            "ruby",
+            "rb",
+            "swift",
+            "kotlin",
+            "scala",
+            "dart",
+            "r",
+            "matlab",
+            "perl",
+            "lua",
+            "haskell",
+            "clojure",
+            "elixir",
+            "erlang",
+            "fsharp",
+            "f#",
+            "ocaml",
+            "nim",
+            "crystal",
+            "zig",
+            "v",
+            "julia",
+            "bash",
+            "shell",
+            "powershell",
+            "sql",
+            "html",
+            "css",
+            "scss",
+            "sass",
+            "less",
+            "xml",
+            "yaml",
+            "yml",
+            "json",
+            "toml",
+            "ini",
+            "dockerfile",
+            "makefile",
+            "assembly",
+            "asm",
+            "vhdl",
+            "verilog",
+            "solidity",
+            "move",
+            "cairo",
+        }
+
+        # Framework/library tags that imply languages
+        framework_to_language = {
+            "react": "javascript",
+            "vue": "javascript",
+            "angular": "javascript",
+            "svelte": "javascript",
+            "nodejs": "javascript",
+            "node": "javascript",
+            "express": "javascript",
+            "nextjs": "javascript",
+            "nuxtjs": "javascript",
+            "gatsby": "javascript",
+            "electron": "javascript",
+            "django": "python",
+            "flask": "python",
+            "fastapi": "python",
+            "pandas": "python",
+            "numpy": "python",
+            "tensorflow": "python",
+            "pytorch": "python",
+            "scikit": "python",
+            "spring": "java",
+            "springboot": "java",
+            "hibernate": "java",
+            "maven": "java",
+            "gradle": "java",
+            "dotnet": "csharp",
+            "aspnet": "csharp",
+            "blazor": "csharp",
+            "xamarin": "csharp",
+            "rails": "ruby",
+            "sinatra": "ruby",
+            "jekyll": "ruby",
+            "laravel": "php",
+            "symfony": "php",
+            "wordpress": "php",
+            "drupal": "php",
+            "gin": "go",
+            "echo": "go",
+            "fiber": "go",
+            "beego": "go",
+            "actix": "rust",
+            "rocket": "rust",
+            "warp": "rust",
+            "tokio": "rust",
+            "flutter": "dart",
+            "android": "java",
+            "ios": "swift",
+            "swiftui": "swift",
+            "bootstrap": "css",
+            "tailwind": "css",
+            "bulma": "css",
+            "materialize": "css",
+        }
+
+        # Check each tag
+        for tag in tags:
+            if not isinstance(tag, str):
+                continue
+
+            tag_lower = tag.lower().strip()
+
+            # Direct language match
+            if tag_lower in programming_language_tags:
+                normalized = self._normalize_language_name(tag_lower)
+                if normalized:
+                    languages.add(normalized)
+
+            # Framework/library implies language
+            elif tag_lower in framework_to_language:
+                implied_lang = framework_to_language[tag_lower]
+                normalized = self._normalize_language_name(implied_lang)
+                if normalized:
+                    languages.add(normalized)
+
+        result = sorted(list(languages))
+        if result:
+            self.logger.debug(f"Extracted languages from tags: {result}")
+
+        return result
 
     def _determine_content_type(self, post: Any, api_data: Dict[str, Any]) -> str:
         """
