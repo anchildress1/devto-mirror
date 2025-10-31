@@ -38,7 +38,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           cache: 'pip'
 
       - name: Upgrade pip
@@ -62,7 +62,16 @@ jobs:
           DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}  # single variable only
           PAGES_REPO: ${{ github.repository }}        # "username/repo"
           FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}  # Incremental by default
-        run: python scripts/generate_site.py
+        run: |
+          echo "## 🏗️ Site Generation Started" >> $GITHUB_STEP_SUMMARY
+          echo "- 👤 Dev.to Username: \`${{ vars.DEVTO_USERNAME }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 Target Repository: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 Full Regeneration: \`${{ github.event.inputs.force_full_regen || 'false' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          python scripts/generate_site.py
+          
+          echo "- ✅ Site generation completed" >> $GITHUB_STEP_SUMMARY
       # Use official GitHub Pages actions to deploy the generated site as an artifact
       # This avoids manual gh-pages branch management and uses the Pages API.
       - name: Configure GitHub Pages

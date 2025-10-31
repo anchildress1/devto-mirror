@@ -508,7 +508,7 @@ class DevToAISitemapGenerator:
         """
         xml_lines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
-            '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" '
+            '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" ',
             'xmlns:ai="http://ai-optimization.dev/rss/1.0/">',
             "  <channel>",
             f"    <title>{escape(self.site_name)}</title>",
