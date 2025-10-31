@@ -7,14 +7,14 @@ This script tests whether major search engine crawlers can access the site
 by simulating different user agents and testing access to sample pages.
 """
 
+import json
 import os
 import sys
 import time
-import requests
-from urllib.parse import urljoin
 from datetime import datetime
-import json
+from urllib.parse import urljoin
 
+import requests
 
 # Major crawler user agents to test
 CRAWLER_USER_AGENTS = {

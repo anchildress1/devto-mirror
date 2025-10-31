@@ -2,8 +2,6 @@
 
 🔗 **Live Site:** [anchildress1.github.io/devto-mirror](https://anchildress1.github.io/devto-mirror/)
 
-
-
 ![anchildress1/devto-mirror social card: A colorful crawler](https://github.com/anchildress1/devto-mirror/blob/main/assets/devto-mirror.jpg)
 
 This Copilot generated utility helps make your Dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante’s DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.tx — _that's it_ (although I'm slowly working through enhancements). If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
@@ -13,8 +11,9 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 > I'm slowly accepting that one or two brave souls might actually read my strong (and usually correct) opinions. 😅 I'm also always looking for ways to improve AI results across the board, because... well, _somebody_ has to. 🧠
 >
 > The internet already changed — blink and you missed it. We don't Google anymore; we ask ChatGPT (the wise ones even ask for sources). 🤖
->  - **When I searched**: my [Dev.to](https://dev.to/anchildress1) showed up just as expected
->  - **When I asked Gemini the same thing**: crickets. 🦗
+>
+> - **When I searched**: my [Dev.to](https://dev.to/anchildress1) showed up just as expected
+> - **When I asked Gemini the same thing**: crickets. 🦗
 >
 > So yeah, obvious disconnect... Also, I'm _not_ hosting a blog on my domain (I'm a backend dev; hosting a pretty blog + analytics sounds like a relaxing afternoon with Dante's DevOps. Hard pass. 🔥🫠), but I still want control of `robots.txt.`
 >
@@ -32,7 +31,7 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 
 [![Publish Dev.to Mirror Site](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml/badge.svg?branch=main&style=flat)](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml) [![CodeQL Analysis](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml/badge.svg?style=flat)](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml) [![Security and Lint CI](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml/badge.svg?style=flat)](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml)
 
-![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Fdevto-mirror%2Frefs%2Fheads%2F001-upgrade-the-python%2Fpyproject.toml&query=%24.project.requires-python&style=flat&logo=python&logoColor=fff&label=Python&color=3776AB) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=flat) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=flat) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=flat) ![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=flat)
+![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Fdevto-mirror%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.project.requires-python&style=flat&logo=python&logoColor=fff&label=Python&color=3776AB) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=flat) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=flat) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=flat) ![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=flat)
 
  [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black&style=flat)](https://www.buymeacoffee.com/anchildress1) [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto&logoColor=fff&style=flat)](https://dev.to/anchildress1) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin\&logoColor=white&style=flat)](https://www.linkedin.com/in/anchildress1/)
 
@@ -50,7 +49,7 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 4. Run workflow: [Actions → "Generate and Publish Dev.to Mirror Site" → Run workflow](https://github.com/anchildress1/devto-mirror/actions)
 5. Enable Pages: Settings → Pages → Deploy from branch → `gh-pages`
 
-Done. Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
+> Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
 
 ---
 
@@ -67,42 +66,26 @@ Done. Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
 
 ## Local Development
 
+
+
 ```bash
 git clone https://github.com/anchildress1/devto-mirror.git
 cd devto-mirror
 python -m venv .venv && source .venv/bin/activate
 pip install -e '.[dev]'
-export DEVTO_USERNAME="your-username"
-export PAGES_REPO="your-username/devto-mirror"
 
-# Run tests
-python -m unittest
+# Copy and configure environment variables
+cp .env.example .env
+# Edit .env with your DEVTO_USERNAME and PAGES_REPO
 
-# Run quality checks
-pre-commit run --all-files
+# Run full validation
+make validate
 
-# Generate site
+# Generate site locally
 python scripts/generate_site.py
 ```
 
-### Local Security & Linting
-
-Install hooks: `pre-commit install`
-Run checks: `pre-commit run --all-files`
-Manual audit: `pip-audit --progress-spinner=off`
-
-Runs: `bandit`, `flake8`, `detect-secrets`, `pip-audit`
-
-## Workflows
-
-We maintain four primary GitHub Actions workflows. Key changes in this branch:
-
-- `security-ci.yml`: Uses Python 3.11 for dependency installation, runs `pip-audit`, `bandit`, and `flake8`. Adds `workflow_dispatch` for manual testing and enforces least-privilege permissions.
-- `codeql.yml`: Runs CodeQL analysis via `github/codeql-action@v3` with Python analysis enabled. Includes `workflow_dispatch` and explicit permissions.
-- `publish.yaml`: Now scheduled weekly on Wednesdays at `09:38 AM EDT` (cron `38 13 * * 3`), uses Python 3.11 and deploys to `gh-pages`.
-- `refresh.yaml`: Manual `workflow_dispatch` trigger that creates a backup branch, resets `last_run.txt`, and triggers the publish workflow.
-
-All workflows include `workflow_dispatch` to allow manual runs from the Actions UI and use `actions/setup-python@v6` with caching enabled for `pip`.
+**For detailed development setup, CI/CD workflows, and troubleshooting**: See [`docs/DEV_GUIDE.md`](docs/DEV_GUIDE.md)
 
 ---
 
@@ -110,8 +93,10 @@ All workflows include `workflow_dispatch` to allow manual runs from the Actions 
 
 Additional documentation is available in the [`docs/`](./docs/) directory:
 
-- [Security Analysis](./docs/SECURITY_ANALYSIS.md) - Security recommendations; added workflows
-- [Crawler Testing](./docs/20251026_CRAWLER_TESTING.md) - Testing crawler accessibility
+- [Development Guide](./docs/DEV_GUIDE.md) - Local development setup and commands
+- [CI/CD Guide](./docs/CI_GUIDE.md) - GitHub Actions workflows and deployment
+- [Security Analysis](./docs/SECURITY_ANALYSIS.md) - Security recommendations and workflows
+- [Migration Plan](./docs/MIGRATION_PLAN.md) - AI optimization refactoring progress
 
 ## License 📄
 

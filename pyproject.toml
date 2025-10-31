@@ -5,12 +5,13 @@ description = "Static HTML mirror of Dev.to blog posts for better search engine 
 authors = [
     {name = "Ashley Childress", email = "6563688+anchildress1@users.noreply.github.com"}
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
     "requests>=2.31.0",
     "jinja2>=3.1.2",
     "python-slugify>=8.0.1",
-    "bleach>=6.0.0"
+    "bleach>=6.0.0",
+    "python-dotenv>=1.0.0"
 ]
 
 [project.optional-dependencies]
@@ -21,7 +22,8 @@ dev = [
     "pre-commit>=3.4.0",
     "gitlint>=0.16.0",
     "detect-secrets>=1.0.0",
-    "black>=24.0.0"
+    "black>=24.0.0",
+    "coverage>=7.0.0"
 ]
 
 [tool.setuptools.packages.find]
@@ -30,7 +32,34 @@ exclude = ["specs*", "assets*", "tests*", ".github*"]
 [tool.black]
 line-length = 120
 skip-string-normalization = false
-target-version = ['py311']
+target-version = ['py312']
+
+[tool.coverage.run]
+source = ["devto_mirror", "scripts"]
+omit = [
+    "tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    ".venv/*",
+    "setup.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:"
+]
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"
 
 [build-system]
 requires = ["setuptools>=61.0"]

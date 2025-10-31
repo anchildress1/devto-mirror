@@ -12,6 +12,7 @@ devto_mirror.egg-info
 
 # Test files
 test_incremental_temp/
+.coverage
 
 # Dependencies
 node_modules/

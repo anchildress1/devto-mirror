@@ -1,4 +1,16 @@
 repos:
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        language_version: python3
+        stages: [pre-commit]
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--line-length", "120"]
+        stages: [pre-commit]
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
     hooks:
@@ -17,3 +29,11 @@ repos:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
         stages: [pre-commit]
+  - repo: local
+    hooks:
+      - id: validate-site-generation
+        name: Validate site generation
+        entry: python scripts/validate_site_generation.py
+        language: system
+        stages: [pre-commit]
+        pass_filenames: false
