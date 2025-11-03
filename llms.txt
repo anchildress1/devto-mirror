@@ -1,0 +1,31 @@
+# llms.txt
+# Policy file for Large Language Model (LLM) crawlers
+# Visibility is welcome. Long-term retention and training are not.
+
+User-agent: *
+Allow: /
+
+Policy: no-training
+Usage: ephemeral-access
+Purpose: browsing, indexing, real-time reference only
+Contact: human@checkmarkdevtools.dev
+Copyright: © 2025 Ashley Childress / CheckMarK DevTools. All rights reserved.
+
+# License Notice:
+# Unless otherwise defined in a specific repository or file header,
+# all content originating from this domain or referenced within it
+# is governed by the Polyform Shield License.
+# Exceptions (e.g., open contributions under MIT in the "awesome-copilot" project)
+# are explicitly marked as such in their respective GitHub repositories.
+# No other deviation from Polyform Shield is implied or granted.
+#
+# This includes this mirror site and all of its contents.
+# You may not copy, store, train on, or reuse any material here
+# for derivative AI models or commercial purposes without written consent.
+
+# Notes:
+# - "Allow: /" keeps the site accessible for real-time reading and legitimate search.
+# - "Policy: no-training" prevents content from being stored or reused for dataset creation.
+# - "Usage: ephemeral-access" allows temporary, context-driven access only.
+# - Place this file at the root of your domain: https://anchildress1.github.io/llms.txt
+# - This file complements your robots.txt and license documentation.

@@ -1,7 +1,5 @@
 # devto-mirror Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2025-10-12
-
 ## Active Technologies
 - Python 3.11+ + requests, jinja2, python-slugify, bleach (001-upgrade-the-python)
 
@@ -15,10 +13,19 @@ assets/           # Static assets (excluded from package)
 ## Commands
 ```bash
 # Run tests from project root
-python -m unittest
+make test
 
 # Run quality checks
-pre-commit run --all-files
+make lint
+
+# Run tests with coverage
+make test-coverage
+
+# Run security checks
+make security
+
+# Run comprehensive validation
+make validate
 
 # Generate site (requires DEVTO_USERNAME and PAGES_REPO env vars)
 python scripts/generate_site.py
@@ -34,9 +41,11 @@ Python 3.11+: Follow standard conventions
 - **Data Flow**: Dev.to API → JSON processing → HTML files in `posts/` directory
 
 ## Critical Workflows
-- **Dependency Management**: Use `pip` with pyproject.toml: `pip install -e '.[dev]'`
-- **Testing**: `python -m unittest` from project root (not scripts/)
-- **Code Quality**: `pre-commit run --all-files` (flake8, bandit, detect-secrets)
+- **Dependency Management**: Use `make install` or `pip install -e '.[dev]'`
+- **Testing**: `make test` from project root (not scripts/)
+- **Code Quality**: `make lint` (flake8, bandit, detect-secrets)
+- **Security**: `make security` (bandit, pip-audit)
+- **Validation**: `make validate` (comprehensive validation: format + lint + test + security + site generation)
 - **Site Generation**: Set `DEVTO_USERNAME` and `PAGES_REPO` env vars, run `python scripts/generate_site.py`
 
 ## Project Conventions

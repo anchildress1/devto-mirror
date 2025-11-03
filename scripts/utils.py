@@ -225,11 +225,10 @@ SITEMAP_TMPL = env.from_string(
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{{ home }}</loc></url>
   {% for p in posts %}
-    {# Prefer canonical Dev.to link if available #}
-    <url><loc>{{ p.link or (home + 'posts/' + p.slug + '.html') }}</loc></url>
+    <url><loc>{{ home }}posts/{{ p.slug }}.html</loc></url>
   {% endfor %}
   {% for c in comments %}
-    <url><loc>{{ c.url or (home + c.local) }}</loc></url>
+    <url><loc>{{ home }}{{ c.local }}</loc></url>
   {% endfor %}
 </urlset>
 """
