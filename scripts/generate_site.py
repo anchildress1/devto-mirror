@@ -1,14 +1,36 @@
-import os, pathlib, re, html, json, requests, time
+import html
+import json
+import logging
+import os
+import pathlib
+import re
+import time
 from datetime import datetime, timezone
-from slugify import slugify
-from jinja2 import Environment, select_autoescape
-from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
+
 import bleach
+import requests
+from dotenv import load_dotenv
+from jinja2 import Environment, select_autoescape
+from slugify import slugify
+from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link, get_post_template
+
+# Import AI optimization components
+try:
+    from devto_mirror.ai_optimization import create_default_ai_optimization_manager, enhance_post_with_cross_references
+
+    AI_OPTIMIZATION_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"AI optimization not available: {e}")
+    AI_OPTIMIZATION_AVAILABLE = False
+
+# Load environment variables from .env file if it exists
+load_dotenv()
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
 LAST_RUN_FILE = "last_run.txt"
 POSTS_DATA_FILE = "posts_data.json"
+VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes")
 
 # Filename sanitization pattern - prevents path traversal and unsafe characters
 SAFE_FILENAME_PATTERN = r"[^A-Za-z0-9_-]"
@@ -24,6 +46,17 @@ HOME = f"https://{username}.github.io/{repo}/"
 ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
 POSTS_DIR.mkdir(parents=True, exist_ok=True)
+
+# Initialize AI optimization manager
+ai_manager = None
+if AI_OPTIMIZATION_AVAILABLE:
+    try:
+        site_name = f"{DEVTO_USERNAME} — Dev.to Mirror"
+        ai_manager = create_default_ai_optimization_manager(site_name, HOME)
+        logging.info("AI optimization manager initialized successfully")
+    except Exception as e:
+        logging.warning(f"Failed to initialize AI optimization manager: {e}")
+        ai_manager = None
 
 
 def get_last_run_timestamp():
@@ -103,6 +136,24 @@ def fetch_all_articles_from_api(last_run_iso=None):
     """Public API that returns full-article objects after pagination.
     Delegates to smaller helpers to keep complexity low.
     """
+    if VALIDATION_MODE:
+        # Return mock data for validation
+        # Uncomment the next line to test validation failure detection:
+        # raise RuntimeError("Test validation failure")
+        return [
+            {
+                "id": 1,
+                "title": "Test Article",
+                "url": f"https://dev.to/{DEVTO_USERNAME}/test-article",
+                "published_at": "2024-01-01T00:00:00Z",
+                "body_html": "<p>Test content</p>",
+                "description": "Test description",
+                "cover_image": "",
+                "tag_list": ["test", "validation"],
+                "slug": "test-article",
+            }
+        ]
+
     summaries = _fetch_article_pages(last_run_iso=last_run_iso)
     return _fetch_full_articles(summaries)
 
@@ -111,62 +162,9 @@ def fetch_all_articles_from_api(last_run_iso=None):
 # Templates (posts + index)
 # ----------------------------
 env = Environment(autoescape=select_autoescape(["html", "xml"]))
-PAGE_TMPL = env.from_string(
-    """<!doctype html><html lang="en"><head>
-<meta charset="utf-8">
-<title>{{ title }}</title>
-<link rel="canonical" href="{{ canonical }}">
-<meta name="description" content="{{ description }}">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="article">
-<meta property="og:url" content="{{ canonical }}">
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
-<meta property="og:image" content="{{ social_image }}">
-<meta property="og:site_name" content="{{ site_name }}">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="{{ canonical }}">
-<meta name="twitter:title" content="{{ title }}">
-<meta name="twitter:description" content="{{ description }}">
-<meta name="twitter:image" content="{{ social_image }}">
-
-<!-- LinkedIn -->
-<meta property="linkedin:title" content="{{ title }}">
-<meta property="linkedin:description" content="{{ description }}">
-<meta property="linkedin:image" content="{{ social_image }}">
-
-<!-- Additional Social Meta -->
-<meta name="image" content="{{ social_image }}">
-<meta name="author" content="{{ author }}">
-{% if tags %}<meta name="keywords" content="{{ tags|join(', ') }}">{% endif %}
-</head><body>
-<main>
-  <h1><a href="{{ canonical }}">{{ title }}</a></h1>
-  {% if cover_image %}
-  <img src="{{ cover_image }}?v=2"
-      alt="Banner image for {{ title }}"
-      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
-  {% endif %}
-  {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
-    {% if tags %}
-    <p><strong>Tags:</strong>
-        {% for tag in tags %}
-            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
-                #{{ tag }}
-            </span>{% if not loop.last %} {% endif %}
-        {% endfor %}
-    </p>
-    {% endif %}
-  {% if description %}<p><em>{{ description }}</em></p>{% endif %}
-  <article>{{ content }}</article>
-  <p><a href="{{ canonical }}">Read on Dev.to →</a></p>
-</main>
-</body></html>"""
-)
+# Get the post template (from file or inline fallback)
+PAGE_TMPL = get_post_template()
 
 COMMENT_NOTE_TMPL = env.from_string(
     """<!doctype html><html lang="en"><head>
@@ -199,6 +197,22 @@ COMMENT_NOTE_TMPL = env.from_string(
 <!-- Additional Social Meta -->
 <meta name="image" content="{{ social_image }}">
 <meta name="author" content="{{ author }}">
+
+<!-- AI-Specific Enhanced Metadata -->
+{% if enhanced_metadata %}
+{% for name, content in enhanced_metadata.items() %}
+<meta name="{{ name }}" content="{{ content }}">
+{% endfor %}
+{% endif %}
+
+<!-- JSON-LD Structured Data -->
+{% if json_ld_schemas %}
+{% for schema in json_ld_schemas %}
+<script type="application/ld+json">
+{{ schema | tojson }}
+</script>
+{% endfor %}
+{% endif %}
 </head><body>
 <main>
   <h1>{{ title }}</h1>
@@ -312,6 +326,9 @@ def sanitize_html_content(content):
 
 class Post:
     def __init__(self, api_data):
+        # Store the original API data for AI optimization
+        self.api_data = api_data
+
         self.title = api_data.get("title", "Untitled")
         self.link = api_data.get("url", HOME)
         self.date = api_data.get("published_at", "")
@@ -391,6 +408,7 @@ class Post:
             "slug": self.slug,
             "cover_image": self.cover_image,
             "tags": self.tags,
+            "api_data": getattr(self, "api_data", {}),  # Store original API data
         }
 
     @classmethod
@@ -405,6 +423,7 @@ class Post:
         post.slug = data["slug"]
         post.cover_image = data.get("cover_image", "")  # Handle legacy data without cover_image
         post.tags = post._normalize_tags(data.get("tags", []))  # Handle legacy data without tags and normalize
+        post.api_data = data.get("api_data", {})  # Restore original API data
         return post
 
 
@@ -527,6 +546,23 @@ for p in all_posts:
     # Use cover image as social image, fallback to default banner
     social_image = p.cover_image or f"{HOME}assets/devto-mirror.jpg"
 
+    # Apply AI optimizations if available
+    optimization_data = {}
+    cross_references = {}
+
+    if ai_manager:
+        try:
+            # Get AI optimization data for this post
+            optimization_data = ai_manager.optimize_post(p, all_posts=all_posts)
+
+            # Get cross-reference data using the cross-reference functions
+            cross_references = enhance_post_with_cross_references(p, all_posts)
+
+            print(f"Applied AI optimizations to: {p.slug}")
+        except Exception as e:
+            logging.warning(f"AI optimization failed for post {p.slug}: {e}")
+            # Continue with graceful fallback - no optimization data
+
     html_out = PAGE_TMPL.render(
         title=p.title,
         canonical=canonical,
@@ -538,6 +574,9 @@ for p in all_posts:
         social_image=social_image,
         site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
         author=DEVTO_USERNAME,
+        enhanced_metadata=optimization_data.get("enhanced_metadata", {}),
+        json_ld_schemas=optimization_data.get("json_ld_schemas", []),
+        cross_references=cross_references,
     )
     # Prevent path traversal or unsafe filenames in slugs
     safe_slug = re.sub(SAFE_FILENAME_PATTERN, "-", p.slug)[:120]
@@ -575,6 +614,7 @@ if comment_items:
             social_image=social_image,
             site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
             author=DEVTO_USERNAME,
+            enhanced_metadata={},  # Comments don't have enhanced metadata yet
         )
         # Ensure local path is safe. Re-sanitize the filename component to be defensive
         # (load_comment_manifest already attempts sanitization, but double-check here).
@@ -612,7 +652,21 @@ pathlib.Path("robots.txt").write_text(
     ROBOTS_TMPL.format(home=HOME, timestamp=datetime.now(timezone.utc).isoformat()), encoding="utf-8"
 )
 
-smap = SITEMAP_TMPL.render(home=HOME, posts=all_posts, comments=comment_items)
-pathlib.Path("sitemap.xml").write_text(smap, encoding="utf-8")
+# Generate sitemap - use AI-optimized version if available
+sitemap_content = None
+if ai_manager:
+    try:
+        sitemap_content = ai_manager.generate_optimized_sitemap(all_posts, comment_items)
+        if sitemap_content:
+            print("Generated AI-optimized sitemap")
+    except Exception as e:
+        logging.warning(f"AI sitemap generation failed: {e}")
+
+# Fallback to standard sitemap if AI optimization failed or unavailable
+if not sitemap_content:
+    sitemap_content = SITEMAP_TMPL.render(home=HOME, posts=all_posts, comments=comment_items)
+    print("Generated standard sitemap")
+
+pathlib.Path("sitemap.xml").write_text(sitemap_content, encoding="utf-8")
 
 # Generated with the help of ChatGPT

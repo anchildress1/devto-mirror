@@ -4,8 +4,8 @@ Reset Repository Script
 Restores the devto-mirror repository to its original state by removing all generated content.
 """
 
-import shutil
 import json
+import shutil
 from pathlib import Path
 
 
@@ -18,11 +18,11 @@ def reset_repository():
 
     # Files and directories to remove
     items_to_remove = [
-        "posts",            # Directory containing all blog post HTML files
-        "index.html",       # Generated index page
-        "sitemap.xml",      # Generated sitemap
+        "posts",  # Directory containing all blog post HTML files
+        "index.html",  # Generated index page
+        "sitemap.xml",  # Generated sitemap
         "posts_data.json",  # Posts data tracking file
-        "robots.txt"        # Generated robots.txt (if it exists)
+        "robots.txt",  # Generated robots.txt (if it exists)
     ]
 
     removed_items = []
@@ -48,12 +48,12 @@ def reset_repository():
     reset_summary = {
         "reset_timestamp": "Reset completed",
         "removed_items": removed_items,
-        "status": "Repository restored to original state"
+        "status": "Repository restored to original state",
     }
 
     # Optional: Create a temporary reset log (will be removed by git add -A)
     reset_log_path = repo_root / "RESET_LOG.json"
-    with open(reset_log_path, 'w', encoding='utf-8') as f:
+    with open(reset_log_path, "w", encoding="utf-8") as f:
         json.dump(reset_summary, f, indent=2)
 
     print("\n✅ Reset process completed!")

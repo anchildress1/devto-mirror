@@ -5,9 +5,9 @@ This script will try to run `gitlint` if available. If `gitlint` is not
 installed, it falls back to a conservative, small regex that enforces
 Conventional Commit headers for common types.
 """
-import sys
 import re
 import subprocess  # nosec
+import sys
 from shutil import which
 
 ALLOWED_TYPES = (
