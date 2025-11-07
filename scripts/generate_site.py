@@ -726,13 +726,15 @@ index_html = INDEX_TMPL.render(
 )
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
 
-# Copy robots.txt from assets and substitute HOME variable
-robots_template = pathlib.Path("assets/robots.txt").read_text(encoding="utf-8")
-pathlib.Path("robots.txt").write_text(robots_template.format(home=HOME, root_home=ROOT_HOME), encoding="utf-8")
+# Copy robots.txt and llms.txt from assets to the project root (raw copy)
+# Keep it simple: identical behavior for both files using shutil.copy2
+assets_robots = pathlib.Path("assets/robots.txt")
+if assets_robots.exists():
+    shutil.copy2(assets_robots, "robots.txt")
 
-# Copy llms.txt from assets if it exists
-if pathlib.Path("assets/llms.txt").exists():
-    shutil.copy2("assets/llms.txt", "llms.txt")
+assets_llms = pathlib.Path("assets/llms.txt")
+if assets_llms.exists():
+    shutil.copy2(assets_llms, "llms.txt")
 
 # Generate sitemap - use AI-optimized version if available
 sitemap_content = None

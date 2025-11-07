@@ -58,6 +58,17 @@ jobs:
 
           python scripts/generate_site.py
 
+          username=$(echo $PAGES_REPO | cut -d'/' -f1)
+          repo=$(echo $PAGES_REPO | cut -d'/' -f2)
+          HOME="https://$username.github.io/$repo/"
+          ROOT_HOME="https://$username.github.io/"
+          cp assets/robots.txt robots.txt
+          cp assets/llms.txt llms.txt
+          sed -i "s|{home}|$HOME|g" robots.txt
+          sed -i "s|{root_home}|$ROOT_HOME|g" robots.txt
+          sed -i "s|{home}|$HOME|g" llms.txt
+          sed -i "s|{root_home}|$ROOT_HOME|g" llms.txt
+
           echo "- ✅ Site generation completed" >> $GITHUB_STEP_SUMMARY
 
       - name: Configure GitHub Pages
@@ -72,7 +83,7 @@ jobs:
 
           set -e
           TMPDIR="$(mktemp -d)"
-          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml llms.txt posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
+          cp -R .nojekyll index.html comments.txt sitemap.xml posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
           if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
           if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
 
@@ -134,9 +145,13 @@ jobs:
           echo "## 📦 Deploying to Root Site" >> $GITHUB_STEP_SUMMARY
 
           mkdir -p _site
-          cp robots.txt _site/
+          username=$(echo ${{ github.repository }} | cut -d'/' -f1)
+          HOME="https://$username.github.io/"
+          cp assets/robots.txt _site/robots.txt
+          sed -i "s|{home}|$HOME|g" _site/robots.txt
+          sed -i "s|{root_home}|$HOME|g" _site/robots.txt
           cp sitemap.xml _site/
-          cp llms.txt _site/
+          cp assets/llms.txt _site/llms.txt
           cp google6b80426bb396f31f.html _site/
 
           echo "- ✅ Prepared 4 files for deployment" >> $GITHUB_STEP_SUMMARY
