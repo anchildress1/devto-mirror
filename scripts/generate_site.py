@@ -214,7 +214,7 @@ def _fetch_full_articles(articles):
                 failed_articles.append(article)
                 break
 
-        # Rate limiting between successful requests
+        # Rate limiting between requests
         if i < len(articles) - 1:
             time.sleep(0.8)  # Rate limiting between requests
 
