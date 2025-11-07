@@ -1,4 +1,9 @@
 # Search Engine Crawlers
+# 
+# This template file uses placeholders that are substituted during site generation:
+# - {home}: The full URL of the site (e.g., https://anchildress1.github.io/devto-mirror/)
+# - {root_home}: The root domain (e.g., https://anchildress1.github.io/)
+#
 User-agent: Googlebot
 Allow: /
 
