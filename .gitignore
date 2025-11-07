@@ -38,7 +38,4 @@ posts/
 posts_data.*
 index.html
 sitemap.xml
-robots.txt
 comments/
-Trigger CI rebuild with description fixes
-
