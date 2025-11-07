@@ -114,6 +114,7 @@ def _fetch_article_pages(last_run_iso=None):
         max_retries = 3
         retry_delay = 1
         timeout = 30
+        data = None
 
         for attempt in range(max_retries):
             try:

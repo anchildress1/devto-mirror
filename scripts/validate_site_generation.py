@@ -63,6 +63,10 @@ def validate_site_generation():
         (assets_dir / "devto-mirror.jpg").touch()
         (assets_dir / "robots.txt").touch()
 
+        # Copy llms.txt if it exists
+        if (workspace_root / "llms.txt").exists():
+            shutil.copy2(workspace_root / "llms.txt", temp_path)
+
         # Set up environment for validation
         env = os.environ.copy()
         env.update(
