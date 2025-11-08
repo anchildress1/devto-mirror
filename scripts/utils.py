@@ -3,7 +3,7 @@ Shared utilities for devto-mirror scripts
 """
 
 import pathlib
-from datetime import datetime
+from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -225,11 +225,10 @@ SITEMAP_TMPL = env.from_string(
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{{ home }}</loc></url>
   {% for p in posts %}
-    {# Prefer canonical Dev.to link if available #}
-    <url><loc>{{ p.link or (home + 'posts/' + p.slug + '.html') }}</loc></url>
+    <url><loc>{{ home }}posts/{{ p.slug }}.html</loc></url>
   {% endfor %}
   {% for c in comments %}
-    <url><loc>{{ c.url or (home + c.local) }}</loc></url>
+    <url><loc>{{ home }}{{ c.local }}</loc></url>
   {% endfor %}
 </urlset>
 """
@@ -245,11 +244,18 @@ def parse_date(date_str):
         return None
 
     if isinstance(date_str, datetime):
-        return date_str
+        dt = date_str
+        # Normalize naive datetimes to UTC to avoid comparison errors
+        if dt.tzinfo is None:
+            return dt.replace(tzinfo=timezone.utc)
+        return dt
 
     if isinstance(date_str, (int, float)):
         try:
-            return datetime.fromtimestamp(date_str)
+            dt = datetime.fromtimestamp(date_str)
+            if dt.tzinfo is None:
+                return dt.replace(tzinfo=timezone.utc)
+            return dt
         except Exception:
             return None
 
@@ -259,21 +265,28 @@ def parse_date(date_str):
     try:
         if s.endswith("Z"):
             s = s.replace("Z", "+00:00")
-        return datetime.fromisoformat(s)
+        dt = datetime.fromisoformat(s)
+        if dt.tzinfo is None:
+            return dt.replace(tzinfo=timezone.utc)
+        return dt
     except (ValueError, TypeError):
         # Failed to parse as ISO format, try RFC format
         pass
 
     # Try RFC-style parse
     try:
-        return parsedate_to_datetime(s)
+        dt = parsedate_to_datetime(s)
+        if dt and dt.tzinfo is None:
+            return dt.replace(tzinfo=timezone.utc)
+        return dt
     except (ValueError, TypeError, OverflowError):
         # Failed to parse as RFC format, try basic ISO format
         pass
 
     # Try basic ISO without timezone
     try:
-        return datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
+        dt = datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
+        return dt.replace(tzinfo=timezone.utc)
     except Exception:
         return None
 
@@ -308,7 +321,9 @@ def dedupe_posts_by_link(posts_list):
             posts_map[link] = post_dict
 
     def _post_date_key(p):
-        return parse_date(p.get("date")) or datetime.min
+        # Ensure the fallback minimum datetime is timezone-aware (UTC)
+        fallback = datetime.min.replace(tzinfo=timezone.utc)
+        return parse_date(p.get("date")) or fallback
 
     deduped = sorted(posts_map.values(), key=_post_date_key, reverse=True)
     return deduped
