@@ -42,7 +42,7 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        run: pip install -e .
+        run: python -m pip install -e .
 
       - name: Generate site
         if: env.DEVTO_USERNAME && env.DEVTO_API_KEY
@@ -62,6 +62,18 @@ jobs:
           repo=$(echo $PAGES_REPO | cut -d'/' -f2)
           HOME="https://$username.github.io/$repo/"
           ROOT_HOME="https://$username.github.io/"
+
+          # Prepare a temporary copy of the static assets directly from the
+          # `assets/` directory (avoid relying on generator creating root copies).
+          # This keeps the staging behavior simple: we always assemble TMPDIR from
+          # authoritative sources. Fail fast if assets are missing.
+          if [ ! -f assets/robots.txt ] || [ ! -f assets/llms.txt ]; then
+            echo "Error: required assets (assets/robots.txt or assets/llms.txt) are missing" >&2
+            exit 1
+          fi
+
+          # We'll perform substitutions on the copies placed into the project root
+          # so later steps (and the site validator) can find them if needed.
           cp assets/robots.txt robots.txt
           cp assets/llms.txt llms.txt
           sed -i "s|{home}|$HOME|g" robots.txt
@@ -85,7 +97,9 @@ jobs:
 
           set -e
           TMPDIR="$(mktemp -d)"
-          cp -R .nojekyll index.html comments.txt sitemap.xml posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
+          # Copy required and expected files into the temporary staging area. This
+          # should fail immediately if any required file is missing (fail-fast).
+          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml llms.txt posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
           if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
           if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
 

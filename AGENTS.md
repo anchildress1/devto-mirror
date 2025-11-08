@@ -4,6 +4,7 @@
 - Python 3.12+ (development & CI)
 - requests, jinja2, python-slugify, bleach, python-dotenv
 - Packaging: poetry / pip + editable installs for development
+- All dependencies, including GHA MUST use the latest available version
 
 ## Project Structure
 ```
