@@ -4,6 +4,7 @@ import logging
 import os
 import pathlib
 import re
+import shutil
 import time
 from datetime import datetime, timezone
 
@@ -728,6 +729,10 @@ pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
 # Copy robots.txt from assets and substitute HOME variable
 robots_template = pathlib.Path("assets/robots.txt").read_text(encoding="utf-8")
 pathlib.Path("robots.txt").write_text(robots_template.format(home=HOME, root_home=ROOT_HOME), encoding="utf-8")
+
+# Copy llms.txt from assets if it exists
+if pathlib.Path("assets/llms.txt").exists():
+    shutil.copy2("assets/llms.txt", "llms.txt")
 
 # Generate sitemap - use AI-optimized version if available
 sitemap_content = None
