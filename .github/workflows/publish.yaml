@@ -159,7 +159,7 @@ jobs:
           echo "- ✅ Prepared 4 files for deployment" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: _site
 
