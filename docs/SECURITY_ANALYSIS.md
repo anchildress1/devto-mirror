@@ -46,7 +46,7 @@ This repository now includes an extra CI workflow (`.github/workflows/security-c
 To run these locally during development:
 
 1. Create a virtual environment: `python -m venv .venv && source .venv/bin/activate`
-2. Install the dev requirements: `pip install -r dev-requirements.txt`
+2. Install the dev requirements: `uv run python -m pip install -r dev-requirements.txt`
 3. Run `pip-audit`, `bandit -r scripts`, and `flake8` as needed
 
 These checks are intentionally lightweight — they won't find everything, but they reduce noise in automated scans and catch common mistakes that lead to security flags.

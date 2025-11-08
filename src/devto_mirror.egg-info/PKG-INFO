@@ -18,5 +18,6 @@ Requires-Dist: pre-commit>=3.4.0; extra == "dev"
 Requires-Dist: gitlint>=0.16.0; extra == "dev"
 Requires-Dist: detect-secrets>=1.0.0; extra == "dev"
 Requires-Dist: black>=24.0.0; extra == "dev"
+Requires-Dist: isort>=5.12.0; extra == "dev"
 Requires-Dist: coverage>=7.0.0; extra == "dev"
 Dynamic: license-file

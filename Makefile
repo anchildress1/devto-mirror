@@ -4,6 +4,7 @@
 PYTHON := $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python)
 
 .PHONY: help test test-coverage lint format install clean check validate security
+.PHONY: test-crawler analyze-crawlers
 
 help:  ## Show this help message
 	@echo "Available commands:"
@@ -11,7 +12,8 @@ help:  ## Show this help message
 
 install:  ## Install development dependencies
 	uv sync --locked
-	pre-commit install
+	# Ensure pre-commit is executed via uv so we use the pinned dev toolchain
+	uv run pre-commit install
 
 test:  ## Run unit tests
 	uv run python -m unittest discover -s tests -p 'test_*.py'
@@ -28,7 +30,7 @@ format:  ## Format code with Black
 	uv run black src/ tests/ scripts/ --line-length 120
 
 prechecks:  ## Run prechecks on staged files (applies formatting to staged files only)
-	@./scripts/prechecks.sh $$(git diff --name-only --cached) || true
+	@./scripts/prechecks.sh $$(git diff --name-only --cached)
 
 prechecks-full:  ## Run full prechecks across the repo (force full run)
 	@./scripts/prechecks.sh $$(git ls-files)
@@ -40,14 +42,24 @@ security:  ## Run security checks
 validate-site:  ## Validate site generation script
 	uv run python scripts/validate_site_generation.py
 
+generate-site:  ## Generate the site locally (creates HTML files in posts/)
+	uv run python scripts/generate_site.py
+
+# Crawler testing helpers
+test-crawler:  ## Run crawler access test script. Provide BASE_URL as environment variable if needed.
+	uv run python scripts/test_crawler_access.py $(BASE_URL)
+
+analyze-crawlers:  ## Run GitHub Pages crawler analysis. Provide BASE_URL as environment variable if needed.
+	uv run python scripts/analyze_github_pages_crawlers.py $(BASE_URL)
+
 validate:  ## Single command: format → lint → security → test + site (POC ready)
 	@set -e; \
 	echo "🔍 format → lint → security → test..."; \
-	$(MAKE) format > /dev/null 2>&1 && echo "  ✓ format" || (echo "  ✗ format"; exit 1); \
-	$(MAKE) lint > /dev/null 2>&1 && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
-	$(MAKE) security > /dev/null 2>&1 && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
-	$(MAKE) test > /dev/null 2>&1 && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
-	$(MAKE) validate-site > /dev/null 2>&1 && echo "  ✓ site" || (echo "  ✗ site"; exit 1); \
+	$(MAKE) format && echo "  ✓ format" || (echo "  ✗ format"; exit 1); \
+	$(MAKE) lint && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
+	$(MAKE) security && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
+	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
+	$(MAKE) validate-site && echo "  ✓ site" || (echo "  ✗ site"; exit 1); \
 	echo "✅ Ready to commit."
 
 check: validate  ## Alias for validate

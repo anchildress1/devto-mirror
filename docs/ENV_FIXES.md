@@ -16,15 +16,17 @@ Effect: removes corrupted cache entries that produced repeated "Cache entry dese
 Commands run (from project root):
 
   source .venv/bin/activate
-  pip install --upgrade pip-audit cachecontrol
-  pip install -e .
-  pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-wj6h-64fc-37mp --ignore-vuln GHSA-7f5h-v6xp-fcq8
+  # Use uv to synchronize locked dev dependencies and run tooling inside the project's environment
+  uv sync --locked
+  # If you need to install the editable package for development, run it through uv
+  uv run python -m pip install -e .
+  uv run pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-wj6h-64fc-37mp --ignore-vuln GHSA-7f5h-v6xp-fcq8
 
 Effect: updated pip-audit & cachecontrol inside the venv, reinstalled the project in editable mode to refresh the editable-finder mapping, and re-ran pip-audit to verify no fatal issues.
 
 Notes and rationale:
 - Using `source .venv/bin/activate` ensures tools are installed into the local virtualenv and not globally.
-- Reinstalling with `pip install -e .` updates the __editable__ finder so imports resolve to the repository layout and not stale paths.
+- Reinstalling with `uv run python -m pip install -e .` updates the __editable__ finder so imports resolve to the repository layout and not stale paths.
 - Clearing the cache addresses noisy warnings from cachecontrol without changing behavior.
 
 If you'd like I can also:

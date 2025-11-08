@@ -43,7 +43,7 @@ Posts with banner images now display them prominently at the top of detail pages
 ### Usage
 
 ```bash
-python scripts/analyze_descriptions.py [posts_file]
+uv run python scripts/analyze_descriptions.py [posts_file]
 ```
 
 ### Sample Output

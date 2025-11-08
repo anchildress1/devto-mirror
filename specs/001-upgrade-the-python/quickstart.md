@@ -38,7 +38,7 @@
 
 1. **Activate environment**: `source .venv/bin/activate`
 2. **Install new dependencies**: `uv add <package>`
-3. **Run scripts**: `python scripts/generate_site.py`
+3. **Run scripts**: `uv run python scripts/generate_site.py`
 4. **Run tests**: `python -m unittest`
 
 ## Key Changes from Previous Setup

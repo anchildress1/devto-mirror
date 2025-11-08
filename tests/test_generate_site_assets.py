@@ -11,6 +11,7 @@ import shutil
 import subprocess  # nosec: B404
 import tempfile
 import unittest
+import warnings
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 ASSETS_DIR = os.path.join(ROOT, "assets")
@@ -21,24 +22,25 @@ def restore_or_remove(backup, target):
 
     This is a best-effort helper used by tests to avoid raising during teardown.
     """
-    if backup:
-        try:
-            shutil.copy2(backup, target)
-        except OSError:
+    try:
+        if backup:
             # Best-effort restore; ignore OS errors during cleanup
-            pass
-    else:
-        try:
+            shutil.copy2(backup, target)
+        else:
+            # Best-effort remove; ignore OS errors during cleanup
             os.remove(target)
-        except OSError:
-            pass
+    except OSError as e:
+        # Don't raise in test teardown - emit a warning so test runners can report
+        # the issue but continue cleanup attempts for other files.
+        warnings.warn(f"Cleanup warning for {target}: {e}")
 
 
 class TestGenerateSiteAssets(unittest.TestCase):
     def setUp(self):
         # Backup original assets content if present
-        self.robots_path = os.path.join(ASSETS_DIR, "robots.txt")
-        self.llms_path = os.path.join(ASSETS_DIR, "llms.txt")
+        # Use normalized paths to avoid surprising path separators on different OSes
+        self.robots_path = os.path.normpath(os.path.join(ASSETS_DIR, "robots.txt"))
+        self.llms_path = os.path.normpath(os.path.join(ASSETS_DIR, "llms.txt"))
         self.backup_dir = tempfile.mkdtemp(prefix="gen_site_test_")
 
         self._robots_backup = None
@@ -61,38 +63,29 @@ class TestGenerateSiteAssets(unittest.TestCase):
         restore_or_remove(self._robots_backup, self.robots_path)
         restore_or_remove(self._llms_backup, self.llms_path)
         # Best-effort cleanup of generated artifacts
-        try:
-            for fname in ("robots.txt", "llms.txt", "index.html", "sitemap.xml", "posts_data.json", "last_run.txt"):
-                path = os.path.join(ROOT, fname)
-                if os.path.exists(path):
-                    try:
-                        os.remove(path)
-                    except OSError:
-                        pass
+        for fname in ("robots.txt", "llms.txt", "index.html", "sitemap.xml", "posts_data.json", "last_run.txt"):
+            path = os.path.join(ROOT, fname)
+            if os.path.exists(path):
+                os.remove(path)  # Best-effort cleanup
 
-            posts_dir = os.path.join(ROOT, "posts")
-            for p in glob.glob(os.path.join(posts_dir, "*.html")):
-                try:
-                    os.remove(p)
-                except OSError:
-                    pass
-        except OSError:
-            # Don't fail teardown on cleanup OS errors
-            pass
+        posts_dir = os.path.join(ROOT, "posts")
+        for p in glob.glob(os.path.join(posts_dir, "*.html")):
+            os.remove(p)  # Best-effort cleanup
 
         shutil.rmtree(self.backup_dir, ignore_errors=True)
 
     def _run_generate(self, extra_env=None):
         env = os.environ.copy()
-        env.update(
-            {
-                "DEVTO_USERNAME": "testuser",
-                "PAGES_REPO": "testuser/repo",
-                # Use validation mode to avoid network calls
-                "VALIDATION_MODE": "true",
-                "FORCE_FULL_REGEN": "true",
-            }
-        )
+        # Explicit, small env patch to avoid accidentally overriding unrelated
+        # environment configuration when spawning the generator subprocess.
+        test_env = {
+            "DEVTO_USERNAME": "testuser",
+            "PAGES_REPO": "testuser/repo",
+            # Use validation mode to avoid network calls
+            "VALIDATION_MODE": "true",
+            "FORCE_FULL_REGEN": "true",
+        }
+        env.update(test_env)
         if extra_env:
             env.update(extra_env)
 

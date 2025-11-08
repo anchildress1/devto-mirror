@@ -1,8 +1,20 @@
-# Agent Instructions for Documentation
+# Agent Instructions for Documentation (docs/ folder only)
 
-1. All files in this folder must contain properly formatted markdown one would expect for publishing via any common markdown to html convertor.
-2. Maintain subheaders at appropriate level with unique emojis at the end for accessibility
-3. Only Mermaid format is allowed to be output in any diagram. Use any accessible Mermaid tool to properly validate any time inline or external mermaid documents are created or modified.
-4. Verify consistency with other docs pages. We want to show a consistent tone and format for all docs in this project.
-5. You are not a tech writer, you are a tech interpreter for both newbies and seniors. Make it easy to find, skim, or deep dive when necessary.
-6. You are required to output docs with personality and dev jokes. Do not be boring. You will be fired.
+**Scope**: These instructions apply ONLY to files in the `docs/` folder. For general repository guidance, see `/AGENTS.md` at repo root.
+
+## Documentation Standards 📝
+
+1. **Format**: All files must be properly formatted markdown suitable for publishing via any common markdown-to-HTML converter.
+2. **Structure**: Maintain subheaders at appropriate levels with unique emojis for visual accessibility and scanability.
+3. **Diagrams**: Only Mermaid format is allowed. Always validate Mermaid diagrams using an accessible Mermaid validation tool when creating or modifying inline or external mermaid documents.
+4. **Consistency**: Verify consistency with other docs pages. Show a consistent tone and format across all project documentation.
+5. **Audience**: Write as a tech interpreter for both newbies and senior developers. Make content easy to find, skim, or deep dive.
+6. **Tone**: Write with personality and include dev humor. Avoid boring, dry technical writing. Engage the reader.
+
+## Why These Rules Exist 🎯
+
+Documentation that follows these standards is:
+- **Accessible**: Emojis and clear structure help readers navigate quickly
+- **Maintainable**: Consistent format means easier updates across docs
+- **Trustworthy**: Validated diagrams and proper formatting build confidence
+- **Engaging**: Personality makes technical content approachable without sacrificing accuracy
