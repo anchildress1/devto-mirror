@@ -49,8 +49,11 @@ generate-site:  ## Generate the site locally (creates HTML files in posts/)
 test-crawler:  ## Run crawler access test script. Provide BASE_URL as environment variable if needed.
 	uv run python scripts/test_crawler_access.py $(BASE_URL)
 
-analyze-crawlers:  ## Run GitHub Pages crawler analysis. Provide BASE_URL as environment variable if needed.
+analyze-crawlers:  ## Run GitHub Pages crawler analysis. Provide BASE_URL as an environment variable if needed.
 	uv run python scripts/analyze_github_pages_crawlers.py $(BASE_URL)
+
+check-imports:  ## Check for missing dependencies by running a dry-run of the site generator
+	VALIDATION_MODE=true uv run python scripts/generate_site.py
 
 validate:  ## Single command: format → lint → security → test + site (POC ready)
 	@set -e; \
@@ -59,6 +62,7 @@ validate:  ## Single command: format → lint → security → test + site (POC 
 	$(MAKE) lint && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
 	$(MAKE) security && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
 	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
+	$(MAKE) check-imports && echo "  ✓ imports" || (echo "  ✗ imports"; exit 1); \
 	$(MAKE) validate-site && echo "  ✓ site" || (echo "  ✗ site"; exit 1); \
 	echo "✅ Ready to commit."
 
