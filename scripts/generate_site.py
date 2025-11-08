@@ -36,12 +36,13 @@ VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes
 # Filename sanitization pattern - prevents path traversal and unsafe characters
 SAFE_FILENAME_PATTERN = r"[^A-Za-z0-9_-]"
 
-if not DEVTO_USERNAME:
-    raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
-if "/" not in PAGES_REPO:
-    raise ValueError("Invalid PAGES_REPO (expected 'user/repo')")
+if not VALIDATION_MODE:
+    if not DEVTO_USERNAME:
+        raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
+    if "/" not in PAGES_REPO:
+        raise ValueError("Invalid PAGES_REPO (expected 'user/repo')")
 
-username, repo = PAGES_REPO.split("/")
+username, repo = PAGES_REPO.split("/") if "/" in PAGES_REPO else ("user", "repo")
 HOME = f"https://{username}.github.io/{repo}/"
 ROOT_HOME = f"https://{username}.github.io/"
 
