@@ -111,7 +111,7 @@ class GitHubPagesCrawlerAnalyzer:
         try:
             if not Path(report_file).exists():
                 print(f"Crawler access report not found: {report_file}")
-                print("Run 'python scripts/test_crawler_access.py' first to generate the report.")
+                print("Run 'uv run python scripts/test_crawler_access.py' first to generate the report.")
                 return False
 
             with open(report_file, "r") as f:
@@ -426,7 +426,7 @@ def main():
                 analyzer.load_crawler_access_results()
         except Exception as e:
             print(f"❌ Failed to run crawler access test: {e}")
-            print("Please run 'python scripts/test_crawler_access.py' manually first")
+            print("Please run 'uv run python scripts/test_crawler_access.py' manually first")
 
     analyzer.compare_permissions_vs_access()
     analyzer.generate_recommendations()

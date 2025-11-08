@@ -24,7 +24,8 @@ Tests whether major search engine crawlers can access the site by simulating dif
 **Usage:**
 
 ```bash
-python scripts/test_crawler_access.py [base_url]
+# Use the Makefile helper which runs the script via uv. Optionally pass BASE_URL env var.
+make test-crawler BASE_URL=https://your-site.example
 ```
 
 **Output:**
@@ -45,7 +46,8 @@ Analyzes GitHub Pages deployment for crawler restrictions and compares with robo
 **Usage:**
 
 ```bash
-python scripts/analyze_github_pages_crawlers.py [base_url]
+# Use the Makefile helper which runs the analysis via uv. Optionally pass BASE_URL env var.
+make analyze-crawlers BASE_URL=https://your-site.example
 ```
 
 **Output:**
@@ -88,7 +90,7 @@ To properly test if GitHub Pages respects robots.txt restrictions, we've impleme
 The GitHub Actions workflow now includes:
 
 1. 🔍 **Deployment Verification** - Shows actual deployed content
-2. 🧪 **Crawler Access Testing** - Tests all major crawlers post-deploy  
+2. 🧪 **Crawler Access Testing** - Tests all major crawlers post-deploy
 3. 📊 **GitHub Pages Analysis** - Compares expected vs actual behavior
 4. 📝 **GitHub Summary** - Results posted to workflow summary with emojis
 
@@ -111,10 +113,10 @@ These scripts can be integrated into GitHub Actions workflows for continuous mon
 
 ```yaml
 - name: Test Crawler Access
-  run: python scripts/test_crawler_access.py
+  run: make test-crawler
 
-- name: Analyze GitHub Pages Restrictions  
-  run: python scripts/analyze_github_pages_crawlers.py
+- name: Analyze GitHub Pages Restrictions
+  run: make analyze-crawlers
 ```
 
 ## Future Monitoring

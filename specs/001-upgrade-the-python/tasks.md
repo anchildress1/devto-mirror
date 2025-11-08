@@ -45,7 +45,7 @@
 
 **Goal**: Enable developers to set up the project using modern uv tooling instead of pip
 
-**Independent Test**: Run `uv venv && uv pip install -e . && python scripts/generate_site.py` and verify successful execution
+**Independent Test**: Run `uv venv && uv pip install -e . && uv run python scripts/generate_site.py` and verify successful execution
 
 ### Tests for User Story 1 ⚠️
 

@@ -25,11 +25,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
         with:
+          version: "latest"
           python-version: "3.12"
-          cache: 'pip'
 
       - name: Create backup branch
         run: |
@@ -63,7 +63,7 @@ jobs:
 
             # Return to main branch
             git checkout main
-            
+
             echo "## 🔄 Refresh Workflow Started" >> $GITHUB_STEP_SUMMARY
             echo "- ✅ Backup created: \`$BACKUP_BRANCH\`" >> $GITHUB_STEP_SUMMARY
           else
@@ -115,12 +115,10 @@ jobs:
           echo "✅ Publish workflow triggered successfully"
           echo "🔍 Monitor the workflow at: ${{ github.server_url }}/${{ github.repository }}/actions"
           echo "📦 Backup available in branch: $BACKUP_BRANCH"
-          
+
           echo "## 🚀 Workflow Triggered" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Publish workflow started for full regeneration" >> $GITHUB_STEP_SUMMARY
           echo "- 🔍 [Monitor progress](${{ github.server_url }}/${{ github.repository }}/actions)" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Backup branch: \`$BACKUP_BRANCH\`" >> $GITHUB_STEP_SUMMARY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-# Generated with the help of ChatGPT and GitHub Copilot

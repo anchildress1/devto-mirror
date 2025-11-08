@@ -45,7 +45,12 @@ def add_source_attribution(post: Any, site_config: Optional[Dict[str, str]] = No
         attribution_data["attribution_link_text"] = "Read the original article on Dev.to"
 
         # Enhanced attribution with author information
-        author = getattr(post, "author", "") or "Unknown Author"
+        author = getattr(post, "author", "")
+        if not author:
+            # Fallback: try to extract from api_data
+            api_data = getattr(post, "api_data", {})
+            user_data = api_data.get("user", {})
+            author = user_data.get("name") or user_data.get("username") or "Dev.to Author"
         attribution_data["author_attribution"] = f"by {author} on Dev.to"
 
         # Publication date for attribution

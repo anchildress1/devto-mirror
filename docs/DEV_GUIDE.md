@@ -18,7 +18,12 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
    git clone https://github.com/anchildress1/devto-mirror.git
    cd devto-mirror
    python -m venv .venv && source .venv/bin/activate
-   pip install -e '.[dev]'  # Installs project + dev dependencies
+   # Recommended: use the project's Makefile which wraps uv for reproducible installs
+   make install   # runs `uv sync --locked --group dev` and installs pre-commit hooks
+
+   # Advanced: if you prefer to run uv directly:
+   # uv sync --locked --group dev
+   # uv run python -m pip install -e '.[dev]'
    ```
 
 2. **Configure environment variables**:
@@ -31,7 +36,7 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
 3. **Install pre-commit hooks** (recommended):
 
    ```bash
-   pre-commit install  # Runs quality checks on every commit
+   make install   # Installs dev deps and pre-commit hooks
    ```
 
 4. **Run validation to ensure everything works**:
@@ -43,7 +48,8 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
 5. **Generate your site locally**:
 
    ```bash
-   python scripts/generate_site.py  # Creates HTML files in posts/ directory
+   make generate-site   # Creates HTML files in posts/ directory
+   # (or for a quick validation run: make validate-site)
    ```
 
 ## Environment Variables
@@ -153,11 +159,11 @@ make validate              # Complete validation pipeline
 
 | Error | Solution |
 |-------|----------|
-| **ModuleNotFoundError: No module named 'src'** | Ensure you're in the correct virtual environment and the package is installed with `pip install -e '.[dev]'`. |
+| **ModuleNotFoundError: No module named 'src'** | Ensure you're in the correct virtual environment and the package is installed (`make install` will run the recommended install steps). |
 | **Missing DEVTO_USERNAME** | Check your `.env` file exists and has the correct variable names |
 | **Pre-commit hooks failing** | Run `make format` then `make lint` to see specific issues |
 | **Site generation fails locally** | Check that your Dev.to username is correct and you have published posts |
-| **Import errors** | Make sure you installed with `pip install -e '.[dev]'` and activated your virtual environment |
+| **Import errors** | Make sure you ran `make install` (or the equivalent `uv` commands) and activated your virtual environment |
 
 ## GitHub Actions Setup
 

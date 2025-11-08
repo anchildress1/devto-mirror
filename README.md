@@ -71,8 +71,16 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 ```bash
 git clone https://github.com/anchildress1/devto-mirror.git
 cd devto-mirror
-python -m venv .venv && source .venv/bin/activate
-pip install -e '.[dev]'
+
+# Install uv if you don't have it
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Or update to latest version
+uv self --no-python-downloads update
+
+# Create lockfile and sync dependencies
+uv lock
+uv sync --locked --group dev
 
 # Copy and configure environment variables
 cp .env.example .env
@@ -82,7 +90,7 @@ cp .env.example .env
 make validate
 
 # Generate site locally
-python scripts/generate_site.py
+uv run python scripts/generate_site.py
 ```
 
 **For detailed development setup, CI/CD workflows, and troubleshooting**: See [`docs/DEV_GUIDE.md`](docs/DEV_GUIDE.md)

@@ -261,34 +261,26 @@ def parse_date(date_str):
 
     s = str(date_str).strip()
 
-    # Handle trailing Z (ISO format)
-    try:
-        if s.endswith("Z"):
-            s = s.replace("Z", "+00:00")
-        dt = datetime.fromisoformat(s)
-        if dt.tzinfo is None:
-            return dt.replace(tzinfo=timezone.utc)
-        return dt
-    except (ValueError, TypeError):
-        # Failed to parse as ISO format, try RFC format
-        pass
+    # Try different parsing formats in order
+    formats_to_try = [
+        # ISO format with Z
+        lambda s: datetime.fromisoformat(s.replace("Z", "+00:00")) if s.endswith("Z") else datetime.fromisoformat(s),
+        # RFC-style parse
+        parsedate_to_datetime,
+        # Basic ISO without timezone
+        lambda s: datetime.strptime(s, "%Y-%m-%dT%H:%M:%S"),
+    ]
 
-    # Try RFC-style parse
-    try:
-        dt = parsedate_to_datetime(s)
-        if dt and dt.tzinfo is None:
-            return dt.replace(tzinfo=timezone.utc)
-        return dt
-    except (ValueError, TypeError, OverflowError):
-        # Failed to parse as RFC format, try basic ISO format
-        pass
+    for parse_func in formats_to_try:
+        try:
+            dt = parse_func(s)
+            if dt and dt.tzinfo is None:
+                return dt.replace(tzinfo=timezone.utc)
+            return dt
+        except (ValueError, TypeError, OverflowError):
+            continue  # Try next format
 
-    # Try basic ISO without timezone
-    try:
-        dt = datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
-        return dt.replace(tzinfo=timezone.utc)
-    except Exception:
-        return None
+    return None
 
 
 def dedupe_posts_by_link(posts_list):

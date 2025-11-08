@@ -7,7 +7,7 @@ This script analyzes posts_data.json to identify:
 2. Posts with missing descriptions (using fallback from content)
 
 Usage:
-  python scripts/analyze_descriptions.py [posts_file]
+    uv run python scripts/analyze_descriptions.py [posts_file]
 
 If no file is specified, defaults to posts_data.json
 """
