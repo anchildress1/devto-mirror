@@ -4,6 +4,7 @@ import logging
 import os
 import pathlib
 import re
+import shutil
 import time
 from datetime import datetime, timezone
 
@@ -114,6 +115,7 @@ def _fetch_article_pages(last_run_iso=None):
         max_retries = 3
         retry_delay = 1
         timeout = 30
+        data = None
 
         for attempt in range(max_retries):
             try:
@@ -428,13 +430,19 @@ class Post:
                 url_path = self.link.split("//")[1]  # Remove protocol
                 path_parts = url_path.split("/")
                 if len(path_parts) >= 3:  # domain, username, slug
-                    self.slug = path_parts[2]  # The full slug with ID
+                    raw_slug = path_parts[2]  # The full slug with ID
+                    # Sanitize slug to produce a safe filename (prevent nested paths)
+                    sanitized = re.sub(SAFE_FILENAME_PATTERN, "-", raw_slug)
+                    # Remove any leading/trailing hyphens introduced by sanitization
+                    sanitized = sanitized.strip("-")
+                    # Truncate to a reasonable filename length
+                    self.slug = sanitized[:120] or slugify(self.title) or "post"
                 else:
-                    self.slug = api_data.get("slug", slugify(self.title) or "post")
+                    self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
             except Exception:
-                self.slug = api_data.get("slug", slugify(self.title) or "post")
+                self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
         else:
-            self.slug = api_data.get("slug", slugify(self.title) or "post")
+            self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
 
     def _normalize_tags(self, tags):
         """
@@ -724,9 +732,15 @@ index_html = INDEX_TMPL.render(
 )
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
 
-# Copy robots.txt from assets and substitute HOME variable
-robots_template = pathlib.Path("assets/robots.txt").read_text(encoding="utf-8")
-pathlib.Path("robots.txt").write_text(robots_template.format(home=HOME, root_home=ROOT_HOME), encoding="utf-8")
+# Copy robots.txt and llms.txt from assets to the project root (raw copy)
+# Keep it simple: identical behavior for both files using shutil.copy2
+assets_robots = pathlib.Path("assets/robots.txt")
+if assets_robots.exists():
+    shutil.copy2(assets_robots, "robots.txt")
+
+assets_llms = pathlib.Path("assets/llms.txt")
+if assets_llms.exists():
+    shutil.copy2(assets_llms, "llms.txt")
 
 # Generate sitemap - use AI-optimized version if available
 sitemap_content = None

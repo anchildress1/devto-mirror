@@ -6,7 +6,7 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
 
 ### Prerequisites
 
-- Python 3.11+ (the project uses modern Python features)
+- Python 3.12+ (the project uses modern Python features)
 - Git
 - A Dev.to account with published posts
 
@@ -118,8 +118,8 @@ devto-mirror/
 ├── scripts/                 # Main site generation and utility scripts
 │   ├── generate_site.py    # Core site generation logic
 │   ├── validate_site_generation.py  # Pre-commit validation
-│   └── load_env.py         # Environment variable loading
-├── devto_mirror/           # Python package (AI optimization modules)
+│   └── utils.py            # Shared script utilities
+├── src/                    # Python package (AI optimization modules)
 │   └── ai_optimization/    # Content analysis and cross-references
 ├── tests/                  # Unit tests
 ├── docs/                   # Documentation
@@ -153,7 +153,7 @@ make validate              # Complete validation pipeline
 
 | Error | Solution |
 |-------|----------|
-| **ModuleNotFoundError: No module named 'devto_mirror'** | Ensure you're in the correct virtual environment and `devto_mirror` is installed. |
+| **ModuleNotFoundError: No module named 'src'** | Ensure you're in the correct virtual environment and the package is installed with `pip install -e '.[dev]'`. |
 | **Missing DEVTO_USERNAME** | Check your `.env` file exists and has the correct variable names |
 | **Pre-commit hooks failing** | Run `make format` then `make lint` to see specific issues |
 | **Site generation fails locally** | Check that your Dev.to username is correct and you have published posts |

@@ -1,0 +1,29 @@
+# FFR TTD
+
+- [x] Upload GCP search file to root and deploy
+- [ ] Optimize and create real UI I suppose. But BASIC.
+- [ ] Move TMP folder logic out of workflow into build script
+- [x] Check on codeql workflow concurrency and remove commented lines
+- [x] Check on refresh concurrency gha
+- [ ] Add semantic versioning and release versions
+- [ ] Fix the commit validator to actually work
+- [ ] Fix sucky documentation
+- [ ] Give AI something to eat
+    ```
+    /sitemap.xml
+    /sitemap.json
+    /sitemap.txt
+    /embeddings/
+        ├─ articles.jsonl
+        ├─ tools.jsonl
+        └─ personas.jsonl
+    ```
+- [x] Assess the structure situation in this app cause it's getting messy
+- [x] Migrate to src/ (standard Python layout)
+- [ ] Migrate from scripts/ to src/ (standard Python layout)
+- [x] Update all imports and tests to use src.ai_optimization
+- [x] Fix broken documentation links and update AGENTS.md
+- [x] Create docs/README.md for documentation navigation
+- [ ] Embeddings sound fun
+- [ ] Generate site should use timestamp if API supports it
+- [ ] Add self-correcting canonical for URLs when updating posts
