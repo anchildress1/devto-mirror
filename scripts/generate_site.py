@@ -417,6 +417,10 @@ class Post:
         # Capture cover image for banner display
         self.cover_image = api_data.get("cover_image", "")
 
+        # Extract author from user data in API response
+        user_data = api_data.get("user", {})
+        self.author = user_data.get("name") or user_data.get("username") or DEVTO_USERNAME
+
         # Capture tags from Dev.to API and normalize to array
         # Try tag_list first (Dev.to standard), fallback to tags field
         tags_raw = api_data.get("tag_list") or api_data.get("tags", [])
@@ -491,6 +495,7 @@ class Post:
             "slug": self.slug,
             "cover_image": self.cover_image,
             "tags": self.tags,
+            "author": getattr(self, "author", DEVTO_USERNAME),
             "api_data": getattr(self, "api_data", {}),  # Store original API data
         }
 
@@ -506,6 +511,7 @@ class Post:
         post.slug = data["slug"]
         post.cover_image = data.get("cover_image", "")  # Handle legacy data without cover_image
         post.tags = post._normalize_tags(data.get("tags", []))  # Handle legacy data without tags and normalize
+        post.author = data.get("author", DEVTO_USERNAME)  # Handle legacy data without author
         post.api_data = data.get("api_data", {})  # Restore original API data
         return post
 
