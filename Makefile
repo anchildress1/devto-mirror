@@ -24,7 +24,7 @@ test-coverage:  ## Run tests with coverage report
 	uv run coverage html
 
 lint:  ## Run pre-commit checks (formatting, linting, security)
-	pre-commit run --all-files
+	uv run pre-commit run --all-files
 
 format:  ## Format code with Black
 	uv run black src/ tests/ scripts/ --line-length 120
