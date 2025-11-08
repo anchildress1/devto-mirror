@@ -33,6 +33,7 @@ jobs:
         run: |
           echo "## 🔧 Installing dependencies" >> $GITHUB_STEP_SUMMARY
           uv sync --locked --group dev
+          make install
           echo "✅ Dependencies installed" >> $GITHUB_STEP_SUMMARY
 
       - name: Run comprehensive validation

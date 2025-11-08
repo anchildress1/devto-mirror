@@ -122,5 +122,3 @@ jobs:
           echo "- 📦 Backup branch: \`$BACKUP_BRANCH\`" >> $GITHUB_STEP_SUMMARY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-# Generated with the help of ChatGPT and GitHub Copilot
