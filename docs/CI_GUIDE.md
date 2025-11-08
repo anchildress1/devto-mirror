@@ -27,7 +27,7 @@ This separation allows for independent execution, targeted permissions, and easi
 **Execution Flow**:
 
 1. **Environment Setup**: Python 3.12 with uv caching for faster builds
-2. **Dependency Installation**: Uses `uv sync --locked` for reproducible builds
+2. **Dependency Installation**: Uses `uv sync --locked --group dev` for reproducible builds
 3. **API Integration**: Fetches posts from Dev.to API using incremental updates via `last_run.txt`
 4. **Content Processing**:
    - Generates HTML with Jinja2 templates
@@ -70,7 +70,7 @@ This workflow uses `uv` for dependency management and runs `make check` for vali
 ✅ **CORRECT**:
 ```yaml
 - name: Install dependencies
-  run: uv sync --locked
+  run: uv sync --locked --group dev
 
 - name: Run validation
   run: make check
@@ -289,7 +289,7 @@ make[1]: *** [Makefile:30: format] Error 2
 ```
 
 **Explanation**: The Makefile already wraps tool invocations with `uv run`. The workflow only needs to:
-1. Run `uv sync --locked` to install dependencies
+1. Run `uv sync --locked --group dev` to install dependencies
 2. Call Makefile targets directly (e.g., `make check`, `make test`)
 
 Double-wrapping with `uv run make` breaks the execution context.
@@ -298,10 +298,10 @@ Double-wrapping with `uv run make` breaks the execution context.
 
 **Symptom**: Tools like `black`, `flake8`, or `bandit` not found.
 
-**Solution**: Ensure `uv sync --locked` runs before any Makefile commands:
+**Solution**: Ensure `uv sync --locked --group dev` runs before any Makefile commands:
 ```yaml
 - name: Install dependencies
-  run: uv sync --locked
+  run: uv sync --locked --group dev
 
 - name: Run checks
   run: make validate
@@ -326,7 +326,7 @@ Double-wrapping with `uv run make` breaks the execution context.
 **Installing dependencies:**
 ```yaml
 - name: Install dependencies
-  run: uv sync --locked
+  run: uv sync --locked --group dev
 ```
 
 **Running Makefile targets:**

@@ -11,7 +11,7 @@ help:  ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 install:  ## Install development dependencies
-	uv sync --locked
+	uv sync --locked --group dev
 	# Ensure pre-commit is executed via uv so we use the pinned dev toolchain
 	uv run pre-commit install
 

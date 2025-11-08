@@ -19,10 +19,10 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
    cd devto-mirror
    python -m venv .venv && source .venv/bin/activate
    # Recommended: use the project's Makefile which wraps uv for reproducible installs
-   make install   # runs `uv sync --locked` and installs pre-commit hooks
+   make install   # runs `uv sync --locked --group dev` and installs pre-commit hooks
 
    # Advanced: if you prefer to run uv directly:
-   # uv sync --locked
+   # uv sync --locked --group dev
    # uv run python -m pip install -e '.[dev]'
    ```
 

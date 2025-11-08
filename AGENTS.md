@@ -54,7 +54,7 @@ If you're an automated agent working on this repo, follow these rules to be imme
 
 - Do NOT edit generated files in `htmlcov/` or anything under `.venv/`.
 - Never perform automated `git commit` or push on behalf of a human. Produce `commit.tmp` messages and wait for human approval.
-- If you change dev-tooling, update `uv.lock` with `uv sync --locked` and run `make validate` to ensure nothing regresses.
+- If you change dev-tooling, update `uv.lock` with `uv sync --locked --group dev` and run `make validate` to ensure nothing regresses.
 - Avoid introducing empty `except:` / `except: pass` patterns; prefer explicit exception handling.
 
 ### Quick Examples
@@ -73,7 +73,7 @@ Follow standard Python conventions; use pre-commit hooks where configured.
 - Optional AI optimizations: `src.ai_optimization` is imported when available and used to enhance metadata and sitemaps
 
 ## Critical Workflows
-- Dependency management: use `uv sync --locked` and `uv run python -m pip install -e .` or `make install`
+- Dependency management: use `uv sync --locked --group dev` and `uv run python -m pip install -e .` or `make install`
 - Testing: `make test` from repository root
 - CI: GitHub Actions runs site generation and publishes to `gh-pages`; a follow-up job prepares a `_site` artifact for root deployment
 - Site generation: set `DEVTO_USERNAME` and `PAGES_REPO` (user/repo) environment variables before running `scripts/generate_site.py`
@@ -89,7 +89,7 @@ The Makefile targets already use `uv run` internally. Calling `uv run make` crea
 Workflow pattern:
 ```yaml
 - name: Install dependencies
-  run: uv sync --locked
+  uv sync --locked --group dev
 
 - name: Run validation
   run: make check  # NOT "uv run make check"

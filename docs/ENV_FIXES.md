@@ -17,7 +17,7 @@ Commands run (from project root):
 
   source .venv/bin/activate
   # Use uv to synchronize locked dev dependencies and run tooling inside the project's environment
-  uv sync --locked
+  uv sync --locked --group dev
   # If you need to install the editable package for development, run it through uv
   uv run python -m pip install -e .
   uv run pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-wj6h-64fc-37mp --ignore-vuln GHSA-7f5h-v6xp-fcq8

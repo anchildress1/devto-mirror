@@ -80,7 +80,7 @@ uv self --no-python-downloads update
 
 # Create lockfile and sync dependencies
 uv lock
-uv sync --locked
+uv sync --locked --group dev
 
 # Copy and configure environment variables
 cp .env.example .env
