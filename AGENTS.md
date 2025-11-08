@@ -60,7 +60,7 @@ Follow standard Python conventions; use pre-commit hooks where configured.
 ## Project Conventions
 - Scripts live in `scripts/` (not `src/`)
 - Required env vars: `DEVTO_USERNAME`, `PAGES_REPO`; optional: `DEVTO_API_KEY`, `VALIDATION_MODE`, `FORCE_FULL_REGEN`
-- Generated files (posts/, `index.html`, `sitemap.xml`, `robots.txt`, `llms.txt`) are intentionally gitignored in the repository root
+- NEVER USE `/dev/null 2>&1` to omit output
 - Commit messages: use the conventional commit format. See the project prompt for generating messages.
 - NEVER execute `git commit` automatically — generate a message and wait for user confirmation.
 

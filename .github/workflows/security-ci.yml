@@ -23,29 +23,27 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v4
         with:
-          python-version: '3.12'
-      - name: Cache pip dependencies
+          version: "latest"
+      - name: Cache uv dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-3.12-${{ hashFiles('**/pyproject.toml') }}
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pip-3.12-
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-uv-
       - name: Install dependencies for analysis
         run: |
-          python -m pip install --upgrade pip setuptools wheel
           echo "## 🔧 Environment Setup" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          make install >> $GITHUB_STEP_SUMMARY 2>&1
+          uv sync --locked >> $GITHUB_STEP_SUMMARY 2>&1
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Run comprehensive validation
         run: |
           echo "## 🔍 Comprehensive Validation Results" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          make check >> $GITHUB_STEP_SUMMARY 2>&1
+          uv run make check >> $GITHUB_STEP_SUMMARY 2>&1
           echo '```' >> $GITHUB_STEP_SUMMARY
