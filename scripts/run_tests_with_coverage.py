@@ -50,7 +50,7 @@ def main():
     print("=" * 80)
 
     # Show coverage for our AI optimization modules
-    coverage_ai_cmd = ["coverage", "report", "--include=devto_mirror/ai_optimization/*"]
+    coverage_ai_cmd = ["coverage", "report", "--include=src/ai_optimization/*"]
     run_command(coverage_ai_cmd, "", cwd=project_root)
 
     print("\n" + "=" * 80)

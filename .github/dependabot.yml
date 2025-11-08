@@ -8,7 +8,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "04:00"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 1
     assignees:
       - "anchildress1"
     commit-message:
@@ -23,7 +23,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "04:00"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 1
     assignees:
       - "anchildress1"
     commit-message:

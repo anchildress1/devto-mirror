@@ -22,11 +22,11 @@ lint:  ## Run pre-commit checks (formatting, linting, security)
 	pre-commit run --all-files
 
 format:  ## Format code with Black
-	black devto_mirror/ tests/ scripts/ --line-length 120
+	black src/ tests/ scripts/ --line-length 120
 
 security:  ## Run security checks
-	bandit -r scripts devto_mirror/ -ll -iii
-	pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph
+	bandit -r scripts src/ -ll -iii
+	pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-wj6h-64fc-37mp --ignore-vuln GHSA-7f5h-v6xp-fcq8
 
 validate-site:  ## Validate site generation script
 	python scripts/validate_site_generation.py

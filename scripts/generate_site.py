@@ -430,13 +430,19 @@ class Post:
                 url_path = self.link.split("//")[1]  # Remove protocol
                 path_parts = url_path.split("/")
                 if len(path_parts) >= 3:  # domain, username, slug
-                    self.slug = path_parts[2]  # The full slug with ID
+                    raw_slug = path_parts[2]  # The full slug with ID
+                    # Sanitize slug to produce a safe filename (prevent nested paths)
+                    sanitized = re.sub(SAFE_FILENAME_PATTERN, "-", raw_slug)
+                    # Remove any leading/trailing hyphens introduced by sanitization
+                    sanitized = sanitized.strip("-")
+                    # Truncate to a reasonable filename length
+                    self.slug = sanitized[:120] or slugify(self.title) or "post"
                 else:
-                    self.slug = api_data.get("slug", slugify(self.title) or "post")
+                    self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
             except Exception:
-                self.slug = api_data.get("slug", slugify(self.title) or "post")
+                self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
         else:
-            self.slug = api_data.get("slug", slugify(self.title) or "post")
+            self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
 
     def _normalize_tags(self, tags):
         """

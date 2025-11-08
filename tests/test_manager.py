@@ -96,12 +96,11 @@ class TestAIOptimizationManager(unittest.TestCase):
         mock_post.slug = "test-post"
         mock_post.api_data = {}
 
-        result = self.manager.optimize_post(mock_post)
-
-        # Should still be applied despite schema failure
-        self.assertTrue(result["optimization_applied"])
-        self.assertEqual(result["json_ld_schemas"], [])  # Empty due to failure
-        self.assertEqual(result["enhanced_metadata"]["description"], "test")  # This worked
+        # Now that schema generation is considered fatal, manager should
+        # propagate the exception. Tests should assert the exception is raised.
+        with self.assertRaises(Exception) as cm:
+            self.manager.optimize_post(mock_post)
+        self.assertIn("Schema error", str(cm.exception))
 
     def test_generate_optimized_sitemap_success(self):
         """Test successful sitemap generation."""
@@ -126,10 +125,11 @@ class TestAIOptimizationManager(unittest.TestCase):
     def test_generate_optimized_sitemap_failure(self):
         """Test sitemap generation when generator fails."""
         self.mock_sitemap_generator.generate_main_sitemap.side_effect = Exception("Sitemap error")
-
-        result = self.manager.generate_optimized_sitemap([], [])
-
-        self.assertIsNone(result)
+        # Sitemap generation is now fatal for optimized path and should
+        # propagate exceptions to callers.
+        with self.assertRaises(Exception) as cm:
+            self.manager.generate_optimized_sitemap([], [])
+        self.assertIn("Sitemap error", str(cm.exception))
 
     @patch("devto_mirror.ai_optimization.AIOptimizedPost")
     def test_create_optimized_post(self, mock_optimized_post_class):

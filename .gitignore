@@ -8,7 +8,6 @@ env/
 venv/
 .venv/
 .env
-devto_mirror.egg-info
 
 # Test files
 test_incremental_temp/
@@ -32,6 +31,7 @@ Thumbs.db
 # Logs
 *.log
 *.tmp
+!ttd.tmp
 
 # Generated site artifacts (ignored by default)
 posts/
@@ -39,3 +39,4 @@ posts_data.*
 index.html
 sitemap.xml
 comments/
+last_run.txt
