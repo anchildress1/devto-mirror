@@ -7,7 +7,7 @@ This guide provides an in-depth technical explanation of the GitHub Actions work
 The project uses a multi-workflow architecture designed for separation of concerns, security, and reliability:
 
 - **`publish.yaml`**: Core site generation and deployment
-- **`security-ci.yml`**: Quality assurance and security scanning  
+- **`security-ci.yml`**: Quality assurance and security scanning
 - **`codeql.yml`**: Advanced security analysis
 - **`refresh.yaml`**: Emergency full regeneration
 
@@ -26,10 +26,10 @@ This separation allows for independent execution, targeted permissions, and easi
 
 **Execution Flow**:
 
-1. **Environment Setup**: Python 3.11 with pip caching for faster builds
-2. **Dependency Installation**: Installs project in editable mode with dev dependencies
+1. **Environment Setup**: Python 3.12 with uv caching for faster builds
+2. **Dependency Installation**: Uses `uv sync --locked` for reproducible builds
 3. **API Integration**: Fetches posts from Dev.to API using incremental updates via `last_run.txt`
-4. **Content Processing**: 
+4. **Content Processing**:
    - Generates HTML with Jinja2 templates
    - Creates canonical links back to Dev.to
    - Processes AI-enhanced metadata and cross-references
@@ -56,6 +56,29 @@ This separation allows for independent execution, targeted permissions, and easi
 ### `security-ci.yml` - Quality Assurance Pipeline
 
 **Purpose**: Comprehensive security and quality checks on every code change.
+
+**CRITICAL: uv and Makefile Integration**
+
+This workflow uses `uv` for dependency management and runs `make check` for validation. A common mistake is calling `uv run make check`, which causes failures.
+
+❌ **WRONG** (causes "No such file or directory" errors):
+```yaml
+- name: Run validation
+  run: uv run make check
+```
+
+✅ **CORRECT**:
+```yaml
+- name: Install dependencies
+  run: uv sync --locked
+
+- name: Run validation
+  run: make check
+```
+
+**Why this matters**: The Makefile targets already use `uv run` internally for all tools (black, flake8, bandit, etc.). Calling `uv run make` creates a nested `uv run` context where the inner commands fail to find executables.
+
+**Rule**: After `uv sync`, call Makefile targets directly. Never wrap them in `uv run`.
 
 **Multi-Tool Security Stack**:
 
@@ -180,9 +203,10 @@ This eliminates secret management complexity and reduces attack surface.
 1. **Dependency Caching**:
 
    ```yaml
-   - uses: actions/setup-python@v5
+   - uses: actions/cache@v4
      with:
-       cache: 'pip'
+       path: ~/.cache/uv
+       key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
    ```
 
 2. **Incremental Processing**: Only processes new posts since last run
@@ -218,7 +242,7 @@ This eliminates secret management complexity and reduces attack surface.
 ### Weekly Scheduling Choice
 
 **Decision**: Wednesday 9:38 AM EDT scheduling
-**Rationale**: 
+**Rationale**:
 
 - Mid-week timing avoids weekend/Monday issues
 - EDT timing serves primary user base
@@ -241,5 +265,96 @@ This eliminates secret management complexity and reduces attack surface.
 **GitHub Pages**: Simple, reliable, integrated with repository
 **Alternative considered**: External hosting (rejected for complexity)
 **Trade-off**: Simplicity vs advanced hosting features
+
+## Common CI Issues and Solutions
+
+### Issue: "Failed to spawn: No such file or directory" in CI
+
+**Symptom**:
+```
+error: Failed to spawn: `black`
+  Caused by: No such file or directory (os error 2)
+make[1]: *** [Makefile:30: format] Error 2
+```
+
+**Root Cause**: Using `uv run make <target>` instead of just `make <target>`.
+
+**Solution**: Remove `uv run` prefix when calling Makefile targets:
+```yaml
+# Before (broken)
+- run: uv run make check
+
+# After (fixed)
+- run: make check
+```
+
+**Explanation**: The Makefile already wraps tool invocations with `uv run`. The workflow only needs to:
+1. Run `uv sync --locked` to install dependencies
+2. Call Makefile targets directly (e.g., `make check`, `make test`)
+
+Double-wrapping with `uv run make` breaks the execution context.
+
+### Issue: Dependencies not found in CI
+
+**Symptom**: Tools like `black`, `flake8`, or `bandit` not found.
+
+**Solution**: Ensure `uv sync --locked` runs before any Makefile commands:
+```yaml
+- name: Install dependencies
+  run: uv sync --locked
+
+- name: Run checks
+  run: make validate
+```
+
+### Issue: Workflow output too verbose
+
+**Solution**: Let tools write to stdout normally; avoid capturing in GITHUB_STEP_SUMMARY:
+```yaml
+# Keep it simple
+- name: Run validation
+  run: |
+    echo "## 🔍 Validation Results" >> $GITHUB_STEP_SUMMARY
+    make check
+    echo "✅ All checks passed" >> $GITHUB_STEP_SUMMARY
+```
+
+## Workflow Command Patterns Reference
+
+### Correct Patterns for All Workflows
+
+**Installing dependencies:**
+```yaml
+- name: Install dependencies
+  run: uv sync --locked
+```
+
+**Running Makefile targets:**
+```yaml
+# ✅ CORRECT - Call make directly
+- name: Run validation
+  run: make check
+
+# ❌ WRONG - Do NOT wrap in uv run
+- name: Run validation
+  run: uv run make check  # This will fail!
+```
+
+**Running Python scripts directly:**
+```yaml
+# ✅ CORRECT - Use uv run for scripts
+- name: Generate site
+  run: uv run python scripts/generate_site.py
+
+# ✅ CORRECT - Or use make targets that wrap them
+- name: Generate site
+  run: make generate-site
+```
+
+**Summary:**
+- After `uv sync --locked`, the environment is ready
+- Makefile targets = call directly (e.g., `make test`, `make check`)
+- Python scripts = use `uv run python script.py` OR use make targets
+- Never nest: `uv run make` is always wrong
 
 For setup instructions and development workflow, see [`DEV_GUIDE.md`](DEV_GUIDE.md).

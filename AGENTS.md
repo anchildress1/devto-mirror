@@ -78,6 +78,25 @@ Follow standard Python conventions; use pre-commit hooks where configured.
 - CI: GitHub Actions runs site generation and publishes to `gh-pages`; a follow-up job prepares a `_site` artifact for root deployment
 - Site generation: set `DEVTO_USERNAME` and `PAGES_REPO` (user/repo) environment variables before running `scripts/generate_site.py`
 
+### CI Workflow Critical Rules
+
+**NEVER use `uv run make <target>` in GitHub Actions workflows.**
+
+The Makefile targets already use `uv run` internally. Calling `uv run make` creates a double-nesting problem:
+- ❌ WRONG: `uv run make check` → fails with "No such file or directory"
+- ✅ CORRECT: `make check` → works correctly
+
+Workflow pattern:
+```yaml
+- name: Install dependencies
+  run: uv sync --locked
+
+- name: Run validation
+  run: make check  # NOT "uv run make check"
+```
+
+This applies to ALL Makefile targets: `test`, `lint`, `format`, `security`, `validate`, `check`.
+
 ## Assets and templates
 - `assets/robots.txt` and `assets/llms.txt` are template files and are copied/substituted into the site during CI deployment. Do not overwrite the generated `robots.txt` or `llms.txt` at the repo root — editors should update the templates in `assets/` instead.
 
