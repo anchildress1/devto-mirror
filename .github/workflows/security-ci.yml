@@ -35,15 +35,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-uv-
       - name: Install dependencies for analysis
-        run: |
-          echo "## 🔧 Environment Setup" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          uv sync --locked >> $GITHUB_STEP_SUMMARY 2>&1
-          echo '```' >> $GITHUB_STEP_SUMMARY
+        run: uv sync --locked
 
       - name: Run comprehensive validation
         run: |
-          echo "## 🔍 Comprehensive Validation Results" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          uv run make check >> $GITHUB_STEP_SUMMARY 2>&1
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 Validation Results" >> $GITHUB_STEP_SUMMARY
+          uv run make check
+          echo "✅ All checks passed" >> $GITHUB_STEP_SUMMARY
