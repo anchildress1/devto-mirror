@@ -27,13 +27,8 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
-      - name: Cache uv dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-uv-
+          python-version: "3.12"
+          enable-cache: true
       - name: Install dependencies for analysis
         run: |
           echo "## 🔧 Installing dependencies" >> $GITHUB_STEP_SUMMARY
