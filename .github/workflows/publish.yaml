@@ -24,12 +24,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    # Run on the repository's default branches and manual dispatches. We no longer
-    # special-case `gh-pages` because we deploy via the Pages actions (artifact
-    # + API) rather than pushing to the branch directly.
+  deploy-mirror-site:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
+      DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -41,230 +41,128 @@ jobs:
           python-version: "3.12"
           cache: 'pip'
 
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
-
-      - name: Cache pip dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/pyproject.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e .
+        run: pip install -e .
 
       - name: Generate site
+        if: env.DEVTO_USERNAME && env.DEVTO_API_KEY
         env:
-          DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}  # single variable only
-          PAGES_REPO: ${{ github.repository }}        # "username/repo"
-          FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}  # Incremental by default
+          PAGES_REPO: ${{ github.repository }}
+          FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}
         run: |
           echo "## 🏗️ Site Generation Started" >> $GITHUB_STEP_SUMMARY
-          echo "- 👤 Dev.to Username: \`${{ vars.DEVTO_USERNAME }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 👤 Dev.to Username: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Target Repository: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔄 Full Regeneration: \`${{ github.event.inputs.force_full_regen || 'false' }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔄 Full Regeneration: \`${FORCE_FULL_REGEN}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           python scripts/generate_site.py
-          
+
+          username=$(echo $PAGES_REPO | cut -d'/' -f1)
+          repo=$(echo $PAGES_REPO | cut -d'/' -f2)
+          HOME="https://$username.github.io/$repo/"
+          ROOT_HOME="https://$username.github.io/"
+          cp assets/robots.txt robots.txt
+          cp assets/llms.txt llms.txt
+          sed -i "s|{home}|$HOME|g" robots.txt
+          sed -i "s|{root_home}|$ROOT_HOME|g" robots.txt
+          sed -i "s|{home}|$HOME|g" llms.txt
+          sed -i "s|{root_home}|$ROOT_HOME|g" llms.txt
+
           echo "- ✅ Site generation completed" >> $GITHUB_STEP_SUMMARY
-      # Use official GitHub Pages actions to deploy the generated site as an artifact
-      # This avoids manual gh-pages branch management and uses the Pages API.
+
       - name: Configure GitHub Pages
+        if: env.DEVTO_USERNAME && env.DEVTO_API_KEY
         uses: actions/configure-pages@v5
 
       - name: Commit & push to gh-pages
-        env:
-          DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
-          PAGES_REPO: ${{ github.repository }}
+        if: env.DEVTO_USERNAME && env.DEVTO_API_KEY
         run: |
           git config user.name "ci-bot"
           git config user.email "actions@users.noreply.github.com"
           git add -A
           git commit -m "chore: auto-publish dev.to mirror" || echo "No changes"
-          # Safer publish flow: copy generated site to a temp dir, switch to gh-pages
-          # branch (create if missing), copy generated files (only posts/comments),
-          # merge posts_data.json, regenerate index/sitemap, commit and push.
+
           set -e
           TMPDIR="$(mktemp -d)"
-          echo "Copying generated site to temporary dir: $TMPDIR"
-          # Copy required artifacts; fail loudly if required ones are missing
-          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
-          # Optional artifacts
+          cp -R .nojekyll index.html comments.txt sitemap.xml posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
           if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
           if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
-          echo "TMPDIR contents:"
-          ls -la "$TMPDIR" || true
 
-          # Ensure we have the remote branch info
           git fetch --all --prune || true
 
           if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
-            echo "gh-pages exists on remote, checking out"
             git checkout gh-pages
             git reset --hard origin/gh-pages
           else
-            echo "gh-pages does not exist, creating orphan branch"
             git checkout --orphan gh-pages
-            # leave working tree empty for now
             git rm -rf .
           fi
 
-          # Copy the generated posts and comment pages only; do NOT overwrite index.html or sitemap.xml
-          # This preserves older posts that are no longer available from the Dev.to API pagination.
           cp -R "$TMPDIR"/posts ./
           cp -R "$TMPDIR"/comments ./
+          cp "$TMPDIR"/robots.txt ./
+          cp "$TMPDIR"/sitemap.xml ./
+          cp "$TMPDIR"/llms.txt ./
           cp "$TMPDIR"/google6b80426bb396f31f.html ./
-          # Persist last_run.txt so incremental updates work across runs
           if [ -f "$TMPDIR/last_run.txt" ]; then
             cp "$TMPDIR/last_run.txt" ./last_run.txt
           fi
 
-          # Save the freshly-generated posts_data.json as a separate file so we can merge
           if [ -f "$TMPDIR/posts_data.json" ]; then
             cp "$TMPDIR/posts_data.json" posts_data_new.json
           fi
 
-          # Copy helper scripts into the gh-pages working tree and run the renderer from the checkout root.
-          # Running from the checkout root ensures the renderer's ROOT (.) points at the gh-pages tree
-          # so posts/ and comments/ are resolved correctly and we don't accidentally run code from TMPDIR.
           if [ -d "$TMPDIR/scripts" ]; then
             cp -R "$TMPDIR/scripts" ./
           fi
 
           if [ -f "scripts/render_index_sitemap.py" ]; then
             python scripts/render_index_sitemap.py
-          else
-            echo "Warning: scripts/render_index_sitemap.py not found in working tree; skipping index/sitemap regeneration" >&2
           fi
 
           git add -A
-          git commit -m "chore: publish generated site to gh-pages (TEST restrictive robots.txt)" || echo "No changes to commit"
+          git commit -m "chore: deploy dev.to mirror" || echo "No changes to commit"
           git push origin gh-pages
 
-      - name: 🔍 Verify Deployed Content
-        run: |
-          echo "🔍 DEPLOYED CONTENT VERIFICATION"
-          echo "================================="
-          
-          # Switch to gh-pages to verify what was actually deployed
-          git checkout gh-pages
-          
-          echo "📍 Current branch: $(git branch --show-current)"
-          echo ""
-          echo "📁 Working directory contents:"
-          ls -la
-          echo ""
-          echo "🤖 ROBOTS.TXT CONTENT:"
-          echo "======================"
-          if [ -f robots.txt ]; then
-            cat robots.txt
-          else
-            echo "❌ robots.txt not found!"
-          fi
-          echo "======================"
-          echo ""
-          echo "📝 POSTS DIRECTORY:"
-          if [ -d posts ]; then
-            echo "✅ Posts directory exists"
-            echo "Posts directory contents (first 10):"
-            ls -la posts/ | head -10
-            echo "📊 Total posts: $(ls -1 posts/ | wc -l)"
-          else
-            echo "❌ posts/ directory not found!"
-          fi
-          echo ""
-          echo "💬 COMMENTS DIRECTORY:"
-          if [ -d comments ]; then
-            echo "✅ Comments directory exists"
-            echo "Comments directory contents:"
-            ls -la comments/
-            echo "📊 Total comment pages: $(ls -1 comments/ | wc -l)"
-          else
-            echo "ℹ️  No comments directory (optional feature)"
-          fi
-          echo ""
-          echo "🔍 GOOGLE VERIFICATION FILE:"
-          if [ -f google6b80426bb396f31f.html ]; then
-            echo "✅ Google verification file exists:"
-            ls -la google6b80426bb396f31f.html
-            echo "Content:"
-            cat google6b80426bb396f31f.html
-          else
-            echo "❌ Google verification file not found!"
-          fi
-          echo ""
-          echo "🎯 DEPLOYMENT VERIFICATION COMPLETE"
-          
-          # Add concise summary to GitHub Summary
-          echo "## 🔍 Deployment Verification" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Deployed to gh-pages branch" >> $GITHUB_STEP_SUMMARY
-          echo "- 🤖 Restrictive robots.txt deployed (blocks 6+ crawlers)" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔍 Google verification file: $([ -f google6b80426bb396f31f.html ] && echo "✅ Present" || echo "❌ Missing")" >> $GITHUB_STEP_SUMMARY
-          echo "- 📝 Posts: $(ls -1 posts/ | wc -l) files deployed" >> $GITHUB_STEP_SUMMARY
-          echo "- 💬 Comments: $([ -d comments ] && echo "$(ls -1 comments/ | wc -l) pages" || echo "None")" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+  deploy-root:
+    runs-on: ubuntu-latest
+    needs: deploy-mirror-site
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v5
+        with:
+          ref: gh-pages
 
-      - name: 🧪 Test Crawler Access (Post-Deploy)
+      - name: Prepare root site files
         run: |
-          # Switch back to source branch to get the test scripts
-          git checkout ${{ github.ref_name }}
-          
-          echo "🧪 CRAWLER ACCESS TEST RESULTS"
-          echo "==============================="
-          echo "🎯 Testing if GitHub Pages respects robots.txt restrictions"
-          echo ""
-          
-          # Wait a moment for deployment to propagate
-          echo "⏳ Waiting 30 seconds for deployment to propagate..."
-          sleep 30
-          
-          # Run the crawler test and capture output
-          python scripts/test_crawler_access.py 2>&1 | tee crawler_test_output.txt
-          
-          # Extract key results for summary
-          TOTAL_CRAWLERS=$(grep "Total Crawlers Tested:" crawler_test_output.txt | grep -o '[0-9]*' | head -1)
-          FULLY_ACCESSIBLE=$(grep "Fully Accessible:" crawler_test_output.txt | grep -o '[0-9]*' | head -1)
-          FULLY_BLOCKED=$(grep "Fully Blocked:" crawler_test_output.txt | grep -o '[0-9]*' | head -1)
-          
-          # Add concise summary to GitHub Summary
-          echo "## 🧪 Crawler Access Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "- 🎯 **Testing:** Does GitHub Pages respect robots.txt restrictions?" >> $GITHUB_STEP_SUMMARY
-          echo "- 📊 **Crawlers Tested:** ${TOTAL_CRAWLERS:-0}" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ **Fully Accessible:** ${FULLY_ACCESSIBLE:-0}" >> $GITHUB_STEP_SUMMARY
-          echo "- ❌ **Fully Blocked:** ${FULLY_BLOCKED:-0}" >> $GITHUB_STEP_SUMMARY
-          
-          # Check if any crawlers were blocked as expected
-          if grep -q "Fully Blocked: 0" crawler_test_output.txt; then
-            echo "- 🚨 **RESULT:** GitHub Pages IGNORES robots.txt restrictions!" >> $GITHUB_STEP_SUMMARY
-            echo "- 🤔 All crawlers have access despite Disallow rules" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ✅ **RESULT:** GitHub Pages RESPECTS robots.txt restrictions!" >> $GITHUB_STEP_SUMMARY
-            echo "- 🎉 Some crawlers were blocked as expected" >> $GITHUB_STEP_SUMMARY
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Deploying to Root Site" >> $GITHUB_STEP_SUMMARY
 
-      - name: 📊 Analyze GitHub Pages Crawler Restrictions
-        run: |
-          echo "📊 GITHUB PAGES ANALYSIS"
-          echo "========================"
-          
-          # Run the analysis script and capture output
-          python scripts/analyze_github_pages_crawlers.py 2>&1 | tee analysis_output.txt
-          
-          # Add final conclusion to GitHub Summary
-          echo "## 📊 Final Analysis" >> $GITHUB_STEP_SUMMARY
-          if grep -q "🎉 EXCELLENT: All tested crawlers have full access" analysis_output.txt; then
-            echo "### ❌ GitHub Pages IGNORES robots.txt Disallow rules" >> $GITHUB_STEP_SUMMARY
-            echo "- 🚨 Crawler restrictions via robots.txt are **NOT enforced**" >> $GITHUB_STEP_SUMMARY
-            echo "- 💡 Consider alternative hosting if crawler blocking is required" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "### ✅ GitHub Pages RESPECTS robots.txt Disallow rules" >> $GITHUB_STEP_SUMMARY
-            echo "- 🎉 Crawler restrictions are **properly enforced**" >> $GITHUB_STEP_SUMMARY
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📋 **Full logs available in workflow steps above**" >> $GITHUB_STEP_SUMMARY
+          mkdir -p _site
+          username=$(echo ${{ github.repository }} | cut -d'/' -f1)
+          HOME="https://$username.github.io/"
+          cp assets/robots.txt _site/robots.txt
+          sed -i "s|{home}|$HOME|g" _site/robots.txt
+          sed -i "s|{root_home}|$HOME|g" _site/robots.txt
+          cp sitemap.xml _site/
+          cp assets/llms.txt _site/llms.txt
+          cp google6b80426bb396f31f.html _site/
+
+          echo "- ✅ Prepared 4 files for deployment" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

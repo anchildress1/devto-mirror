@@ -26,7 +26,11 @@ dev = [
     "coverage>=7.0.0"
 ]
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.packages.find]
+where = ["src"]
 exclude = ["specs*", "assets*", "tests*", ".github*"]
 
 [tool.black]
@@ -35,7 +39,7 @@ skip-string-normalization = false
 target-version = ['py312']
 
 [tool.coverage.run]
-source = ["devto_mirror", "scripts"]
+source = ["src", "scripts"]
 omit = [
     "tests/*",
     "*/test_*",

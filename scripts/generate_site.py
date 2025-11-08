@@ -4,6 +4,7 @@ import logging
 import os
 import pathlib
 import re
+import shutil
 import time
 from datetime import datetime, timezone
 
@@ -42,6 +43,7 @@ if "/" not in PAGES_REPO:
 
 username, repo = PAGES_REPO.split("/")
 HOME = f"https://{username}.github.io/{repo}/"
+ROOT_HOME = f"https://{username}.github.io/"
 
 ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
@@ -81,6 +83,26 @@ def _fetch_article_pages(last_run_iso=None):
     articles = []
     page = 1
     api_base = "https://dev.to/api/articles"
+
+    # Detect CI environment and adjust settings
+    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+    if is_ci:
+        print("🤖 Running in CI environment - using conservative timeouts and delays")
+
+    # Create a session for connection reuse with V1 API
+    session = requests.Session()
+    headers = {
+        "User-Agent": "DevTo-Mirror-Bot/1.0 (GitHub-Actions)" if is_ci else "DevTo-Mirror-Bot/1.0",
+        "Accept": "application/vnd.forem.api-v1+json",  # Use V1 API for better compatibility
+    }
+
+    # Add API key if available for higher rate limits
+    api_key = os.getenv("DEVTO_API_KEY")
+    if api_key:
+        headers["api-key"] = api_key
+
+    session.headers.update(headers)
+
     while True:
         print(f"Fetching page {page} of articles...")
 
@@ -90,9 +112,33 @@ def _fetch_article_pages(last_run_iso=None):
         if page == 1:
             params["_cb"] = time.time() // 60
 
-        response = requests.get(api_base, params=params, timeout=30)
-        response.raise_for_status()
-        data = response.json()
+        max_retries = 3
+        retry_delay = 1
+        timeout = 30
+        data = None
+
+        for attempt in range(max_retries):
+            try:
+                response = session.get(api_base, params=params, timeout=timeout)
+                response.raise_for_status()
+                data = response.json()
+                break
+
+            except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
+                if attempt < max_retries - 1:
+                    print(f"  ⚠️  Timeout on page {page}, attempt {attempt + 1}, retrying in {retry_delay}s...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                else:
+                    print(f"  ❌ Failed to fetch page {page} after {max_retries} attempts: {e}")
+                    session.close()
+                    return articles  # Return what we have so far
+
+            except requests.exceptions.RequestException as e:
+                print(f"  ❌ Request error for page {page}: {e}")
+                session.close()
+                return articles  # Return what we have so far
+
         if not data:
             break
 
@@ -110,7 +156,9 @@ def _fetch_article_pages(last_run_iso=None):
             articles.extend(data)
 
         page += 1
+        time.sleep(0.5)  # Rate limiting between pages
 
+    session.close()
     return articles
 
 
@@ -120,16 +168,83 @@ def _fetch_full_articles(articles):
     """
     print(f"Found {len(articles)} articles, fetching full content...")
     full_articles = []
+    failed_articles = []
+
+    # Detect CI environment and adjust settings
+    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+
+    # Create a session for connection reuse with V1 API
+    session = requests.Session()
+    headers = {
+        "User-Agent": "DevTo-Mirror-Bot/1.0 (GitHub-Actions)" if is_ci else "DevTo-Mirror-Bot/1.0",
+        "Accept": "application/vnd.forem.api-v1+json",  # Use V1 API for better compatibility
+    }
+
+    # Add API key if available for higher rate limits
+    api_key = os.getenv("DEVTO_API_KEY")
+    if api_key:
+        headers["api-key"] = api_key
+
+    session.headers.update(headers)
+
     for i, article in enumerate(articles):
         print(f"Fetching full content for article {i + 1}/{len(articles)}: {article.get('title')}")
-        full_response = requests.get(f"https://dev.to/api/articles/{article['id']}", timeout=30)
-        full_response.raise_for_status()
-        full_articles.append(full_response.json())
-        if i < len(articles) - 1:
-            time.sleep(0.5)
 
+        # Retry logic for individual article fetching
+        max_retries = 3
+        retry_delay = 2
+        timeout = 30
+
+        for attempt in range(max_retries):
+            try:
+                full_response = session.get(f"https://dev.to/api/articles/{article['id']}", timeout=timeout)
+                full_response.raise_for_status()
+                full_articles.append(full_response.json())
+                break
+
+            except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
+                if attempt < max_retries - 1:
+                    print(f"  ⚠️  Timeout/connection error on attempt {attempt + 1}, retrying in {retry_delay}s...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                else:
+                    print(f"  ❌ Failed to fetch article {article['id']} after {max_retries} attempts: {e}")
+                    failed_articles.append(article)
+
+            except requests.exceptions.RequestException as e:
+                print(f"  ❌ Request error for article {article['id']}: {e}")
+                failed_articles.append(article)
+                break
+
+        # Rate limiting between requests
+        if i < len(articles) - 1:
+            time.sleep(0.8)  # Rate limiting between requests
+
+    session.close()
     print(f"Found {len(full_articles)} articles with full content.")
+    if failed_articles:
+        print(f"⚠️  Failed to fetch {len(failed_articles)} articles due to timeouts/errors")
+        for failed in failed_articles:
+            print(f"  - {failed.get('title', 'Unknown')} (ID: {failed['id']})")
+
     return full_articles
+
+
+def _try_load_cached_articles():
+    """Try to load articles from cached posts_data.json as fallback."""
+    try:
+        if os.path.exists("posts_data.json"):
+            print("📁 Loading cached articles from posts_data.json")
+            with open("posts_data.json", "r", encoding="utf-8") as f:
+                cached_data = json.load(f)
+                if cached_data and len(cached_data) > 0:
+                    print(f"✅ Found {len(cached_data)} cached articles")
+                    return cached_data
+        print("❌ No cached articles available")
+        return []
+    except Exception as e:
+        print(f"❌ Error loading cached articles: {e}")
+        return []
 
 
 def fetch_all_articles_from_api(last_run_iso=None):
@@ -154,8 +269,23 @@ def fetch_all_articles_from_api(last_run_iso=None):
             }
         ]
 
-    summaries = _fetch_article_pages(last_run_iso=last_run_iso)
-    return _fetch_full_articles(summaries)
+    try:
+        summaries = _fetch_article_pages(last_run_iso=last_run_iso)
+        if not summaries:
+            print("⚠️  No article summaries found, checking for cached data...")
+            return _try_load_cached_articles()
+
+        full_articles = _fetch_full_articles(summaries)
+        if not full_articles:
+            print("⚠️  No full articles fetched, checking for cached data...")
+            return _try_load_cached_articles()
+
+        return full_articles
+
+    except Exception as e:
+        print(f"❌ Error fetching articles from API: {e}")
+        print("⚠️  Trying to use cached data as fallback...")
+        return _try_load_cached_articles()
 
 
 # ----------------------------
@@ -223,62 +353,9 @@ COMMENT_NOTE_TMPL = env.from_string(
 """
 )
 
+
 # ----------------------------
 # robots + sitemap
-# ----------------------------
-ROBOTS_TMPL = """# TEST robots.txt generated by scripts/generate_site.py
-# This version BLOCKS half the crawlers to test if GitHub Pages respects robots.txt
-# Generated at: {timestamp}
-
-# ALLOWED CRAWLERS (should have access)
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: DuckDuckBot
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-# BLOCKED CRAWLERS (should be denied access)
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: Claude-Web
-Disallow: /
-
-User-agent: PerplexityBot
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-User-agent: Twitterbot
-Disallow: /
-
-User-agent: LinkedInBot
-Disallow: /
-
-# All other crawlers - BLOCKED by default
-User-agent: *
-Disallow: /
-
-Sitemap: {home}sitemap.xml
-"""
-
-
 # ----------------------------
 # Helpers
 # ----------------------------
@@ -353,13 +430,19 @@ class Post:
                 url_path = self.link.split("//")[1]  # Remove protocol
                 path_parts = url_path.split("/")
                 if len(path_parts) >= 3:  # domain, username, slug
-                    self.slug = path_parts[2]  # The full slug with ID
+                    raw_slug = path_parts[2]  # The full slug with ID
+                    # Sanitize slug to produce a safe filename (prevent nested paths)
+                    sanitized = re.sub(SAFE_FILENAME_PATTERN, "-", raw_slug)
+                    # Remove any leading/trailing hyphens introduced by sanitization
+                    sanitized = sanitized.strip("-")
+                    # Truncate to a reasonable filename length
+                    self.slug = sanitized[:120] or slugify(self.title) or "post"
                 else:
-                    self.slug = api_data.get("slug", slugify(self.title) or "post")
+                    self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
             except Exception:
-                self.slug = api_data.get("slug", slugify(self.title) or "post")
+                self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
         else:
-            self.slug = api_data.get("slug", slugify(self.title) or "post")
+            self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
 
     def _normalize_tags(self, tags):
         """
@@ -648,9 +731,16 @@ index_html = INDEX_TMPL.render(
     social_image=social_image,
 )
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
-pathlib.Path("robots.txt").write_text(
-    ROBOTS_TMPL.format(home=HOME, timestamp=datetime.now(timezone.utc).isoformat()), encoding="utf-8"
-)
+
+# Copy robots.txt and llms.txt from assets to the project root (raw copy)
+# Keep it simple: identical behavior for both files using shutil.copy2
+assets_robots = pathlib.Path("assets/robots.txt")
+if assets_robots.exists():
+    shutil.copy2(assets_robots, "robots.txt")
+
+assets_llms = pathlib.Path("assets/llms.txt")
+if assets_llms.exists():
+    shutil.copy2(assets_llms, "llms.txt")
 
 # Generate sitemap - use AI-optimized version if available
 sitemap_content = None

@@ -1,5 +1,4 @@
-"""
-AI Optimization Manager
+"""AI Optimization Manager for Dev.to Mirror.
 
 This module provides the main coordination class for all AI optimization components.
 The AIOptimizationManager serves as the integration point for the existing
@@ -24,11 +23,11 @@ class AIOptimizationManager:
 
     def __init__(
         self,
-        schema_generator: Optional[Any] = None,  # SchemaGenerator from devto_mirror.ai_optimization
-        metadata_enhancer: Optional[Any] = None,  # MetadataEnhancer from devto_mirror.ai_optimization
-        content_analyzer: Optional[Any] = None,  # ContentAnalyzer from devto_mirror.ai_optimization
-        cross_reference_manager: Optional[Any] = None,  # CrossReferenceManager interface
-        sitemap_generator: Optional[Any] = None,  # AISitemapGenerator from devto_mirror.ai_optimization
+        schema_generator: Optional[Any] = None,
+        metadata_enhancer: Optional[Any] = None,
+        content_analyzer: Optional[Any] = None,
+        cross_reference_manager: Optional[Any] = None,
+        sitemap_generator: Optional[Any] = None,
     ):
         """
         Initialize AI optimization manager with component implementations.
@@ -83,16 +82,16 @@ class AIOptimizationManager:
         if api_data is None:
             api_data = getattr(post, "api_data", {})
 
-        try:
-            if self.schema_generator:
-                try:
-                    canonical_url = getattr(post, "link", "")
-                    article_schema = self.schema_generator.generate_article_schema(post, canonical_url, api_data)
-                    breadcrumb_schema = self.schema_generator.generate_breadcrumb_schema(post)
+        # Schema generation is critical: let exceptions propagate so callers/tests
+        # become aware of fatal schema generation errors instead of silently
+        # continuing. Other components may still be guarded to allow graceful
+        # degradation.
+        if self.schema_generator:
+            canonical_url = getattr(post, "link", "")
+            article_schema = self.schema_generator.generate_article_schema(post, canonical_url, api_data)
+            breadcrumb_schema = self.schema_generator.generate_breadcrumb_schema(post)
 
-                    optimization_data["json_ld_schemas"] = [article_schema, breadcrumb_schema]
-                except Exception as e:
-                    logger.warning(f"Schema generation failed for post {getattr(post, 'slug', 'unknown')}: {e}")
+            optimization_data["json_ld_schemas"] = [article_schema, breadcrumb_schema]
 
             if self.metadata_enhancer:
                 try:
@@ -126,9 +125,6 @@ class AIOptimizationManager:
 
             optimization_data["optimization_applied"] = True
 
-        except Exception as e:
-            logger.error(f"AI optimization failed for post {getattr(post, 'slug', 'unknown')}: {e}")
-
         return optimization_data
 
     def generate_optimized_sitemap(self, posts: List[Any], comments: List[Dict[str, Any]]) -> Optional[str]:
@@ -145,11 +141,10 @@ class AIOptimizationManager:
         if not self.sitemap_generator:
             return None
 
-        try:
-            return self.sitemap_generator.generate_main_sitemap(posts, comments)
-        except Exception as e:
-            logger.error(f"AI sitemap generation failed: {e}")
-            return None
+        # Sitemap generation errors are considered fatal for the optimized
+        # generation path. Let exceptions propagate so callers/tests fail fast
+        # and surface issues rather than silently returning None.
+        return self.sitemap_generator.generate_main_sitemap(posts, comments)
 
     def create_optimized_post(self, post: Any) -> Any:
         """
@@ -161,7 +156,6 @@ class AIOptimizationManager:
         Returns:
             AIOptimizedPost instance with content analysis capabilities
         """
-        # Import here to avoid circular imports
         from devto_mirror.ai_optimization import AIOptimizedPost
 
         return AIOptimizedPost.from_post(post, self.content_analyzer)
@@ -183,7 +177,6 @@ class AIOptimizationManager:
                 optimized_posts.append(optimized_post)
             except Exception as e:
                 logger.warning(f"Failed to create optimized post for {getattr(post, 'slug', 'unknown')}: {e}")
-                # Fallback: create a basic wrapper without content analyzer
                 from devto_mirror.ai_optimization import AIOptimizedPost
 
                 optimized_posts.append(AIOptimizedPost(post, None))
@@ -205,7 +198,7 @@ class AIOptimizationManager:
 
 
 def create_default_ai_optimization_manager(
-    site_name: str = "ChecKMarK Dev.to Mirror", site_url: str = ""
+    site_name: str = "Dev.to Mirror", site_url: str = ""
 ) -> AIOptimizationManager:
     """
     Create a fully configured AIOptimizationManager with all default implementations.
@@ -217,7 +210,6 @@ def create_default_ai_optimization_manager(
     Returns:
         Configured AIOptimizationManager instance
     """
-    # Create all component implementations
     from devto_mirror.ai_optimization import (
         DevToAISitemapGenerator,
         DevToContentAnalyzer,
@@ -230,8 +222,6 @@ def create_default_ai_optimization_manager(
     content_analyzer = DevToContentAnalyzer()
     sitemap_generator = DevToAISitemapGenerator(site_name, site_url)
 
-    # Note: CrossReferenceManager implementation uses functions from cross_reference module
-    # rather than a class-based approach, so we don't instantiate it here
     cross_reference_manager = None
 
     return AIOptimizationManager(
