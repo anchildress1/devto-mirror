@@ -31,7 +31,7 @@ jobs:
       DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
       DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set up uv
