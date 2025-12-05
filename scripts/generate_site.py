@@ -34,18 +34,18 @@ except ImportError as e:
 load_dotenv()
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
-PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
+GH_USERNAME = os.getenv("GH_USERNAME", "").strip()
 LAST_RUN_FILE = "last_run.txt"
 VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes")
 
 if not VALIDATION_MODE:
     if not DEVTO_USERNAME:
         raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
-    if "/" not in PAGES_REPO:
-        raise ValueError("Invalid PAGES_REPO (expected 'user/repo')")
+    if not GH_USERNAME:
+        raise ValueError("Missing GH_USERNAME (your GitHub username)")
 
-username, repo = PAGES_REPO.split("/") if "/" in PAGES_REPO else ("user", "repo")
-HOME = f"https://{username}.github.io/{repo}/"
+username = GH_USERNAME or "user"
+HOME = f"https://{username}.github.io/devto-mirror/"
 ROOT_HOME = f"https://{username}.github.io/"
 
 ROOT = pathlib.Path(".")

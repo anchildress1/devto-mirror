@@ -27,15 +27,15 @@ def validate_site_generation():
 
     # Check required environment variables
     devto_username = os.getenv("DEVTO_USERNAME")
-    pages_repo = os.getenv("PAGES_REPO")
+    gh_username = os.getenv("GH_USERNAME")
 
     if not devto_username:
         print("⚠️  DEVTO_USERNAME not set - using test value for validation")
         devto_username = "testuser"
 
-    if not pages_repo:
-        print("⚠️  PAGES_REPO not set - using test value for validation")
-        pages_repo = "testuser/devto-mirror"
+    if not gh_username:
+        print("⚠️  GH_USERNAME not set - using test value for validation")
+        gh_username = "testuser"
 
     # Create temporary directory for validation
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -79,7 +79,7 @@ def validate_site_generation():
         env.update(
             {
                 "DEVTO_USERNAME": devto_username,
-                "PAGES_REPO": pages_repo,
+                "GH_USERNAME": gh_username,
                 "VALIDATION_MODE": "true",  # Signal to script this is validation
             }
         )

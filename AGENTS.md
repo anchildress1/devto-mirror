@@ -23,31 +23,19 @@ Do NOT add new application modules into `scripts/` — reserve `scripts/` for ru
 
 ## Commands
 
-```bash
-# Run tests from project root
-make test
+Use Makefile targets exclusively (do not invoke tools directly):
 
-# Run quality checks
-make lint
-
-# Run tests with coverage
-make test-coverage
-
-# Run security checks
-make security
-
-# Run comprehensive validation (format + lint + tests + security)
-make validate
-
-# Generate site (requires DEVTO_USERNAME and PAGES_REPO env vars)
-uv run python scripts/generate_site.py
-```
+- `make test` - unit tests
+- `make lint` - pre-commit checks (format, lint, security)
+- `make security` - bandit + pip-audit scans
+- `make validate` - full pipeline (format → lint → security → complexity → test → site validation)
+- `make generate-site` - site generation (requires DEVTO_USERNAME and GH_USERNAME env vars)
 
 ## Agent Operational Rules
 
 Automated agents must follow these constraints for safe and effective operation:
 
-- **Big picture**: `scripts/` are CLI entrypoints (generation + helpers); `src/devto_mirror/` contains core AI modules (`ai_optimization/*`). Generated artifacts live in `posts/`, `assets/`, and `htmlcov/`.
+- **Big picture**: `scripts/` are CLI entrypoints (generation + helpers); `src/devto_mirror/` is the Python package; `src/devto_mirror/ai_optimization/` contains AI modules. Generated artifacts: `posts/` (HTML), `htmlcov/` (coverage reports).
 - **Canonical runner**: prefer `Makefile` targets (single source of truth). Use `make install`, `make test` (unit tests), `make validate` (full pipeline), `make generate-site`, `make security` instead of calling tools directly.
 - **Tooling**: this repo pins dev tooling via `uv.lock`. When invoking tools directly use `uv run <tool>`; prefer Makefile wrappers for consistency.
 - **Pre-commit**: configured in `.pre-commit-config.yaml`. Install hooks with `make install` (runs `uv run pre-commit install`). The validate-site hook runs `uv run python scripts/validate_site_generation.py`.
@@ -60,15 +48,7 @@ Automated agents must follow these constraints for safe and effective operation:
 - If you change dev-tooling, update `uv.lock` with `uv sync --locked --group dev` and run `make validate` to ensure nothing regresses.
 - Avoid introducing empty `except:` / `except: pass` patterns; prefer explicit exception handling.
 
-### Initialization Sequence
 
-When starting work on this repository:
-
-1. Read `Makefile` to understand available targets and their implementations
-2. Read `scripts/generate_site.py` to understand site generation workflow
-3. Read `.pre-commit-config.yaml` to understand validation hooks
-4. Scan `src/devto_mirror/ai_optimization/` for AI module structure
-5. Use `make validate` to verify repository state before making changes
 
 ## Code Style
 
@@ -78,35 +58,18 @@ Follow standard Python conventions; use pre-commit hooks where configured.
 
 - Static site generator: fetches Dev.to posts via API and renders HTML using Jinja2
 - Incremental updates: `last_run.txt` is used to fetch only new/changed posts
-- Optional AI optimizations: `src.ai_optimization` is imported when available and used to enhance metadata and sitemaps
+- Optional AI optimizations: `devto_mirror.ai_optimization` is imported when available and used to enhance metadata and sitemaps
 
 ## Critical Workflows
 
 - Dependency management: use `uv sync --locked --group dev` and `uv run python -m pip install -e .` or `make install`
 - Testing: `make test` from repository root
 - CI: GitHub Actions runs site generation and publishes to `gh-pages`; a follow-up job prepares a `_site` artifact for root deployment
-- Site generation: set `DEVTO_USERNAME` and `PAGES_REPO` (user/repo) environment variables before running `scripts/generate_site.py`
+- Site generation: set `DEVTO_USERNAME` and `GH_USERNAME` environment variables before running `scripts/generate_site.py`
 
 ### CI Workflow Critical Rules
 
-**NEVER use `uv run make <target>` in GitHub Actions workflows.**
-
-The Makefile targets already use `uv run` internally. Calling `uv run make` creates a double-nesting problem:
-
-- ❌ WRONG: `uv run make check` → fails with "No such file or directory"
-- ✅ CORRECT: `make check` → works correctly
-
-Workflow pattern:
-
-```yaml
-- name: Install dependencies
-  uv sync --locked --group dev
-
-- name: Run validation
-  run: make check  # NOT "uv run make check"
-```
-
-This applies to ALL Makefile targets: `test`, `lint`, `format`, `security`, `validate`, `check`.
+NEVER use `uv run make <target>` in GitHub Actions workflows. Makefile targets already use `uv run` internally; double-nesting causes failures. Always invoke: `make <target>` not `uv run make <target>`.
 
 ## Assets and templates
 
@@ -115,10 +78,9 @@ This applies to ALL Makefile targets: `test`, `lint`, `format`, `security`, `val
 ## Project Conventions
 
 - Scripts live in `scripts/` (not `src/`)
-- Required env vars: `DEVTO_USERNAME`, `GH_USERNAME`, `PAGES_REPO`; optional: `DEVTO_API_KEY` (for private/draft posts), `VALIDATION_MODE`, `FORCE_FULL_REGEN`, `ROOT_SITE_PAT` (for root repo deployment)
-- Always preserve command output visibility — avoid redirecting to `/dev/null 2>&1` so CI logs and local runs remain debuggable
-- Commit messages: use conventional commit format with `Generated-by: GitHub Copilot` attribution
-- Generate commit messages in `commit.tmp` and wait for human review before committing
+- Required env vars: `DEVTO_USERNAME`, `GH_USERNAME`; optional: `DEVTO_API_KEY`, `VALIDATION_MODE`, `FORCE_FULL_REGEN`, `ROOT_SITE_PAT`
+- Always preserve command output visibility — avoid redirecting to `/dev/null 2>&1`
+- Generate commit messages in `commit.tmp` with `Generated-by: GitHub Copilot` attribution and wait for human approval before committing
 
 ## Integration Points
 
@@ -138,9 +100,8 @@ This applies to ALL Makefile targets: `test`, `lint`, `format`, `security`, `val
 
 ## Critical Constraints
 
-- Under NO circumstances should any automated workflow perform `git commit` on behalf of a human without explicit approval. Commit messages may be generated, but commits must be made by a human operator or an authorized CI step.
-- Before returning to the user, you are expected to follow agent instructions to update the `commit.tmp` with a valid AI-attribution included commit message.
-- All formatting, security scans, linters, and the entire test suite must pass successfully before you return to the user. If one or more items fail validation, iterate improvements as needed until all problems are resolved.
-- Avoid using an empty except at any point. If you get to a point where they're required then the code is somehow inaccurate.
+- NEVER perform `git commit` on behalf of a human without explicit approval. Generate commit messages in `commit.tmp` with `Generated-by: GitHub Copilot` attribution for human review.
+- Before returning to the user: run `make validate` to ensure all checks pass (format, lint, security, tests). If validation fails, iterate until resolved.
+- Never use empty `except:` or `except: pass` patterns; prefer explicit exception handling.
 
 <!-- MANUAL ADDITIONS END -->

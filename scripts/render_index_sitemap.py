@@ -78,10 +78,9 @@ def load_and_merge_posts():
 
 
 def get_home_url():
-    home_env = os.environ.get("PAGES_REPO", "")
-    if "/" in home_env:
-        user, repo = home_env.split("/", 1)
-        return f"https://{user}.github.io/{repo}/"
+    gh_username = os.environ.get("GH_USERNAME", "").strip()
+    if gh_username:
+        return f"https://{gh_username}.github.io/devto-mirror/"
     return ""
 
 
