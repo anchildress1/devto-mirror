@@ -89,6 +89,22 @@ class DevToContentAnalyzer:
 
         return analysis_result
 
+    def _validate_numeric_metric(self, value: Any, min_value: int = 0) -> int | None:
+        """
+        Validate and convert a numeric metric value.
+
+        Args:
+            value: The value to validate
+            min_value: Minimum acceptable value
+
+        Returns:
+            Validated integer value or None if invalid
+        """
+        if value is None or not isinstance(value, (int, float)):
+            return None
+        int_value = int(value)
+        return int_value if int_value >= min_value else None
+
     def extract_api_metrics(self, api_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Extract metrics directly from Dev.to API data when available.
@@ -105,33 +121,20 @@ class DevToContentAnalyzer:
             self.logger.debug("No API data available for metric extraction")
             return metrics
 
+        metric_config = [
+            ("reading_time_minutes", 1),
+            ("public_reactions_count", 0),
+            ("comments_count", 0),
+            ("word_count", 1),
+            ("page_views_count", 0),
+        ]
+
         try:
-            # Extract reading time (Dev.to provides this)
-            reading_time = api_data.get("reading_time_minutes")
-            if reading_time is not None and isinstance(reading_time, (int, float)) and reading_time > 0:
-                metrics["reading_time_minutes"] = int(reading_time)
-                self.logger.debug(f"Extracted reading time from API: {reading_time} minutes")
-
-            # Extract reaction count
-            reactions = api_data.get("public_reactions_count")
-            if reactions is not None and isinstance(reactions, (int, float)) and reactions >= 0:
-                metrics["public_reactions_count"] = int(reactions)
-                self.logger.debug(f"Extracted reaction count from API: {reactions}")
-
-            # Extract comment count
-            comments = api_data.get("comments_count")
-            if comments is not None and isinstance(comments, (int, float)) and comments >= 0:
-                metrics["comments_count"] = int(comments)
-
-            # Extract word count if available (some APIs provide this)
-            word_count = api_data.get("word_count")
-            if word_count is not None and isinstance(word_count, (int, float)) and word_count > 0:
-                metrics["word_count"] = int(word_count)
-
-            # Extract page views if available
-            page_views = api_data.get("page_views_count")
-            if page_views is not None and isinstance(page_views, (int, float)) and page_views >= 0:
-                metrics["page_views_count"] = int(page_views)
+            for metric_key, min_value in metric_config:
+                raw_value = api_data.get(metric_key)
+                validated_value = self._validate_numeric_metric(raw_value, min_value)
+                if validated_value is not None:
+                    metrics[metric_key] = validated_value
 
             if metrics:
                 self.logger.info(f"Successfully extracted {len(metrics)} metrics from API data")
