@@ -6,7 +6,7 @@ This guide provides an in-depth technical explanation of the GitHub Actions work
 
 The project uses a multi-workflow architecture designed for separation of concerns, security, and reliability:
 
-- **`publish.yaml`**: Core site generation and deployment
+- **`publish.yaml`**: Core site generation and deployment (two-stage: project site + root config files)
 - **`security-ci.yml`**: Quality assurance and security scanning
 - **`codeql.yml`**: Advanced security analysis
 - **`refresh.yaml`**: Emergency full regeneration
@@ -20,11 +20,27 @@ This separation allows for independent execution, targeted permissions, and easi
 **Technical Implementation**:
 
 ```yaml
-# Scheduled: Weekly Wednesday 9:38 AM EDT (cron: '38 13 * * 3')
-# Manual: workflow_dispatch with optional inputs
+# Scheduled: Weekly Wednesday 9:40 AM EST (cron: '40 13 * * 3')
+# Manual: workflow_dispatch with optional inputs (force_full_regen)
 ```
 
-**Execution Flow**:
+**Two-Stage Deployment Architecture**:
+
+This workflow deploys to TWO separate locations:
+
+1. **Project Repository (`gh-pages` branch)**: Full mirror site at `https://<username>.github.io/devto-mirror/`
+   - Complete post archive
+   - Index page with post listings
+   - Project-specific sitemap.xml
+   - Comments pages (if configured)
+
+2. **Root Repository (`gh-pages` branch)**: Config files only at `https://<username>.github.io/`
+   - robots.txt (optimized for crawlers)
+   - llms.txt (AI crawler instructions)
+   - sitemap.xml (root-level sitemap)
+   - google verification file
+
+**Execution Flow (Job 1: generate-and-deploy)**:
 
 1. **Environment Setup**: Python 3.12 with uv caching for faster builds
 2. **Dependency Installation**: Uses `uv sync --locked --group dev` for reproducible builds
@@ -35,10 +51,18 @@ This separation allows for independent execution, targeted permissions, and easi
    - Processes AI-enhanced metadata and cross-references
    - Sanitizes HTML content with bleach
 5. **Static Asset Generation**:
-   - `sitemap.xml` for search engines
-   - `robots.txt` with crawler-specific rules
    - `index.html` with post listings
-6. **Deployment**: Uses `actions/deploy-pages@v4` to deploy to `gh-pages` branch
+   - Individual post pages
+6. **Root Config Preparation**: Copies and processes template files for root deployment
+7. **Project Deployment**: Manually deploys to `gh-pages` branch of project repo
+8. **Sitemap Generation**: Runs `render_index_sitemap.py` AFTER deployment to create `sitemap.xml`
+
+**Execution Flow (Job 2: deploy-root-config)**:
+
+1. **Credential Check**: Verifies `ROOT_SITE_PAT` secret exists
+2. **Change Detection**: Compares new files with existing root repo files
+3. **Conditional Deployment**: Only deploys if files changed AND token present
+4. **Root Deployment**: Uses `peaceiris/actions-gh-pages@v4` to deploy to `<username>/<username>` repo
 
 **Key Technical Features**:
 
@@ -49,25 +73,30 @@ This separation allows for independent execution, targeted permissions, and easi
 
 **Environment Variables**:
 
-- `DEVTO_USERNAME`: Repository variable (required)
+- `DEVTO_USERNAME`: Repository variable (required) - Your Dev.to username
+- `GH_USERNAME`: Repository variable (required) - Your GitHub username for Pages URLs.
+- `DEVTO_API_KEY`: Repository secret (optional for public content, required for private/draft posts)
 - `PAGES_REPO`: Auto-derived from `github.repository`
 - `GITHUB_TOKEN`: Auto-provided for Pages deployment
+- `ROOT_SITE_PAT`: Repository secret (optional) - Personal Access Token for deploying to root GitHub Pages repo (`<username>/<username>`). Required scopes: `repo` or fine-grained `contents: write`
 
 ### `security-ci.yml` - Quality Assurance Pipeline
 
 **Purpose**: Comprehensive security and quality checks on every code change.
 
-**CRITICAL: uv and Makefile Integration**
+#### CRITICAL: uv and Makefile Integration
 
 This workflow uses `uv` for dependency management and runs `make check` for validation. A common mistake is calling `uv run make check`, which causes failures.
 
 ❌ **WRONG** (causes "No such file or directory" errors):
+
 ```yaml
 - name: Run validation
   run: uv run make check
 ```
 
 ✅ **CORRECT**:
+
 ```yaml
 - name: Install dependencies
   run: uv sync --locked --group dev
@@ -181,6 +210,7 @@ permissions:
 ### Secret Management
 
 **No secrets required**: The project is designed to work with only public information:
+
 - Dev.to username (public)
 - Repository name (public)
 - GitHub token (auto-provided)
@@ -271,7 +301,8 @@ This eliminates secret management complexity and reduces attack surface.
 ### Issue: "Failed to spawn: No such file or directory" in CI
 
 **Symptom**:
-```
+
+```text
 error: Failed to spawn: `black`
   Caused by: No such file or directory (os error 2)
 make[1]: *** [Makefile:30: format] Error 2
@@ -280,6 +311,7 @@ make[1]: *** [Makefile:30: format] Error 2
 **Root Cause**: Using `uv run make <target>` instead of just `make <target>`.
 
 **Solution**: Remove `uv run` prefix when calling Makefile targets:
+
 ```yaml
 # Before (broken)
 - run: uv run make check
@@ -289,6 +321,7 @@ make[1]: *** [Makefile:30: format] Error 2
 ```
 
 **Explanation**: The Makefile already wraps tool invocations with `uv run`. The workflow only needs to:
+
 1. Run `uv sync --locked --group dev` to install dependencies
 2. Call Makefile targets directly (e.g., `make check`, `make test`)
 
@@ -299,6 +332,7 @@ Double-wrapping with `uv run make` breaks the execution context.
 **Symptom**: Tools like `black`, `flake8`, or `bandit` not found.
 
 **Solution**: Ensure `uv sync --locked --group dev` runs before any Makefile commands:
+
 ```yaml
 - name: Install dependencies
   run: uv sync --locked --group dev
@@ -310,6 +344,7 @@ Double-wrapping with `uv run make` breaks the execution context.
 ### Issue: Workflow output too verbose
 
 **Solution**: Let tools write to stdout normally; avoid capturing in GITHUB_STEP_SUMMARY:
+
 ```yaml
 # Keep it simple
 - name: Run validation
@@ -324,12 +359,15 @@ Double-wrapping with `uv run make` breaks the execution context.
 ### Correct Patterns for All Workflows
 
 **Installing dependencies:**
+
 ```yaml
 - name: Install dependencies
   run: uv sync --locked --group dev
 ```
 
 **Running Makefile targets:**
+
+
 ```yaml
 # ✅ CORRECT - Call make directly
 - name: Run validation
@@ -341,6 +379,7 @@ Double-wrapping with `uv run make` breaks the execution context.
 ```
 
 **Running Python scripts directly:**
+
 ```yaml
 # ✅ CORRECT - Use uv run for scripts
 - name: Generate site
@@ -352,6 +391,7 @@ Double-wrapping with `uv run make` breaks the execution context.
 ```
 
 **Summary:**
+
 - After `uv sync --locked`, the environment is ready
 - Makefile targets = call directly (e.g., `make test`, `make check`)
 - Python scripts = use `uv run python script.py` OR use make targets

@@ -15,7 +15,7 @@ repos:
     rev: 7.3.0
     hooks:
       - id: flake8
-        args: ['--max-line-length=120', '--ignore=E302,E305,E231,E261,E401']
+        args: ['--max-line-length=120', '--ignore=E302,E305,E231,E261,E401,E402']
         stages: [pre-commit]
   - repo: https://github.com/PyCQA/bandit
     rev: 1.8.6
@@ -37,3 +37,9 @@ repos:
         language: system
         stages: [pre-commit]
         pass_filenames: false
+      # - id: check-complexity
+      #   name: Check cognitive complexity (max 15)
+      #   entry: bash -c 'uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\([1-9][6-9]\)|([2-9][0-9]\)|([1-9][0-9]{2,}\))" && echo "Functions with complexity >15 found. Please refactor." && exit 1 || exit 0'
+      #   language: system
+      #   stages: [pre-commit]
+      #   pass_filenames: false

@@ -1,9 +1,3 @@
-# Search Engine Crawlers
-# 
-# This template file uses placeholders that are substituted during site generation:
-# - {home}: The full URL of the site (e.g., https://anchildress1.github.io/devto-mirror/)
-# - {root_home}: The root domain (e.g., https://anchildress1.github.io/)
-#
 User-agent: Googlebot
 Allow: /
 
@@ -19,7 +13,6 @@ Allow: /
 User-agent: Slurp
 Allow: /
 
-# AI Training Crawlers
 User-agent: GPTBot
 Allow: /
 
@@ -38,7 +31,6 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-# Social Media Crawlers
 User-agent: facebookexternalhit
 Allow: /
 
@@ -48,17 +40,14 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-# Other Common Crawlers
 User-agent: Bytespider
 Allow: /
 
 User-agent: ia_archiver
 Allow: /
 
-# Default for all other crawlers
 User-agent: *
 Allow: /
 
-
-Sitemap: {home}sitemap.xml
+Sitemap: {root_home}sitemap.xml
 Host: {root_home}

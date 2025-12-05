@@ -12,6 +12,7 @@ import subprocess  # nosec: B404
 import tempfile
 import unittest
 import warnings
+from pathlib import Path
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 ASSETS_DIR = os.path.join(ROOT, "assets")
@@ -99,20 +100,22 @@ class TestGenerateSiteAssets(unittest.TestCase):
         )  # nosec: B603
         return res
 
-    def test_generate_creates_assets_when_present(self):
-        # Ensure assets/robots.txt and assets/llms.txt exist for this test
-        self.assertTrue(os.path.exists(self.robots_path), "assets/robots.txt must exist for this test")
-        self.assertTrue(os.path.exists(self.llms_path), "assets/llms.txt must exist for this test")
+    def test_assets_templates_have_placeholders(self):
+        # Assets templates should exist and contain placeholders for workflow replacement
+        self.assertTrue(os.path.exists(self.robots_path), "assets/robots.txt must exist")
+        self.assertTrue(os.path.exists(self.llms_path), "assets/llms.txt must exist")
 
         res = self._run_generate()
         self.assertEqual(res.returncode, 0, msg=f"Generator failed: {res.stderr.decode()}")
 
-        # After generation, project-root copies should exist and match assets
-        with open(self.robots_path, "rb") as a, open(os.path.join(ROOT, "robots.txt"), "rb") as b:
-            self.assertEqual(a.read(), b.read())
+        # Verify templates contain placeholders (workflow replaces these during deployment)
+        robots_content = Path(self.robots_path).read_text(encoding="utf-8")
+        self.assertIn("{root_home}", robots_content, "robots.txt template must contain {root_home} placeholder")
 
-        with open(self.llms_path, "rb") as a, open(os.path.join(ROOT, "llms.txt"), "rb") as b:
-            self.assertEqual(a.read(), b.read())
+        # llms.txt is static content with no placeholders
+        llms_content = Path(self.llms_path).read_text(encoding="utf-8")
+        self.assertNotIn("{root_home}", llms_content, "llms.txt should not contain placeholders")
+        self.assertNotIn("{home}", llms_content, "llms.txt should not contain placeholders")
 
     def test_generate_runs_gracefully_when_assets_missing(self):
         # Temporarily remove assets
@@ -128,9 +131,6 @@ class TestGenerateSiteAssets(unittest.TestCase):
         try:
             res = self._run_generate()
             self.assertEqual(res.returncode, 0, msg=f"Generator failed when assets missing: {res.stderr.decode()}")
-            # Should not create robots/llms in project root when assets absent
-            self.assertFalse(os.path.exists(os.path.join(ROOT, "robots.txt")))
-            self.assertFalse(os.path.exists(os.path.join(ROOT, "llms.txt")))
         finally:
             if tmp_r:
                 os.rename(tmp_r, self.robots_path)

@@ -316,13 +316,12 @@ def discover_sample_pages(base_url):
 def main():
     """Main function to run crawler access tests."""
     # Get base URL from environment or use default
-    pages_repo = os.getenv("PAGES_REPO", "").strip()
-    if not pages_repo or "/" not in pages_repo:
-        print("Error: PAGES_REPO environment variable must be set (format: 'user/repo')")
+    gh_username = os.getenv("GH_USERNAME", "").strip()
+    if not gh_username:
+        print("Error: GH_USERNAME environment variable must be set")
         sys.exit(1)
 
-    username, repo = pages_repo.split("/", 1)
-    base_url = f"https://{username}.github.io/{repo}"
+    base_url = f"https://{gh_username}.github.io/devto-mirror"
 
     # Allow override of base URL for testing
     if len(sys.argv) > 1:

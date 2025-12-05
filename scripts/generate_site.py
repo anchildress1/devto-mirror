@@ -4,16 +4,22 @@ import logging
 import os
 import pathlib
 import re
-import shutil
+import sys
 import time
 from datetime import datetime, timezone
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 
 import bleach
 import requests
 from dotenv import load_dotenv
 from jinja2 import Environment, select_autoescape
 from slugify import slugify
-from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link, get_post_template
+
+from scripts.constants import POSTS_DATA_FILE
+from scripts.path_utils import sanitize_filename, sanitize_slug, validate_safe_path
+from scripts.utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link, get_post_template
 
 # Import AI optimization components
 try:
@@ -28,22 +34,18 @@ except ImportError as e:
 load_dotenv()
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
-PAGES_REPO = os.getenv("PAGES_REPO", "").strip()  # "user/repo"
+GH_USERNAME = os.getenv("GH_USERNAME", "").strip()
 LAST_RUN_FILE = "last_run.txt"
-POSTS_DATA_FILE = "posts_data.json"
 VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes")
-
-# Filename sanitization pattern - prevents path traversal and unsafe characters
-SAFE_FILENAME_PATTERN = r"[^A-Za-z0-9_-]"
 
 if not VALIDATION_MODE:
     if not DEVTO_USERNAME:
         raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
-    if "/" not in PAGES_REPO:
-        raise ValueError("Invalid PAGES_REPO (expected 'user/repo')")
+    if not GH_USERNAME:
+        raise ValueError("Missing GH_USERNAME (your GitHub username)")
 
-username, repo = PAGES_REPO.split("/") if "/" in PAGES_REPO else ("user", "repo")
-HOME = f"https://{username}.github.io/{repo}/"
+username = GH_USERNAME or "user"
+HOME = f"https://{username}.github.io/devto-mirror/"
 ROOT_HOME = f"https://{username}.github.io/"
 
 ROOT = pathlib.Path(".")
@@ -234,9 +236,9 @@ def _fetch_full_articles(articles):
 def _try_load_cached_articles():
     """Try to load articles from cached posts_data.json as fallback."""
     try:
-        if os.path.exists("posts_data.json"):
-            print("📁 Loading cached articles from posts_data.json")
-            with open("posts_data.json", "r", encoding="utf-8") as f:
+        if os.path.exists(POSTS_DATA_FILE):
+            print(f"📁 Loading cached articles from {POSTS_DATA_FILE}")
+            with open(POSTS_DATA_FILE, "r", encoding="utf-8") as f:
                 cached_data = json.load(f)
                 if cached_data and len(cached_data) > 0:
                     print(f"✅ Found {len(cached_data)} cached articles")
@@ -361,13 +363,11 @@ COMMENT_NOTE_TMPL = env.from_string(
 # Helpers
 # ----------------------------
 def strip_html(text):
-    # Remove HTML tags, collapse internal whitespace (newlines/tabs/extra spaces)
-    # into single spaces, then trim leading/trailing whitespace.
+    """Remove HTML tags and normalize whitespace using bleach."""
     if not text:
         return ""
-    no_tags = re.sub(r"<[^>]+>", "", text)
-    collapsed = re.sub(r"\s+", " ", no_tags)
-    return collapsed.strip()
+    cleaned = bleach.clean(text, tags=[], strip=True)
+    return " ".join(cleaned.split()).strip()
 
 
 def sanitize_html_content(content):
@@ -436,18 +436,14 @@ class Post:
                 path_parts = url_path.split("/")
                 if len(path_parts) >= 3:  # domain, username, slug
                     raw_slug = path_parts[2]  # The full slug with ID
-                    # Sanitize slug to produce a safe filename (prevent nested paths)
-                    sanitized = re.sub(SAFE_FILENAME_PATTERN, "-", raw_slug)
-                    # Remove any leading/trailing hyphens introduced by sanitization
-                    sanitized = sanitized.strip("-")
-                    # Truncate to a reasonable filename length
-                    self.slug = sanitized[:120] or slugify(self.title) or "post"
+                    sanitized = sanitize_slug(raw_slug, max_length=120)
+                    self.slug = sanitized or slugify(self.title) or "post"
                 else:
-                    self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
+                    self.slug = sanitize_filename(api_data.get("slug", slugify(self.title) or "post"))
             except Exception:
-                self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
+                self.slug = sanitize_filename(api_data.get("slug", slugify(self.title) or "post"))
         else:
-            self.slug = re.sub(SAFE_FILENAME_PATTERN, "-", api_data.get("slug", slugify(self.title) or "post"))
+            self.slug = sanitize_filename(api_data.get("slug", slugify(self.title) or "post"))
 
     def _normalize_tags(self, tags):
         """
@@ -533,7 +529,7 @@ def load_comment_manifest(path="comments.txt"):
         m = re.search(r"/comment/([A-Za-z0-9]+)", url) or re.search(r"#comment-([A-Za-z0-9_-]+)", url)
         cid = m.group(1) if m else slugify(url)[:48]
         # Sanitize only the filename component (cid) to prevent path traversal
-        sanitized_cid = re.sub(SAFE_FILENAME_PATTERN, "-", cid)
+        sanitized_cid = sanitize_filename(cid)
         local = f"comments/{sanitized_cid}.html"
         # short label for index
         label = context or url
@@ -663,15 +659,12 @@ for p in all_posts:
         tags=getattr(p, "tags", []),
         social_image=social_image,
         site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
-        author=DEVTO_USERNAME,
+        author=p.author,
         enhanced_metadata=optimization_data.get("enhanced_metadata", {}),
         json_ld_schemas=optimization_data.get("json_ld_schemas", []),
         cross_references=cross_references,
     )
-    # Prevent path traversal or unsafe filenames in slugs
-    safe_slug = re.sub(SAFE_FILENAME_PATTERN, "-", p.slug)[:120]
-    # Periods are not allowed; this prevents path traversal via '..' or similar.
-    # No further sanitization needed.
+    safe_slug = sanitize_slug(p.slug, max_length=120)
     (POSTS_DIR / f"{safe_slug}.html").write_text(html_out, encoding="utf-8")
     print(f"Wrote: {p.slug}.html (canonical: {canonical})")
 
@@ -703,16 +696,15 @@ if comment_items:
             url=c["url"],
             social_image=social_image,
             site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
-            author=DEVTO_USERNAME,
+            author=p.author,
             enhanced_metadata={},  # Comments don't have enhanced metadata yet
         )
         # Ensure local path is safe. Re-sanitize the filename component to be defensive
         # (load_comment_manifest already attempts sanitization, but double-check here).
         orig_filename = os.path.basename(c["local"])
         name, ext = os.path.splitext(orig_filename)
-        sanitized_name = re.sub(SAFE_FILENAME_PATTERN, "-", name)
-        sanitized_local = sanitized_name + ext
-        local_path = pathlib.Path("comments") / sanitized_local
+        sanitized_local = sanitize_filename(name) + ext
+        local_path = validate_safe_path(pathlib.Path("comments"), sanitized_local)
         resolved_path = local_path.resolve()
         comments_dir = pathlib.Path("comments").resolve()
         if not str(resolved_path).startswith(str(comments_dir) + os.sep):
@@ -738,16 +730,6 @@ index_html = INDEX_TMPL.render(
     social_image=social_image,
 )
 pathlib.Path("index.html").write_text(index_html, encoding="utf-8")
-
-# Copy robots.txt and llms.txt from assets to the project root (raw copy)
-# Keep it simple: identical behavior for both files using shutil.copy2
-assets_robots = pathlib.Path("assets/robots.txt")
-if assets_robots.exists():
-    shutil.copy2(assets_robots, "robots.txt")
-
-assets_llms = pathlib.Path("assets/llms.txt")
-if assets_llms.exists():
-    shutil.copy2(assets_llms, "llms.txt")
 
 # Generate sitemap - use AI-optimized version if available
 sitemap_content = None

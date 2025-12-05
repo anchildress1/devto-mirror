@@ -77,7 +77,7 @@
   {{ cross_references.attribution.attribution_html | safe }}
   {% endif %}
 
-  <article>{{ content }}</article>
+  <article>{{ content | safe }}</article>
 
   <!-- Dev.to Backlinks -->
   {% if cross_references and cross_references.backlinks and cross_references.has_backlinks %}

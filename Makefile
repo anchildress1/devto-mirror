@@ -4,7 +4,7 @@
 PYTHON := $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python)
 
 .PHONY: help test test-coverage lint format install clean check validate security
-.PHONY: test-crawler analyze-crawlers
+.PHONY: test-crawler analyze-crawlers check-complexity
 
 help:  ## Show this help message
 	@echo "Available commands:"
@@ -39,6 +39,12 @@ security:  ## Run security checks
 	uv run bandit -r scripts src/ -ll -iii
 	uv run pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-wj6h-64fc-37mp --ignore-vuln GHSA-7f5h-v6xp-fcq8
 
+check-complexity:  ## Check cognitive complexity (max 15)
+	@echo "🔍 Checking cognitive complexity (max 15)..."
+	@uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\([1-9][6-9]\)|([2-9][0-9]\)|([1-9][0-9]{2,}\))" && \
+		echo "❌ Functions with complexity >15 found. See docs/COMPLEXITY_REFACTORING.md" && exit 1 || \
+		echo "✅ All functions within complexity limits"
+
 validate-site:  ## Validate site generation script
 	uv run python scripts/validate_site_generation.py
 
@@ -55,12 +61,13 @@ analyze-crawlers:  ## Run GitHub Pages crawler analysis. Provide BASE_URL as an 
 check-imports:  ## Check for missing dependencies by running a dry-run of the site generator
 	VALIDATION_MODE=true uv run python scripts/generate_site.py
 
-validate:  ## Single command: format → lint → security → test + site (POC ready)
+validate:  ## Single command: format → lint → security → complexity → test + site (POC ready)
 	@set -e; \
-	echo "🔍 format → lint → security → test..."; \
+	echo "🔍 format → lint → security → complexity → test..."; \
 	$(MAKE) format && echo "  ✓ format" || (echo "  ✗ format"; exit 1); \
 	$(MAKE) lint && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
 	$(MAKE) security && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
+	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ⚠ complexity (see docs/COMPLEXITY_REFACTORING.md)"; exit 0); \
 	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
 	$(MAKE) check-imports && echo "  ✓ imports" || (echo "  ✗ imports"; exit 1); \
 	$(MAKE) validate-site && echo "  ✓ site" || (echo "  ✗ site"; exit 1); \

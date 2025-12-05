@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
-      name: github-pages
+      name: deploy
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout gh-pages branch
@@ -31,44 +31,14 @@ jobs:
         run: |
           echo "## 📦 Preparing GitHub Pages Deployment" >> $GITHUB_STEP_SUMMARY
           echo "- 📍 Source Branch: gh-pages" >> $GITHUB_STEP_SUMMARY
+          echo "- 📄 Deploying site content (posts, index, comments)" >> $GITHUB_STEP_SUMMARY
+          echo "- ℹ️ Note: robots.txt, llms.txt, sitemap.xml, and verification files deploy to root repo only" >> $GITHUB_STEP_SUMMARY
 
+          # Deploy everything from gh-pages branch as-is
+          # (sitemap.xml, robots.txt, llms.txt, and google verification are handled by root repo deployment)
           mkdir -p _site
-
-          # Extract username for URL construction
-          username=$(echo ${{ github.repository }} | cut -d'/' -f1)
-          ROOT_HOME="https://$username.github.io/"
-
-          # Copy and substitute robots.txt from assets
-          if [ -f assets/robots.txt ]; then
-            cp assets/robots.txt _site/robots.txt
-            sed -i "s|{home}|$ROOT_HOME|g" _site/robots.txt
-            sed -i "s|{root_home}|$ROOT_HOME|g" _site/robots.txt
-            echo "  ✅ robots.txt" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "  ⚠️ assets/robots.txt not found" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Copy sitemap if it exists
-          if [ -f sitemap.xml ]; then
-            cp sitemap.xml _site/
-            echo "  ✅ sitemap.xml" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Copy llms.txt from assets
-          if [ -f assets/llms.txt ]; then
-            cp assets/llms.txt _site/llms.txt
-            sed -i "s|{home}|$ROOT_HOME|g" _site/llms.txt
-            sed -i "s|{root_home}|$ROOT_HOME|g" _site/llms.txt
-            echo "  ✅ llms.txt" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "  ⚠️ assets/llms.txt not found" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Copy Google verification file
-          if [ -f google6b80426bb396f31f.html ]; then
-            cp google6b80426bb396f31f.html _site/
-            echo "  ✅ google6b80426bb396f31f.html" >> $GITHUB_STEP_SUMMARY
-          fi
+          cp -R . _site/
+          rm -rf _site/.git _site/_site
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ Deployment artifact prepared" >> $GITHUB_STEP_SUMMARY

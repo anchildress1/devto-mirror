@@ -33,6 +33,7 @@ jobs:
 
       - name: Create backup branch
         run: |
+          # This backs up the PROJECT site's gh-pages branch (devto-mirror repo)
           # Generate backup branch name if not provided
           if [ -z "${{ inputs.backup_branch }}" ]; then
             BACKUP_BRANCH="backup-$(date +%Y%m%d-%H%M%S)"
@@ -107,18 +108,36 @@ jobs:
       - name: Trigger publish workflow
         run: |
           echo "🚀 Triggering the main publish workflow for full regeneration..."
+          echo "ℹ️  This regenerates the devto-mirror PROJECT site"
+          echo "ℹ️  Root site (username.github.io) updates automatically if ROOT_SITE_PAT is set"
 
-          # Use GitHub CLI to trigger the publish workflow
+          # Verify DEVTO_USERNAME is set
+          if [ -z "${{ vars.DEVTO_USERNAME }}" ]; then
+            echo "❌ ERROR: DEVTO_USERNAME repository variable is not set!"
+            echo "The publish workflow will be skipped without this variable."
+            echo "Set it at: Settings → Actions → Variables → DEVTO_USERNAME"
+            exit 1
+          fi
+
+          # Trigger the workflow
           gh workflow run publish.yaml \
-            --ref main
+            --ref main \
+            -f force_full_regen=true
+
+          # Wait a moment for workflow to register
+          sleep 5
+
+          # Get the workflow run ID
+          RUN_ID=$(gh run list --workflow=publish.yaml --limit 1 --json databaseId --jq '.[0].databaseId')
 
           echo "✅ Publish workflow triggered successfully"
-          echo "🔍 Monitor the workflow at: ${{ github.server_url }}/${{ github.repository }}/actions"
+          echo "🔍 Monitor the workflow at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${RUN_ID}"
           echo "📦 Backup available in branch: $BACKUP_BRANCH"
 
           echo "## 🚀 Workflow Triggered" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Publish workflow started for full regeneration" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔍 [Monitor progress](${{ github.server_url }}/${{ github.repository }}/actions)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🆔 Run ID: \`${RUN_ID}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 [Monitor progress](${{ github.server_url }}/${{ github.repository }}/actions/runs/${RUN_ID})" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Backup branch: \`$BACKUP_BRANCH\`" >> $GITHUB_STEP_SUMMARY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

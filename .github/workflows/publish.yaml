@@ -1,12 +1,28 @@
 name: Generate and Publish Dev.to Mirror Site
 
+# This workflow has TWO deployment jobs:
+# 1. generate-and-deploy: Deploys full mirror site to THIS repo's gh-pages branch
+# 2. deploy-root-config: Deploys 4 static files to <username>/<username> repo's gh-pages branch
+#
+# Required repository variables:
+# - DEVTO_USERNAME: Your Dev.to username (required)
+# - GH_USERNAME: Your GitHub username (required)
+#   - Used for constructing GitHub Pages URLs
+#
+# Optional repository secrets:
+# - DEVTO_API_KEY: Dev.to API key (optional for public content, required for private/draft posts)
+# - ROOT_SITE_PAT: Personal Access Token for deploying to root repo (optional)
+#   - If not set, root deployment will be skipped
+#   - Required scopes: 'repo' (classic) or 'contents: write' (fine-grained)
+#   - Used to deploy to: https://github.com/<username>/<username>
+
 on:
   schedule:
-    - cron: "40 13 * * 3"  # At 09:40 EDT every Wednesday; change to 14 for EST when applicable
+    - cron: "40 14 * * 3"  # At 9:40 AM EST every Wednesday
   workflow_dispatch:
     inputs:
       force_full_regen:
-        description: 'Force full regeneration (fetch all posts instead of incremental)'
+        description: 'Force full regeneration'
         required: false
         default: 'false'
         type: choice
@@ -24,21 +40,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy-mirror-site:
+  generate-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    if: vars.DEVTO_USERNAME != ''
+    environment:
+      name: deploy
+      url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
     env:
       DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
+      GH_USERNAME: ${{ vars.GH_USERNAME }}
       DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
       - name: Set up uv
         uses: astral-sh/setup-uv@v7
         with:
           version: "latest"
           python-version: "3.12"
+
       - name: Cache uv dependencies
         uses: actions/cache@v4
         with:
@@ -46,107 +69,164 @@ jobs:
           key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-uv-
+
       - name: Install dependencies
-        run: uv sync --locked --group dev && make install
+        run: uv sync --locked --group dev
+
+      - name: Run post-install setup
+        run: make install
 
       - name: Generate site
-        if: env.DEVTO_USERNAME && env.DEVTO_API_KEY
         env:
           PAGES_REPO: ${{ github.repository }}
           FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}
         run: |
-          echo "## 🏗️ Site Generation Started" >> $GITHUB_STEP_SUMMARY
-          echo "- 👤 Dev.to Username: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 📦 Target Repository: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 🔄 Full Regeneration: \`${FORCE_FULL_REGEN}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🏗️ Site Generation" >> $GITHUB_STEP_SUMMARY
+          echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 Repo: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          make generate-site
+          echo "✅ Generated" >> $GITHUB_STEP_SUMMARY
 
-          uv run python scripts/generate_site.py
-
-          username=$(echo $PAGES_REPO | cut -d'/' -f1)
-          repo=$(echo $PAGES_REPO | cut -d'/' -f2)
-          HOME="https://$username.github.io/$repo/"
-          ROOT_HOME="https://$username.github.io/"
-
-          # Prepare a temporary copy of the static assets directly from the
-          # `assets/` directory (avoid relying on generator creating root copies).
-          # This keeps the staging behavior simple: we always assemble TMPDIR from
-          # authoritative sources. Fail fast if assets are missing.
-          if [ ! -f assets/robots.txt ] || [ ! -f assets/llms.txt ]; then
-            echo "Error: required assets (assets/robots.txt or assets/llms.txt) are missing" >&2
-            exit 1
-          fi
-
-          # We'll perform substitutions on the copies placed into the project root
-          # so later steps (and the site validator) can find them if needed.
-          cp assets/robots.txt robots.txt
-          cp assets/llms.txt llms.txt
-          sed -i "s|{home}|$HOME|g" robots.txt
-          sed -i "s|{root_home}|$ROOT_HOME|g" robots.txt
-          sed -i "s|{home}|$HOME|g" llms.txt
-          sed -i "s|{root_home}|$ROOT_HOME|g" llms.txt
-
-          echo "- ✅ Site generation completed" >> $GITHUB_STEP_SUMMARY
-
-      - name: Configure GitHub Pages
-        if: env.DEVTO_USERNAME && env.DEVTO_API_KEY
-        uses: actions/configure-pages@v5
-
-      - name: Commit & push to gh-pages
-        if: env.DEVTO_USERNAME && env.DEVTO_API_KEY
+      - name: Validate generated site
         run: |
-          git config user.name "ci-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add -A
-          git commit -m "chore: auto-publish dev.to mirror" || echo "No changes"
+          echo "## ✅ Site Validation" >> $GITHUB_STEP_SUMMARY
+          uv run python scripts/validate_site_generation.py
+          echo "✅ Validation passed" >> $GITHUB_STEP_SUMMARY
 
-          set -e
-          TMPDIR="$(mktemp -d)"
-          # Copy required and expected files into the temporary staging area. This
-          # should fail immediately if any required file is missing (fail-fast).
-          cp -R .nojekyll index.html comments.txt robots.txt sitemap.xml llms.txt posts posts_data.json scripts google6b80426bb396f31f.html "$TMPDIR/"
-          if [ -d comments ]; then cp -R comments "$TMPDIR/"; fi
-          if [ -f last_run.txt ]; then cp last_run.txt "$TMPDIR/"; fi
+      - name: Generate sitemap and index
+        run: |
+          echo "## 📄 Generating Sitemap" >> $GITHUB_STEP_SUMMARY
+          uv run python scripts/render_index_sitemap.py
+          echo "✅ Sitemap generated" >> $GITHUB_STEP_SUMMARY
 
-          git fetch --all --prune || true
+      - name: Prepare root site config files
+        env:
+          GH_USERNAME: ${{ vars.GH_USERNAME }}
+        run: |
+          echo "## 🌐 Root Site Config Update" >> $GITHUB_STEP_SUMMARY
+          echo "Preparing root config bundle" >> $GITHUB_STEP_SUMMARY
 
-          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
-            git checkout gh-pages
-            git reset --hard origin/gh-pages
+          mkdir -p root_config
+          # Use GH_USERNAME for root site only
+          ROOT_HOME="https://${GH_USERNAME}.github.io/"
+
+          cp assets/robots.txt root_config/robots.txt
+          sed -i "s|{root_home}|$ROOT_HOME|g" root_config/robots.txt
+
+          cp assets/llms.txt root_config/llms.txt
+          sed -i "s|{root_home}|$ROOT_HOME|g" root_config/llms.txt
+
+          if [ -f sitemap.xml ]; then
+            cp sitemap.xml root_config/sitemap.xml
+            echo "✅ Sitemap copied to root config" >> $GITHUB_STEP_SUMMARY
           else
-            git checkout --orphan gh-pages
-            git rm -rf .
+            echo "⚠️ No sitemap.xml found" >> $GITHUB_STEP_SUMMARY
           fi
 
-          cp -R "$TMPDIR"/posts ./
-          cp -R "$TMPDIR"/comments ./
-          cp "$TMPDIR"/robots.txt ./
-          cp "$TMPDIR"/sitemap.xml ./
-          cp "$TMPDIR"/llms.txt ./
-          cp "$TMPDIR"/google6b80426bb396f31f.html ./
-          if [ -f "$TMPDIR/last_run.txt" ]; then
-            cp "$TMPDIR/last_run.txt" ./last_run.txt
+          if [ -f google6b80426bb396f31f.html ]; then
+            cp google6b80426bb396f31f.html root_config/
           fi
 
-          if [ -f "$TMPDIR/posts_data.json" ]; then
-            cp "$TMPDIR/posts_data.json" posts_data_new.json
+      - name: Upload root config artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: root-config
+          path: root_config
+
+      - name: Prepare deployment directory
+        run: |
+          mkdir -p _deploy
+          cp .nojekyll _deploy/
+          cp index.html _deploy/
+          cp posts_data.json _deploy/
+          cp -R posts _deploy/
+          [ -d comments ] && cp -R comments _deploy/
+          [ -f last_run.txt ] && cp last_run.txt _deploy/
+          [ -f comments.txt ] && cp comments.txt _deploy/
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_deploy
+          publish_branch: gh-pages
+          force_orphan: false
+          user_name: ci-bot
+          user_email: actions@users.noreply.github.com
+          commit_message: 'chore: deploy dev.to mirror'
+
+  deploy-root-config:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: generate-and-deploy
+    if: vars.DEVTO_USERNAME != '' && vars.GH_USERNAME != ''
+    environment: deploy
+    env:
+      DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
+      GH_USERNAME: ${{ vars.GH_USERNAME }}
+      ROOT_SITE_PAT: ${{ secrets.ROOT_SITE_PAT }}
+    steps:
+      - name: Download root config artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: root-config
+          path: root_config
+
+      - name: Check root config changes
+        id: root_config_changed
+        if: env.ROOT_SITE_PAT != ''
+        run: |
+          set -eo pipefail
+
+          TMP_REPO="$(mktemp -d)"
+          # Use GH_USERNAME for root repo
+          REPO_URL="https://github.com/${GH_USERNAME}/${GH_USERNAME}.git"
+
+          if git ls-remote --exit-code "$REPO_URL" gh-pages >/dev/null 2>&1; then
+            git clone --depth 1 --branch gh-pages "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
+          else
+            git clone --depth 1 "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
+            (cd "$TMP_REPO" && git checkout --orphan gh-pages && git rm -rf . >/dev/null 2>&1 || true)
           fi
 
-          if [ -d "$TMPDIR/scripts" ]; then
-            cp -R "$TMPDIR/scripts" ./
-          fi
+          FILES=(robots.txt llms.txt sitemap.xml google6b80426bb396f31f.html)
+          changed=false
+          for file in "${FILES[@]}"; do
+            new_file="root_config/$file"
+            old_file="$TMP_REPO/$file"
 
-          # We are now on the gh-pages branch. Run render_index_sitemap.py to regenerate
-          # index.html and sitemap.xml using the posts_data.json we just copied.
-          # This ensures the sitemap and index reflect the latest posts.
-          if [ -f "scripts/render_index_sitemap.py" ]; then
-            uv run python scripts/render_index_sitemap.py
-          fi
+            if [ -f "$new_file" ]; then
+              if [ ! -f "$old_file" ] || ! cmp -s "$new_file" "$old_file"; then
+                changed=true
+                break
+              fi
+            elif [ -f "$old_file" ]; then
+              changed=true
+              break
+            fi
+          done
 
-          # Commit and push changes to gh-pages branch
-          git add -A
-          git commit -m "chore: deploy dev.to mirror" || echo "No changes to commit"
-          git push origin gh-pages
+          echo "changed=$changed" >> $GITHUB_OUTPUT
 
-          echo "- ✅ Pushed to gh-pages branch" >> $GITHUB_STEP_SUMMARY
-          echo "- 🚀 Deployment workflow will trigger automatically" >> $GITHUB_STEP_SUMMARY
+      - name: Deploy root config via GitHub Pages action
+        if: steps.root_config_changed.outputs.changed == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ env.ROOT_SITE_PAT }}
+          publish_dir: root_config
+          publish_branch: gh-pages
+          keep_files: true
+          destination_dir: .
+          external_repository: ${{ env.GH_USERNAME }}/${{ env.GH_USERNAME }}
+          user_name: ci-bot
+          user_email: actions@users.noreply.github.com
+
+      - name: Skip root deployment (no changes)
+        if: steps.root_config_changed.outputs.changed != 'true' && env.ROOT_SITE_PAT != ''
+        run: |
+          echo "Skipping root deployment (no file changes detected)"
+
+      - name: Skip root deployment (missing ROOT_SITE_PAT)
+        if: env.ROOT_SITE_PAT == ''
+        run: |
+          echo "Skipping root deployment (ROOT_SITE_PAT not configured)"
