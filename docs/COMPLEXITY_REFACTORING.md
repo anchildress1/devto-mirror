@@ -131,10 +131,10 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Extract metadata tag creation
 - Separate validation from generation
 
-### 10. DevToContentAnalyzer.extract_code_languages - Complexity: 16
+### 10. DevToContentAnalyzer.extract_code_languages - Complexity: 16 ✅
 
 **File:** `src/devto_mirror/ai_optimization/content_analyzer.py:212`
-**Current Complexity:** 16
+**Current Complexity:** ≤ 15 (Refactored)
 **Target Complexity:** ≤ 15
 
 **Refactoring Strategy:**
@@ -142,6 +142,14 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Extract language detection patterns
 - Extract confidence scoring logic
 - Simplify nested loops
+
+**Status:** Completed
+**Refactoring Actions:**
+- Extracted `_extract_languages_from_attributes()` method for HTML class/data attribute parsing
+- Extracted `_extract_languages_from_fenced_blocks()` method for fenced code block parsing
+- Extracted `_normalize_and_sort_languages()` method for language normalization
+- Simplified main function to orchestrate helper methods
+- Added comprehensive unit tests for new helper methods
 
 ### 11. DevToSchemaGenerator (class) - Complexity: 17
 
@@ -182,7 +190,7 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
 - [x] DevToAISitemapGenerator._determine_content_type (18 → 3) ✅
 - [x] _fetch_article_pages (18) ✅
-- [x] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17 → 2)
+- [x] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17 → 2) ✅
 - [ ] DevToMetadataEnhancer.add_source_attribution_metadata (17)
-- [ ] DevToContentAnalyzer.extract_code_languages (16)
+- [x] DevToContentAnalyzer.extract_code_languages (16) ✅
 - [x] DevToSchemaGenerator class (17 → 7) ✅

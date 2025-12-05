@@ -285,7 +285,6 @@ class DevToContentAnalyzer:
         """
         languages = set()
 
-        # First, extract languages from Dev.to tag_list (most reliable source)
         if api_data:
             tag_languages = self._extract_languages_from_tags(api_data)
             languages.update(tag_languages)
@@ -294,44 +293,15 @@ class DevToContentAnalyzer:
             return sorted(list(languages))
 
         try:
-            # Pattern 1: Look for class="language-*" or class="lang-*" attributes
-            lang_class_patterns = [
-                r'class=["\'][^"\']*(?:language|lang)-([a-zA-Z0-9+#-]+)',
-                r'data-lang=["\']([a-zA-Z0-9+#-]+)["\']',
-                r'data-language=["\']([a-zA-Z0-9+#-]+)["\']',
-            ]
+            languages.update(self._extract_languages_from_attributes(content))
+            languages.update(self._extract_languages_from_fenced_blocks(content))
 
-            for pattern in lang_class_patterns:
-                matches = re.findall(pattern, content, re.IGNORECASE)
-                for match in matches:
-                    lang = match.lower().strip()
-                    if lang and len(lang) <= 20:  # Reasonable language name length
-                        languages.add(lang)
-
-            # Pattern 2: Look for common code block patterns with language hints
-            # GitHub-style code blocks: ```language
-            fenced_blocks = re.findall(r"```([a-zA-Z0-9+#-]+)", content)
-            for lang in fenced_blocks:
-                lang = lang.lower().strip()
-                if lang and len(lang) <= 20:
-                    languages.add(lang)
-
-            # Pattern 3: Look for common language keywords in code blocks
-            # This is a basic heuristic approach
             code_content = self._extract_code_block_content(content)
             if code_content:
                 detected_langs = self._detect_languages_by_keywords(code_content)
                 languages.update(detected_langs)
 
-            # Clean up and normalize language names
-            normalized_languages = []
-            for lang in languages:
-                normalized = self._normalize_language_name(lang)
-                if normalized:
-                    normalized_languages.append(normalized)
-
-            # Remove duplicates and sort
-            result = sorted(list(set(normalized_languages)))
+            result = self._normalize_and_sort_languages(languages)
 
             if result:
                 self.logger.debug(f"Detected programming languages: {result}")
@@ -341,6 +311,45 @@ class DevToContentAnalyzer:
         except Exception as e:
             self.logger.warning(f"Error extracting code languages: {e}")
             return []
+
+    def _extract_languages_from_attributes(self, content: str) -> set:
+        """Extract programming languages from HTML class and data attributes."""
+        languages = set()
+        lang_class_patterns = [
+            r'class=["\'][^"\']*(?:language|lang)-([a-zA-Z0-9+#-]+)',
+            r'data-lang=["\']([a-zA-Z0-9+#-]+)["\']',
+            r'data-language=["\']([a-zA-Z0-9+#-]+)["\']',
+        ]
+
+        for pattern in lang_class_patterns:
+            matches = re.findall(pattern, content, re.IGNORECASE)
+            for match in matches:
+                lang = match.lower().strip()
+                if lang and len(lang) <= 20:
+                    languages.add(lang)
+
+        return languages
+
+    def _extract_languages_from_fenced_blocks(self, content: str) -> set:
+        """Extract programming languages from fenced code blocks (```language)."""
+        languages = set()
+        fenced_blocks = re.findall(r"```([a-zA-Z0-9+#-]+)", content)
+        for lang in fenced_blocks:
+            lang = lang.lower().strip()
+            if lang and len(lang) <= 20:
+                languages.add(lang)
+
+        return languages
+
+    def _normalize_and_sort_languages(self, languages: set) -> List[str]:
+        """Normalize language names and return sorted list."""
+        normalized_languages = []
+        for lang in languages:
+            normalized = self._normalize_language_name(lang)
+            if normalized:
+                normalized_languages.append(normalized)
+
+        return sorted(list(set(normalized_languages)))
 
     def _extract_code_block_content(self, content: str) -> str:
         """Extract text content from code blocks for language detection."""
