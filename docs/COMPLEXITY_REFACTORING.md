@@ -47,17 +47,25 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Similar to item #1, extract into helper methods
 - Consider sharing logic with DevToContentAnalyzer._determine_content_type
 
-### 4. DevToContentAnalyzer.extract_api_metrics - Complexity: 20
+### 4. DevToContentAnalyzer.extract_api_metrics - Complexity: 20 ✓ COMPLETED
 
 **File:** `src/devto_mirror/ai_optimization/content_analyzer.py:92`
-**Current Complexity:** 20
+**Original Complexity:** 20
 **Target Complexity:** ≤ 15
+**Status:** ✓ Refactored
 
-**Refactoring Strategy:**
+**Refactoring Approach:**
 
-- Extract API endpoint detection into separate method
-- Extract metric calculation into helper functions
-- Simplify conditional logic
+- Created `_validate_numeric_metric()` helper method to centralize validation logic
+- Replaced 5 repetitive nested conditionals with configuration-driven approach
+- Used metric configuration list to define validation rules (key, min_value)
+- Single loop iterates through configuration, eliminating nested conditionals
+
+**Changes:**
+
+- Added `_validate_numeric_metric(value, min_value)` method for validation
+- Refactored `extract_api_metrics()` to use metric configuration
+- Maintained backward compatibility and all existing tests pass
 
 ### 5. DevToMetadataEnhancer._add_article_meta_tags - Complexity: 19
 
@@ -165,7 +173,7 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - [x] DevToContentAnalyzer._determine_content_type (45 → 3) ✅
 - [x] DevToSchemaGenerator.generate_article_schema (55 → 7) ✅
 - [x] DevToMetadataEnhancer._determine_content_type (24 → 3) ✅
-- [ ] DevToContentAnalyzer.extract_api_metrics (20)
+- [x] DevToContentAnalyzer.extract_api_metrics (20) ✅
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
 - [ ] DevToAISitemapGenerator._determine_content_type (18)
 - [ ] _fetch_article_pages (18)
