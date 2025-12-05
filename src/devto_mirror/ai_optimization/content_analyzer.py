@@ -70,6 +70,15 @@ class DevToContentAnalyzer:
         ),
     ]
 
+    # (API field name, minimum acceptable value)
+    METRIC_CONFIG = [
+        ("reading_time_minutes", 1),
+        ("public_reactions_count", 0),
+        ("comments_count", 0),
+        ("word_count", 1),
+        ("page_views_count", 0),
+    ]
+
     def __init__(self):
         """Initialize content analyzer with logging configuration."""
         self.logger = logging.getLogger(__name__ + ".ContentAnalyzer")
@@ -142,13 +151,17 @@ class DevToContentAnalyzer:
         Validate and convert a numeric metric value.
 
         Args:
-            value: The value to validate
-            min_value: Minimum acceptable value
+            value: The value to validate (int or float)
+            min_value: Minimum acceptable value (inclusive)
 
         Returns:
             Validated integer value or None if invalid
+
+        Note:
+            Float values are truncated toward zero (e.g., 5.7 becomes 5, -5.7 becomes -5).
+            Boolean values are rejected even though bool is a subclass of int.
         """
-        if value is None or not isinstance(value, (int, float)):
+        if value is None or isinstance(value, bool) or not isinstance(value, (int, float)):
             return None
         int_value = int(value)
         return int_value if int_value >= min_value else None
@@ -169,23 +182,22 @@ class DevToContentAnalyzer:
             self.logger.debug("No API data available for metric extraction")
             return metrics
 
-        metric_config = [
-            ("reading_time_minutes", 1),
-            ("public_reactions_count", 0),
-            ("comments_count", 0),
-            ("word_count", 1),
-            ("page_views_count", 0),
-        ]
-
         try:
-            for metric_key, min_value in metric_config:
+            for metric_key, min_value in self.METRIC_CONFIG:
                 raw_value = api_data.get(metric_key)
+                if raw_value is None:
+                    self.logger.debug(f"Metric {metric_key} not in API data")
+                    continue
                 validated_value = self._validate_numeric_metric(raw_value, min_value)
                 if validated_value is not None:
                     metrics[metric_key] = validated_value
+                    self.logger.debug(f"Extracted {metric_key}: {validated_value}")
+                else:
+                    self.logger.debug(f"Metric {metric_key}={raw_value} rejected (min={min_value})")
 
+            total_metrics = len(self.METRIC_CONFIG)
             if metrics:
-                self.logger.info(f"Successfully extracted {len(metrics)} metrics from API data")
+                self.logger.info(f"Extracted {len(metrics)} of {total_metrics} metrics from API data")
             else:
                 self.logger.debug("No usable metrics found in API data")
 
