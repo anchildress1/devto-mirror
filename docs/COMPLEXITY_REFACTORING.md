@@ -163,8 +163,8 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 ## Progress Tracking
 
 - [x] DevToContentAnalyzer._determine_content_type (45 → 3) ✅
-- [x] DevToSchemaGenerator.generate_article_schema (55)
-- [ ] DevToMetadataEnhancer._determine_content_type (24)
+- [x] DevToSchemaGenerator.generate_article_schema (55 → 7) ✅
+- [x] DevToMetadataEnhancer._determine_content_type (24 → 3) ✅
 - [ ] DevToContentAnalyzer.extract_api_metrics (20)
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
 - [ ] DevToAISitemapGenerator._determine_content_type (18)
