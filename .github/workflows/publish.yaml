@@ -167,7 +167,7 @@ jobs:
       ROOT_SITE_PAT: ${{ secrets.ROOT_SITE_PAT }}
     steps:
       - name: Download root config artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: root-config
           path: root_config

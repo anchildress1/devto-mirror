@@ -11,6 +11,8 @@ from datetime import datetime
 from typing import Any, Dict, List
 from xml.sax.saxutils import escape  # nosec B406 - Used for XML output escaping, not parsing
 
+from .utils import determine_content_type as classify_content_type
+
 logger = logging.getLogger(__name__)
 
 
@@ -319,34 +321,13 @@ class DevToAISitemapGenerator:
         Returns:
             String indicating content type
         """
-        # Get tags from post or API data
         tags = getattr(post, "tags", [])
         if not tags:
             api_data = getattr(post, "api_data", {})
             if api_data:
                 tags = api_data.get("tags", [])
 
-        if not isinstance(tags, list):
-            tags = []
-
-        # Convert tags to lowercase for comparison
-        tags_lower = [tag.lower() for tag in tags if isinstance(tag, str)]
-
-        # Determine content type based on Dev.to tags
-        if any(tag in tags_lower for tag in ["tutorial", "howto", "guide", "walkthrough", "beginners"]):
-            return "tutorial"
-        elif any(tag in tags_lower for tag in ["discuss", "discussion", "watercooler", "community"]):
-            return "discussion"
-        elif any(tag in tags_lower for tag in ["career", "job", "interview", "workplace"]):
-            return "career"
-        elif any(tag in tags_lower for tag in ["ai", "githubcopilot", "chatgpt", "machinelearning"]):
-            return "ai"
-        elif any(tag in tags_lower for tag in ["technology", "tooling", "tools", "vscode", "webdev"]):
-            return "technology"
-        elif any(tag in tags_lower for tag in ["productivity", "workflow", "automation", "efficiency"]):
-            return "productivity"
-        else:
-            return "article"
+        return classify_content_type(tags)
 
     def _determine_post_changefreq(self, post: Any, content_type: str = None) -> str:
         """
