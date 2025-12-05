@@ -79,32 +79,13 @@ def set_last_run_timestamp():
 
 
 def _fetch_article_pages(last_run_iso=None):
-    """Return a list of article summary objects from the paginated API.
-    This helper keeps the pagination logic isolated to reduce cognitive
-    complexity in the public function.
-    """
+    from devto_mirror.api_client import create_devto_session, fetch_page_with_retry, filter_new_articles
+
     articles = []
     page = 1
     api_base = "https://dev.to/api/articles"
 
-    # Detect CI environment and adjust settings
-    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
-    if is_ci:
-        print("🤖 Running in CI environment - using conservative timeouts and delays")
-
-    # Create a session for connection reuse with V1 API
-    session = requests.Session()
-    headers = {
-        "User-Agent": "DevTo-Mirror-Bot/1.0 (GitHub-Actions)" if is_ci else "DevTo-Mirror-Bot/1.0",
-        "Accept": "application/vnd.forem.api-v1+json",  # Use V1 API for better compatibility
-    }
-
-    # Add API key if available for higher rate limits
-    api_key = os.getenv("DEVTO_API_KEY")
-    if api_key:
-        headers["api-key"] = api_key
-
-    session.headers.update(headers)
+    session = create_devto_session()
 
     while True:
         print(f"Fetching page {page} of articles...")
@@ -115,51 +96,19 @@ def _fetch_article_pages(last_run_iso=None):
         if page == 1:
             params["_cb"] = time.time() // 60
 
-        max_retries = 3
-        retry_delay = 1
-        timeout = 30
-        data = None
-
-        for attempt in range(max_retries):
-            try:
-                response = session.get(api_base, params=params, timeout=timeout)
-                response.raise_for_status()
-                data = response.json()
-                break
-
-            except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
-                if attempt < max_retries - 1:
-                    print(f"  ⚠️  Timeout on page {page}, attempt {attempt + 1}, retrying in {retry_delay}s...")
-                    time.sleep(retry_delay)
-                    retry_delay *= 2
-                else:
-                    print(f"  ❌ Failed to fetch page {page} after {max_retries} attempts: {e}")
-                    session.close()
-                    return articles  # Return what we have so far
-
-            except requests.exceptions.RequestException as e:
-                print(f"  ❌ Request error for page {page}: {e}")
-                session.close()
-                return articles  # Return what we have so far
+        data = fetch_page_with_retry(session, api_base, params, page)
 
         if not data:
             break
 
-        if last_run_iso:
-            last_run_dt = datetime.fromisoformat(last_run_iso)
-            new_articles = [
-                article
-                for article in data
-                if datetime.fromisoformat(article["published_at"].replace("Z", "+00:00")) > last_run_dt
-            ]
-            articles.extend(new_articles)
-            if len(data) < 100 or len(new_articles) < len(data):
-                break
-        else:
-            articles.extend(data)
+        new_articles = filter_new_articles(data, last_run_iso)
+        articles.extend(new_articles)
+
+        if last_run_iso and (len(data) < 100 or len(new_articles) < len(data)):
+            break
 
         page += 1
-        time.sleep(0.5)  # Rate limiting between pages
+        time.sleep(0.5)
 
     session.close()
     return articles
