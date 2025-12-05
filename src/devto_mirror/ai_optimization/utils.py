@@ -7,9 +7,43 @@ including JSON-LD schema validation and other helper functions.
 
 import json
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, List, Tuple
 
 logger = logging.getLogger(__name__)
+
+CONTENT_TYPE_MAPPINGS: List[Tuple[str, List[str]]] = [
+    ("tutorial", ["tutorial", "howto", "guide", "walkthrough", "stepbystep", "beginners"]),
+    ("discussion", ["discuss", "discussion", "watercooler", "community", "opinion", "thoughts"]),
+    ("career", ["career", "job", "interview", "workplace", "professional"]),
+    ("writing", ["writing", "writers", "blogging", "content"]),
+    ("technology", ["technology", "tooling", "tools", "vscode", "webdev"]),
+    ("ai", ["ai", "githubcopilot", "chatgpt", "machinelearning", "ml"]),
+    ("productivity", ["productivity", "workflow", "automation", "efficiency"]),
+    ("challenge", ["devchallenge", "challenge", "contest", "hackathon"]),
+    ("wellness", ["mentalhealth", "wellness", "burnout", "health"]),
+]
+
+
+def determine_content_type(tags: List[str]) -> str:
+    """
+    Determine content type based on tag list.
+
+    Args:
+        tags: List of tag strings (will be normalized to lowercase)
+
+    Returns:
+        Content type string (tutorial, discussion, career, etc.)
+    """
+    if not isinstance(tags, list):
+        return "article"
+
+    tags_lower = [tag.lower() for tag in tags if isinstance(tag, str)]
+
+    for content_type, keywords in CONTENT_TYPE_MAPPINGS:
+        if any(keyword in tags_lower for keyword in keywords):
+            return content_type
+
+    return "article"
 
 
 def validate_json_ld_schema(schema: Dict[str, Any]) -> bool:
