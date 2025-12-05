@@ -134,6 +134,114 @@ Allow: /
         _process_disallow_rule("Disallow: ", ["Googlebot"], disallowed_agents, universal_rules)
         self.assertNotIn("Googlebot", disallowed_agents)
 
+    def test_process_allow_rule_empty_path(self):
+        """Test processing allow rule with empty path for specific agent."""
+        allowed_agents = set()
+        universal_rules = {"allow": [], "disallow": []}
+        _process_allow_rule("Allow: ", ["Googlebot"], allowed_agents, universal_rules)
+        self.assertNotIn("Googlebot", allowed_agents)
+
+    def test_process_allow_rule_empty_path_universal(self):
+        """Test processing allow rule with empty path for universal agent."""
+        allowed_agents = set()
+        universal_rules = {"allow": [], "disallow": []}
+        _process_allow_rule("Allow: ", ["*"], allowed_agents, universal_rules)
+        # Empty paths are not recorded for consistency with Disallow behavior
+        self.assertEqual(len(universal_rules["allow"]), 0)
+
+    def test_process_disallow_rule_empty_path_universal(self):
+        """Test processing disallow rule with empty path for universal agent."""
+        disallowed_agents = set()
+        universal_rules = {"allow": [], "disallow": []}
+        _process_disallow_rule("Disallow: ", ["*"], disallowed_agents, universal_rules)
+        # Empty paths are not recorded for consistency with Allow behavior
+        self.assertEqual(len(universal_rules["disallow"]), 0)
+
+    def test_process_allow_rule_no_agents(self):
+        """Test processing allow rule when no user-agent has been declared."""
+        allowed_agents = set()
+        universal_rules = {"allow": [], "disallow": []}
+        _process_allow_rule("Allow: /", [], allowed_agents, universal_rules)
+        self.assertEqual(len(allowed_agents), 0)
+        self.assertEqual(len(universal_rules["allow"]), 0)
+
+    def test_process_disallow_rule_no_agents(self):
+        """Test processing disallow rule when no user-agent has been declared."""
+        disallowed_agents = set()
+        universal_rules = {"allow": [], "disallow": []}
+        _process_disallow_rule("Disallow: /admin/", [], disallowed_agents, universal_rules)
+        self.assertEqual(len(disallowed_agents), 0)
+        self.assertEqual(len(universal_rules["disallow"]), 0)
+
+    def test_parse_robots_txt_rules_before_user_agent(self):
+        """Test parsing robots.txt with rules before any User-agent directive."""
+        # Rules before any User-agent directive should be silently ignored
+        # because current_agents will be empty when they're processed
+        content = """Allow: /public/
+Disallow: /private/
+User-agent: *
+Allow: /"""
+
+        result = parse_robots_txt(content)
+
+        # Only the rule after User-agent should be recorded
+        self.assertIn("/", result["universal_rules"]["allow"])
+        # Rules before User-agent should be ignored
+        self.assertNotIn("/public/", result["universal_rules"]["allow"])
+        self.assertNotIn("/private/", result["universal_rules"]["disallow"])
+
+    def test_parse_robots_txt_invalid_type(self):
+        """Test that non-string input raises TypeError."""
+        with self.assertRaises(TypeError) as context:
+            parse_robots_txt(None)
+        self.assertIn("content must be a string", str(context.exception))
+
+        with self.assertRaises(TypeError):
+            parse_robots_txt(123)
+
+        with self.assertRaises(TypeError):
+            parse_robots_txt([])
+
+    def test_parse_user_agent_line_malformed(self):
+        """Test parsing malformed user-agent line without colon."""
+        line = "User-agent"
+        result = _parse_user_agent_line(line)
+        self.assertEqual(result, [])
+
+    def test_parse_user_agent_line_empty_value(self):
+        """Test parsing user-agent line with empty value."""
+        line = "User-agent: "
+        result = _parse_user_agent_line(line)
+        self.assertEqual(result, [])
+
+    def test_process_allow_rule_malformed(self):
+        """Test processing malformed allow rule without colon."""
+        allowed_agents = set()
+        universal_rules = {"allow": [], "disallow": []}
+        _process_allow_rule("Allow", ["*"], allowed_agents, universal_rules)
+        self.assertEqual(len(universal_rules["allow"]), 0)
+
+    def test_process_disallow_rule_malformed(self):
+        """Test processing malformed disallow rule without colon."""
+        disallowed_agents = set()
+        universal_rules = {"allow": [], "disallow": []}
+        _process_disallow_rule("Disallow", ["*"], disallowed_agents, universal_rules)
+        self.assertEqual(len(universal_rules["disallow"]), 0)
+
+    def test_parse_robots_txt_different_line_endings(self):
+        """Test parsing robots.txt with different line ending styles."""
+        content_unix = "User-agent: *\nAllow: /\nDisallow: /admin/"
+        content_windows = "User-agent: *\r\nAllow: /\r\nDisallow: /admin/"
+        content_mac = "User-agent: *\rAllow: /\rDisallow: /admin/"
+
+        result_unix = parse_robots_txt(content_unix)
+        result_windows = parse_robots_txt(content_windows)
+        result_mac = parse_robots_txt(content_mac)
+
+        for result in [result_unix, result_windows, result_mac]:
+            self.assertIn("/", result["universal_rules"]["allow"])
+            self.assertIn("/admin/", result["universal_rules"]["disallow"])
+
     def test_parse_user_agent_rules_complex(self):
         """Test parsing complex user agent rules."""
         content = """User-agent: *
