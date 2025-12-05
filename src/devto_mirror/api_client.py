@@ -1,12 +1,37 @@
+"""
+Dev.to API client utilities.
+
+Provides session management, retry logic, and article filtering
+for interacting with the Dev.to API.
+"""
+
+import logging
 import os
 import time
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 import requests
 
+logger = logging.getLogger(__name__)
+
 
 def create_devto_session() -> requests.Session:
+    """
+    Create a configured requests session for Dev.to API calls.
+
+    Configures appropriate headers for the Dev.to V1 API including
+    User-Agent and Accept headers. Automatically detects CI environments
+    and uses GitHub Actions-specific User-Agent string.
+
+    Environment Variables:
+        CI: Set to "true" to indicate CI environment
+        GITHUB_ACTIONS: Set to "true" to indicate GitHub Actions
+        DEVTO_API_KEY: Optional API key for higher rate limits
+
+    Returns:
+        Configured requests.Session with appropriate headers
+    """
     is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
     if is_ci:
         print("🤖 Running in CI environment - using conservative timeouts and delays")
@@ -32,7 +57,25 @@ def fetch_page_with_retry(
     page: int,
     max_retries: int = 3,
     timeout: int = 30,
-) -> Optional[list]:
+) -> Optional[List[dict]]:
+    """
+    Fetch a page of articles with automatic retry on transient failures.
+
+    Implements exponential backoff for ReadTimeout and ConnectionError only.
+    Other RequestException types (e.g., HTTPError for 4xx/5xx) fail immediately.
+    Returns None on persistent failures to allow graceful degradation.
+
+    Args:
+        session: Configured requests session
+        url: API endpoint URL
+        params: Query parameters for the request
+        page: Page number (used for logging)
+        max_retries: Maximum retry attempts (default: 3)
+        timeout: Request timeout in seconds (default: 30)
+
+    Returns:
+        List of article dictionaries on success, None on failure
+    """
     retry_delay = 1
 
     for attempt in range(max_retries):
@@ -57,23 +100,49 @@ def fetch_page_with_retry(
     return None
 
 
-def filter_new_articles(data: list, last_run_iso: Optional[str]) -> list:
+def filter_new_articles(data: List[dict], last_run_iso: Optional[str]) -> List[dict]:
+    """
+    Filter articles to only include those published after last run.
+
+    Args:
+        data: List of article dictionaries from API
+        last_run_iso: ISO 8601 timestamp with timezone offset (e.g., "2024-01-15T10:30:00+00:00").
+                      The "Z" suffix is NOT supported; use "+00:00" for UTC.
+                      Pass None to return all articles without filtering.
+
+    Returns:
+        Filtered list containing only articles newer than last_run_iso,
+        or all articles if last_run_iso is None.
+
+    Raises:
+        ValueError: If last_run_iso is not a valid ISO 8601 format string.
+
+    Note:
+        Article timestamps from Dev.to API use "Z" suffix which is converted
+        internally to "+00:00" for proper comparison. Articles with missing
+        or malformed published_at fields are silently skipped.
+    """
     if not last_run_iso:
         return data
 
-    last_run_dt = datetime.fromisoformat(last_run_iso)
-    return [
-        article
-        for article in data
-        if datetime.fromisoformat(article["published_at"].replace("Z", "+00:00")) > last_run_dt
-    ]
+    try:
+        last_run_dt = datetime.fromisoformat(last_run_iso)
+    except ValueError as e:
+        logger.error(f"Invalid ISO format for last_run_iso: {last_run_iso}")
+        raise ValueError(f"last_run_iso must be valid ISO 8601 format: {e}") from e
 
+    result = []
+    for article in data:
+        published_at = article.get("published_at")
+        if not published_at:
+            logger.debug(f"Skipping article without published_at: {article.get('id', 'unknown')}")
+            continue
+        try:
+            article_dt = datetime.fromisoformat(published_at.replace("Z", "+00:00"))
+            if article_dt > last_run_dt:
+                result.append(article)
+        except (ValueError, AttributeError):
+            logger.warning(f"Skipping article with invalid published_at: {published_at}")
+            continue
 
-def should_continue_pagination(data: list, last_run_iso: Optional[str], new_articles: list) -> bool:
-    if not data:
-        return False
-
-    if last_run_iso:
-        return len(data) >= 100 and len(new_articles) >= len(data)
-
-    return True
+    return result
