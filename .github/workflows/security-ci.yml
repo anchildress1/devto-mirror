@@ -1,10 +1,10 @@
-name: Security and Lint CI
+name: Security and Quality CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch: {}
 
 permissions:
@@ -16,28 +16,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  security-lint:
+  security-quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+
       - name: Set up uv
         uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
           python-version: "3.12"
           enable-cache: true
-      - name: Install dependencies for analysis
+
+      - name: Install dependencies
         run: |
           echo "## 🔧 Installing dependencies" >> $GITHUB_STEP_SUMMARY
           uv sync --locked --group dev
           make install
           echo "✅ Dependencies installed" >> $GITHUB_STEP_SUMMARY
 
-      - name: Run comprehensive validation
+      - name: Run validation
         run: |
           echo "## 🔍 Validation Results" >> $GITHUB_STEP_SUMMARY
-          make check
+          make validate
           echo "✅ All checks passed" >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate coverage and reports
+        run: |
+          make test-coverage
+          uv run bandit -r scripts src/ -ll -iii -f json -o bandit-report.json || true
+          uv run flake8 scripts src/ --max-line-length=120 > flake8-report.txt || true
