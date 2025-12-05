@@ -78,17 +78,20 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Share implementation with other _determine_content_type methods
 - Consider creating a base class or mixin for content type determination
 
-### 7. _fetch_article_pages - Complexity: 18
+### 7. _fetch_article_pages - Complexity: 18 ✅
 
-**File:** `scripts/generate_site.py:78`
-**Current Complexity:** 18
-**Target Complexity:** ≤ 15
+**File:** `scripts/generate_site.py:81`
+**Original Complexity:** 18
+**Final Complexity:** ≤ 15
+**Status:** COMPLETED
 
-**Refactoring Strategy:**
+**Refactoring Applied:**
 
-- Extract retry logic into separate function
-- Extract response processing into helper method
-- Simplify error handling with early returns
+- Created `src/devto_mirror/api_client.py` module with helper functions
+- Extracted session creation logic to `create_devto_session()`
+- Extracted retry logic to `fetch_page_with_retry()`
+- Extracted date filtering to `filter_new_articles()`
+- Migrated API client logic from scripts/ to src/devto_mirror/ package
 
 ## Medium Priority (Complexity 16-19)
 
@@ -164,7 +167,7 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - [ ] DevToContentAnalyzer.extract_api_metrics (20)
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
 - [ ] DevToAISitemapGenerator._determine_content_type (18)
-- [ ] _fetch_article_pages (18)
+- [x] _fetch_article_pages (18) ✅
 - [ ] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17)
 - [ ] DevToMetadataEnhancer.add_source_attribution_metadata (17)
 - [ ] DevToContentAnalyzer.extract_code_languages (16)

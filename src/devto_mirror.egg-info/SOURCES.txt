@@ -2,6 +2,7 @@ LICENSE
 README.md
 pyproject.toml
 src/devto_mirror/__init__.py
+src/devto_mirror/api_client.py
 src/devto_mirror.egg-info/PKG-INFO
 src/devto_mirror.egg-info/SOURCES.txt
 src/devto_mirror.egg-info/dependency_links.txt
