@@ -2,6 +2,8 @@ LICENSE
 README.md
 pyproject.toml
 src/devto_mirror/__init__.py
+src/devto_mirror/api_client.py
+src/devto_mirror/robots_parser.py
 src/devto_mirror.egg-info/PKG-INFO
 src/devto_mirror.egg-info/SOURCES.txt
 src/devto_mirror.egg-info/dependency_links.txt
@@ -16,12 +18,14 @@ src/devto_mirror/ai_optimization/optimized_post.py
 src/devto_mirror/ai_optimization/schema_generator.py
 src/devto_mirror/ai_optimization/sitemap_generator.py
 src/devto_mirror/ai_optimization/utils.py
+tests/test_api_client.py
 tests/test_content_analyzer.py
 tests/test_cross_reference.py
 tests/test_generate_site_assets.py
 tests/test_manager.py
 tests/test_metadata_enhancer.py
 tests/test_optimized_post.py
+tests/test_robots_parser.py
 tests/test_schema_generator.py
 tests/test_sitemap_generator.py
 tests/test_utils.py

@@ -39,6 +39,24 @@ class TestDevToContentAnalyzer(unittest.TestCase):
         metrics = self.analyzer.extract_api_metrics(None)
         self.assertEqual(metrics, {})
 
+    def test_validate_numeric_metric(self):
+        """Test the _validate_numeric_metric helper method (truncates toward zero)."""
+        self.assertEqual(self.analyzer._validate_numeric_metric(10, 0), 10)
+        self.assertEqual(self.analyzer._validate_numeric_metric(5, 1), 5)
+        self.assertEqual(self.analyzer._validate_numeric_metric(5.7, 0), 5)
+        self.assertEqual(self.analyzer._validate_numeric_metric(1, 1), 1)
+        self.assertEqual(self.analyzer._validate_numeric_metric(0, 0), 0)
+        self.assertEqual(self.analyzer._validate_numeric_metric(-5.7, -10), -5)
+
+        self.assertIsNone(self.analyzer._validate_numeric_metric(None, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric("string", 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric([], 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric({}, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(-5, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(0, 1))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(True, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(False, 0))
+
     def test_calculate_fallback_metrics(self):
         """Test calculating fallback metrics from HTML content."""
         html_content = """
