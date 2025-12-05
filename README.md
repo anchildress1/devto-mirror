@@ -53,7 +53,7 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 6. Run workflow: [Actions → "Generate and Publish Dev.to Mirror Site" → Run workflow](https://github.com/anchildress1/devto-mirror/actions)
 7. Enable Pages: Settings → Pages → Deploy from branch → `gh-pages`
 
-> Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
+> Auto-updates weekly (Wednesdays) at 9:40 AM EST.
 
 ### Root Deployment (Optional)
 

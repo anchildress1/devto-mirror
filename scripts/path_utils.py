@@ -1,5 +1,6 @@
 """Path and filename sanitization utilities."""
 
+import os
 import string
 from pathlib import Path
 
@@ -52,7 +53,8 @@ def validate_safe_path(base_dir: Path, target_path: str) -> Path:
     base = base_dir.resolve()
     target = (base / target_path).resolve()
 
-    if not str(target).startswith(str(base)):
+    # Ensure target is within base, accounting for exact match or subdirectory
+    if target != base and not str(target).startswith(str(base) + os.sep):
         raise ValueError(f"Path traversal detected: {target_path}")
 
     return target

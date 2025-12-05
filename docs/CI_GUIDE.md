@@ -20,7 +20,7 @@ This separation allows for independent execution, targeted permissions, and easi
 **Technical Implementation**:
 
 ```yaml
-# Scheduled: Weekly Wednesday 9:40 AM EDT (cron: '40 14 * * 3')
+# Scheduled: Weekly Wednesday 9:40 AM EST (cron: '40 13 * * 3')
 # Manual: workflow_dispatch with optional inputs (force_full_regen)
 ```
 

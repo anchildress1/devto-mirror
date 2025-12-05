@@ -18,7 +18,7 @@ name: Generate and Publish Dev.to Mirror Site
 
 on:
   schedule:
-    - cron: "40 14 * * 3"  # At 09:40 EDT every Wednesday; change to 14 for EST
+    - cron: "40 14 * * 3"  # At 9:40 AM EST every Wednesday
   workflow_dispatch:
     inputs:
       force_full_regen:
@@ -100,6 +100,8 @@ jobs:
           echo "✅ Sitemap generated" >> $GITHUB_STEP_SUMMARY
 
       - name: Prepare root site config files
+        env:
+          GH_USERNAME: ${{ vars.GH_USERNAME }}
         run: |
           echo "## 🌐 Root Site Config Update" >> $GITHUB_STEP_SUMMARY
           echo "Preparing root config bundle" >> $GITHUB_STEP_SUMMARY

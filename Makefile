@@ -41,7 +41,7 @@ security:  ## Run security checks
 
 check-complexity:  ## Check cognitive complexity (max 15)
 	@echo "🔍 Checking cognitive complexity (max 15)..."
-	@uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\([1-9][6-9]\)|([2-9][0-9]\))|([1-9][0-9]{2,}\))" && \
+	@uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\([1-9][6-9]\)|([2-9][0-9]\)|([1-9][0-9]{2,}\))" && \
 		echo "❌ Functions with complexity >15 found. See docs/COMPLEXITY_REFACTORING.md" && exit 1 || \
 		echo "✅ All functions within complexity limits"
 
