@@ -175,7 +175,7 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - [x] DevToMetadataEnhancer._determine_content_type (24 → 3) ✅
 - [x] DevToContentAnalyzer.extract_api_metrics (20) ✅
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
-- [ ] DevToAISitemapGenerator._determine_content_type (18)
+- [x] DevToAISitemapGenerator._determine_content_type (18 → 3)
 - [ ] _fetch_article_pages (18)
 - [ ] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17)
 - [ ] DevToMetadataEnhancer.add_source_attribution_metadata (17)
