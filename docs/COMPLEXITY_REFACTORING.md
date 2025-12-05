@@ -4,10 +4,11 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 
 ## Critical Priority (Complexity >= 40)
 
-### 1. DevToContentAnalyzer._determine_content_type - Complexity: 45
+### 1. DevToContentAnalyzer._determine_content_type - Complexity: 3 ✅
 
-**File:** `src/devto_mirror/ai_optimization/content_analyzer.py:545`
-**Current Complexity:** 45
+**File:** `src/devto_mirror/ai_optimization/content_analyzer.py:639`
+**Original Complexity:** 45
+**Current Complexity:** 3
 **Target Complexity:** ≤ 15
 
 **Refactoring Strategy:**
@@ -16,19 +17,22 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Create a mapping/strategy pattern for content type detection
 - Reduce nested conditionals using early returns
 
-### 2. DevToSchemaGenerator.generate_article_schema - Complexity: 55
+### 2. DevToSchemaGenerator.generate_article_schema - Complexity: 7 ✅
 
-**File:** `src/devto_mirror/ai_optimization/schema_generator.py:38`
-**Current Complexity:** 55
+**File:** `src/devto_mirror/ai_optimization/schema_generator.py:252`
+**Original Complexity:** 55
+**Current Complexity:** 7
 **Target Complexity:** ≤ 15
 
-**Refactoring Strategy:**
+**Refactoring Completed:**
 
-- Extract author extraction into `_extract_author_info()`
-- Extract date handling into `_extract_dates()`
-- Extract image handling into `_extract_images()`
-- Extract tags/keywords into `_extract_keywords()`
-- Keep main method as orchestrator calling helper methods
+- Extracted author extraction into `_extract_author_info()`
+- Extracted date handling into `_extract_dates()` with `_normalize_iso_date()` helper
+- Extracted image handling into `_extract_images()`
+- Extracted tags/keywords into `_extract_keywords()`
+- Extracted engagement metrics into `_extract_engagement_metrics()`
+- Extracted content metrics into `_extract_content_metrics()`
+- Refactored main method as orchestrator calling helper methods
 
 ## High Priority (Complexity 20-39)
 
@@ -158,9 +162,9 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 
 ## Progress Tracking
 
-- [ ] DevToContentAnalyzer._determine_content_type (45)
-- [ ] DevToSchemaGenerator.generate_article_schema (55)
-- [ ] DevToMetadataEnhancer._determine_content_type (24)
+- [x] DevToContentAnalyzer._determine_content_type (45 → 3) ✅
+- [x] DevToSchemaGenerator.generate_article_schema (55 → 7) ✅
+- [x] DevToMetadataEnhancer._determine_content_type (24 → 3) ✅
 - [ ] DevToContentAnalyzer.extract_api_metrics (20)
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
 - [x] DevToAISitemapGenerator._determine_content_type (18 → 3)
@@ -168,4 +172,4 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - [ ] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17)
 - [ ] DevToMetadataEnhancer.add_source_attribution_metadata (17)
 - [ ] DevToContentAnalyzer.extract_code_languages (16)
-- [ ] DevToSchemaGenerator class (17)
+- [x] DevToSchemaGenerator class (17 → 7) ✅
