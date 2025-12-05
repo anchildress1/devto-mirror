@@ -17,8 +17,6 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Create a mapping/strategy pattern for content type detection
 - Reduce nested conditionals using early returns
 
-=======
-
 ### 2. DevToSchemaGenerator.generate_article_schema - Complexity: 7 ✅
 
 **File:** `src/devto_mirror/ai_optimization/schema_generator.py:252`
@@ -164,14 +162,9 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 
 ## Progress Tracking
 
-<<<<<<< HEAD
 - [x] DevToContentAnalyzer._determine_content_type (45 → 3) ✅
-- [ ] DevToSchemaGenerator.generate_article_schema (55)
-=======
-- [ ] DevToContentAnalyzer._determine_content_type (45)
 - [x] DevToSchemaGenerator.generate_article_schema (55 → 7) ✅
->>>>>>> a51e133 (refactor(schema): reduce generate_article_schema complexity from 55 to 7)
-- [ ] DevToMetadataEnhancer._determine_content_type (24)
+- [x] DevToMetadataEnhancer._determine_content_type (24 → 3) ✅
 - [ ] DevToContentAnalyzer.extract_api_metrics (20)
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
 - [ ] DevToAISitemapGenerator._determine_content_type (18)

@@ -23,6 +23,18 @@ class DevToMetadataEnhancer:
     Twitter Card, and LinkedIn meta tags from current templates.
     """
 
+    CONTENT_TYPE_TAGS = {
+        "tutorial": ["tutorial", "howto", "guide", "walkthrough", "beginners"],
+        "discussion": ["discuss", "discussion", "watercooler", "community", "opinion", "thoughts"],
+        "career": ["career", "job", "interview", "workplace", "professional"],
+        "writing": ["writing", "writers", "blogging", "content"],
+        "technology": ["technology", "tooling", "tools", "vscode", "webdev"],
+        "ai": ["ai", "githubcopilot", "chatgpt", "machinelearning", "ml"],
+        "productivity": ["productivity", "workflow", "automation", "efficiency"],
+        "challenge": ["devchallenge", "challenge", "contest", "hackathon"],
+        "wellness": ["mentalhealth", "wellness", "burnout", "health"],
+    }
+
     def __init__(self, site_name: str = "ChecKMarK Dev.to Mirror", site_url: str = ""):
         """
         Initialize metadata enhancer with site information.
@@ -126,7 +138,24 @@ class DevToMetadataEnhancer:
         Returns:
             String indicating content type (tutorial, article, discussion, etc.)
         """
-        # Get tags from post or API data
+        tags_lower = self._extract_tags_lowercase(post)
+
+        for content_type, type_tags in self.CONTENT_TYPE_TAGS.items():
+            if self._has_matching_tag(tags_lower, type_tags):
+                return content_type
+
+        return "article"
+
+    def _extract_tags_lowercase(self, post: Any) -> list[str]:
+        """
+        Extract tags from post and convert to lowercase.
+
+        Args:
+            post: Post object to extract tags from
+
+        Returns:
+            List of lowercase tag strings
+        """
         tags = getattr(post, "tags", [])
         if not tags:
             api_data = getattr(post, "api_data", {})
@@ -134,34 +163,22 @@ class DevToMetadataEnhancer:
                 tags = api_data.get("tags", [])
 
         if not isinstance(tags, list):
-            tags = []
+            return []
 
-        # Convert tags to lowercase for comparison
-        tags_lower = [tag.lower() for tag in tags if isinstance(tag, str)]
+        return [tag.lower() for tag in tags if isinstance(tag, str)]
 
-        # Determine content type based on actual Dev.to tags
-        if any(tag in tags_lower for tag in ["tutorial", "howto", "guide", "walkthrough", "beginners"]):
-            return "tutorial"
-        elif any(
-            tag in tags_lower for tag in ["discuss", "discussion", "watercooler", "community", "opinion", "thoughts"]
-        ):
-            return "discussion"
-        elif any(tag in tags_lower for tag in ["career", "job", "interview", "workplace", "professional"]):
-            return "career"
-        elif any(tag in tags_lower for tag in ["writing", "writers", "blogging", "content"]):
-            return "writing"
-        elif any(tag in tags_lower for tag in ["technology", "tooling", "tools", "vscode", "webdev"]):
-            return "technology"
-        elif any(tag in tags_lower for tag in ["ai", "githubcopilot", "chatgpt", "machinelearning", "ml"]):
-            return "ai"
-        elif any(tag in tags_lower for tag in ["productivity", "workflow", "automation", "efficiency"]):
-            return "productivity"
-        elif any(tag in tags_lower for tag in ["devchallenge", "challenge", "contest", "hackathon"]):
-            return "challenge"
-        elif any(tag in tags_lower for tag in ["mentalhealth", "wellness", "burnout", "health"]):
-            return "wellness"
-        else:
-            return "article"
+    def _has_matching_tag(self, tags_lower: list[str], type_tags: list[str]) -> bool:
+        """
+        Check if any tag matches the content type tags.
+
+        Args:
+            tags_lower: List of lowercase tags from post
+            type_tags: List of tags that identify a content type
+
+        Returns:
+            True if any tag matches, False otherwise
+        """
+        return any(tag in tags_lower for tag in type_tags)
 
     def add_ai_specific_tags(self, metadata: Dict[str, str]) -> Dict[str, str]:
         """
