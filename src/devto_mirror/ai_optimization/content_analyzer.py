@@ -22,6 +22,54 @@ class DevToContentAnalyzer:
     from Dev.to posts, prioritizing API data when available.
     """
 
+    CONTENT_TYPE_MATCHERS = [
+        (
+            "tutorial",
+            ["tutorial", "howto", "guide", "walkthrough", "stepbystep", "beginners"],
+            ["how to", "tutorial", "guide", "walkthrough", "step by step"],
+        ),
+        (
+            "discussion",
+            ["discuss", "discussion", "watercooler", "community", "opinion", "thoughts"],
+            ["thoughts on", "opinion", "discussion", "what do you think"],
+        ),
+        (
+            "career",
+            ["career", "job", "interview", "workplace", "professional"],
+            ["career", "job", "interview", "workplace"],
+        ),
+        (
+            "writing",
+            ["writing", "writers", "blogging", "content"],
+            ["writing", "blog", "content creation"],
+        ),
+        (
+            "technology",
+            ["technology", "tooling", "tools", "vscode", "webdev"],
+            ["technology", "tools", "tech"],
+        ),
+        (
+            "ai",
+            ["ai", "githubcopilot", "chatgpt", "machinelearning", "ml"],
+            ["ai", "artificial intelligence", "copilot", "chatgpt"],
+        ),
+        (
+            "productivity",
+            ["productivity", "workflow", "automation", "efficiency"],
+            ["productivity", "workflow", "automation"],
+        ),
+        (
+            "challenge",
+            ["devchallenge", "challenge", "contest", "hackathon"],
+            ["challenge", "contest", "hackathon"],
+        ),
+        (
+            "wellness",
+            ["mentalhealth", "wellness", "burnout", "health"],
+            ["mental health", "wellness", "burnout"],
+        ),
+    ]
+
     def __init__(self):
         """Initialize content analyzer with logging configuration."""
         self.logger = logging.getLogger(__name__ + ".ContentAnalyzer")
@@ -545,6 +593,52 @@ class DevToContentAnalyzer:
 
         return result
 
+    def _extract_tags(self, post: Any, api_data: Dict[str, Any]) -> List[str]:
+        """
+        Extract and normalize tags from API data or post object.
+
+        Args:
+            post: Post object to analyze
+            api_data: Original Dev.to API response data
+
+        Returns:
+            List of lowercase tag strings
+        """
+        tags = []
+        if api_data and "tags" in api_data:
+            tags = api_data.get("tags", [])
+        elif api_data and "tag_list" in api_data:
+            tags = api_data.get("tag_list", [])
+
+        if not tags:
+            tags = getattr(post, "tags", [])
+
+        if not isinstance(tags, list):
+            return []
+
+        return [tag.lower() for tag in tags if isinstance(tag, str)]
+
+    def _matches_content_type(
+        self, tags_lower: List[str], title: str, tag_keywords: List[str], title_keywords: List[str]
+    ) -> bool:
+        """
+        Check if tags or title match content type keywords.
+
+        Args:
+            tags_lower: Lowercase tags from post
+            title: Lowercase title from post
+            tag_keywords: Keywords to search in tags
+            title_keywords: Keywords to search in title
+
+        Returns:
+            True if any keyword matches
+        """
+        if any(tag in tags_lower for tag in tag_keywords):
+            return True
+        if any(word in title for word in title_keywords):
+            return True
+        return False
+
     def _determine_content_type(self, post: Any, api_data: Dict[str, Any]) -> str:
         """
         Determine the content type of the post based on tags and content.
@@ -556,81 +650,11 @@ class DevToContentAnalyzer:
         Returns:
             String indicating content type (tutorial, article, discussion, etc.)
         """
-        # Get tags from API data first, then post object
-        tags = []
-        if api_data and "tags" in api_data:
-            tags = api_data.get("tags", [])
-        elif api_data and "tag_list" in api_data:
-            tags = api_data.get("tag_list", [])
-
-        if not tags:
-            tags = getattr(post, "tags", [])
-
-        if not isinstance(tags, list):
-            tags = []
-
-        # Convert tags to lowercase for comparison
-        tags_lower = [tag.lower() for tag in tags if isinstance(tag, str)]
-
-        # Determine content type based on tags and title
+        tags_lower = self._extract_tags(post, api_data)
         title = getattr(post, "title", "").lower()
 
-        # Tutorial/Guide content - based on actual Dev.to tags
-        if any(tag in tags_lower for tag in ["tutorial", "howto", "guide", "walkthrough", "stepbystep", "beginners"]):
-            return "tutorial"
-        elif any(word in title for word in ["how to", "tutorial", "guide", "walkthrough", "step by step"]):
-            return "tutorial"
+        for content_type, tag_keywords, title_keywords in self.CONTENT_TYPE_MATCHERS:
+            if self._matches_content_type(tags_lower, title, tag_keywords, title_keywords):
+                return content_type
 
-        # Discussion/Community content - based on actual Dev.to tags
-        elif any(
-            tag in tags_lower for tag in ["discuss", "discussion", "watercooler", "community", "opinion", "thoughts"]
-        ):
-            return "discussion"
-        elif any(word in title for word in ["thoughts on", "opinion", "discussion", "what do you think"]):
-            return "discussion"
-
-        # Career/Professional content - based on actual Dev.to tags
-        elif any(tag in tags_lower for tag in ["career", "job", "interview", "workplace", "professional"]):
-            return "career"
-        elif any(word in title for word in ["career", "job", "interview", "workplace"]):
-            return "career"
-
-        # Writing/Content creation - based on actual Dev.to tags
-        elif any(tag in tags_lower for tag in ["writing", "writers", "blogging", "content"]):
-            return "writing"
-        elif any(word in title for word in ["writing", "blog", "content creation"]):
-            return "writing"
-
-        # Technology/Tools - based on actual Dev.to tags
-        elif any(tag in tags_lower for tag in ["technology", "tooling", "tools", "vscode", "webdev"]):
-            return "technology"
-        elif any(word in title for word in ["technology", "tools", "tech"]):
-            return "technology"
-
-        # AI/ML content - based on actual Dev.to tags (very common in this dataset)
-        elif any(tag in tags_lower for tag in ["ai", "githubcopilot", "chatgpt", "machinelearning", "ml"]):
-            return "ai"
-        elif any(word in title for word in ["ai", "artificial intelligence", "copilot", "chatgpt"]):
-            return "ai"
-
-        # Productivity content - based on actual Dev.to tags
-        elif any(tag in tags_lower for tag in ["productivity", "workflow", "automation", "efficiency"]):
-            return "productivity"
-        elif any(word in title for word in ["productivity", "workflow", "automation"]):
-            return "productivity"
-
-        # Challenge/Contest content - based on actual Dev.to tags
-        elif any(tag in tags_lower for tag in ["devchallenge", "challenge", "contest", "hackathon"]):
-            return "challenge"
-        elif any(word in title for word in ["challenge", "contest", "hackathon"]):
-            return "challenge"
-
-        # Mental health content - based on actual Dev.to tags
-        elif any(tag in tags_lower for tag in ["mentalhealth", "wellness", "burnout", "health"]):
-            return "wellness"
-        elif any(word in title for word in ["mental health", "wellness", "burnout"]):
-            return "wellness"
-
-        # Default to article for general content
-        else:
-            return "article"
+        return "article"
