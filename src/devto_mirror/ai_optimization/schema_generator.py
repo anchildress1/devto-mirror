@@ -9,11 +9,11 @@ Extracted from scripts/ai_optimization.py as part of package migration.
 """
 
 import logging
-from typing import Any, Dict
+import re
+from typing import Any, Dict, Optional, Tuple
 
 from .utils import validate_json_ld_schema
 
-# Configure logging for schema generation
 logger = logging.getLogger(__name__)
 
 
@@ -35,6 +35,182 @@ class DevToSchemaGenerator:
         self.site_name = site_name
         self.site_url = site_url.rstrip("/")
 
+    def _extract_author_info(self, canonical_url: str, api_data: Optional[Dict[str, Any]]) -> Tuple[str, str]:
+        """
+        Extract author name and URL from API data or canonical URL.
+
+        Args:
+            canonical_url: Canonical URL pointing to original Dev.to post
+            api_data: Optional original Dev.to API response data
+
+        Returns:
+            Tuple of (author_name, author_url)
+        """
+        if api_data and "user" in api_data:
+            user_data = api_data["user"]
+            author_name = user_data.get("name", user_data.get("username", "Dev.to Author"))
+            username = user_data.get("username")
+            if username:
+                return author_name, f"https://dev.to/{username}"
+
+        if canonical_url:
+            try:
+                url_parts = canonical_url.split("/")
+                if len(url_parts) >= 4 and "dev.to" in canonical_url:
+                    username = url_parts[3]
+                    return username, f"https://dev.to/{username}"
+            except Exception:
+                logger.debug("Failed to extract username from canonical URL")
+
+        return "Dev.to Author", canonical_url
+
+    def _extract_dates(self, post: Any, api_data: Optional[Dict[str, Any]]) -> Tuple[str, str]:
+        """
+        Extract and format published and modified dates.
+
+        Args:
+            post: Post object containing article data
+            api_data: Optional original Dev.to API response data
+
+        Returns:
+            Tuple of (published_date, modified_date)
+        """
+        published_date = ""
+        if api_data:
+            published_date = api_data.get("published_at", "")
+        if not published_date:
+            published_date = getattr(post, "date", "")
+
+        published_date = self._ensure_iso_format(published_date)
+
+        modified_date = published_date
+        if api_data and api_data.get("edited_at"):
+            modified_date = self._ensure_iso_format(api_data["edited_at"])
+
+        return published_date, modified_date
+
+    def _ensure_iso_format(self, date_str: str) -> str:
+        """
+        Ensure date string is in ISO format with timezone.
+
+        Args:
+            date_str: Date string to format
+
+        Returns:
+            ISO formatted date string with timezone
+        """
+        if isinstance(date_str, str) and date_str:
+            if not date_str.endswith("Z") and "+" not in date_str and "T" in date_str:
+                return date_str + "Z"
+        return date_str
+
+    def _extract_image(self, post: Any, api_data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+        """
+        Extract image information for the article.
+
+        Args:
+            post: Post object containing article data
+            api_data: Optional original Dev.to API response data
+
+        Returns:
+            Image schema dictionary or None
+        """
+        image_url = ""
+        if api_data:
+            image_url = api_data.get("social_image") or api_data.get("cover_image", "")
+        if not image_url:
+            image_url = getattr(post, "cover_image", "")
+
+        if image_url:
+            return {"@type": "ImageObject", "url": image_url, "width": 1000, "height": 500}
+        return None
+
+    def _extract_tags(self, post: Any, api_data: Optional[Dict[str, Any]]) -> list:
+        """
+        Extract tags/keywords from post or API data.
+
+        Args:
+            post: Post object containing article data
+            api_data: Optional original Dev.to API response data
+
+        Returns:
+            List of tags
+        """
+        tags = []
+        if api_data:
+            tags = api_data.get("tags", [])
+        if not tags:
+            tags = getattr(post, "tags", [])
+        return tags if isinstance(tags, list) else []
+
+    def _calculate_word_count(self, content_html: str) -> int:
+        """
+        Calculate word count from HTML content.
+
+        Args:
+            content_html: HTML content string
+
+        Returns:
+            Word count
+        """
+        if not content_html:
+            return 0
+        text_content = re.sub(r"<[^>]+>", "", content_html)
+        return len(text_content.split())
+
+    def _extract_engagement_metrics(self, api_data: Optional[Dict[str, Any]], schema: Dict[str, Any]) -> None:
+        """
+        Extract and add engagement metrics to schema.
+
+        Args:
+            api_data: Optional original Dev.to API response data
+            schema: Schema dictionary to update
+        """
+        if not api_data:
+            return
+
+        interaction_stats = {}
+        comments_count = api_data.get("comments_count")
+        if comments_count is not None and comments_count >= 0:
+            interaction_stats["commentCount"] = comments_count
+
+        reactions_count = api_data.get("public_reactions_count")
+        if reactions_count is not None and reactions_count >= 0:
+            interaction_stats["interactionCount"] = reactions_count
+
+        page_views = api_data.get("page_views_count")
+        if page_views is not None and page_views >= 0:
+            interaction_stats["pageViews"] = page_views
+
+        if not interaction_stats:
+            return
+
+        schema["interactionStatistic"] = []
+
+        if "commentCount" in interaction_stats:
+            schema["interactionStatistic"].append(
+                {
+                    "@type": "InteractionCounter",
+                    "interactionType": "https://schema.org/CommentAction",
+                    "userInteractionCount": interaction_stats["commentCount"],
+                }
+            )
+
+        if "interactionCount" in interaction_stats:
+            schema["interactionStatistic"].append(
+                {
+                    "@type": "InteractionCounter",
+                    "interactionType": "https://schema.org/LikeAction",
+                    "userInteractionCount": interaction_stats["interactionCount"],
+                }
+            )
+
+        if "pageViews" in interaction_stats:
+            schema["additionalProperty"] = schema.get("additionalProperty", [])
+            schema["additionalProperty"].append(
+                {"@type": "PropertyValue", "name": "pageViews", "value": interaction_stats["pageViews"]}
+            )
+
     def generate_article_schema(self, post: Any, canonical_url: str, api_data: Dict[str, Any] = None) -> Dict[str, Any]:
         """
         Generate Schema.org Article markup for a blog post.
@@ -47,50 +223,9 @@ class DevToSchemaGenerator:
         Returns:
             Dictionary containing JSON-LD Article schema
         """
-        # Extract author information from API data if available
-        author_name = "Dev.to Author"
-        author_url = canonical_url
+        author_name, author_url = self._extract_author_info(canonical_url, api_data)
+        published_date, modified_date = self._extract_dates(post, api_data)
 
-        if api_data and "user" in api_data:
-            user_data = api_data["user"]
-            author_name = user_data.get("name", user_data.get("username", "Dev.to Author"))
-            username = user_data.get("username")
-            if username:
-                author_url = f"https://dev.to/{username}"
-        elif canonical_url:
-            # Extract username from Dev.to URL pattern: https://dev.to/username/post-slug
-            try:
-                url_parts = canonical_url.split("/")
-                if len(url_parts) >= 4 and "dev.to" in canonical_url:
-                    username = url_parts[3]  # Username from URL
-                    author_name = username
-                    author_url = f"https://dev.to/{username}"
-            except Exception:
-                logger.debug("Failed to extract username from canonical URL")
-        elif canonical_url:
-            # Extract username from Dev.to URL pattern: https://dev.to/username/post-slug
-            try:
-                url_parts = canonical_url.split("/")
-                if len(url_parts) >= 4 and "dev.to" in canonical_url:
-                    username = url_parts[3]  # Username from URL
-                    author_name = username
-                    author_url = f"https://dev.to/{username}"
-            except Exception:
-                logger.debug("Failed to extract username from canonical URL")
-
-        # Get post dates - prefer API data, fallback to Post object
-        published_date = ""
-        if api_data:
-            published_date = api_data.get("published_at", "")
-        if not published_date:
-            published_date = getattr(post, "date", "")
-
-        # Ensure ISO format with timezone
-        if isinstance(published_date, str) and published_date:
-            if not published_date.endswith("Z") and "+" not in published_date and "T" in published_date:
-                published_date = published_date + "Z"
-
-        # Build the article schema
         schema = {
             "@context": "https://schema.org",
             "@type": "Article",
@@ -101,124 +236,41 @@ class DevToSchemaGenerator:
             "url": canonical_url,
         }
 
-        # Add dates if available
         if published_date:
             schema["datePublished"] = published_date
-            # Use edited_at if available, otherwise use published_at
-            edited_date = published_date
-            if api_data and api_data.get("edited_at"):
-                edited_date = api_data["edited_at"]
-                if not edited_date.endswith("Z") and "+" not in edited_date and "T" in edited_date:
-                    edited_date = edited_date + "Z"
-            schema["dateModified"] = edited_date
+            schema["dateModified"] = modified_date
 
-        # Add description if available
         description = getattr(post, "description", "")
         if description:
             schema["description"] = description
 
-        # Add images - prefer social_image from API, fallback to cover_image
-        image_url = ""
-        if api_data:
-            image_url = api_data.get("social_image") or api_data.get("cover_image", "")
-        if not image_url:
-            image_url = getattr(post, "cover_image", "")
+        image = self._extract_image(post, api_data)
+        if image:
+            schema["image"] = image
 
-        if image_url:
-            schema["image"] = {
-                "@type": "ImageObject",
-                "url": image_url,
-                "width": 1000,  # Default dimensions for Dev.to images
-                "height": 500,
-            }
-
-        # Add tags as keywords - prefer API data
-        tags = []
-        if api_data:
-            # Dev.to API provides tags as array
-            tags = api_data.get("tags", [])
-        if not tags:
-            tags = getattr(post, "tags", [])
-
-        if tags and isinstance(tags, list):
+        tags = self._extract_tags(post, api_data)
+        if tags:
             schema["keywords"] = tags
 
-        # Add reading time if available from API
         if api_data and "reading_time_minutes" in api_data:
             reading_time = api_data["reading_time_minutes"]
             if reading_time and reading_time > 0:
-                schema["timeRequired"] = f"PT{reading_time}M"  # ISO 8601 duration format
+                schema["timeRequired"] = f"PT{reading_time}M"
 
-        # Add word count estimation from content
-        content_html = getattr(post, "content_html", "")
-        if content_html:
-            # Basic word count estimation
-            import re
+        word_count = self._calculate_word_count(getattr(post, "content_html", ""))
+        if word_count > 0:
+            schema["wordCount"] = word_count
 
-            text_content = re.sub(r"<[^>]+>", "", content_html)
-            word_count = len(text_content.split())
-            if word_count > 0:
-                schema["wordCount"] = word_count
-
-        # Add language if available from API
         if api_data and "language" in api_data:
             schema["inLanguage"] = api_data["language"]
 
-        # Add engagement metrics from Dev.to API
-        if api_data:
-            # Add interaction statistics
-            interaction_stats = {}
+        self._extract_engagement_metrics(api_data, schema)
 
-            # Comments count
-            comments_count = api_data.get("comments_count")
-            if comments_count is not None and comments_count >= 0:
-                interaction_stats["commentCount"] = comments_count
-
-            # Reactions count (likes, hearts, etc.)
-            reactions_count = api_data.get("public_reactions_count")
-            if reactions_count is not None and reactions_count >= 0:
-                interaction_stats["interactionCount"] = reactions_count
-
-            # Page views if available
-            page_views = api_data.get("page_views_count")
-            if page_views is not None and page_views >= 0:
-                interaction_stats["pageViews"] = page_views
-
-            # Add interaction statistics as structured data
-            if interaction_stats:
-                schema["interactionStatistic"] = []
-
-                if "commentCount" in interaction_stats:
-                    schema["interactionStatistic"].append(
-                        {
-                            "@type": "InteractionCounter",
-                            "interactionType": "https://schema.org/CommentAction",
-                            "userInteractionCount": interaction_stats["commentCount"],
-                        }
-                    )
-
-                if "interactionCount" in interaction_stats:
-                    schema["interactionStatistic"].append(
-                        {
-                            "@type": "InteractionCounter",
-                            "interactionType": "https://schema.org/LikeAction",
-                            "userInteractionCount": interaction_stats["interactionCount"],
-                        }
-                    )
-
-                # Add page views as additional property (not standard schema.org but useful for AI)
-                if "pageViews" in interaction_stats:
-                    schema["additionalProperty"] = schema.get("additionalProperty", [])
-                    schema["additionalProperty"].append(
-                        {"@type": "PropertyValue", "name": "pageViews", "value": interaction_stats["pageViews"]}
-                    )
-
-        # Validate schema before returning
         if validate_json_ld_schema(schema):
             return schema
-        else:
-            logger.warning("Generated article schema failed validation")
-            return {}
+
+        logger.warning("Generated article schema failed validation")
+        return {}
 
     def generate_website_schema(self, site_info: Dict[str, Any]) -> Dict[str, Any]:
         """

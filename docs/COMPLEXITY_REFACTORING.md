@@ -128,24 +128,32 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Extract confidence scoring logic
 - Simplify nested loops
 
-### 11. DevToSchemaGenerator (class) - Complexity: 17
+### 11. DevToSchemaGenerator (class) - ✅ COMPLETED
 
 **File:** `src/devto_mirror/ai_optimization/schema_generator.py:20`
-**Current Complexity:** 17
-**Target Complexity:** ≤ 15
+**Original Complexity:** 17 → **Current Complexity:** 7
+**Target Complexity:** ≤ 15 ✓
 
-**Refactoring Strategy:**
+**Refactoring Applied:**
 
-- Review class structure
-- Consider splitting into multiple specialized classes
-- Reduce method interdependencies
+- Extracted `_extract_author_info()` helper method (complexity: 8)
+- Extracted `_extract_dates()` and `_ensure_iso_format()` helper methods (complexity: 5, 6)
+- Extracted `_extract_image()` helper method (complexity: 5)
+- Extracted `_extract_tags()` helper method (complexity: 4)
+- Extracted `_calculate_word_count()` helper method (complexity: 2)
+- Extracted `_extract_engagement_metrics()` helper method (complexity: 12)
+- Removed duplicate code blocks from `generate_article_schema`
+- Reduced `generate_article_schema` from 55 → 14
+- Average class complexity: 6.08
 
 ## Status Summary
 
 - **Total Functions:** 11
+- **Completed:** 1 (DevToSchemaGenerator class)
+- **Remaining:** 10
 - **Critical Priority (>= 40):** 2
 - **High Priority (20-39):** 5
-- **Medium Priority (16-19):** 4
+- **Medium Priority (16-19):** 4 (3 remaining)
 
 ## Refactoring Guidelines
 
@@ -159,7 +167,7 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 ## Progress Tracking
 
 - [ ] DevToContentAnalyzer._determine_content_type (45)
-- [ ] DevToSchemaGenerator.generate_article_schema (55)
+- [ ] DevToSchemaGenerator.generate_article_schema (55) - ✅ **Completed as part of class refactoring**
 - [ ] DevToMetadataEnhancer._determine_content_type (24)
 - [ ] DevToContentAnalyzer.extract_api_metrics (20)
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
@@ -168,4 +176,4 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - [ ] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17)
 - [ ] DevToMetadataEnhancer.add_source_attribution_metadata (17)
 - [ ] DevToContentAnalyzer.extract_code_languages (16)
-- [ ] DevToSchemaGenerator class (17)
+- [x] **DevToSchemaGenerator class (17) - ✅ COMPLETED (reduced to 7)**
