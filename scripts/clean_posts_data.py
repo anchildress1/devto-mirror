@@ -6,14 +6,20 @@ Keeps the newest post when duplicates are found (based on parsed date), backs up
 Usage: python3 scripts/clean_posts_data.py
 """
 import json
+import pathlib
+import sys
 from datetime import datetime
 from pathlib import Path
 
-from utils import parse_date
+# Add parent directory to path for imports
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
+
+from scripts.constants import POSTS_DATA_FILE
+from scripts.utils import parse_date
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA_FILE = ROOT / "posts_data.json"
-BACKUP_FILE = ROOT / "posts_data.json.bak"
+DATA_FILE = ROOT / POSTS_DATA_FILE
+BACKUP_FILE = ROOT / f"{POSTS_DATA_FILE}.bak"
 
 
 def key_for(post):
@@ -55,7 +61,7 @@ def dedupe_posts(data):
 
 def main():
     if not DATA_FILE.exists():
-        print(f"No posts_data.json found at {DATA_FILE}")
+        print(f"No {POSTS_DATA_FILE} found at {DATA_FILE}")
         return
     data = json.loads(DATA_FILE.read_text())
     print(f"Loaded {len(data)} posts from {DATA_FILE}")
@@ -75,7 +81,7 @@ def main():
     cleaned.sort(key=_entry_date_key, reverse=True)
 
     DATA_FILE.write_text(json.dumps(cleaned, indent=2, ensure_ascii=False))
-    print(f"Wrote cleaned posts_data.json ({len(cleaned)} posts)")
+    print(f"Wrote cleaned {POSTS_DATA_FILE} ({len(cleaned)} posts)")
 
 
 if __name__ == "__main__":

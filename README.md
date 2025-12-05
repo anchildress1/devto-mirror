@@ -44,12 +44,31 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 ## Quick Setup ⚡
 
 1. Fork this repo
-2. Set repository variable: Settings → Actions → Variables → Add `DEVTO_USERNAME`
-3. Delete `gh-pages` branch if it exists
-4. Run workflow: [Actions → "Generate and Publish Dev.to Mirror Site" → Run workflow](https://github.com/anchildress1/devto-mirror/actions)
-5. Enable Pages: Settings → Pages → Deploy from branch → `gh-pages`
+2. Set repository variables: Settings → Actions → Variables
+   - Add `DEVTO_USERNAME` (your Dev.to username)
+   - Add `GH_USERNAME` (GitHub username, since apparently naming this variable "GITHUB" is not allowed)
+3. (Optional) Set API key: Settings → Actions → Secrets → Add `DEVTO_API_KEY` (only needed for private/draft posts)
+4. (Optional) Set root deploy token: Settings → Actions → Secrets → Add `ROOT_SITE_PAT` (see Root Deployment below)
+5. Delete `gh-pages` branch if it exists
+6. Run workflow: [Actions → "Generate and Publish Dev.to Mirror Site" → Run workflow](https://github.com/anchildress1/devto-mirror/actions)
+7. Enable Pages: Settings → Pages → Deploy from branch → `gh-pages`
 
 > Auto-updates weekly (Wednesdays) at 9:40 AM EDT.
+
+### Root Deployment (Optional)
+
+To deploy config files (robots.txt, llms.txt, sitemap.xml) to your root GitHub Pages (`https://<username>.github.io/`):
+
+1. Create a repository named `<username>/<username>` (e.g., `anchildress1/anchildress1`)
+2. Create a Personal Access Token:
+   - Settings → Developer settings → Personal access tokens → Generate new token
+   - Classic: Check `repo` scope
+   - Fine-grained: Grant `contents: write` permission to your `<username>/<username>` repo
+3. Add token as repository secret: Settings → Actions → Secrets → New secret named `ROOT_SITE_PAT`
+
+Without this token, the workflow will only deploy to the project repository.
+
+> **Note:** The workflow automatically generates robots.txt and llms.txt for your root GitHub Pages site using `GH_USERNAME`. The robots.txt template in `assets/` uses `{root_home}` placeholders that are replaced during deployment to your `<username>/<username>` repo - no manual URL configuration needed!
 
 ---
 

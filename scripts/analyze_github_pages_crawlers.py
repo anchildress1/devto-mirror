@@ -241,7 +241,7 @@ class GitHubPagesCrawlerAnalyzer:
         comparison = self.analysis_results.get("comparison", {})
         if comparison and "summary" in comparison:
             consistency_rate = comparison["summary"].get("consistency_rate", 0)
-            if consistency_rate == 1.0:
+            if abs(consistency_rate - 1.0) < 1e-9:
                 recommendations.append(
                     {
                         "type": "positive",
