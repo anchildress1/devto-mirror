@@ -304,6 +304,70 @@ class TestDevToMetadataEnhancer(unittest.TestCase):
         self.assertNotIn("devto:comments", metadata)
         self.assertNotIn("devto:engagement_score", metadata)
 
+    def test_ensure_iso_timezone_edge_cases(self):
+        """Test _ensure_iso_timezone with edge cases."""
+        self.assertEqual(self.enhancer._ensure_iso_timezone(""), "")
+        self.assertEqual(self.enhancer._ensure_iso_timezone(None), "")
+        self.assertEqual(self.enhancer._ensure_iso_timezone("2023-01-01"), "2023-01-01")
+        self.assertEqual(self.enhancer._ensure_iso_timezone("2023-01-01T12:00:00Z"), "2023-01-01T12:00:00Z")
+        self.assertEqual(self.enhancer._ensure_iso_timezone("2023-01-01T12:00:00+05:00"), "2023-01-01T12:00:00+05:00")
+
+    def test_extract_author_name_no_user_data(self):
+        """Test _extract_author_name when user data is empty."""
+        mock_post = Mock()
+        mock_post.author = ""
+        result = self.enhancer._extract_author_name(mock_post, {})
+        self.assertEqual(result, "")
+
+    def test_build_canonical_metadata_non_devto_url(self):
+        """Test _build_canonical_metadata with non-dev.to URL."""
+        result = self.enhancer._build_canonical_metadata("https://example.com/post")
+        self.assertEqual(result, {"canonical": "https://example.com/post"})
+        self.assertNotIn("source-platform", result)
+
+    def test_add_engagement_metrics(self):
+        """Test _add_engagement_metrics calculation logic."""
+        metadata = {}
+        api_data = {
+            "public_reactions_count": 42,
+            "comments_count": 10,
+            "page_views_count": 500,
+        }
+
+        self.enhancer._add_engagement_metrics(metadata, api_data)
+
+        self.assertEqual(metadata["devto:reactions"], "42")
+        self.assertEqual(metadata["devto:comments"], "10")
+        self.assertEqual(metadata["devto:page_views"], "500")
+        self.assertEqual(metadata["devto:engagement_score"], "62")
+
+    def test_add_engagement_metrics_partial_data(self):
+        """Test _add_engagement_metrics with partial data."""
+        metadata = {}
+        api_data = {"public_reactions_count": 20}
+
+        self.enhancer._add_engagement_metrics(metadata, api_data)
+
+        self.assertEqual(metadata["devto:reactions"], "20")
+        self.assertNotIn("devto:comments", metadata)
+        self.assertNotIn("devto:engagement_score", metadata)
+
+    def test_add_engagement_metrics_zero_values(self):
+        """Test _add_engagement_metrics with zero values."""
+        metadata = {}
+        api_data = {
+            "public_reactions_count": 0,
+            "comments_count": 0,
+            "page_views_count": 0,
+        }
+
+        self.enhancer._add_engagement_metrics(metadata, api_data)
+
+        self.assertEqual(metadata["devto:reactions"], "0")
+        self.assertEqual(metadata["devto:comments"], "0")
+        self.assertEqual(metadata["devto:page_views"], "0")
+        self.assertEqual(metadata["devto:engagement_score"], "0")
+
 
 if __name__ == "__main__":
     unittest.main()

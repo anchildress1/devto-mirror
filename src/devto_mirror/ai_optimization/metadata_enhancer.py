@@ -35,6 +35,8 @@ class DevToMetadataEnhancer:
         "wellness": ["mentalhealth", "wellness", "burnout", "health"],
     }
 
+    COMMENT_ENGAGEMENT_WEIGHT = 2
+
     def __init__(self, site_name: str = "ChecKMarK Dev.to Mirror", site_url: str = ""):
         """
         Initialize metadata enhancer with site information.
@@ -85,48 +87,61 @@ class DevToMetadataEnhancer:
             Dictionary of article meta tags
         """
         metadata = {}
+        api_data = getattr(post, "api_data", {}) or {}
 
-        # Extract author information
-        author_name = getattr(post, "author", "")
-        if not author_name:
-            # Try to extract from API data if available
-            api_data = getattr(post, "api_data", {})
-            if api_data and "user" in api_data:
-                user_data = api_data["user"]
-                author_name = user_data.get("name", user_data.get("username", ""))
-
+        author_name = self._extract_author_name(post, api_data)
         if author_name:
             metadata["article:author"] = author_name
 
-        # Add published time
-        published_date = getattr(post, "date", "")
-        if not published_date:
-            # Try to get from API data
-            api_data = getattr(post, "api_data", {})
-            if api_data:
-                published_date = api_data.get("published_at", "")
-
+        published_date = self._extract_published_date(post, api_data)
         if published_date:
-            # Ensure ISO format with timezone
-            if isinstance(published_date, str) and published_date:
-                if not published_date.endswith("Z") and "+" not in published_date and "T" in published_date:
-                    published_date = published_date + "Z"
-            metadata["article:published_time"] = published_date
+            metadata["article:published_time"] = self._ensure_iso_timezone(published_date)
 
-        # Add modified time if available
-        api_data = getattr(post, "api_data", {})
-        if api_data and api_data.get("edited_at"):
-            edited_date = api_data["edited_at"]
-            if not edited_date.endswith("Z") and "+" not in edited_date and "T" in edited_date:
-                edited_date = edited_date + "Z"
-            metadata["article:modified_time"] = edited_date
+        edited_date = api_data.get("edited_at")
+        if edited_date:
+            metadata["article:modified_time"] = self._ensure_iso_timezone(edited_date)
 
-        # Add content type
         content_type = self._determine_content_type(post)
         if content_type:
             metadata["content-type"] = content_type
 
         return metadata
+
+    def _extract_author_name(self, post: Any, api_data: Dict[str, Any]) -> str:
+        """Extract author name from post or API data."""
+        author_name = getattr(post, "author", "")
+        if author_name:
+            return author_name
+
+        user_data = api_data.get("user", {})
+        if user_data:
+            return user_data.get("name", user_data.get("username", ""))
+        return ""
+
+    def _extract_published_date(self, post: Any, api_data: Dict[str, Any]) -> str:
+        """Extract published date from post or API data."""
+        published_date = getattr(post, "date", "")
+        if published_date:
+            return published_date
+        return api_data.get("published_at", "")
+
+    def _ensure_iso_timezone(self, date_str: str) -> str:
+        """
+        Ensure date string has timezone suffix.
+
+        Args:
+            date_str: Date string to normalize
+
+        Returns:
+            Normalized date string with timezone, or empty string if invalid
+        """
+        if not isinstance(date_str, str) or not date_str:
+            return ""
+        if date_str.endswith("Z") or "+" in date_str:
+            return date_str
+        if "T" in date_str:
+            return date_str + "Z"
+        return date_str
 
     def _determine_content_type(self, post: Any) -> str:
         """
@@ -277,58 +292,80 @@ class DevToMetadataEnhancer:
         """
         metadata = {}
 
-        # Add canonical link validation
         canonical_url = getattr(post, "link", "")
         if canonical_url:
-            metadata["canonical"] = canonical_url
+            metadata.update(self._build_canonical_metadata(canonical_url))
 
-            # Validate that it's a proper Dev.to URL
-            if self._validate_devto_canonical_url(canonical_url):
-                metadata["source-platform"] = "dev.to"
-                metadata["source-url"] = canonical_url
-
-                # Extract username from Dev.to URL for attribution
-                username = self._extract_username_from_devto_url(canonical_url)
-                if username:
-                    metadata["source-author-profile"] = f"https://dev.to/{username}"
-
-        # Add original publication information
-        api_data = getattr(post, "api_data", {})
+        api_data = getattr(post, "api_data", {}) or {}
         if api_data:
-            # Add original Dev.to post ID if available
-            post_id = api_data.get("id")
-            if post_id:
-                metadata["source-post-id"] = str(post_id)
-
-            # Add original publication date
-            published_at = api_data.get("published_at")
-            if published_at:
-                metadata["original-published-date"] = published_at
-
-            # Add reading time from Dev.to if available
-            reading_time = api_data.get("reading_time_minutes")
-            if reading_time and reading_time > 0:
-                metadata["reading-time"] = f"{reading_time} minutes"
-
-            # Add engagement metrics from Dev.to API
-            reactions_count = api_data.get("public_reactions_count")
-            if reactions_count is not None and reactions_count >= 0:
-                metadata["devto:reactions"] = str(reactions_count)
-
-            comments_count = api_data.get("comments_count")
-            if comments_count is not None and comments_count >= 0:
-                metadata["devto:comments"] = str(comments_count)
-
-            page_views = api_data.get("page_views_count")
-            if page_views is not None and page_views >= 0:
-                metadata["devto:page_views"] = str(page_views)
-
-            # Add community engagement score (calculated from reactions and comments)
-            if reactions_count is not None and comments_count is not None:
-                engagement_score = reactions_count + (comments_count * 2)  # Comments weighted higher
-                metadata["devto:engagement_score"] = str(engagement_score)
+            metadata.update(self._build_api_metadata(api_data))
 
         return metadata
+
+    def _build_canonical_metadata(self, canonical_url: str) -> Dict[str, str]:
+        """Build metadata from canonical URL."""
+        metadata = {"canonical": canonical_url}
+
+        if not self._validate_devto_canonical_url(canonical_url):
+            return metadata
+
+        metadata["source-platform"] = "dev.to"
+        metadata["source-url"] = canonical_url
+
+        username = self._extract_username_from_devto_url(canonical_url)
+        if username:
+            metadata["source-author-profile"] = f"https://dev.to/{username}"
+
+        return metadata
+
+    def _build_api_metadata(self, api_data: Dict[str, Any]) -> Dict[str, str]:
+        """Build metadata from API data."""
+        metadata = {}
+
+        post_id = api_data.get("id")
+        if post_id:
+            metadata["source-post-id"] = str(post_id)
+
+        published_at = api_data.get("published_at")
+        if published_at:
+            metadata["original-published-date"] = published_at
+
+        reading_time = api_data.get("reading_time_minutes")
+        if reading_time and reading_time > 0:
+            metadata["reading-time"] = f"{reading_time} minutes"
+
+        self._add_engagement_metrics(metadata, api_data)
+
+        return metadata
+
+    def _add_engagement_metrics(self, metadata: Dict[str, str], api_data: Dict[str, Any]) -> None:
+        """
+        Add engagement metrics to metadata dictionary (modifies in-place).
+
+        Args:
+            metadata: Dictionary to update with engagement metrics
+            api_data: API data containing engagement metrics
+
+        Side Effects:
+            Modifies metadata dict by adding devto:reactions, devto:comments,
+            devto:page_views, and devto:engagement_score keys
+        """
+        metric_mappings = [
+            ("public_reactions_count", "devto:reactions"),
+            ("comments_count", "devto:comments"),
+            ("page_views_count", "devto:page_views"),
+        ]
+
+        for api_key, meta_key in metric_mappings:
+            value = api_data.get(api_key)
+            if value is not None and value >= 0:
+                metadata[meta_key] = str(value)
+
+        reactions = api_data.get("public_reactions_count")
+        comments = api_data.get("comments_count")
+        if reactions is not None and comments is not None:
+            engagement_score = reactions + (comments * self.COMMENT_ENGAGEMENT_WEIGHT)
+            metadata["devto:engagement_score"] = str(engagement_score)
 
     def _validate_devto_canonical_url(self, url: str) -> bool:
         """
