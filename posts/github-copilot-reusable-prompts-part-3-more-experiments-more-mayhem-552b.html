@@ -109,26 +109,28 @@
   <h1><a href="https://dev.to/anchildress1/github-copilot-reusable-prompts-part-3-more-experiments-more-mayhem-552b">GitHub Copilot - Reusable Prompts Part 3: More Experiments, More Mayhem 🌀</a></h1>
   
   <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgdsj7uaxrvtp32kx9ojo.png?v=2"
+      width="1000" height="420"
       alt="Banner image for GitHub Copilot - Reusable Prompts Part 3: More Experiments, More Mayhem 🌀"
-      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
   
   <p><em>Published: 2025-08-06T11:48:00Z</em></p>
     
     <p><strong>Tags:</strong>
         
-            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
                 #githubcopilot
             </span> 
         
-            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
                 #ai
             </span> 
         
-            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
                 #tutorial
             </span> 
         
-            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
                 #productivity
             </span>
         
@@ -169,7 +171,7 @@
 </blockquote>
 
 
-&lt;hr&gt;
+<hr>
 
 <h2>
   <a href="#quick-refresher-prior-prompting">
@@ -179,7 +181,7 @@
 
 <p>If you just landed here, start with <a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">Part 1</a> (seriously — it’ll make this way less confusing). Not for my views, but because everything here builds on earlier concepts. If you’re up to speed, speed read the refresher and dive right in!</p>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider" loading="lazy" width="300" height="4"></a></p>
 
 <h3>
   <a href="#the-prior-system-for-reusable-prompts">
@@ -208,7 +210,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 </blockquote>
 
 
-&lt;hr&gt;
+<hr>
 
 <h2>
   <a href="#start-fresh-then-optimize">
@@ -222,7 +224,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 <p><strong>Truth bomb:</strong> 99% of Copilot “failures” are just crummy (or missing) repo instructions. Don’t believe me? Treat it like the “Copilot Easter Egg Hunt”: if you run into a prompt problem you genuinely can’t solve, drop it in the comments. If you actually stump me, you’ll get full bragging rights — and I’ll spotlight your curveball (and, if I crack it, share the fix) in a future post. Nine times out of ten, though? Tweak your instructions and the problem disappears.</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider" loading="lazy" width="300" height="4"></a></p>
 
 <h3>
   <a href="#stuck-try-these-quick-fixes">
@@ -243,7 +245,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 <p>If you take my system, remix it, and invent a prompt that’s even better — share it with the group (me!) What worked for you or failed when you least expected it?</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider" loading="lazy" width="300" height="4"></a></p>
 
 <h3>
   <a href="#realworld-example-%F0%9F%AB%A5">
@@ -260,7 +262,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 <p>And that’s the <em>real</em> lesson: Copilot — or any AI assistant — is just another tool in your toolbox. When it starts acting up or giving weird results, don’t panic. Debug it the same way you’d debug any stubborn code or logic bug: one step at a time. 😉</p>
 
 
-&lt;hr&gt;
+<hr>
 
 <h2>
   <a href="#metaoptimize-your-prompts">
@@ -290,7 +292,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 </blockquote>
 
 
-&lt;hr&gt;
+<hr>
 
 <h2>
   <a href="#structure-with-xmlstyle-fake-tags">
@@ -341,7 +343,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 </blockquote>
 
 
-&lt;hr&gt;
+<hr>
 
 <h2>
   <a href="#make-it-modular">
@@ -353,7 +355,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 
 <p>Yank the core instructions, constraints, or examples into their own little spot in <code>.github/instructions</code> with an <code>.instructions.md</code> extension. Bam! Now, whenever you want to go from “plain vanilla commits” to “full-on conventional,” just point Copilot to the right file. Less rewriting, less chaos, more time for snacks. 🥤</p>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F4ghqkmehwlkpzd81cc72.png" alt="divider" loading="lazy" width="300" height="4"></a></p>
 
 <h3>
   <a href="#but-dont-stop-there-make-it-autonomous">
@@ -366,7 +368,7 @@ Creativity welcome, but shenanigans encouraged!</p>
 <p>This works for Copilot Chat in your IDE, GitHub.com, Coding Agent, Copilot Reviews — if you can think it up, then there's a way to tell Copilot exactly what you want, how to get it, and what it should look like once it's done. 🤯</p>
 
 
-&lt;hr&gt;
+<hr>
 
 <h2>
   <a href="#rabbit-holes-dime-jar-runway-recap-all-in-one">
@@ -395,7 +397,7 @@ Structure and curiosity will take you way farther than any so-called “best pra
 </blockquote>
 
 
-&lt;hr&gt;
+<hr>
 
 <h2>
   <a href="#final-footer-fresh-never-reused">
@@ -432,29 +434,29 @@ Structure and curiosity will take you way farther than any so-called “best pra
     <ul style="list-style: none; padding: 0; margin: 0;">
       
       <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
-                 border-left: 3px solid #007bff;">
+                 border-left: 3px solid #003f8a;">
         <div>
-          <a href="posts/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph.html" style="color: #007bff; text-decoration: none; font-weight: bold;">
+          <a href="posts/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
             Copilot Premium Requests—More Than Asked, Exactly What You Need 💸
           </a>
           
-          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.</p>
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.</p>
           
           
           <div style="margin: 5px 0;">
-            <small style="color: #868e96;">Shared tags:
+            <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#productivity</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#ai</span>
+                             margin: 0 2px; color:#495057;">#productivity</span>
               
             </small>
           </div>
@@ -463,29 +465,29 @@ Structure and curiosity will take you way farther than any so-called “best pra
       </li>
       
       <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
-                 border-left: 3px solid #007bff;">
+                 border-left: 3px solid #003f8a;">
         <div>
-          <a href="posts/github-copilot-chat-modes-from-chaos-to-command-54k0.html" style="color: #007bff; text-decoration: none; font-weight: bold;">
+          <a href="posts/github-copilot-chat-modes-from-chaos-to-command-54k0.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
             GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents: From Chaos to Command 🎛️
           </a>
           
-          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">You’ve built your first GitHub Copilot c̶h̶a̶t̶ ̶m̶o̶d̶e̶ agent—now it’s time to tame it. Here’s how to set up, test, and share custom modes like a professional who occasionally yells at their AI.</p>
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">You’ve built your first GitHub Copilot c̶h̶a̶t̶ ̶m̶o̶d̶e̶ agent—now it’s time to tame it. Here’s how to set up, test, and share custom modes like a professional who occasionally yells at their AI.</p>
           
           
           <div style="margin: 5px 0;">
-            <small style="color: #868e96;">Shared tags:
+            <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#productivity</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#ai</span>
+                             margin: 0 2px; color:#495057;">#productivity</span>
               
             </small>
           </div>
@@ -494,29 +496,29 @@ Structure and curiosity will take you way farther than any so-called “best pra
       </li>
       
       <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
-                 border-left: 3px solid #007bff;">
+                 border-left: 3px solid #003f8a;">
         <div>
-          <a href="posts/github-copilot-chat-modes-explained-with-personality-2f4c.html" style="color: #007bff; text-decoration: none; font-weight: bold;">
+          <a href="posts/github-copilot-chat-modes-explained-with-personality-2f4c.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
             GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents Explained (with Personality) 🎭
           </a>
           
-          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">The third way to shape how GitHub Copilot responds:  c̶h̶a̶t̶ ̶m̶o̶d̶e̶s̶ agents. Now officially documented and live in your repo, they let you define Copilot’s behavior with your own personality, tone, and workflow—because coding assistants should sound like you.</p>
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">The third way to shape how GitHub Copilot responds:  c̶h̶a̶t̶ ̶m̶o̶d̶e̶s̶ agents. Now officially documented and live in your repo, they let you define Copilot’s behavior with your own personality, tone, and workflow—because coding assistants should sound like you.</p>
           
           
           <div style="margin: 5px 0;">
-            <small style="color: #868e96;">Shared tags:
+            <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#productivity</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#ai</span>
+                             margin: 0 2px; color:#495057;">#productivity</span>
               
             </small>
           </div>
@@ -525,29 +527,29 @@ Structure and curiosity will take you way farther than any so-called “best pra
       </li>
       
       <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
-                 border-left: 3px solid #007bff;">
+                 border-left: 3px solid #003f8a;">
         <div>
-          <a href="posts/demystifying-coding-agent-prompts-that-always-work-2on7.html" style="color: #007bff; text-decoration: none; font-weight: bold;">
+          <a href="posts/demystifying-coding-agent-prompts-that-always-work-2on7.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
             Demystifying Coding Agent: Prompts That Always Work ✨
           </a>
           
-          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">A field guide to the safest, most reliable GitHub Coding Agent prompts—feature docs, test specs, bug fixes, and more—all proven to ship without breaking anything.</p>
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A field guide to the safest, most reliable GitHub Coding Agent prompts—feature docs, test specs, bug fixes, and more—all proven to ship without breaking anything.</p>
           
           
           <div style="margin: 5px 0;">
-            <small style="color: #868e96;">Shared tags:
+            <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#productivity</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#ai</span>
+                             margin: 0 2px; color:#495057;">#productivity</span>
               
             </small>
           </div>
@@ -556,29 +558,29 @@ Structure and curiosity will take you way farther than any so-called “best pra
       </li>
       
       <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
-                 border-left: 3px solid #007bff;">
+                 border-left: 3px solid #003f8a;">
         <div>
-          <a href="posts/magical-coding-agent-the-ship-ready-spellbook-2mbf.html" style="color: #007bff; text-decoration: none; font-weight: bold;">
+          <a href="posts/magical-coding-agent-the-ship-ready-spellbook-2mbf.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
             Magical Coding Agent: The Ship-Ready Spellbook
           </a>
           
-          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">Flip the right GitHub previews, understand Copilot’s PR shape, batch your review prompts, and keep control of the code—practical notes with just a dash of wizardry.</p>
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Flip the right GitHub previews, understand Copilot’s PR shape, batch your review prompts, and keep control of the code—practical notes with just a dash of wizardry.</p>
           
           
           <div style="margin: 5px 0;">
-            <small style="color: #868e96;">Shared tags:
+            <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#productivity</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#ai</span>
+                             margin: 0 2px; color:#495057;">#productivity</span>
               
             </small>
           </div>
