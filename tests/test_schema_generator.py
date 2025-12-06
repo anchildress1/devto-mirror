@@ -68,11 +68,10 @@ class TestDevToSchemaGenerator(unittest.TestCase):
         """Test initialization with custom values."""
         generator = DevToSchemaGenerator("Custom Site", "https://custom.com/")
         self.assertEqual(generator.site_name, "Custom Site")
-        self.assertEqual(generator.site_url, "https://custom.com")  # Should strip trailing slash
+        self.assertEqual(generator.site_url, "https://custom.com")
 
     def test_generate_article_schema_basic(self):
         """Test basic article schema generation."""
-        # Create mock post with proper attribute configuration
         mock_post = Mock()
         mock_post.configure_mock(
             **{
@@ -89,26 +88,17 @@ class TestDevToSchemaGenerator(unittest.TestCase):
 
         schema = self.generator.generate_article_schema(mock_post, canonical_url)
 
-        # Check basic structure
         self.assertEqual(schema["@context"], "https://schema.org")
         self.assertEqual(schema["@type"], "Article")
         self.assertEqual(schema["headline"], "Test Article")
         self.assertEqual(schema["url"], canonical_url)
         self.assertEqual(schema["mainEntityOfPage"]["@id"], canonical_url)
-
-        # Check author extracted from URL when no API data provided
         self.assertEqual(schema["author"]["name"], "testuser")
         self.assertEqual(schema["author"]["url"], "https://dev.to/testuser")
-
-        # Check publisher
         self.assertEqual(schema["publisher"]["name"], "Test Site")
         self.assertEqual(schema["publisher"]["url"], "https://example.com")
-
-        # Check dates
         self.assertEqual(schema["datePublished"], "2023-01-01T12:00:00Z")
         self.assertEqual(schema["dateModified"], "2023-01-01T12:00:00Z")
-
-        # Check other fields
         self.assertEqual(schema["description"], "Test description")
         self.assertEqual(schema["keywords"], ["python", "tutorial"])
         self.assertIn("wordCount", schema)
@@ -140,7 +130,6 @@ class TestDevToSchemaGenerator(unittest.TestCase):
 
         schema = self.generator.generate_article_schema(mock_post, canonical_url, api_data)
 
-        # Check API data is used
         self.assertEqual(schema["author"]["name"], "John Doe")
         self.assertEqual(schema["author"]["url"], "https://dev.to/johndoe")
         self.assertEqual(schema["datePublished"], "2023-01-01T12:00:00Z")
@@ -166,8 +155,6 @@ class TestDevToSchemaGenerator(unittest.TestCase):
         self.assertEqual(schema["name"], "My Dev Blog")
         self.assertEqual(schema["url"], "https://myblog.com")
         self.assertEqual(schema["description"], "A blog about development")
-
-        # Check search action
         self.assertIn("potentialAction", schema)
         self.assertEqual(schema["potentialAction"]["@type"], "SearchAction")
 
@@ -190,21 +177,14 @@ class TestDevToSchemaGenerator(unittest.TestCase):
         self.assertEqual(schema["@context"], "https://schema.org")
         self.assertEqual(schema["@type"], "BreadcrumbList")
 
-        # Check breadcrumb items
         items = schema["itemListElement"]
         self.assertEqual(len(items), 3)
-
-        # Home
         self.assertEqual(items[0]["position"], 1)
         self.assertEqual(items[0]["name"], "Home")
         self.assertEqual(items[0]["item"], "https://example.com")
-
-        # Posts
         self.assertEqual(items[1]["position"], 2)
         self.assertEqual(items[1]["name"], "Posts")
         self.assertEqual(items[1]["item"], "https://example.com/posts")
-
-        # Current post
         self.assertEqual(items[2]["position"], 3)
         self.assertEqual(items[2]["name"], "My Test Post")
         self.assertEqual(items[2]["item"], "https://example.com/posts/my-test-post.html")
@@ -226,17 +206,88 @@ class TestDevToSchemaGenerator(unittest.TestCase):
 
         canonical_url = "https://dev.to/user/test-article"
 
-        # Test article schema validation
         article_schema = self.generator.generate_article_schema(mock_post, canonical_url)
         self.assertTrue(validate_json_ld_schema(article_schema))
 
-        # Test website schema validation
         website_schema = self.generator.generate_website_schema({"name": "Test", "url": "https://test.com"})
         self.assertTrue(validate_json_ld_schema(website_schema))
 
-        # Test breadcrumb schema validation
         breadcrumb_schema = self.generator.generate_breadcrumb_schema(mock_post)
         self.assertTrue(validate_json_ld_schema(breadcrumb_schema))
+
+    def test_engagement_metrics_with_page_views(self):
+        """Test engagement metrics extraction with page views."""
+        api_data = {
+            "comments_count": 5,
+            "public_reactions_count": 20,
+            "page_views_count": 100,
+        }
+
+        metrics = self.generator._extract_engagement_metrics(api_data)
+
+        self.assertIn("interactionStatistic", metrics)
+        self.assertEqual(len(metrics["interactionStatistic"]), 2)
+        self.assertIn("additionalProperty", metrics)
+        self.assertEqual(metrics["additionalProperty"], [{"@type": "PropertyValue", "name": "pageViews", "value": 100}])
+
+    def test_engagement_metrics_page_views_only(self):
+        """Ensure page views produce additionalProperty without empty interactionStatistic."""
+        api_data = {"page_views_count": 42}
+
+        metrics = self.generator._extract_engagement_metrics(api_data)
+
+        self.assertNotIn("interactionStatistic", metrics)
+        self.assertEqual(metrics["additionalProperty"], [{"@type": "PropertyValue", "name": "pageViews", "value": 42}])
+
+    def test_calculate_word_count_strips_html(self):
+        """_calculate_word_count removes HTML tags and counts words."""
+        content = "<p>Hello <strong>world</strong></p>"
+        self.assertEqual(self.generator._calculate_word_count(content), 2)
+
+    def test_calculate_word_count_empty(self):
+        """Empty content produces zero word count."""
+        self.assertEqual(self.generator._calculate_word_count(""), 0)
+
+    def test_collect_interaction_stats_filters_invalid(self):
+        """_collect_interaction_stats omits None or negative values."""
+        api_data = {"comments_count": 3, "public_reactions_count": -1, "page_views_count": None}
+
+        stats = self.generator._collect_interaction_stats(api_data)
+
+        self.assertEqual(stats, {"commentCount": 3})
+
+    def test_create_interaction_counter_structure(self):
+        """_create_interaction_counter returns valid Schema.org object."""
+        counter = self.generator._create_interaction_counter("https://schema.org/LikeAction", 7)
+
+        self.assertEqual(
+            counter,
+            {
+                "@type": "InteractionCounter",
+                "interactionType": "https://schema.org/LikeAction",
+                "userInteractionCount": 7,
+            },
+        )
+
+    def test_extract_author_info_prefers_api_data(self):
+        """API data takes precedence over canonical URL when extracting author."""
+        api_data = {"user": {"name": "Alice", "username": "alice"}}
+
+        result = self.generator._extract_author_info("https://dev.to/bob/post", api_data)
+
+        self.assertEqual(result, ("Alice", "https://dev.to/alice"))
+
+    def test_extract_author_info_falls_back_to_canonical(self):
+        """Username is derived from canonical URL when API data missing."""
+        result = self.generator._extract_author_info("https://dev.to/charlie/post", None)
+
+        self.assertEqual(result, ("charlie", "https://dev.to/charlie"))
+
+    def test_extract_author_info_defaults_when_missing(self):
+        """Returns default author data when extraction fails."""
+        result = self.generator._extract_author_info("https://example.com/post", None)
+
+        self.assertEqual(result, ("Dev.to Author", "https://example.com/post"))
 
 
 if __name__ == "__main__":

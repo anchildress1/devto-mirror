@@ -143,25 +143,23 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Extract confidence scoring logic
 - Simplify nested loops
 
-**Status:** Completed
-**Refactoring Actions:**
-- Extracted `_extract_languages_from_attributes()` method for HTML class/data attribute parsing
-- Extracted `_extract_languages_from_fenced_blocks()` method for fenced code block parsing
-- Extracted `_normalize_and_sort_languages()` method for language normalization
-- Simplified main function to orchestrate helper methods
-- Added comprehensive unit tests for new helper methods
-
-### 11. DevToSchemaGenerator (class) - Complexity: 17
+### 11. DevToSchemaGenerator (class) - ✅ COMPLETED
 
 **File:** `src/devto_mirror/ai_optimization/schema_generator.py:20`
-**Current Complexity:** 17
-**Target Complexity:** ≤ 15
+**Original Complexity:** 17 → **Current Complexity:** 7
+**Target Complexity:** ≤ 15 ✓
 
-**Refactoring Strategy:**
+**Refactoring Applied:**
 
-- Review class structure
-- Consider splitting into multiple specialized classes
-- Reduce method interdependencies
+- Extracted `_extract_author_info()` helper method (complexity: 8)
+- Extracted `_extract_dates()` and `_ensure_iso_format()` helper methods (complexity: 5, 6)
+- Extracted `_extract_image()` helper method (complexity: 5)
+- Extracted `_extract_tags()` helper method (complexity: 4)
+- Extracted `_calculate_word_count()` helper method (complexity: 2)
+- Extracted `_extract_engagement_metrics()` helper method (complexity: 12)
+- Removed duplicate code blocks from `generate_article_schema`
+- Reduced `generate_article_schema` from 55 → 14
+- Average class complexity: 6.08
 
 ## Status Summary
 
