@@ -43,7 +43,6 @@ jobs:
   generate-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    if: vars.DEVTO_USERNAME != ''
     environment:
       name: deploy
       url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
@@ -160,26 +159,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: generate-and-deploy
-    if: vars.DEVTO_USERNAME != '' && vars.GH_USERNAME != ''
     environment: deploy
     steps:
-      - name: Check root deploy token
-        id: check_pat
-        timeout-minutes: 1
-        env:
-          ROOT_SITE_PAT: ${{ secrets.ROOT_SITE_PAT }}
-        run: |
-          echo "::debug::Checking ROOT_SITE_PAT availability"
-          if [ -n "$ROOT_SITE_PAT" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-            echo "::notice::✅ ROOT_SITE_PAT is configured"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::ROOT_SITE_PAT not configured, skipping root deployment"
-          fi
-
       - name: Validate root gh-pages branch
-        if: steps.check_pat.outputs.available == 'true'
         timeout-minutes: 2
         env:
           GH_TOKEN: ${{ secrets.ROOT_SITE_PAT }}
@@ -190,64 +172,61 @@ jobs:
           fi
 
       - name: Download root config artifact
-        if: steps.check_pat.outputs.available == 'true'
         timeout-minutes: 2
         uses: actions/download-artifact@v6
         with:
           name: root-config
           path: root_config
 
-      - name: Check root config changes
-        id: root_config_changed
-        if: steps.check_pat.outputs.available == 'true'
-        timeout-minutes: 3
-        env:
-          GH_USERNAME: ${{ vars.GH_USERNAME }}
-        run: |
-          set -eo pipefail
-          echo "::group::Checking root config changes"
-          TMP_REPO="$(mktemp -d)"
-          REPO_URL="https://github.com/${GH_USERNAME}/${GH_USERNAME}.git"
-          echo "::debug::Cloning ${REPO_URL}"
-          if git ls-remote --exit-code "$REPO_URL" gh-pages >/dev/null 2>&1; then
-            git clone --depth 1 --branch gh-pages "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
-          else
-            git clone --depth 1 "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
-            (cd "$TMP_REPO" && git checkout --orphan gh-pages && git rm -rf . >/dev/null 2>&1 || true)
-          fi
-          FILES=(robots.txt llms.txt sitemap.xml google6b80426bb396f31f.html)
-          changed=false
-          for file in "${FILES[@]}"; do
-            new_file="root_config/$file"
-            old_file="$TMP_REPO/$file"
-            if [ -f "$new_file" ]; then
-              if [ ! -f "$old_file" ]; then
-                echo "::notice::📄 New file detected: $file"
-                changed=true
-                break
-              elif ! cmp -s "$new_file" "$old_file"; then
-                echo "::notice::📝 File changed: $file"
-                changed=true
-                break
-              else
-                echo "::debug::File unchanged: $file"
-              fi
-            elif [ -f "$old_file" ]; then
-              echo "::notice::🗑️  File removed: $file"
-              changed=true
-              break
-            fi
-          done
-          if [ "$changed" = "true" ]; then
-            echo "::notice::✅ Changes detected, will deploy"
-          else
-            echo "::notice::ℹ️  No changes detected, skipping deployment"
-          fi
-          echo "changed=$changed" >> "$GITHUB_OUTPUT"
-          echo "::endgroup::"
+      # - name: Check root config changes
+      #   id: root_config_changed
+      #   timeout-minutes: 3
+      #   env:
+      #     GH_USERNAME: ${{ vars.GH_USERNAME }}
+      #   run: |
+      #     set -eo pipefail
+      #     echo "::group::Checking root config changes"
+      #     TMP_REPO="$(mktemp -d)"
+      #     REPO_URL="https://github.com/${GH_USERNAME}/${GH_USERNAME}.git"
+      #     echo "::debug::Cloning ${REPO_URL}"
+      #     if git ls-remote --exit-code "$REPO_URL" gh-pages >/dev/null 2>&1; then
+      #       git clone --depth 1 --branch gh-pages "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
+      #     else
+      #       git clone --depth 1 "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
+      #       (cd "$TMP_REPO" && git checkout --orphan gh-pages && git rm -rf . >/dev/null 2>&1 || true)
+      #     fi
+      #     FILES=(robots.txt llms.txt sitemap.xml google6b80426bb396f31f.html)
+      #     changed=false
+      #     for file in "${FILES[@]}"; do
+      #       new_file="root_config/$file"
+      #       old_file="$TMP_REPO/$file"
+      #       if [ -f "$new_file" ]; then
+      #         if [ ! -f "$old_file" ]; then
+      #           echo "::notice::📄 New file detected: $file"
+      #           changed=true
+      #           break
+      #         elif ! cmp -s "$new_file" "$old_file"; then
+      #           echo "::notice::📝 File changed: $file"
+      #           changed=true
+      #           break
+      #         else
+      #           echo "::debug::File unchanged: $file"
+      #         fi
+      #       elif [ -f "$old_file" ]; then
+      #         echo "::notice::🗑️  File removed: $file"
+      #         changed=true
+      #         break
+      #       fi
+      #     done
+      #     if [ "$changed" = "true" ]; then
+      #       echo "::notice::✅ Changes detected, will deploy"
+      #     else
+      #       echo "::notice::ℹ️  No changes detected, skipping deployment"
+      #     fi
+      #     echo "changed=$changed" >> "$GITHUB_OUTPUT"
+      #     echo "::endgroup::"
 
       - name: Deploy root config via GitHub Pages action
-        if: steps.check_pat.outputs.available == 'true' && steps.root_config_changed.outputs.changed == 'true'
         timeout-minutes: 5
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -261,16 +240,6 @@ jobs:
           user_email: actions@users.noreply.github.com
 
       - name: Root deployment status
-        if: always()
         run: |
           echo "## 🌐 Root Deployment Status" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.check_pat.outputs.available }}" != "true" ]; then
-            echo "::warning::Root deployment skipped: ROOT_SITE_PAT not configured in deploy environment"
-            echo "⚠️ **Skipped**: ROOT_SITE_PAT not configured" >> $GITHUB_STEP_SUMMARY
-          elif [ "${{ steps.root_config_changed.outputs.changed }}" != "true" ]; then
-            echo "::notice::Root deployment skipped: No file changes detected"
-            echo "ℹ️ **Skipped**: No file changes detected" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "::notice::✅ Root deployment completed successfully"
-            echo "✅ **Completed**: Config files deployed to ${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "✅ **Completed**: Config files deployed to ${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}" >> $GITHUB_STEP_SUMMARY
