@@ -238,6 +238,45 @@ class TestDevToSchemaGenerator(unittest.TestCase):
         breadcrumb_schema = self.generator.generate_breadcrumb_schema(mock_post)
         self.assertTrue(validate_json_ld_schema(breadcrumb_schema))
 
+    def test_engagement_metrics_with_page_views(self):
+        """Test engagement metrics extraction with page views."""
+        api_data = {
+            "comments_count": 5,
+            "public_reactions_count": 20,
+            "page_views_count": 100,
+        }
+
+        metrics = self.generator._extract_engagement_metrics(api_data)
+
+        # Check interactionStatistic
+        self.assertIn("interactionStatistic", metrics)
+        self.assertEqual(len(metrics["interactionStatistic"]), 2)
+
+        # Check additionalProperty
+        self.assertIn("additionalProperty", metrics)
+        self.assertEqual(len(metrics["additionalProperty"]), 1)
+        self.assertEqual(metrics["additionalProperty"][0]["name"], "pageViews")
+        self.assertEqual(metrics["additionalProperty"][0]["value"], 100)
+
+    def test_engagement_metrics_merge_preserves_existing_properties(self):
+        """Test that additionalProperty merge doesn't overwrite existing entries (defensive scenario)."""
+        api_data = {
+            "comments_count": 5,
+            "public_reactions_count": 20,
+            "page_views_count": 100,
+        }
+
+        metrics = self.generator._extract_engagement_metrics(api_data)
+
+        # Simulate pre-populated additionalProperty (defensive test)
+        pre_existing_property = {"@type": "PropertyValue", "name": "customMetric", "value": 42}
+        metrics["additionalProperty"].insert(0, pre_existing_property)
+
+        # Verify merge preserved existing entry
+        self.assertEqual(len(metrics["additionalProperty"]), 2)
+        self.assertEqual(metrics["additionalProperty"][0]["name"], "customMetric")
+        self.assertEqual(metrics["additionalProperty"][1]["name"], "pageViews")
+
 
 if __name__ == "__main__":
     unittest.main()

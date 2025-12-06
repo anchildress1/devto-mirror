@@ -4,10 +4,11 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 
 ## Critical Priority (Complexity >= 40)
 
-### 1. DevToContentAnalyzer._determine_content_type - Complexity: 45
+### 1. DevToContentAnalyzer._determine_content_type - Complexity: 3 ✅
 
-**File:** `src/devto_mirror/ai_optimization/content_analyzer.py:545`
-**Current Complexity:** 45
+**File:** `src/devto_mirror/ai_optimization/content_analyzer.py:639`
+**Original Complexity:** 45
+**Current Complexity:** 3
 **Target Complexity:** ≤ 15
 
 **Refactoring Strategy:**
@@ -16,19 +17,22 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Create a mapping/strategy pattern for content type detection
 - Reduce nested conditionals using early returns
 
-### 2. DevToSchemaGenerator.generate_article_schema - Complexity: 55
+### 2. DevToSchemaGenerator.generate_article_schema - Complexity: 7 ✅
 
-**File:** `src/devto_mirror/ai_optimization/schema_generator.py:38`
-**Current Complexity:** 55
+**File:** `src/devto_mirror/ai_optimization/schema_generator.py:252`
+**Original Complexity:** 55
+**Current Complexity:** 7
 **Target Complexity:** ≤ 15
 
-**Refactoring Strategy:**
+**Refactoring Completed:**
 
-- Extract author extraction into `_extract_author_info()`
-- Extract date handling into `_extract_dates()`
-- Extract image handling into `_extract_images()`
-- Extract tags/keywords into `_extract_keywords()`
-- Keep main method as orchestrator calling helper methods
+- Extracted author extraction into `_extract_author_info()`
+- Extracted date handling into `_extract_dates()` with `_normalize_iso_date()` helper
+- Extracted image handling into `_extract_images()`
+- Extracted tags/keywords into `_extract_keywords()`
+- Extracted engagement metrics into `_extract_engagement_metrics()`
+- Extracted content metrics into `_extract_content_metrics()`
+- Refactored main method as orchestrator calling helper methods
 
 ## High Priority (Complexity 20-39)
 
@@ -43,17 +47,25 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Similar to item #1, extract into helper methods
 - Consider sharing logic with DevToContentAnalyzer._determine_content_type
 
-### 4. DevToContentAnalyzer.extract_api_metrics - Complexity: 20
+### 4. DevToContentAnalyzer.extract_api_metrics - Complexity: 20 ✓ COMPLETED
 
 **File:** `src/devto_mirror/ai_optimization/content_analyzer.py:92`
-**Current Complexity:** 20
+**Original Complexity:** 20
 **Target Complexity:** ≤ 15
+**Status:** ✓ Refactored
 
-**Refactoring Strategy:**
+**Refactoring Approach:**
 
-- Extract API endpoint detection into separate method
-- Extract metric calculation into helper functions
-- Simplify conditional logic
+- Created `_validate_numeric_metric()` helper method to centralize validation logic
+- Replaced 5 repetitive nested conditionals with configuration-driven approach
+- Used metric configuration list to define validation rules (key, min_value)
+- Single loop iterates through configuration, eliminating nested conditionals
+
+**Changes:**
+
+- Added `_validate_numeric_metric(value, min_value)` method for validation
+- Refactored `extract_api_metrics()` to use metric configuration
+- Maintained backward compatibility and all existing tests pass
 
 ### 5. DevToMetadataEnhancer._add_article_meta_tags - Complexity: 19
 
@@ -78,17 +90,20 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Share implementation with other _determine_content_type methods
 - Consider creating a base class or mixin for content type determination
 
-### 7. _fetch_article_pages - Complexity: 18
+### 7. _fetch_article_pages - Complexity: 18 ✅
 
-**File:** `scripts/generate_site.py:78`
-**Current Complexity:** 18
-**Target Complexity:** ≤ 15
+**File:** `scripts/generate_site.py:81`
+**Original Complexity:** 18
+**Final Complexity:** ≤ 15
+**Status:** COMPLETED
 
-**Refactoring Strategy:**
+**Refactoring Applied:**
 
-- Extract retry logic into separate function
-- Extract response processing into helper method
-- Simplify error handling with early returns
+- Created `src/devto_mirror/api_client.py` module with helper functions
+- Extracted session creation logic to `create_devto_session()`
+- Extracted retry logic to `fetch_page_with_retry()`
+- Extracted date filtering to `filter_new_articles()`
+- Migrated API client logic from scripts/ to src/devto_mirror/ package
 
 ## Medium Priority (Complexity 16-19)
 
@@ -116,10 +131,10 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 - Extract metadata tag creation
 - Separate validation from generation
 
-### 10. DevToContentAnalyzer.extract_code_languages - Complexity: 16
+### 10. DevToContentAnalyzer.extract_code_languages - Complexity: 16 ✅
 
 **File:** `src/devto_mirror/ai_optimization/content_analyzer.py:212`
-**Current Complexity:** 16
+**Current Complexity:** ≤ 15 (Refactored)
 **Target Complexity:** ≤ 15
 
 **Refactoring Strategy:**
@@ -149,11 +164,11 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 ## Status Summary
 
 - **Total Functions:** 11
-- **Completed:** 1 (DevToSchemaGenerator class)
+- **Completed:** 1
 - **Remaining:** 10
 - **Critical Priority (>= 40):** 2
 - **High Priority (20-39):** 5
-- **Medium Priority (16-19):** 4 (3 remaining)
+- **Medium Priority (16-19):** 3
 
 ## Refactoring Guidelines
 
@@ -166,14 +181,14 @@ This document tracks functions with cognitive complexity > 15 that need refactor
 
 ## Progress Tracking
 
-- [ ] DevToContentAnalyzer._determine_content_type (45)
-- [ ] DevToSchemaGenerator.generate_article_schema (55) - ✅ **Completed as part of class refactoring**
-- [ ] DevToMetadataEnhancer._determine_content_type (24)
-- [ ] DevToContentAnalyzer.extract_api_metrics (20)
+- [x] DevToContentAnalyzer._determine_content_type (45 → 3) ✅
+- [x] DevToSchemaGenerator.generate_article_schema (55 → 7) ✅
+- [x] DevToMetadataEnhancer._determine_content_type (24 → 3) ✅
+- [x] DevToContentAnalyzer.extract_api_metrics (20) ✅
 - [ ] DevToMetadataEnhancer._add_article_meta_tags (19)
-- [ ] DevToAISitemapGenerator._determine_content_type (18)
-- [ ] _fetch_article_pages (18)
-- [ ] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17)
+- [x] DevToAISitemapGenerator._determine_content_type (18 → 3) ✅
+- [x] _fetch_article_pages (18) ✅
+- [x] GitHubPagesCrawlerAnalyzer.analyze_robots_txt (17 → 2) ✅
 - [ ] DevToMetadataEnhancer.add_source_attribution_metadata (17)
-- [ ] DevToContentAnalyzer.extract_code_languages (16)
-- [x] **DevToSchemaGenerator class (17) - ✅ COMPLETED (reduced to 7)**
+- [x] DevToContentAnalyzer.extract_code_languages (16) ✅
+- [x] DevToSchemaGenerator class (17 → 7) ✅

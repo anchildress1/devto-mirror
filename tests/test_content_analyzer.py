@@ -39,6 +39,24 @@ class TestDevToContentAnalyzer(unittest.TestCase):
         metrics = self.analyzer.extract_api_metrics(None)
         self.assertEqual(metrics, {})
 
+    def test_validate_numeric_metric(self):
+        """Test the _validate_numeric_metric helper method (truncates toward zero)."""
+        self.assertEqual(self.analyzer._validate_numeric_metric(10, 0), 10)
+        self.assertEqual(self.analyzer._validate_numeric_metric(5, 1), 5)
+        self.assertEqual(self.analyzer._validate_numeric_metric(5.7, 0), 5)
+        self.assertEqual(self.analyzer._validate_numeric_metric(1, 1), 1)
+        self.assertEqual(self.analyzer._validate_numeric_metric(0, 0), 0)
+        self.assertEqual(self.analyzer._validate_numeric_metric(-5.7, -10), -5)
+
+        self.assertIsNone(self.analyzer._validate_numeric_metric(None, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric("string", 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric([], 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric({}, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(-5, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(0, 1))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(True, 0))
+        self.assertIsNone(self.analyzer._validate_numeric_metric(False, 0))
+
     def test_calculate_fallback_metrics(self):
         """Test calculating fallback metrics from HTML content."""
         html_content = """
@@ -76,6 +94,54 @@ class TestDevToContentAnalyzer(unittest.TestCase):
         self.assertIn("python", languages)
         self.assertIn("javascript", languages)
         self.assertIn("typescript", languages)
+
+    def test_extract_languages_from_attributes(self):
+        """Test extracting languages from HTML attributes."""
+        html_content = """
+        <pre><code class="language-python">print("hello")</code></pre>
+        <code class="lang-javascript">console.log("test");</code>
+        <pre data-lang="typescript">interface Test {}</pre>
+        <div data-language="ruby">puts "hello"</div>
+        """
+
+        languages = self.analyzer._extract_languages_from_attributes(html_content)
+
+        self.assertIn("python", languages)
+        self.assertIn("javascript", languages)
+        self.assertIn("typescript", languages)
+        self.assertIn("ruby", languages)
+
+    def test_extract_languages_from_fenced_blocks(self):
+        """Test extracting languages from fenced code blocks."""
+        html_content = """
+        Some text
+        ```python
+        def hello():
+            pass
+        ```
+        More text
+        ```javascript
+        console.log("test");
+        ```
+        """
+
+        languages = self.analyzer._extract_languages_from_fenced_blocks(html_content)
+
+        self.assertIn("python", languages)
+        self.assertIn("javascript", languages)
+
+    def test_normalize_and_sort_languages(self):
+        """Test normalizing and sorting language names."""
+        languages = {"js", "py", "cpp", "go", "invalid-very-long-language-name"}
+
+        result = self.analyzer._normalize_and_sort_languages(languages)
+
+        self.assertIn("javascript", result)
+        self.assertIn("python", result)
+        self.assertIn("cpp", result)
+        self.assertIn("go", result)
+        self.assertNotIn("invalid-very-long-language-name", result)
+        self.assertEqual(result, sorted(result))
 
     def test_normalize_language_name(self):
         """Test language name normalization."""

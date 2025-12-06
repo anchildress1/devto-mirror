@@ -8,13 +8,14 @@ documents findings, and compares actual access with robots.txt permissions.
 
 import json
 import os
-import re
 import sys
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urljoin
 
 import requests
+
+from devto_mirror.robots_parser import parse_robots_txt
 
 
 class GitHubPagesCrawlerAnalyzer:
@@ -46,60 +47,9 @@ class GitHubPagesCrawlerAnalyzer:
                 return
 
             robots_content = response.text
+            parsed_data = parse_robots_txt(robots_content)
 
-            # Parse robots.txt for user agents and permissions
-            allowed_agents = set()
-            disallowed_agents = set()
-            universal_rules = {"allow": [], "disallow": []}
-
-            current_agents = []
-
-            for line in robots_content.split("\n"):
-                line = line.strip()
-                if not line or line.startswith("#"):
-                    continue
-
-                if line.lower().startswith("user-agent:"):
-                    agent = line.split(":", 1)[1].strip()
-                    if agent == "*":
-                        current_agents = ["*"]
-                    else:
-                        current_agents = [agent]
-
-                elif line.lower().startswith("allow:"):
-                    path = line.split(":", 1)[1].strip()
-                    if "*" in current_agents:
-                        universal_rules["allow"].append(path)
-                    else:
-                        for agent in current_agents:
-                            allowed_agents.add(agent)
-
-                elif line.lower().startswith("disallow:"):
-                    path = line.split(":", 1)[1].strip()
-                    if "*" in current_agents:
-                        universal_rules["disallow"].append(path)
-                    else:
-                        for agent in current_agents:
-                            if path:  # Non-empty disallow means restricted
-                                disallowed_agents.add(agent)
-
-            # Extract sitemap URL
-            sitemap_match = re.search(r"Sitemap:\s*(.+)", robots_content, re.IGNORECASE)
-            sitemap_url = sitemap_match.group(1).strip() if sitemap_match else None
-
-            self.analysis_results["robots_txt_analysis"] = {
-                "accessible": True,
-                "content_length": len(robots_content),
-                "allowed_agents": list(allowed_agents),
-                "disallowed_agents": list(disallowed_agents),
-                "universal_rules": universal_rules,
-                "sitemap_url": sitemap_url,
-                "analysis": {
-                    "universal_allow": "/" in universal_rules["allow"],
-                    "has_restrictions": bool(disallowed_agents or universal_rules["disallow"]),
-                    "total_specific_agents": len(allowed_agents) + len(disallowed_agents),
-                },
-            }
+            self.analysis_results["robots_txt_analysis"] = {"accessible": True, **parsed_data}
 
         except Exception as e:
             self.analysis_results["robots_txt_analysis"] = {"accessible": False, "error": str(e), "content": None}
