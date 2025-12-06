@@ -93,14 +93,17 @@ POST_TEMPLATE_INLINE = """<!doctype html><html lang="en"><head>
   <h1><a href="{{ canonical }}">{{ title }}</a></h1>
   {% if cover_image %}
   <img src="{{ cover_image }}?v=2"
+      width="1000" height="420"
       alt="Banner image for {{ title }}"
-      style="width:100%;max-width:1000px;height:auto;margin:1em 0;">
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
   {% endif %}
   {% if date %}<p><em>Published: {{ date }}</em></p>{% endif %}
     {% if tags %}
     <p><strong>Tags:</strong>
         {% for tag in tags %}
-            <span style="background:#f0f0f0; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em;">
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px;
+                         border-radius:3px; font-size:0.9em; color:#495057;">
                 #{{ tag }}
             </span>{% if not loop.last %} {% endif %}
         {% endfor %}
@@ -128,20 +131,20 @@ POST_TEMPLATE_INLINE = """<!doctype html><html lang="en"><head>
     <ul style="list-style: none; padding: 0; margin: 0;">
       {% for related in cross_references.related_posts %}
       <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
-                 border-left: 3px solid #007bff;">
+                 border-left: 3px solid #003f8a;">
         <div>
-          <a href="{{ related.local_link }}" style="color: #007bff; text-decoration: none; font-weight: bold;">
+          <a href="{{ related.local_link }}" style="color: #003f8a; text-decoration: none; font-weight: bold;">
             {{ related.title }}
           </a>
           {% if related.description %}
-          <p style="margin: 5px 0; color: #6c757d; font-size: 0.9em;">{{ related.description }}</p>
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">{{ related.description }}</p>
           {% endif %}
           {% if related.shared_tags %}
           <div style="margin: 5px 0;">
-            <small style="color: #868e96;">Shared tags:
+            <small style="color: #495057;">Shared tags:
               {% for tag in related.shared_tags %}
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px;">#{{ tag }}</span>
+                             margin: 0 2px; color:#495057;">#{{ tag }}</span>
               {% endfor %}
             </small>
           </div>

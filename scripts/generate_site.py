@@ -8,7 +8,7 @@ import sys
 import time
 from datetime import datetime, timezone
 
-# Add parent directory to path for imports
+# Add parent directory to path for imports BEFORE other local imports
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 
 import bleach
@@ -346,9 +346,62 @@ def sanitize_html_content(content):
         "h5",
         "h6",
         "img",
+        "hr",
     ]
-    allowed_attributes = {"a": ["href"], "img": ["src", "alt"]}
+    allowed_attributes = {
+        "a": ["href"],
+        # allow width/height/loading so we can avoid CLS and improve Lighthouse scores
+        "img": ["src", "alt", "width", "height", "style", "class", "title", "loading"],
+    }
+
     return bleach.clean(content, tags=allowed_tags, attributes=allowed_attributes)
+
+
+def ensure_img_dimensions(content: str, cover_src: str | None = None) -> str:
+    """
+    Add width/height attributes to <img> tags when missing. This helps browsers reserve
+    layout space and reduces cumulative layout shift (CLS) reported by Lighthouse.
+
+    Rules:
+    - If an img tag already has width and height attributes, leave it.
+    - If the image matches the cover image src (or contains '/cover'), add width=1000 height=420.
+    - Otherwise add a conservative default width=800 height=450.
+    """
+    if not content:
+        return content
+
+    def _choose_size(src_val: str) -> tuple[int, int]:
+        # Decide size based on image source
+        if cover_src and src_val and cover_src in src_val:
+            return 1000, 420
+        if "/cover" in src_val or "cover_image" in src_val:
+            return 1000, 420
+        return 800, 450
+
+    def _normalize_img_tag(tag: str) -> str:
+        """Return a normalized img tag with width and height if they were missing."""
+        # Skip if already has width and height
+        if re.search(r"width\s*=\s*\"\d+\"", tag) and re.search(r"height\s*=\s*\"\d+\"", tag):
+            return tag
+
+        src_match = re.search(r"src\s*=\s*\"([^\"]+)\"", tag)
+        src_val = src_match.group(1) if src_match else ""
+        width, height = _choose_size(src_val)
+
+        # Add attributes and return updated tag; preserve existing attributes
+        if "width=" not in tag:
+            tag = tag.replace("<img", f'<img width="{width}"', 1)
+        if "height=" not in tag:
+            tag = tag.replace("<img", f'<img height="{height}"', 1)
+        return tag
+
+    # Simpler substitution approach: iterate over found tags and replace
+    tags = re.findall(r"<img[^>]*>", content, flags=re.IGNORECASE)
+    for tag in tags:
+        normalized = _normalize_img_tag(tag)
+        if normalized != tag:
+            content = content.replace(tag, normalized)
+    return content
 
 
 class Post:
@@ -598,12 +651,18 @@ for p in all_posts:
             logging.warning(f"AI optimization failed for post {p.slug}: {e}")
             # Continue with graceful fallback - no optimization data
 
+    # Ensure images have dimensions and improve color contrast in inline styles in content
+    content_html = p.content_html or ""
+    content_html = ensure_img_dimensions(content_html or "", p.cover_image or "")
+    # Replace low-contrast color used in some Dev.to content (heuristic)
+    content_html = content_html.replace("color: #868e96", "color: #495057")
+
     html_out = PAGE_TMPL.render(
         title=p.title,
         canonical=canonical,
         description=html.escape(p.description or ""),
         date=p.date,
-        content=sanitize_html_content(p.content_html or ""),
+        content=sanitize_html_content(content_html or ""),
         cover_image=p.cover_image,
         tags=getattr(p, "tags", []),
         social_image=social_image,
