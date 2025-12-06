@@ -6,7 +6,7 @@ Tests that generate_site.py can run without errors in a dry-run mode.
 
 import os
 import shutil
-import subprocess  # nosec - subprocess needed for test runner functionality, controlled input
+import subprocess  # nosec B404
 import sys
 import tempfile
 from pathlib import Path
@@ -86,7 +86,7 @@ def validate_site_generation():
 
         try:
             # Run the script in validation mode
-            result = subprocess.run(  # nosec - subprocess needed for test runner functionality, controlled input
+            result = subprocess.run(  # nosec B603
                 [sys.executable, "scripts/generate_site.py"],
                 cwd=temp_path,
                 env=env,

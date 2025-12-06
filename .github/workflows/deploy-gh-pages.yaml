@@ -23,11 +23,13 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout gh-pages branch
+        timeout-minutes: 2
         uses: actions/checkout@v6
         with:
           ref: gh-pages
 
       - name: Prepare deployment artifact
+        timeout-minutes: 2
         run: |
           echo "## 📦 Preparing GitHub Pages Deployment" >> $GITHUB_STEP_SUMMARY
           echo "- 📍 Source Branch: gh-pages" >> $GITHUB_STEP_SUMMARY
@@ -44,12 +46,14 @@ jobs:
           echo "✅ Deployment artifact prepared" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Pages artifact
+        timeout-minutes: 2
         uses: actions/upload-pages-artifact@v4
         with:
           path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
+        timeout-minutes: 5
         uses: actions/deploy-pages@v4
 
       - name: Deployment summary

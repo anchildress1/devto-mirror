@@ -145,6 +145,7 @@ jobs:
           [ -f comments.txt ] && cp comments.txt _deploy/
 
       - name: Deploy to gh-pages
+        timeout-minutes: 5
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -161,12 +162,34 @@ jobs:
     needs: generate-and-deploy
     if: vars.DEVTO_USERNAME != '' && vars.GH_USERNAME != ''
     environment: deploy
-    env:
-      DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
-      GH_USERNAME: ${{ vars.GH_USERNAME }}
-      ROOT_SITE_PAT: ${{ secrets.ROOT_SITE_PAT }}
     steps:
+      - name: Check root deploy token
+        id: check_pat
+        timeout-minutes: 1
+        env:
+          ROOT_SITE_PAT: ${{ secrets.ROOT_SITE_PAT }}
+        run: |
+          if [ -n "$ROOT_SITE_PAT" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ROOT_SITE_PAT not configured, skipping root deployment"
+          fi
+
+      - name: Validate root gh-pages branch
+        if: steps.check_pat.outputs.available == 'true'
+        timeout-minutes: 2
+        env:
+          GH_TOKEN: ${{ secrets.ROOT_SITE_PAT }}
+        run: |
+          if ! gh api "repos/${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}/branches/gh-pages" --silent; then
+            echo "::error::gh-pages branch does not exist on ${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}"
+            exit 1
+          fi
+
       - name: Download root config artifact
+        if: steps.check_pat.outputs.available == 'true'
+        timeout-minutes: 2
         uses: actions/download-artifact@v6
         with:
           name: root-config
@@ -174,27 +197,25 @@ jobs:
 
       - name: Check root config changes
         id: root_config_changed
-        if: env.ROOT_SITE_PAT != ''
+        if: steps.check_pat.outputs.available == 'true'
+        timeout-minutes: 3
+        env:
+          GH_USERNAME: ${{ vars.GH_USERNAME }}
         run: |
           set -eo pipefail
-
           TMP_REPO="$(mktemp -d)"
-          # Use GH_USERNAME for root repo
           REPO_URL="https://github.com/${GH_USERNAME}/${GH_USERNAME}.git"
-
           if git ls-remote --exit-code "$REPO_URL" gh-pages >/dev/null 2>&1; then
             git clone --depth 1 --branch gh-pages "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
           else
             git clone --depth 1 "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
             (cd "$TMP_REPO" && git checkout --orphan gh-pages && git rm -rf . >/dev/null 2>&1 || true)
           fi
-
           FILES=(robots.txt llms.txt sitemap.xml google6b80426bb396f31f.html)
           changed=false
           for file in "${FILES[@]}"; do
             new_file="root_config/$file"
             old_file="$TMP_REPO/$file"
-
             if [ -f "$new_file" ]; then
               if [ ! -f "$old_file" ] || ! cmp -s "$new_file" "$old_file"; then
                 changed=true
@@ -205,28 +226,28 @@ jobs:
               break
             fi
           done
-
-          echo "changed=$changed" >> $GITHUB_OUTPUT
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
 
       - name: Deploy root config via GitHub Pages action
-        if: steps.root_config_changed.outputs.changed == 'true'
+        if: steps.check_pat.outputs.available == 'true' && steps.root_config_changed.outputs.changed == 'true'
+        timeout-minutes: 5
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ env.ROOT_SITE_PAT }}
+          personal_token: ${{ secrets.ROOT_SITE_PAT }}
           publish_dir: root_config
           publish_branch: gh-pages
           keep_files: true
           destination_dir: .
-          external_repository: ${{ env.GH_USERNAME }}/${{ env.GH_USERNAME }}
+          external_repository: ${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}
           user_name: ci-bot
           user_email: actions@users.noreply.github.com
 
-      - name: Skip root deployment (no changes)
-        if: steps.root_config_changed.outputs.changed != 'true' && env.ROOT_SITE_PAT != ''
+      - name: Root deployment status
+        if: always()
         run: |
-          echo "Skipping root deployment (no file changes detected)"
-
-      - name: Skip root deployment (missing ROOT_SITE_PAT)
-        if: env.ROOT_SITE_PAT == ''
-        run: |
-          echo "Skipping root deployment (ROOT_SITE_PAT not configured)"
+          if [ "${{ steps.check_pat.outputs.available }}" != "true" ]; then
+            echo "::notice::Root deployment skipped: ROOT_SITE_PAT not configured"
+          elif [ "${{ steps.root_config_changed.outputs.changed }}" != "true" ]; then
+            echo "::notice::Root deployment skipped: No file changes detected"
+          else
+            echo "::notice::Root deployment completed"

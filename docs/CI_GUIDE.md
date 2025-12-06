@@ -60,9 +60,18 @@ This workflow deploys to TWO separate locations:
 **Execution Flow (Job 2: deploy-root-config)**:
 
 1. **Credential Check**: Verifies `ROOT_SITE_PAT` secret exists
-2. **Change Detection**: Compares new files with existing root repo files
-3. **Conditional Deployment**: Only deploys if files changed AND token present
-4. **Root Deployment**: Uses `peaceiris/actions-gh-pages@v4` to deploy to `<username>/<username>` repo
+2. **Branch Validation**: Confirms the destination `gh-pages` branch already exists on the root repository
+3. **Artifact Retrieval**: Downloads the generated `root_config` bundle only when credentials are available
+4. **Change Detection**: Compares new files with existing root repo files using a temporary checkout
+5. **Conditional Deployment**: Deploys via personal access token if and only if differences are detected
+6. **Status Reporting**: Emits explicit notices covering the skipped/complete states for observability
+
+## 🛠️ Workflow Hardening Highlights
+
+- **Environment-Scoped Secrets**: Secret access now happens inside steps after the `deploy` environment activates, guaranteeing the token is readable when required.
+- **Timeout Guards**: Critical deployment, artifact, and clone steps have explicit timeouts aligned with `peaceiris/actions-gh-pages` guidance to prevent runner exhaustion.
+- **Branch Preflight Check**: The workflow fails fast with a descriptive error when the root repository lacks an initialized `gh-pages` branch, matching the project's baseline assumption.
+- **Unified Skip Messaging**: Root deployment outcomes funnel through a single status step so operators always know whether the run deployed, skipped for no change, or skipped due to missing credentials.
 
 **Key Technical Features**:
 

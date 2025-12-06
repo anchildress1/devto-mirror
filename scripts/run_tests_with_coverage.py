@@ -6,7 +6,7 @@ This script runs unit tests with coverage analysis and displays results
 in the terminal with options for different output formats.
 """
 
-import subprocess  # nosec B404 - subprocess needed for test runner functionality
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 
@@ -20,7 +20,7 @@ def run_command(cmd_args, description="", cwd=None):
     if isinstance(cmd_args, str):
         cmd_args = cmd_args.split()
 
-    result = subprocess.run(cmd_args, capture_output=True, text=True, cwd=cwd)  # nosec B603 - controlled input
+    result = subprocess.run(cmd_args, capture_output=True, text=True, cwd=cwd)  # nosec B603
 
     if result.returncode != 0:
         print(f"❌ Command failed: {' '.join(cmd_args)}")

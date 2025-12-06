@@ -8,8 +8,8 @@ compatibility with the current sitemap.xml format.
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, List
-from xml.sax.saxutils import escape  # nosec B406 - Used for XML output escaping, not parsing
+from typing import Any, Dict, List, Optional
+from xml.sax.saxutils import escape  # nosec B406
 
 from .utils import determine_content_type as classify_content_type
 
@@ -156,7 +156,7 @@ class DevToAISitemapGenerator:
             return ""
 
     def _create_url_entry(
-        self, loc: str, lastmod: str = None, changefreq: str = None, priority: str = None
+        self, loc: str, lastmod: Optional[str] = None, changefreq: Optional[str] = None, priority: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Create a sitemap URL entry with optional metadata.
