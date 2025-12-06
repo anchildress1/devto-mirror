@@ -12,6 +12,7 @@ dependencies = [
     "python-slugify>=8.0.1",
     "bleach>=6.0.0",
     "python-dotenv>=1.0.0",
+    "urllib3>=2.6.0",
 ]
 
 [dependency-groups]
@@ -39,6 +40,10 @@ exclude = ["specs*", "assets*", "tests*", ".github*"]
 line-length = 120
 skip-string-normalization = false
 target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 120
 
 [tool.coverage.run]
 source = ["src", "scripts"]

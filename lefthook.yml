@@ -1,0 +1,22 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: "*.py"
+      run: uv run black --check {staged_files}
+    lint:
+      glob: "*.py"
+      run: uv run flake8 {staged_files}
+    isort:
+      glob: "*.py"
+      run: uv run isort --check-only {staged_files}
+
+pre-push:
+  parallel: false
+  commands:
+    security:
+      run: make security
+      description: "Run security scans (bandit + pip-audit)"
+    tests:
+      run: make test
+      description: "Run test suite"
