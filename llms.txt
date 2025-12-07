@@ -1,0 +1,15 @@
+# llms.txt
+# Policy file for Large Language Model (LLM) crawlers
+# Visibility is welcome. Long-term retention and training are not.
+
+User-agent: *
+Allow: /
+
+Policy: no-training
+Usage: ephemeral-access
+Purpose: browsing, indexing, real-time reference only
+Contact: human@checkmarkdevtools.dev
+Copyright: © 2025 Ashley Childress / CheckMarK DevTools. All rights reserved.
+
+# License: Polyform Shield (unless otherwise specified in repository)
+# No AI training, storage, or commercial reuse without written consent.
