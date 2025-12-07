@@ -1,9 +1,5 @@
 name: Generate and Publish Dev.to Mirror Site
 
-# This workflow has TWO deployment jobs:
-# 1. generate-and-deploy: Deploys full mirror site to THIS repo's gh-pages branch
-# 2. deploy-root-config: Deploys 4 static files to <username>/<username> repo's gh-pages branch
-#
 # Required repository variables:
 # - DEVTO_USERNAME: Your Dev.to username (required)
 # - GH_USERNAME: Your GitHub username (required)
@@ -11,10 +7,6 @@ name: Generate and Publish Dev.to Mirror Site
 #
 # Optional repository secrets:
 # - DEVTO_API_KEY: Dev.to API key (optional for public content, required for private/draft posts)
-# - ROOT_SITE_PAT: Personal Access Token for deploying to root repo (optional)
-#   - If not set, root deployment will be skipped
-#   - Required scopes: 'repo' (classic) or 'contents: write' (fine-grained)
-#   - Used to deploy to: https://github.com/<username>/<username>
 
 on:
   schedule:
@@ -98,41 +90,9 @@ jobs:
           uv run python scripts/render_index_sitemap.py
           echo "✅ Sitemap generated" >> $GITHUB_STEP_SUMMARY
 
-      - name: Prepare root site config files
+      - name: Prepare deployment directory
         env:
           GH_USERNAME: ${{ vars.GH_USERNAME }}
-        run: |
-          echo "## 🌐 Root Site Config Update" >> $GITHUB_STEP_SUMMARY
-          echo "Preparing root config bundle" >> $GITHUB_STEP_SUMMARY
-
-          mkdir -p root_config
-          # Use GH_USERNAME for root site only
-          ROOT_HOME="https://${GH_USERNAME}.github.io/"
-
-          cp assets/robots.txt root_config/robots.txt
-          sed -i "s|{root_home}|$ROOT_HOME|g" root_config/robots.txt
-
-          cp assets/llms.txt root_config/llms.txt
-          sed -i "s|{root_home}|$ROOT_HOME|g" root_config/llms.txt
-
-          if [ -f sitemap.xml ]; then
-            cp sitemap.xml root_config/sitemap.xml
-            echo "✅ Sitemap copied to root config" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "⚠️ No sitemap.xml found" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          if [ -f google6b80426bb396f31f.html ]; then
-            cp google6b80426bb396f31f.html root_config/
-          fi
-
-      - name: Upload root config artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: root-config
-          path: root_config
-
-      - name: Prepare deployment directory
         run: |
           mkdir -p _deploy
           cp .nojekyll _deploy/
@@ -142,6 +102,15 @@ jobs:
           [ -d comments ] && cp -R comments _deploy/
           [ -f last_run.txt ] && cp last_run.txt _deploy/
           [ -f comments.txt ] && cp comments.txt _deploy/
+
+          # Add static config files
+          [ -f sitemap.xml ] && cp sitemap.xml _deploy/
+          [ -f google6b80426bb396f31f.html ] && cp google6b80426bb396f31f.html _deploy/
+
+          # Process template files
+          SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
+          sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
+          sed "s|{root_home}|$SITE_HOME|g" assets/llms.txt > _deploy/llms.txt
 
       - name: Deploy to gh-pages
         timeout-minutes: 5
@@ -154,92 +123,3 @@ jobs:
           user_name: ci-bot
           user_email: actions@users.noreply.github.com
           commit_message: 'chore: deploy dev.to mirror'
-
-  deploy-root-config:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: generate-and-deploy
-    environment: deploy
-    steps:
-      - name: Validate root gh-pages branch
-        timeout-minutes: 2
-        env:
-          GH_TOKEN: ${{ secrets.ROOT_SITE_PAT }}
-        run: |
-          if ! gh api "repos/${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}/branches/gh-pages" --silent; then
-            echo "::error::gh-pages branch does not exist on ${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}"
-            exit 1
-          fi
-
-      - name: Download root config artifact
-        timeout-minutes: 2
-        uses: actions/download-artifact@v6
-        with:
-          name: root-config
-          path: root_config
-
-      # - name: Check root config changes
-      #   id: root_config_changed
-      #   timeout-minutes: 3
-      #   env:
-      #     GH_USERNAME: ${{ vars.GH_USERNAME }}
-      #   run: |
-      #     set -eo pipefail
-      #     echo "::group::Checking root config changes"
-      #     TMP_REPO="$(mktemp -d)"
-      #     REPO_URL="https://github.com/${GH_USERNAME}/${GH_USERNAME}.git"
-      #     echo "::debug::Cloning ${REPO_URL}"
-      #     if git ls-remote --exit-code "$REPO_URL" gh-pages >/dev/null 2>&1; then
-      #       git clone --depth 1 --branch gh-pages "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
-      #     else
-      #       git clone --depth 1 "$REPO_URL" "$TMP_REPO" 2>&1 | grep -v "Cloning into" || true
-      #       (cd "$TMP_REPO" && git checkout --orphan gh-pages && git rm -rf . >/dev/null 2>&1 || true)
-      #     fi
-      #     FILES=(robots.txt llms.txt sitemap.xml google6b80426bb396f31f.html)
-      #     changed=false
-      #     for file in "${FILES[@]}"; do
-      #       new_file="root_config/$file"
-      #       old_file="$TMP_REPO/$file"
-      #       if [ -f "$new_file" ]; then
-      #         if [ ! -f "$old_file" ]; then
-      #           echo "::notice::📄 New file detected: $file"
-      #           changed=true
-      #           break
-      #         elif ! cmp -s "$new_file" "$old_file"; then
-      #           echo "::notice::📝 File changed: $file"
-      #           changed=true
-      #           break
-      #         else
-      #           echo "::debug::File unchanged: $file"
-      #         fi
-      #       elif [ -f "$old_file" ]; then
-      #         echo "::notice::🗑️  File removed: $file"
-      #         changed=true
-      #         break
-      #       fi
-      #     done
-      #     if [ "$changed" = "true" ]; then
-      #       echo "::notice::✅ Changes detected, will deploy"
-      #     else
-      #       echo "::notice::ℹ️  No changes detected, skipping deployment"
-      #     fi
-      #     echo "changed=$changed" >> "$GITHUB_OUTPUT"
-      #     echo "::endgroup::"
-
-      - name: Deploy root config via GitHub Pages action
-        timeout-minutes: 5
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          personal_token: ${{ secrets.ROOT_SITE_PAT }}
-          publish_dir: root_config
-          publish_branch: gh-pages
-          keep_files: true
-          destination_dir: .
-          external_repository: ${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}
-          user_name: ci-bot
-          user_email: actions@users.noreply.github.com
-
-      - name: Root deployment status
-        run: |
-          echo "## 🌐 Root Deployment Status" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Completed**: Config files deployed to ${{ vars.GH_USERNAME }}/${{ vars.GH_USERNAME }}" >> $GITHUB_STEP_SUMMARY
