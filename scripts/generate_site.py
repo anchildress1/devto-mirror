@@ -56,7 +56,7 @@ POSTS_DIR.mkdir(parents=True, exist_ok=True)
 ai_manager = None
 if AI_OPTIMIZATION_AVAILABLE:
     try:
-        site_name = f"{DEVTO_USERNAME} — Dev.to Mirror"
+        site_name = f"{DEVTO_USERNAME}—Dev.to Mirror"
         ai_manager = create_default_ai_optimization_manager(site_name, HOME)
         logging.info("AI optimization manager initialized successfully")
     except Exception as e:
@@ -666,7 +666,7 @@ for p in all_posts:
         cover_image=p.cover_image,
         tags=getattr(p, "tags", []),
         social_image=social_image,
-        site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
+        site_name=f"{DEVTO_USERNAME}—Dev.to Mirror",
         author=p.author,
         enhanced_metadata=optimization_data.get("enhanced_metadata", {}),
         json_ld_schemas=optimization_data.get("json_ld_schemas", []),
@@ -703,7 +703,7 @@ if comment_items:
             context=html.escape(c["context"]) if c["context"] else "",
             url=c["url"],
             social_image=social_image,
-            site_name=f"{DEVTO_USERNAME} — Dev.to Mirror",
+            site_name=f"{DEVTO_USERNAME}—Dev.to Mirror",
             author=p.author,
             enhanced_metadata={},  # Comments don't have enhanced metadata yet
         )

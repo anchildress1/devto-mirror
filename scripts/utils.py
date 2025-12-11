@@ -164,7 +164,7 @@ POST_TEMPLATE_INLINE = """<!doctype html><html lang="en"><head>
 INDEX_TMPL = env.from_string(
     """<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
-<title>{{ username }} — Dev.to Mirror</title>
+<title>{{ username }}—Dev.to Mirror</title>
 <link rel="canonical" href="{{ canonical }}">
 <meta name="description" content="{{ site_description }}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -172,20 +172,20 @@ INDEX_TMPL = env.from_string(
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ home }}">
-<meta property="og:title" content="{{ username }} — Dev.to Mirror">
+<meta property="og:title" content="{{ username }}—Dev.to Mirror">
 <meta property="og:description" content="{{ site_description }}">
 <meta property="og:image" content="{{ social_image }}">
-<meta property="og:site_name" content="{{ username }} — Dev.to Mirror">
+<meta property="og:site_name" content="{{ username }}—Dev.to Mirror">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="{{ home }}">
-<meta name="twitter:title" content="{{ username }} — Dev.to Mirror">
+<meta name="twitter:title" content="{{ username }}—Dev.to Mirror">
 <meta name="twitter:description" content="{{ site_description }}">
 <meta name="twitter:image" content="{{ social_image }}">
 
 <!-- LinkedIn -->
-<meta property="linkedin:title" content="{{ username }} — Dev.to Mirror">
+<meta property="linkedin:title" content="{{ username }}—Dev.to Mirror">
 <meta property="linkedin:description" content="{{ site_description }}">
 <meta property="linkedin:image" content="{{ social_image }}">
 
@@ -194,20 +194,20 @@ INDEX_TMPL = env.from_string(
 <meta name="author" content="{{ username }}">
 </head><body>
 <main>
-  <h1>{{ username }} — Dev.to Mirror</h1>
+  <h1>{{ username }}—Dev.to Mirror</h1>
   <ul>
   {% for p in posts %}
         <li>
             <a href="posts/{{ p.slug }}.html">{{ p.title }}</a>
-            {% if p.description %} — {{ p.description }}{% endif %}
+            {% if p.description %}—{{ p.description }}{% endif %}
                         {% if p.tags %}
-                                — <small>Tags:
+                               —<small>Tags:
                                     {% for tag in p.tags %}
                                         #{{ tag }}{% if not loop.last %}, {% endif %}
                                     {% endfor %}
                                 </small>
                         {% endif %}
-            — <small>{{ p.date }}</small>
+           —<small>{{ p.date }}</small>
         </li>
   {% endfor %}
   </ul>

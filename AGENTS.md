@@ -19,7 +19,7 @@ docs/              # Documentation files (guides, plans, and analysis)
 ```
 
 Note: The project's Python application code lives in `src/` (standard layout).
-Do NOT add new application modules into `scripts/` — reserve `scripts/` for runnable helpers and CLI wrappers.
+Do NOT add new application modules into `scripts/`—reserve `scripts/` for runnable helpers and CLI wrappers.
 
 ## Commands
 
@@ -73,13 +73,13 @@ NEVER use `uv run make <target>` in GitHub Actions workflows. Makefile targets a
 
 ## Assets and templates
 
-- `assets/robots.txt` and `assets/llms.txt` are template files and are copied/substituted into the site during CI deployment. Do not overwrite the generated `robots.txt` or `llms.txt` at the repo root — editors should update the templates in `assets/` instead.
+- `assets/robots.txt` and `assets/llms.txt` are template files and are copied/substituted into the site during CI deployment. Do not overwrite the generated `robots.txt` or `llms.txt` at the repo root—editors should update the templates in `assets/` instead.
 
 ## Project Conventions
 
 - Scripts live in `scripts/` (not `src/`)
 - Required env vars: `DEVTO_USERNAME`, `GH_USERNAME`; optional: `DEVTO_API_KEY`, `VALIDATION_MODE`, `FORCE_FULL_REGEN`, `ROOT_SITE_PAT`
-- Always preserve command output visibility — avoid redirecting to `/dev/null 2>&1`
+- Always preserve command output visibility—avoid redirecting to `/dev/null 2>&1`
 - Generate commit messages in `commit.tmp` with `Generated-by: GitHub Copilot` attribution and wait for human approval before committing
 
 ## Integration Points

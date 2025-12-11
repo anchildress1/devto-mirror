@@ -39,17 +39,17 @@ To fully enable GitHub's security features, consider enabling these in repositor
 
 This repository now includes an extra CI workflow (`.github/workflows/security-ci.yml`) that runs a few lightweight, fast checks on pushes and PRs:
 
-- Bandit — looks for common Python security anti-patterns in `scripts/`
-- pip-audit — checks installed packages for known vulnerabilities
-- flake8 — a linter to catch a range of potential issues, including style problems that can hide bugs
+- Bandit—looks for common Python security anti-patterns in `scripts/`
+- pip-audit—checks installed packages for known vulnerabilities
+- flake8—a linter to catch a range of potential issues, including style problems that can hide bugs
 
 To run these locally during development:
 
-1. Create a virtual environment: `python -m venv .venv && source .venv/bin/activate`
-2. Install the dev requirements: `uv run python -m pip install -r dev-requirements.txt`
-3. Run `pip-audit`, `bandit -r scripts`, and `flake8` as needed
+1. Install development dependencies: `make install`
+2. Run security checks: `make security`
+3. Or run the full validation pipeline: `make validate`
 
-These checks are intentionally lightweight — they won't find everything, but they reduce noise in automated scans and catch common mistakes that lead to security flags.
+These checks are intentionally lightweight—they won't find everything, but they reduce noise in automated scans and catch common mistakes that lead to security flags.
 
 ## How It Works
 

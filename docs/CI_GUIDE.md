@@ -9,7 +9,6 @@ The project uses a multi-workflow architecture designed for separation of concer
 - **`publish.yaml`**: Core site generation and deployment (two-stage: project site + root config files)
 - **`security-ci.yml`**: Quality assurance and security scanning
 - **`codeql.yml`**: Advanced security analysis
-- **`refresh.yaml`**: Emergency full regeneration
 
 This separation allows for independent execution, targeted permissions, and easier maintenance.
 
@@ -24,23 +23,23 @@ This separation allows for independent execution, targeted permissions, and easi
 # Manual: workflow_dispatch with optional inputs (force_full_regen)
 ```
 
-**Two-Stage Deployment Architecture**:
+**Deployment Architecture**:
 
-This workflow deploys to TWO separate locations:
+This workflow deploys to a single location:
 
-1. **Project Repository (`gh-pages` branch)**: Full mirror site at `https://<username>.github.io/devto-mirror/`
-   - Complete post archive
-   - Index page with post listings
-   - Project-specific sitemap.xml
-   - Comments pages (if configured)
+- **Project Repository (`gh-pages` branch)**: Full mirror site at `https://<username>.github.io/devto-mirror/`
+  - Complete post archive
+  - Index page with post listings
+  - Project-specific sitemap.xml
+  - Comments pages (if configured)
+  - robots.txt (optimized for crawlers)
+  - llms.txt (AI crawler instructions)
+  - google verification file
 
-2. **Root Repository (`gh-pages` branch)**: Config files only at `https://<username>.github.io/`
-   - robots.txt (optimized for crawlers)
-   - llms.txt (AI crawler instructions)
-   - sitemap.xml (root-level sitemap)
-   - google verification file
+> [!NOTE]
+> Root GitHub Pages deployment (username.github.io) is not currently available. If you need crawler access at the root domain, you can manually copy `robots.txt` and `llms.txt` to your root repository.
 
-**Execution Flow (Job 1: generate-and-deploy)**:
+**Execution Flow (generate-and-deploy job)**:
 
 1. **Environment Setup**: Python 3.12 with uv caching for faster builds
 2. **Dependency Installation**: Uses `uv sync --locked --group dev` for reproducible builds
@@ -53,25 +52,20 @@ This workflow deploys to TWO separate locations:
 5. **Static Asset Generation**:
    - `index.html` with post listings
    - Individual post pages
-6. **Root Config Preparation**: Copies and processes template files for root deployment
-7. **Project Deployment**: Manually deploys to `gh-pages` branch of project repo
-8. **Sitemap Generation**: Runs `render_index_sitemap.py` AFTER deployment to create `sitemap.xml`
-
-**Execution Flow (Job 2: deploy-root-config)**:
-
-1. **Credential Check**: Verifies `ROOT_SITE_PAT` secret exists
-2. **Branch Validation**: Confirms the destination `gh-pages` branch already exists on the root repository
-3. **Artifact Retrieval**: Downloads the generated `root_config` bundle only when credentials are available
-4. **Change Detection**: Compares new files with existing root repo files using a temporary checkout
-5. **Conditional Deployment**: Deploys via personal access token if and only if differences are detected
-6. **Status Reporting**: Emits explicit notices covering the skipped/complete states for observability
+6. **Sitemap Generation**: Runs `render_index_sitemap.py` to create `sitemap.xml`
+7. **Deployment Preparation**: Assembles all files into `_deploy` directory including:
+   - Generated HTML pages
+   - robots.txt and llms.txt (processed from templates)
+   - google verification files
+   - Comment pages (if configured)
+8. **Project Deployment**: Deploys to `gh-pages` branch of project repository via `peaceiris/actions-gh-pages`
 
 ## 🛠️ Workflow Hardening Highlights
 
-- **Environment-Scoped Secrets**: Secret access now happens inside steps after the `deploy` environment activates, guaranteeing the token is readable when required.
-- **Timeout Guards**: Critical deployment, artifact, and clone steps have explicit timeouts aligned with `peaceiris/actions-gh-pages` guidance to prevent runner exhaustion.
-- **Branch Preflight Check**: The workflow fails fast with a descriptive error when the root repository lacks an initialized `gh-pages` branch, matching the project's baseline assumption.
-- **Unified Skip Messaging**: Root deployment outcomes funnel through a single status step so operators always know whether the run deployed, skipped for no change, or skipped due to missing credentials.
+- **Environment-Scoped Secrets**: Secret access happens inside the `deploy` environment, guaranteeing tokens are readable when required.
+- **Timeout Guards**: Critical deployment steps have explicit timeouts aligned with `peaceiris/actions-gh-pages` guidance to prevent runner exhaustion.
+- **Idempotent Deployment**: Uses `force_orphan: false` to preserve `gh-pages` history rather than force-rewriting branches.
+- **Comprehensive Validation**: Site validation runs before deployment to catch template errors and import issues.
 
 **Key Technical Features**:
 
@@ -83,11 +77,11 @@ This workflow deploys to TWO separate locations:
 **Environment Variables**:
 
 - `DEVTO_USERNAME`: Repository variable (required) - Your Dev.to username
-- `GH_USERNAME`: Repository variable (required) - Your GitHub username for Pages URLs.
+- `GH_USERNAME`: Repository variable (required) - Your GitHub username for Pages URLs
 - `DEVTO_API_KEY`: Repository secret (optional for public content, required for private/draft posts)
 - `PAGES_REPO`: Auto-derived from `github.repository`
 - `GITHUB_TOKEN`: Auto-provided for Pages deployment
-- `ROOT_SITE_PAT`: Repository secret (optional) - Personal Access Token for deploying to root GitHub Pages repo (`<username>/<username>`). Required scopes: `repo` or fine-grained `contents: write`
+- `FORCE_FULL_REGEN`: Passed from workflow_dispatch input to force full site regeneration
 
 ### `security-ci.yml` - Quality Assurance Pipeline
 
@@ -183,25 +177,6 @@ strategy:
 # Uses github/codeql-action@v3 for latest analysis capabilities
 ```
 
-### `refresh.yaml` - Emergency Recovery Workflow
-
-**Use Case**: When incremental updates fail or complete regeneration is needed.
-
-**Technical Process**:
-
-1. **Backup Creation**: Creates timestamped backup branch
-2. **State Reset**: Removes `last_run.txt` to force full regeneration
-3. **Workflow Trigger**: Programmatically triggers `publish.yaml`
-4. **Safety Measures**: Manual-only trigger to prevent accidental execution
-
-**Implementation Details**:
-
-```yaml
-# Manual dispatch only - no automatic triggers
-# Optional input: force_full_regen (boolean)
-# Uses GitHub API to trigger dependent workflow
-```
-
 ## Security Architecture
 
 ### Permissions Model
@@ -290,7 +265,7 @@ This eliminates secret management complexity and reduces attack surface.
 ### Incremental vs Full Regeneration
 
 **Default**: Incremental updates for efficiency
-**Override**: Full regeneration available via refresh workflow
+**Override**: Full regeneration available via `publish.yaml` with `force_full_regen=true`
 **Trade-off**: Speed vs completeness - incremental is faster but may miss template changes
 
 ### Security Tool Selection

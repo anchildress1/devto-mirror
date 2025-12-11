@@ -23,7 +23,7 @@ for f in "${FILES[@]}"; do
   [[ "${f##*.}" == "py" ]] && PY_FILES+=("$f") || true
 done
 
-# 1) Format (black + isort) — attempt fixes; do not fail the run
+# 1) Format (black + isort)—attempt fixes; do not fail the run
 if [[ ${#PY_FILES[@]} -gt 0 ]]; then
   echo "Formatting Python files (black, isort)..."
   uv run black "${PY_FILES[@]}" --line-length 120 || true
@@ -46,7 +46,7 @@ else
   echo "No Python files to format."
 fi
 
-# 2) Lint (flake8) — failures are critical
+# 2) Lint (flake8)—failures are critical
 if [[ ${#PY_FILES[@]} -gt 0 ]]; then
   echo "Running flake8 on Python files..."
   if ! uv run flake8 "${PY_FILES[@]}"; then
@@ -71,7 +71,7 @@ if [[ "$NEEDS_PIP_AUDIT" == true ]]; then
     EXIT_CODE=1
   fi
 else
-  echo "No dependency files changed — skipping pip-audit."
+  echo "No dependency files changed—skipping pip-audit."
 fi
 
 # 4) bandit: only run on explicit files under src/ or scripts/
@@ -88,7 +88,7 @@ if [[ ${#BANDIT_FILES[@]} -gt 0 ]]; then
     EXIT_CODE=1
   fi
 else
-  echo "No source files for bandit — skipping bandit."
+  echo "No source files for bandit—skipping bandit."
 fi
 
 # 5) Unit tests: only if changes touch src/ or tests/
@@ -105,7 +105,7 @@ if [[ "$NEEDS_TESTS" == true ]]; then
     EXIT_CODE=1
   fi
 else
-  echo "No changes under src/ or tests/ — skipping unit tests."
+  echo "No changes under src/ or tests/—skipping unit tests."
 fi
 
 if [[ $EXIT_CODE -eq 0 ]]; then

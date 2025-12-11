@@ -58,7 +58,7 @@ def _validate_header(header: str) -> bool:
     header_re = re.compile(rf"^({type_part})(?:\([A-Za-z0-9_\-:.]+\))?:\s+[A-Z][\s\S]{{0,71}}$")
     if not header_re.match(header):
         print("Invalid commit header:", header, file=sys.stderr)
-        print("Expected: type(scope)?: Subject — where type is one of:", file=sys.stderr)
+        print("Expected: type(scope)?: Subject—where type is one of:", file=sys.stderr)
         print(", ".join(ALLOWED_TYPES), file=sys.stderr)
         return False
     return True
@@ -235,7 +235,7 @@ def main(argv):
         return 2
 
     msgfile = argv[1]
-    # Run gitlint if available — require it to pass when present
+    # Run gitlint if available—require it to pass when present
     gitlint_rc = run_gitlint(msgfile)
     if gitlint_rc != 0:
         print("gitlint reported issues (rc=" + str(gitlint_rc) + ")", file=sys.stderr)

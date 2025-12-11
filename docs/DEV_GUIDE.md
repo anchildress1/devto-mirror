@@ -12,18 +12,12 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
 
 ### Quick Start
 
-1. **Clone and setup virtual environment**:
+1. **Clone and setup**:
 
    ```bash
    git clone https://github.com/anchildress1/devto-mirror.git
    cd devto-mirror
-   python -m venv .venv && source .venv/bin/activate
-   # Recommended: use the project's Makefile which wraps uv for reproducible installs
-   make install   # runs `uv sync --locked --group dev` and installs pre-commit hooks
-
-   # Advanced: if you prefer to run uv directly:
-   # uv sync --locked --group dev
-   # uv run python -m pip install -e '.[dev]'
+   make install   # Installs dev dependencies and pre-commit hooks
    ```
 
 2. **Configure environment variables**:
@@ -92,7 +86,7 @@ make validate       # Run everything: format + lint + test + security + site val
 **Understanding the validation pipeline:**
 
 - **Format**: Uses Black to ensure consistent code style
-- **Lint**: Runs flake8, isort, bandit (security), detect-secrets
+- **Lint**: Runs pre-commit checks (formatting, linting, security)
 - **Test**: Unit tests for content analysis and cross-reference features
 - **Site validation**: Dry-run of site generation to catch build errors early
 - **Security**: Scans for vulnerabilities and security issues
@@ -109,11 +103,11 @@ git commit -m "your message"         # Hooks run automatically
 
 **What the hooks check:**
 
-- Code formatting (Black, isort)
-- Linting and style (flake8)
+- Code formatting (Black)
+- Linting and style checks
 - Security issues (bandit)
-- Secret detection (detect-secrets)
-- Site generation validation (custom hook)
+- Secret detection
+- Site generation validation
 
 If any hook fails, the commit is blocked until you fix the issues.
 
@@ -140,7 +134,7 @@ The project includes multiple levels of testing:
 
 ```bash
 make test                   # Run all unit tests
-python -m unittest discover -s tests -p 'test_*.py' -v  # Verbose output
+make test-coverage          # Run tests with coverage report
 ```
 
 **Site generation validation** (catches build errors):
@@ -201,6 +195,6 @@ Trigger workflows manually for testing or immediate updates:
 - Testing changes before they go live
 - Immediate updates after publishing new posts
 - Troubleshooting workflow issues
-- Full site regeneration (refresh workflow)
+- Full site regeneration (via `publish.yaml` with `force_full_regen=true`)
 
 For detailed explanations of the CI/CD workflows and their technical implementation, see [`CI_GUIDE.md`](CI_GUIDE.md).
