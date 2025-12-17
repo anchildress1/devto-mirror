@@ -28,15 +28,14 @@ Use Makefile targets exclusively (do not invoke tools directly):
 - `make test` - unit tests
 - `make lint` - pre-commit checks (format, lint, security)
 - `make security` - bandit + pip-audit scans
-- `make validate` - full pipeline (format → lint → security → complexity → test → site validation)
-- `make generate-site` - site generation (requires DEVTO_USERNAME and GH_USERNAME env vars)
+- `make ai-checks` - full pipeline (format → lint → security → complexity → test → site validation)
 
 ## Agent Operational Rules
 
 Automated agents must follow these constraints for safe and effective operation:
 
 - **Big picture**: `scripts/` are CLI entrypoints (generation + helpers); `src/devto_mirror/` is the Python package; `src/devto_mirror/ai_optimization/` contains AI modules. Generated artifacts: `posts/` (HTML), `htmlcov/` (coverage reports).
-- **Canonical runner**: prefer `Makefile` targets (single source of truth). Use `make install`, `make test` (unit tests), `make validate` (full pipeline), `make generate-site`, `make security` instead of calling tools directly.
+- **Canonical runner**: prefer `Makefile` targets (single source of truth). Use `make install`, `make test` (unit tests), `make ai-checks` (full pipeline), `make security` instead of calling tools directly.
 - **Tooling**: this repo pins dev tooling via `uv.lock`. When invoking tools directly use `uv run <tool>`; prefer Makefile wrappers for consistency.
 - **Pre-commit**: configured in `.pre-commit-config.yaml`. Install hooks with `make install` (runs `uv run pre-commit install`). The validate-site hook runs `uv run python scripts/validate_site_generation.py`.
 - **Files to read first**: `Makefile`, `scripts/generate_site.py`, `scripts/validate_site_generation.py`, `.pre-commit-config.yaml`, `src/devto_mirror/ai_optimization/`, `docs/DEV_GUIDE.md`.
@@ -45,7 +44,7 @@ Automated agents must follow these constraints for safe and effective operation:
 
 - Do NOT edit generated files in `htmlcov/` or anything under `.venv/`.
 - Never perform automated `git commit` or push on behalf of a human. Produce `commit.tmp` messages and wait for human approval.
-- If you change dev-tooling, update `uv.lock` with `uv sync --locked --group dev` and run `make validate` to ensure nothing regresses.
+- If you change dev-tooling, update `uv.lock` with `uv sync --locked --group dev` and run `make ai-checks` to ensure nothing regresses.
 - Avoid introducing empty `except:` / `except: pass` patterns; prefer explicit exception handling.
 
 
@@ -101,7 +100,7 @@ NEVER use `uv run make <target>` in GitHub Actions workflows. Makefile targets a
 ## Critical Constraints
 
 - NEVER perform `git commit` on behalf of a human without explicit approval. Generate commit messages in `commit.tmp` with `Generated-by: GitHub Copilot` attribution for human review.
-- Before returning to the user: run `make validate` to ensure all checks pass (format, lint, security, tests). If validation fails, iterate until resolved.
+- Before returning to the user: run `make ai-checks` to ensure all checks pass (format, lint, security, tests). If validation fails, iterate until resolved.
 - Never use empty `except:` or `except: pass` patterns; prefer explicit exception handling.
 
 <!-- MANUAL ADDITIONS END -->

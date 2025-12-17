@@ -31,6 +31,6 @@ Notes and rationale:
 
 If you'd like I can also:
 - Normalize imports to use `src.*` (as the codebase now references `src.ai_optimization`) and regenerate coverage/docs.
-- Run `make validate` to fully re-run format/lint/tests/security/site validation.
+- Run `make ai-checks` to fully re-run format/lint/tests/security/site validation.
 
 -- Automated edit made by assistant

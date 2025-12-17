@@ -36,14 +36,13 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
 4. **Run validation to ensure everything works**:
 
    ```bash
-   make validate  # Comprehensive check: format, lint, test, security, site generation
+   make ai-checks  # Comprehensive check: format, lint, test, security, site generation
    ```
 
 5. **Generate your site locally**:
 
    ```bash
-   make generate-site   # Creates HTML files in posts/ directory
-   # (or for a quick validation run: make validate-site)
+   uv run python scripts/generate_site.py   # Creates HTML files in posts/ directory
    ```
 
 ## Environment Variables
@@ -79,8 +78,7 @@ The project includes a comprehensive development workflow with automated quality
 make format         # Auto-format code with Black (120 char line length)
 make lint           # Run all pre-commit checks (linting, security, secrets)
 make test           # Run unit tests for AI optimization modules
-make validate-site  # Test that site generation works without API calls
-make validate       # Run everything: format + lint + test + security + site validation
+make ai-checks       # Run everything: format + lint + test + security + site validation
 ```
 
 **Understanding the validation pipeline:**
@@ -133,20 +131,19 @@ The project includes multiple levels of testing:
 **Unit tests** (for AI optimization features):
 
 ```bash
-make test                   # Run all unit tests
-make test-coverage          # Run tests with coverage report
+make test                   # Run all unit tests with coverage
 ```
 
 **Site generation validation** (catches build errors):
 
 ```bash
-make validate-site          # Test site generation with mock data
+uv run python scripts/validate_site_generation.py # Test site generation with mock data
 ```
 
 **Integration testing** (full pipeline):
 
 ```bash
-make validate              # Complete validation pipeline
+make ai-checks              # Complete validation pipeline
 ```
 
 ## Troubleshooting

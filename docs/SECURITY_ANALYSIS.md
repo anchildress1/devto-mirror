@@ -47,7 +47,7 @@ To run these locally during development:
 
 1. Install development dependencies: `make install`
 2. Run security checks: `make security`
-3. Or run the full validation pipeline: `make validate`
+3. Or run the full validation pipeline: `make ai-checks`
 
 These checks are intentionally lightweight—they won't find everything, but they reduce noise in automated scans and catch common mistakes that lead to security flags.
 

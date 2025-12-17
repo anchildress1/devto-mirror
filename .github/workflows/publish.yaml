@@ -75,7 +75,7 @@ jobs:
           echo "## 🏗️ Site Generation" >> $GITHUB_STEP_SUMMARY
           echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Repo: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
-          make generate-site
+          uv run python scripts/generate_site.py
           echo "✅ Generated" >> $GITHUB_STEP_SUMMARY
 
       - name: Validate generated site

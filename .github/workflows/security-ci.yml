@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    types: [opened, synchronize, reopened]
   workflow_dispatch: {}
 
 permissions:
@@ -41,11 +41,11 @@ jobs:
       - name: Run validation
         run: |
           echo "## 🔍 Validation Results" >> $GITHUB_STEP_SUMMARY
-          make validate
+          make ai-checks
           echo "✅ All checks passed" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate coverage and reports
         run: |
-          make test-coverage
+          make test
           uv run bandit -r scripts src/ -ll -iii -f json -o bandit-report.json || true
           uv run flake8 scripts src/ --max-line-length=120 > flake8-report.txt || true

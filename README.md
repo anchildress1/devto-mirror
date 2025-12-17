@@ -88,10 +88,7 @@ cp .env.example .env
 # Edit .env with your DEVTO_USERNAME and GH_USERNAME
 
 # Run validation
-make validate
-
-# Generate site (optional for local testing)
-make generate-site
+make ai-checks
 ```
 
 ## Documentation 📚
