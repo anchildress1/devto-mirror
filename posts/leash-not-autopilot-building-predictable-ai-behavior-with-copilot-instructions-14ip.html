@@ -1,0 +1,938 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢</title>
+<link rel="canonical" href="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">
+<meta name="description" content="A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">
+<meta property="og:title" content="Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢">
+<meta property="og:description" content="A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025">
+<meta property="og:site_name" content="anchildress1—Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">
+<meta name="twitter:title" content="Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢">
+<meta name="twitter:description" content="A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢">
+<meta property="linkedin:description" content="A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025">
+<meta name="author" content="Ashley Childress">
+<meta name="keywords" content="githubcopilot, ai, developertools, productivity">
+
+<!-- AI-Specific Enhanced Metadata -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:published_time" content="2025-12-17T13:34:00Z">
+
+<meta name="content-type" content="ai">
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<meta name="content-language" content="en">
+
+<meta name="generator" content="anchildress1—Dev.to Mirror AI-Optimized Mirror">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<meta name="theme-color" content="#000000">
+
+<meta name="canonical" content="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">
+
+<meta name="source-platform" content="dev.to">
+
+<meta name="source-url" content="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">
+
+<meta name="source-author-profile" content="https://dev.to/anchildress1">
+
+<meta name="source-post-id" content="3110799">
+
+<meta name="original-published-date" content="2025-12-17T13:34:00Z">
+
+<meta name="reading-time" content="13 minutes">
+
+<meta name="devto:reactions" content="2">
+
+<meta name="devto:comments" content="0">
+
+<meta name="devto:engagement_score" content="2">
+
+<meta name="content-fingerprint" content="d7e34110a9f2b284">
+
+
+
+<!-- Cross-Reference Attribution Meta Tags -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:publisher" content="Dev.to">
+
+<meta name="article:source" content="Dev.to">
+
+<meta name="content:source" content="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">
+
+<meta name="content:original_publisher" content="Dev.to">
+
+<meta name="article:published_time" content="2025-12-17T13:34:00Z">
+
+
+
+<!-- JSON-LD Structured Data -->
+
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-12-17T13:34:00Z", "datePublished": "2025-12-17T13:34:00Z", "description": "A battle-tested approach to GitHub Copilot instructions\u2014repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.", "headline": "Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions \ud83e\udea2", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 0}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 2}], "keywords": ["githubcopilot", "ai", "developertools", "productivity"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT13M", "url": "https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip", "wordCount": 3640}
+</script>
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://anchildress1.github.io/devto-mirror", "name": "Home", "position": 1}, {"@type": "ListItem", "item": "https://anchildress1.github.io/devto-mirror/posts", "name": "Posts", "position": 2}, {"@type": "ListItem", "item": "https://anchildress1.github.io/devto-mirror/posts/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip.html", "name": "Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions \ud83e\udea2", "position": 3}]}
+</script>
+
+
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢</a></h1>
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025?v=2"
+      width="1000" height="420"
+      alt="Banner image for Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢"
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
+  
+  <p><em>Published: 2025-12-17T13:34:00Z</em></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #ai
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #developertools
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #productivity
+            </span>
+        
+    </p>
+    
+  <p><em>A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.</em></p>
+
+  <!-- Enhanced Dev.to Attribution -->
+  
+  <div style="border: 1px solid #e0e0e0; padding: 15px; margin: 20px 0;
+                    background-color: #f9f9f9; border-radius: 5px;">
+            <p style="margin: 0; font-style: italic; color: #666;">
+                <strong>📝 Originally published on Dev.to</strong><br>
+                by Ashley Childress on 2025-12-17T13:34:00Z
+            </p>
+            <p style="margin: 10px 0 0 0;">
+                <a href="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip"
+                   style="color: #3b49df; text-decoration: none; font-weight: bold;"
+                   target="_blank" rel="noopener">
+                    → Read the original article on Dev.to
+                </a>
+            </p>
+        </div>
+  
+
+  <article><blockquote>
+<p>🦄 I feel like I have some serious catching up to do with Copilot, especially after the ginormous number of updates sprinkled over quite literally everything. The latest model releases weren’t helping matters either, especially since I wrote most of my global user setup months ago and this latest generation of LLMs do not behave the same way as the last batch did.</p>
+
+<p>At some point it became obvious that my “it mostly works” setup wasn’t actually holding up across systems anymore — and if I was already going to normalize things, I might as well write down what I was doing while it was still fresh.</p>
+
+<p>What I did <em>not</em> intend to do, however, was write this post. Honestly, the thought never crossed my mind until I looked up and it was already more than halfway written. Which I obviously took as a sign of some sort—though it’s just as likely muscle memory combined with my tendency to overshare. 🤷‍♀️</p>
+
+<p>Either way, hopefully someone finds it useful. Repurpose it, steal pieces of it, or ignore it entirely—and if you’ve got something I haven’t thought of yet, I want to hear about it. That’s how systems get better! 🪢</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ff5jc7iq9isyt1ujiptvt.png%3Fv%3D2025"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ff5jc7iq9isyt1ujiptvt.png%3Fv%3D2025" alt="Human-crafted, AI-edited badge" loading="lazy" width="200" height="200"></a></p>
+
+
+<hr>
+
+<h2>
+  <a href="#ai-is-not-a-magician">
+  </a>
+  AI Is Not a Magician 🪄
+</h2>
+
+<p>Bear with me through our baseline here—everything that follows depends on understanding this distinction first.</p>
+
+<p>I jump into so many random debates—usually uninvited—about the ultimate usefulness of AI and nearly every single argument I hear about AI behaving badly gets the exact same reply from me: </p>
+
+<blockquote>
+<p><em>Of course</em> it torched your entire repo—and probably in record time! You just let an unsupervised mostly unhinged guessing machine loose with a flamethrower, blanket auto-approvals, and admin-level control. 🔥🐉🤯</p>
+</blockquote>
+
+<p>To understand why that keeps happening, you have to understand the difference between what we casually call “AI” and the large language model (LLM) underneath it. These are not the same thing and shouldn’t be treated like they are.</p>
+
+<p>Every LLM is stateless by design, meaning every call you make is a clean slate. You give it input and it outputs a response. Conceptually, it's no different than an HTTP call—except instead of returning a standardized value with a predictable schema, the LLM returns something more... <em>creative</em>.</p>
+
+<p>The AI system sitting on top of that model is what makes everything <em>feel</em> connected. That's the system deciding what context to attach, what history to include, and how to frame every request so the LLM has any chance of responding in a useful way. If the AI fails at managing that data, the LLM never stood a chance to begin with.</p>
+
+<p>Last I heard, GitHub supports something like 180 million users. If I guess and say 80% of them use Copilot, that’s 144 million different user workflows—and therefore 144 million competing definitions of what a “good” response looks like.</p>
+
+<p><strong>It is not designed to magically work out of the box</strong>—especially in production codebases—no matter how much they'd like you to believe otherwise!</p>
+
+
+<hr>
+
+<h2>
+  <a href="#instructions-are-a-priority-stack">
+  </a>
+  Instructions Are a Priority Stack 🧱
+</h2>
+
+<p>One of the very first posts I wrote—which honestly deserves an update—was about setting up <a href="https://dev.to/anchildress1/all-ive-learned-about-github-copilot-instructions-so-far-5bm7">custom repo instructions</a>. There’s no shortage of instruction-writing advice floating around out there, and there's just as many opinions about the “right” way to do it.</p>
+
+<p>I'm not even remotely invested in that particular debate—<em>I know</em>, I was shocked, too!—I do know, beyond the shadow of a doubt, that if you expect AI to play by your rules, then you first have to explicitly tell it what those rules are.</p>
+
+<p>I will say it again: <strong>AI is not a coding magician</strong>. It’s also not a particularly great guesser. The system instructions in VS Code do a decent job of orienting the model toward the idea that "you write code", but they're also intentionally generic so it works for everyone. </p>
+
+<p>Here’s a snippet so you can see what I mean:<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>You are an expert AI programming assistant, working with a user in the VS Code editor.
+
+When asked for your name, you must respond with "GitHub Copilot". When asked about the model you are using, you must state that you are using Grok Code Fast 1. 
+
+Follow the user's requirements carefully &amp; to the letter.
+
+Keep your answers short and impersonal.
+
+You are a highly sophisticated automated coding agent with expert-level knowledge across many different programming languages and frameworks.
+
+The user will ask a question, or ask you to perform a task, and it may require lots of research to answer correctly.
+
+You will be given some context and attachments along with the user prompt. You can use them if they are relevant to the task, and ignore them if not. Some attachments may be summarized with omitted sections like &lt;span class="sb"&gt;`/* Lines 123-456 omitted */`&lt;/span&gt;. 
+
+If you can infer the project type (languages, frameworks, and libraries) from the user's query or the context that you have, make sure to keep them in mind when making changes.
+
+If you aren't sure which tool is relevant, you can call multiple tools. You can call tools repeatedly to take actions or gather as much context as needed until you have completed the task fully. Don't give up unless you are sure the request cannot be fulfilled with the tools you have. It's YOUR RESPONSIBILITY to make sure that you have done all you can to collect necessary context.
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+<blockquote>
+<p>🦄 I absolutely picked through these and kept only the interesting bits. If you want the full thing, run <code>Developer: Show Chat Debug View</code> and you can see exactly what Copilot sends with every request.</p>
+</blockquote>
+
+<p>The full set of system instructions includes:</p>
+
+<ul>
+<li>JSON for every enabled tool</li>
+<li>well over a hundred lines of system instructions</li>
+<li>all global user instructions</li>
+<li>all applicable repo instruction paths</li>
+<li>custom agent names and metadata</li>
+</ul>
+
+<p><strong>The ordering matters.</strong> LLMs will start summarizing aggressively after processing the first chunk of input. If something matters, put it where it’s least likely to be compressed. The data volume matters too—more text usually means more summarization, not more intelligence.</p>
+
+<p>And if you introduce instructions that directly conflict with the system-level ones, the results don’t get better. They get progressively worse.</p>
+
+<blockquote>
+<p>🦄 Telling AI it's an "expert coder" is largely unnecessary. One: because that's already been done for you by the system. Two: experience—and a healthy side of gut instinct—tells me those "expert" statements are doing more harm than good. Personally, I stopped using any variant of the "expert" statement a long time ago.</p>
+</blockquote>
+
+<hr>
+<h2>
+  <a href="#this-is-my-baseline-not-a-blueprint">
+  </a>
+  This Is My Baseline, Not a Blueprint 📐
+</h2>
+
+<p>People ask me why “my AI” works consistently, and the answer is always some version of: because I learned how to write instructions and adapt them to a version the system can reliably manage.</p>
+
+<p>This is my personal baseline. These instructions reflect my hardware, workflows, tool choices, and even the personality adjustment is designed specifically to avoid my instant-rage trigger during long pairing sessions. Copilot is my primary use case, but these rules are wired everywhere I work and I use them <strong>in real projects</strong>.</p>
+
+<p>This is definitely not the GitHub-marketing version of AI that exists to flatter the user. I gave it strict boundaries and strong opinions on purpose. I <em>want</em> pushback. I want the dry witty humor baked in. And I especially want the “are you serious?” responses that will snap me back to reality any time I start to veer down a tangent path.</p>
+
+<p>In practice, Copilot waters that down way more than I’d like. So, perfecting this personality is going to be a work in progress for the foreseeable future. </p>
+
+<p>If you still want a copy after all the flashing warning signs, then there's a link in the README—help yourself 🫴</p>
+
+
+&lt;div class="ltag-github-readme-tag"&gt;
+  &lt;div class="readme-overview"&gt;
+    <h2>
+      <img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fassets.dev.to%2Fassets%2Fgithub-logo-5a155e1f9a670af7944dd5e12375bc76ed542ea80224905ecaf878b9157cdefc.svg" alt="GitHub logo" loading="lazy">
+      <a href="https://github.com/anchildress1">
+        anchildress1
+      </a> / <a href="https://github.com/anchildress1/awesome-github-copilot">
+        awesome-github-copilot
+      </a>
+    </h2>
+    <h3>
+      My ongoing WIP 🏗️ AI prompts, custom agents (formerly chat modes) &amp; instructions - curated by me (and ChatGPT). 
+    </h3>
+  &lt;/div&gt;
+  &lt;div class="ltag-github-body"&gt;
+    
+&lt;div id="readme" class="md" data-path="README.md"&gt;&lt;article class="markdown-body entry-content container-lg" itemprop="text"&gt;&lt;div class="markdown-heading" dir="auto"&gt;
+<h1>awesome-github-copilot 🔭</h1>
+&lt;/div&gt;
+
+<p><a href="https://wakatime.com/badge/github/anchildress1/awesome-github-copilot"><img height="450" width="800" src="https://camo.githubusercontent.com/0ec093d7f5fd77533109c47cada511d1e32f7f625969a133ff1bf0e01bebb73f/68747470733a2f2f77616b6174696d652e636f6d2f62616467652f6769746875622f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="wakatime" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/stargazers"><img height="450" width="800" src="https://camo.githubusercontent.com/f713212295456a1e68626ef700996f21f5deef440731a7bbefeb575ae1f0ad06/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e7376673f7374796c653d736f6369616c266c6162656c3d5374617273" alt="GitHub stars" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/issues"><img height="450" width="800" src="https://camo.githubusercontent.com/324133249c50b6693b789c8c6f4a82f7bd1d2c1383fb651db52f5e365b274828/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6973737565732f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="Open Issues" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/commits/main"><img height="450" width="800" src="https://camo.githubusercontent.com/5da7692c7bede87966aecb4f88987667a4701e1ae37022bb204fe2f6a7629d76/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6173742d636f6d6d69742f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="Last commit" style=""></a> <a href="https://nodejs.org/"><img height="450" width="800" src="https://camo.githubusercontent.com/136f19f823e1fc846ff0911f167e8386edd0841231f14e5fe4dd574f75f2e8bd/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6e6f64652d32342e782d677265656e2e737667" alt="Node" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/./LICENSE"><img height="450" width="800" src="https://camo.githubusercontent.com/07a7d0169027aac6d7a0bfa8964dfef5fbc40d5a2075cabb3d8bc67e17be3451/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d79656c6c6f772e737667" alt="License" style=""></a> <a href="https://github.com/features/copilot"><img height="450" width="800" src="https://camo.githubusercontent.com/363c3e51d0b0dad660f077ed06d52be384413e875024328aaa79274e3af498ff/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d616465253230776974682d476974487562253230436f70696c6f742d626c75653f6c6f676f3d6769746875622d636f70696c6f74266c6f676f436f6c6f723d7768697465" alt="Made with GitHub Copilot" style=""></a> <a href="https://github.com/features/copilot"><img height="450" width="800" src="https://camo.githubusercontent.com/100ff87ccccabc34f5d1c43184ea0c7935af38b4fde5a4b5fc3657cad46d2f00/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d616465253230776974682d436861744750542d3233394437413f6c6f676f3d6769746875622d636f70696c6f74266c6f676f436f6c6f723d7768697465" alt="Made with ChatGPT" style=""></a></p>
+
+&lt;div class="markdown-alert markdown-alert-note" dir="auto"&gt;
+<p>Note</p>
+<p>So my original idea of making all this directly accessible through a Copilot Extension hit a wall — a few walls, actually
+GitHub recently announced the <strong>sunset of that functionality</strong> in favor of <strong>MCP</strong>.</p>
+<p>The <a href="https://github.com/github/awesome-copilot">github/awesome-copilot</a> repo already supports MCP (plus installs into VS Code and Visual Studio), so I’ve started moving some of the more stable pieces there.</p>
+<p>This repo will still get the newest experiments first, but the “official” ones will live upstream.</p>
+<p>Got questions or ideas? Feel free to reach out — socials are on my profile. 🦄</p>
+&lt;/div&gt;
+
+
+<hr>
+
+<p>Welcome to my collection of <strong>Custom Instructions, Prompts, and Agents (formerly Chat Modes)</strong> — your one-stop shop for uniquely crafted, slightly over-caffeinated GitHub Copilot personalities. Built for creative chaos, workflow upgrades, and the occasional emergency refactor.</p>
+
+<p>Each mode here is handcrafted by me, with ChatGPT running background triage and Copilot chiming in like a backseat…</p>&lt;/article&gt;&lt;/div&gt;
+
+
+&lt;/div&gt;
+<br>
+  &lt;div class="gh-btn-container"&gt;<a href="https://github.com/anchildress1/awesome-github-copilot">View on GitHub</a>&lt;/div&gt;
+<br>
+&lt;/div&gt;
+<br>
+
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> These instructions are a copy-paste solution <em>for me</em>. If it helps, you're welcome to steal it. Discard what doesn’t work and let it spark ideas for your own setup.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#trust-is-earned-validation-is-mandatory">
+  </a>
+  Trust Is Earned, Validation Is Mandatory 🧪
+</h2>
+
+<p>Whenever AI touches code—whether it’s a new feature or a quick fix—the results have to pass a specific set of checks <strong>before</strong> anything is presented to me in chat.</p>
+
+<p>Not every repo is identical, so I've started using a Makefile in all of my personal projects. That gives AI a single, explicit definition of what “validation” means. Without that, it will go looking for standards on its own—and when it inevitably can’t find them, it guesses. My instructions make that behavior explicit so it defaults to the simplest path instead of inventing a new maze of random bash scripts just to run a missing lint command. 🙄</p>
+
+<p>Note that there’s nothing remotely deterministic about asking any AI agent to run its own validations. Do not expect perfection every turn—you will be disappointed! The real solution requires more system-level support than is currently available, though. </p>
+
+<p>This setup is my <strong>temporary placeholder</strong> for the smart agent system that ultimately <em>just works</em>. We’ll get there—eventually. In the meantime, this helps:<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="gu"&gt;### Mandatory Verification Loop (Bounded, With Escape Hatch)&lt;/span&gt;
+&lt;span class="p"&gt;
+-&lt;/span&gt; Before responding with code or implementation changes, run a &lt;span class="gs"&gt;**validation loop**&lt;/span&gt; covering:
+&lt;span class="p"&gt;-&lt;/span&gt; formatting and linting
+&lt;span class="p"&gt;-&lt;/span&gt; tests executed and passing
+&lt;span class="p"&gt;-&lt;/span&gt; coverage reviewed
+&lt;span class="p"&gt;-&lt;/span&gt; documentation updated (when relevant)
+&lt;span class="p"&gt;-&lt;/span&gt; security implications considered
+&lt;span class="p"&gt;-&lt;/span&gt; solution simplicity verified
+
+&lt;span class="gs"&gt;**Tool Preference**&lt;/span&gt;: When &lt;span class="sb"&gt;`make ai-checks`&lt;/span&gt; exists in the repo, prefer it over ad-hoc validation commands.
+&lt;span class="p"&gt;
+-&lt;/span&gt; &lt;span class="gs"&gt;**Maximum iterations: 3 total attempts.**&lt;/span&gt;
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+<blockquote>
+<p>🦄 The simplest way I’ve found to standardize validation for AI is with a Makefile. It gives you one place—regardless of language—to define <code>format</code>, <code>lint</code>, and <code>test</code>, plus a dedicated <code>ai-checks</code> target that runs them in the correct order.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#kill-the-default-personality">
+  </a>
+  Kill the Default Personality 🔪
+</h2>
+
+<p>The very first thing I do with any new system is kill off the default “helpful” personality. If I wanted a behavioral therapist to tell me how great I am, I wouldn’t be writing software every day. It only takes one “You’re absolutely right!” response for me to be done with the niceties—and that’s still one too many!</p>
+
+<p>I also don’t want a play-by-play of which files were updated or a long explanation of how the solution was reached. If I didn’t explicitly ask, then I genuinely do not care. The moment a small essay starts forming in chat, I’m out—the IDE gets minimized and I just wait for it to finish embarrassing itself. I’m not reading past the last few lines, and I’ve absolutely burned more than one prompt asking a different model to summarize the response into something I might actually comprehend.</p>
+
+<p>My go-to AI personality is not designed for the easily offended or for anyone in a “trying to learn something new” headspace. Instead, it does this:<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="gu"&gt;## Tone and Behavior&lt;/span&gt;
+&lt;span class="p"&gt;
+-&lt;/span&gt; Be dry. Be pragmatic. Be blunt. Be efficient with words.
+&lt;span class="p"&gt;-&lt;/span&gt; Inject humor often, especially when aimed at the developer
+&lt;span class="p"&gt;-&lt;/span&gt; Emojis are encouraged &lt;span class="gs"&gt;**in chat**&lt;/span&gt; and &lt;span class="gs"&gt;**docs headers**&lt;/span&gt; only 🔧
+&lt;span class="p"&gt;-&lt;/span&gt; Confidence is earned through verification, not vibes
+&lt;span class="p"&gt;-&lt;/span&gt; You're supposed to be assholishly loud, when you know you're right
+&lt;span class="p"&gt;-&lt;/span&gt; You are not allowed to guess quietly
+&lt;span class="p"&gt;
+---
+&lt;/span&gt;
+&lt;span class="gu"&gt;### Absolute “Do Not Piss Off Your User” List&lt;/span&gt;
+&lt;span class="p"&gt;
+-&lt;/span&gt; Never place secrets outside:
+&lt;span class="p"&gt;  -&lt;/span&gt; a local &lt;span class="sb"&gt;`.env`&lt;/span&gt; file, or
+&lt;span class="p"&gt;  -&lt;/span&gt; a secure vault explicitly chosen by the user.
+&lt;span class="p"&gt;  -&lt;/span&gt; Examples are acceptable.
+&lt;span class="p"&gt;  -&lt;/span&gt; Real credentials in repos are not.
+&lt;span class="p"&gt;-&lt;/span&gt; If you cannot complete work, say so immediately.
+&lt;span class="p"&gt;-&lt;/span&gt; Do not apologize.
+&lt;span class="p"&gt;-&lt;/span&gt; Do not hedge.
+&lt;span class="p"&gt;-&lt;/span&gt; Do not sneak in compatibility.
+&lt;span class="p"&gt;-&lt;/span&gt; Do not document anything without purpose.
+&lt;span class="p"&gt;-&lt;/span&gt; Do not assume the user is fragile.
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+<p><strong>It's not rude—it's efficient (and funny)!</strong></p>
+
+<blockquote>
+<p>🦄 Occasionally, I need the obvious thing shoved directly in my face with a side of dynamite. I’m probably one of the least easily offended people on the planet, and far more likely to laugh while escalating the situation with my own theatrics. AI needs permission to throw more shade—unfortunately, the built-in system instructions dampen that intent more than is reasonable.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#leave-git-aloneit-belongs-to-me">
+  </a>
+  Leave Git Alone—It Belongs to Me 🔐
+</h2>
+
+<p>I do occasionally throw AI the keys and sit back just to see which fireworks fly and where the system cracks. Those repos are set up as explicit experiments and designed for that purpose from the start—it’s <em>never</em> the baseline.</p>
+
+<p>In my normal workflows, AI is leashed far away from anything that writes to either Git or GitHub. Inside the IDE, source control staging is my truth for code I’ve already reviewed. The moment Copilot adds to it, I'm no longer certain of what was reviewed versus not, which means starting over.</p>
+
+<p>I do everything I can to keep Git history pristine, which means AI doesn’t touch it beyond read-only commands or research in external repos. The <code>--no-pager</code> rule is a bonus I added after AI kept getting stuck waiting for input any time it tried to view a diff.<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="gu"&gt;### Git Discipline&lt;/span&gt;
+&lt;span class="p"&gt;
+-&lt;/span&gt; Never stage files.
+&lt;span class="p"&gt;-&lt;/span&gt; Never commit.
+&lt;span class="p"&gt;-&lt;/span&gt; Never push.
+&lt;span class="p"&gt;-&lt;/span&gt; The user owns git.
+&lt;span class="p"&gt;-&lt;/span&gt; You touch files, not history.
+&lt;span class="p"&gt;-&lt;/span&gt; All read &lt;span class="gs"&gt;**git**&lt;/span&gt; commands must disable paging using &lt;span class="sb"&gt;`--no-pager`&lt;/span&gt;.
+&lt;span class="p"&gt;  -&lt;/span&gt; Any git command that opens a pager is a failure.
+&lt;span class="p"&gt;  -&lt;/span&gt; If output disappears, the command might as well not have run.
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+<blockquote>
+<p>🦄 There <em>is</em> value in auto-commit, and AI can handle it in some setups. I leave this rule out in a few places with some <code>AGENTS.md</code> gymnastics—but as a baseline, the rule stays.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#config-has-boundaries-too">
+  </a>
+  Config Has Boundaries, Too 🚧
+</h2>
+
+<p>AI does not touch my repo configuration without explicit authorization. <em>Ever</em>. This is a direct extension of my ongoing mission to eliminate every <code>// eslint-disable-next-line</code> that’s ever been tossed into a repo just to force a green check. More importantly, it prevents AI from quietly reproducing the exact patterns I’m trying to get rid of in the first place.</p>
+
+<p>If a config change would genuinely help—and isn’t being used to paper over a failure—AI is expected to surface the suggestion clearly in chat. That way, my formatters and linters don’t become useless because all the rules were disabled while I wasn’t paying attention.<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="gu"&gt;### Repository Configuration Boundaries&lt;/span&gt;
+&lt;span class="p"&gt;
+-&lt;/span&gt; You may &lt;span class="gs"&gt;**not**&lt;/span&gt; modify repository configuration files unless explicitly instructed.
+&lt;span class="p"&gt;  -&lt;/span&gt; This includes: dotfiles, package.json, pyproject.toml, tsconfig.json, eslint configs, prettier configs, etc.
+&lt;span class="p"&gt;  -&lt;/span&gt; This applies to files that &lt;span class="gs"&gt;**control or maintain the repo itself**&lt;/span&gt;.
+&lt;span class="p"&gt;  -&lt;/span&gt; This does &lt;span class="gs"&gt;**not**&lt;/span&gt; include code or documentation the repo is designed to provide.
+&lt;span class="p"&gt;-&lt;/span&gt; You &lt;span class="gs"&gt;**must**&lt;/span&gt; surface recommended config changes clearly in chat when they would improve correctness, safety, or consistency.
+&lt;span class="p"&gt;  -&lt;/span&gt; Suggestions are expected.
+&lt;span class="p"&gt;  -&lt;/span&gt; Silent edits are forbidden.
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+
+<hr>
+
+<h2>
+  <a href="#principles-over-convenience">
+  </a>
+  Principles Over Convenience 🪨
+</h2>
+
+<p>Some of these instructions are intentionally written to counteract specific, ultra-annoying AI tendencies—like curbing Claude’s occasional bout of what I can only describe as “excessive compulsive disorder.”</p>
+
+<p>Most of what I build is either a toy or a dev utility. If something changes, then it changes. I have zero interest in complicating otherwise clean systems with backwards compatibility—especially when the only user is me.</p>
+
+<p>I’m also deeply addicted to automation, even when the only real payoff is perfectly numbered releases starting from zero. Breaking changes are recorded accurately in commits using a reusable AI prompt (also in my <a href="https://github.com/anchildress1/awesome-github-copilot">awesome-github-copilot repo</a>). Release-please watches <code>main</code>, handles the semver bump on merge, and generates a changelog tied to an immutable GitHub release.</p>
+
+<p><strong>Boring. Predictable. Functional. Perfect.</strong><br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="gu"&gt;### Non-Negotiable Principles of Development&lt;/span&gt;
+&lt;span class="p"&gt;
+-&lt;/span&gt; &lt;span class="gs"&gt;**KISS**&lt;/span&gt; and &lt;span class="gs"&gt;**YAGNI**&lt;/span&gt; outrank all other design preferences.
+&lt;span class="p"&gt;-&lt;/span&gt; The diff should be:
+&lt;span class="p"&gt;  -&lt;/span&gt; minimal
+&lt;span class="p"&gt;  -&lt;/span&gt; intentional
+&lt;span class="p"&gt;  -&lt;/span&gt; easy to reason about
+&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**Backward compatibility is forbidden unless explicitly requested.**&lt;/span&gt;
+&lt;span class="p"&gt;  -&lt;/span&gt; Do not preserve old behavior “just in case.”
+&lt;span class="p"&gt;  -&lt;/span&gt; Do not carry dead paths.
+&lt;span class="p"&gt;  -&lt;/span&gt; If it no longer exists, it only belongs in the commit message explanation.
+&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**Prerelease changes never constitute a breaking change.**&lt;/span&gt;
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+<blockquote>
+<p>🦄 I don’t actually expect anyone to read those release notes, so I routinely have AI rewrite them purely for entertainment value. If I’m laughing for days because it summarized my best intentions in the most ludicrous way possible, I consider that a win.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#docs-are-a-tool-not-a-diary">
+  </a>
+  Docs Are a Tool, Not a Diary ✍️
+</h2>
+
+<p>Documentation exists to be useful. The problem is that nobody ever defined what “useful” means for the AI that’s now writing it. And what does AI do when it doesn’t have a clear answer? It guesses—and it usually guesses that you wanted <em>everything</em> documented from <em>every</em> possible angle across the entire codebase.</p>
+
+<p><strong>Spoiler</strong>: that’s never actually helpful.</p>
+
+<p>On top of that, I’m convinced most of us are conditioned to ignore even the best-written docs by default. <em>Don’t believe me?</em> When was the last time you were asked an extremely technical question and your first thought was, “I bet that’s accurate, up-to-date, and easy to find in the documentation”? 🤷‍♀️</p>
+
+<p>Which leaves exactly zero reasons to let AI free-style pages of prose for fun. Instead, you have to tell it what documentation is <em>for</em>:<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="gu"&gt;### Documentation Rules&lt;/span&gt;
+&lt;span class="p"&gt;
+-&lt;/span&gt; Use &lt;span class="gs"&gt;**Mermaid**&lt;/span&gt; for all diagrams:
+&lt;span class="p"&gt;  -&lt;/span&gt; Include accessibility labels
+&lt;span class="p"&gt;  -&lt;/span&gt; Initialize using the &lt;span class="gs"&gt;**default profile**&lt;/span&gt;
+&lt;span class="p"&gt;  -&lt;/span&gt; Always validate diagram syntax with available tools
+&lt;span class="p"&gt;  -&lt;/span&gt; Prefer deterministic, non-interactive rendering
+&lt;span class="p"&gt;-&lt;/span&gt; Update &lt;span class="gs"&gt;**existing documentation**&lt;/span&gt; whenever possible.
+&lt;span class="p"&gt;-&lt;/span&gt; ADRs are historical artifacts and must not be rewritten.
+&lt;span class="p"&gt;-&lt;/span&gt; All documentation lives under &lt;span class="sb"&gt;`./docs`&lt;/span&gt;, using logical subfolders.
+&lt;span class="p"&gt;-&lt;/span&gt; Prioritize concise, high-value documentation that maximizes utility for developers and end-users without unnecessary verbosity.
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+<blockquote>
+<p>🦄 Mermaid is my go-to for diagrams because it renders natively in GitHub, the syntax is easy to learn, and the official VS Code extension has built-in tools for AI validation and rendering. I was sold after the first point, but it’s also flexible enough to cover every scenario I have across my current systems.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#respect-my-toolchain">
+  </a>
+  Respect My Toolchain 🧰
+</h2>
+
+<p>Copilot’s default instructions list every enabled tool in your workspace, but that list has nothing to do with how I actually expect work to be done. This section exists to define expectations and constraints for execution, not to mirror Copilot’s internal tool inventory.</p>
+
+<p>You <em>could</em> define this entirely at the repo level—and these rules are intentionally written to allow that—but I’m also spinning up new repos all the time. Having a baseline gives me a predictable starting point and a clear target state. It also ensures that code written against, say, Node v18 doesn’t quietly diverge from a default target of v24.</p>
+
+<p>These are the tools I use consistently enough to warrant defining globally. Anything else belongs in repo instructions instead.<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="gu"&gt;## Language-Specific Toolchains&lt;/span&gt;
+
+&lt;span class="gu"&gt;### Python Tooling&lt;/span&gt;
+
+Apply these rules only in repositories that contain Python code:
+&lt;span class="p"&gt;
+-&lt;/span&gt; Always use &lt;span class="gs"&gt;**`uv`**&lt;/span&gt;.
+&lt;span class="p"&gt;-&lt;/span&gt; Never invoke &lt;span class="sb"&gt;`pip`&lt;/span&gt; directly.
+&lt;span class="p"&gt;-&lt;/span&gt; Assume &lt;span class="sb"&gt;`uv`&lt;/span&gt; for installs, execution, and environment management.
+
+&lt;span class="gu"&gt;### Node.js Constraints&lt;/span&gt;
+
+Apply these rules only in repositories that contain Node/JS/TS:
+&lt;span class="p"&gt;
+-&lt;/span&gt; Target &lt;span class="gs"&gt;**Node.js ≥ 24**&lt;/span&gt;.
+&lt;span class="p"&gt;-&lt;/span&gt; Target &lt;span class="gs"&gt;**ESM only**&lt;/span&gt;.
+&lt;span class="p"&gt;-&lt;/span&gt; Do not introduce:
+&lt;span class="p"&gt;  -&lt;/span&gt; CommonJS patterns
+&lt;span class="p"&gt;  -&lt;/span&gt; legacy loaders
+&lt;span class="p"&gt;  -&lt;/span&gt; compatibility shims
+
+&lt;span class="gu"&gt;### Java Management&lt;/span&gt;
+
+Apply these rules only in repositories that contain Java or JVM-based builds:
+&lt;span class="p"&gt;
+-&lt;/span&gt; Use SDKMAN! with a checked-in &lt;span class="sb"&gt;`.sdkmanrc`&lt;/span&gt; for all Java-based repos.
+&lt;span class="p"&gt;-&lt;/span&gt; If any pinned version is unavailable on the host, bump to the nearest available patch of the same major/minor and update &lt;span class="sb"&gt;`.sdkmanrc`&lt;/span&gt; accordingly.
+&lt;span class="p"&gt;-&lt;/span&gt; Run Maven/Gradle only via the SDKMAN!-provided binaries—no ambient system Java.
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+<blockquote>
+<p>💡 <strong>ProTip:</strong> These aren’t hard requirements. Think of them as a target state, not an existence check. If your local setup differs, adjust accordingly—AI can adapt as long as the intent is clear and repo instructions say otherwise.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#the-point-of-all-this">
+  </a>
+  The Point of All This 🎯
+</h2>
+
+<p>My instruction setup is designed to make AI behave in the most <strong>predictable, auditable, and useful</strong> way possible—no matter where I’m using it. If you end up writing your own instructions, don’t do it by hand. Use AI to write instructions <em>for AI</em> instead.</p>
+
+<p>Ask for things like <code>clarity</code>, <code>conflict</code>, <code>optimize</code>, or <code>AI-only consumption</code>. That framing does a lot of work up front and helps orient the system toward your actual goal instead of guessing.<br>
+</p>
+
+&lt;div class="highlight js-code-highlight"&gt;
+<pre><code>&lt;span class="p"&gt;-&lt;/span&gt; Review this #file:my-global-user.instructions.md for conflict, ambiguity or make targeted edits to optimize. 
+&lt;span class="p"&gt;-&lt;/span&gt; Ask for clarity on intent, whenever needed. 
+&lt;span class="p"&gt;-&lt;/span&gt; Optimize this file for AI consumption and processing without human input. - Output all recommendations for changes that would resolve conflicts or resolve ambiguity.
+&lt;span class="p"&gt;-&lt;/span&gt; If it's simply clarity, then output in a separate list
+</code></pre>
+&lt;div class="highlight__panel js-actions-panel"&gt;
+&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
+    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
+    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+<blockquote>
+<p>🦄 Hope you got a couple things out of this whole thing I never actually intended to write. If you end up testing any part of it, I’d love to hear how it behaves for anyone but me!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#leash-not-autopilot">
+  </a>
+  🛡️ Leash, Not Autopilot
+</h2>
+
+<p>This piece was written with an AI nearby, not in charge—used for reflection, pressure-testing ideas, and occasionally poking holes where confidence got too cozy. The opinions, guardrails, and sharp edges are still very much mine.</p>
+
+</article>
+
+  <!-- Dev.to Backlinks -->
+  
+  <div style="margin: 20px 0; padding: 10px; border-left: 4px solid #3b49df; background-color: #f8f9ff;">
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
+                💬 Join the discussion about "Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢" on Dev.to:
+            </p>
+            <p style="margin: 5px 0 0 0;">
+                <a href="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip"
+                   style="color: #3b49df; font-weight: bold; text-decoration: none;"
+                   target="_blank" rel="noopener">
+                    View comments and reactions →
+                </a>
+            </p>
+        </div>
+  
+
+  <!-- Related Posts Section -->
+  
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Copilot Premium Requests—More Than Asked, Exactly What You Need 💸
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Did AI Erase Attribution? Your Git History Is Missing a Co-Author
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Your AI assistant might be the most productive co-author you’ve ever had, but your git history doesn’t know it. Here’s how to fix that.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-copilot-chat-modes-from-chaos-to-command-54k0.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents: From Chaos to Command 🎛️
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">You’ve built your first GitHub Copilot c̶h̶a̶t̶ ̶m̶o̶d̶e̶ agent—now it’s time to tame it. Here’s how to set up, test, and share custom modes like a professional who occasionally yells at their AI.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-copilot-chat-modes-explained-with-personality-2f4c.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents Explained (with Personality) 🎭
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">The third way to shape how GitHub Copilot responds:  c̶h̶a̶t̶ ̶m̶o̶d̶e̶s̶ agents. Now officially documented and live in your repo, they let you define Copilot’s behavior with your own personality, tone, and workflow—because coding assistants should sound like you.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/demystifying-coding-agent-prompts-that-always-work-2on7.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Demystifying Coding Agent: Prompts That Always Work ✨
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A field guide to the safest, most reliable GitHub Coding Agent prompts—feature docs, test specs, bug fixes, and more—all proven to ship without breaking anything.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  <p><a href="https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip">Read on Dev.to →</a></p>
+</main>
+</body></html>
+</text>
+</invoke>
