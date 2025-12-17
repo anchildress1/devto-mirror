@@ -112,7 +112,31 @@ jobs:
           sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
           sed "s|{root_home}|$SITE_HOME|g" assets/llms.txt > _deploy/llms.txt
 
+      - name: Snapshot gh-pages branch
+        id: snapshot-gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config --global user.name "ci-bot"
+          git config --global user.email "actions@users.noreply.github.com"
+          SNAPSHOT_DIR=$(mktemp -d)
+          git clone --depth 1 --branch gh-pages "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}" "$SNAPSHOT_DIR"
+          find "$SNAPSHOT_DIR" -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
+          rsync -a _deploy/ "$SNAPSHOT_DIR"/
+          cd "$SNAPSHOT_DIR"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No gh-pages updates"
+            echo "snapshot_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: snapshot generated site"
+            git push origin gh-pages
+            echo "snapshot_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy to gh-pages
+        if: steps.snapshot-gh-pages.outputs.snapshot_changed == 'true'
         timeout-minutes: 5
         uses: peaceiris/actions-gh-pages@v4
         with:
