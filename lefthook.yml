@@ -3,20 +3,24 @@ pre-commit:
   commands:
     format:
       glob: "*.py"
-      run: uv run black --check {staged_files}
+      run: uv run black {staged_files}
+      stage_fixed: true
     lint:
       glob: "*.py"
       run: uv run flake8 {staged_files}
     isort:
       glob: "*.py"
-      run: uv run isort --check-only {staged_files}
+      run: uv run isort {staged_files}
+      stage_fixed: true
+    detect-secrets:
+      run: uv run detect-secrets scan --baseline .secrets.baseline
+    validate-site:
+      run: uv run python scripts/validate_site_generation.py
 
 pre-push:
   parallel: false
   commands:
     security:
       run: make security
-      description: "Run security scans (bandit + pip-audit)"
     tests:
       run: make test
-      description: "Run test suite"

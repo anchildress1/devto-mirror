@@ -16,8 +16,8 @@ install:  ## Install development dependencies
 	uv run pre-commit install
 
 test:  ## Run unit tests
-	uv run python -m unittest discover -s tests -p 'test_*.py'
-	uv run coverage report
+	uv run coverage run --source src,scripts -m unittest discover -s tests -p 'test_*.py'
+	uv run coverage report --fail-under=80
 	uv run coverage html
 
 lint:  ## Run pre-commit checks (formatting, linting, security)

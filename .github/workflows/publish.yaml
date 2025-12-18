@@ -52,6 +52,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Restore last run timestamp
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code origin gh-pages >/dev/null 2>&1; then
+            git fetch origin gh-pages --depth=1
+            if git show origin/gh-pages:last_run.txt >/dev/null 2>&1; then
+              TIMESTAMP=$(git show origin/gh-pages:last_run.txt)
+              echo "$TIMESTAMP" > last_run.txt
+              echo "🔄 Restored last_run.txt from gh-pages: \`$TIMESTAMP\`" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ last_run.txt not found on gh-pages branch" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "🆕 gh-pages branch does not exist yet; skipping last_run restore" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Set up uv
         uses: astral-sh/setup-uv@v7
         with:
