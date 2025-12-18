@@ -11,6 +11,11 @@ name: Generate and Publish Dev.to Mirror Site
 on:
   schedule:
     - cron: "40 14 * * 3"  # At 9:40 AM EST every Wednesday
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/publish.yaml'
   workflow_dispatch:
     inputs:
       force_full_regen:
