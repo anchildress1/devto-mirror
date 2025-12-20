@@ -13,7 +13,8 @@ help:  ## Show this help message
 install:  ## Install development dependencies
 	uv sync --locked --group dev
 	# Ensure lefthook is executed via uv so we use the pinned dev toolchain
-	uv run lefthook install
+	# Skip lefthook installation in CI environments (GITHUB_ACTIONS, CI)
+	@if [ -z "$$CI$$GITHUB_ACTIONS" ]; then uv run lefthook install; fi
 
 test:  ## Run unit tests
 	uv run coverage run --source src -m unittest discover -s tests -p 'test_*.py'
