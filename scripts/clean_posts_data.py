@@ -3,7 +3,7 @@
 Clean posts_data.json by deduplicating entries that share the same canonical link or slug.
 Keeps the newest post when duplicates are found (based on parsed date), backs up the original file.
 
-Usage: python3 scripts/clean_posts_data.py
+Usage: python -m scripts.clean_posts_data
 """
 import json
 from datetime import datetime
