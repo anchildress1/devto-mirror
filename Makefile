@@ -24,7 +24,6 @@ test:  ## Run unit tests
 lint:  ## Run linting checks (formatting, linting, security)
 	uv run isort --check-only --profile black --line-length 120 src/ tests/ scripts/
 	uv run flake8 src/ tests/ scripts/
-	uv run detect-secrets scan --baseline .secrets.baseline
 	uv run python scripts/validate_site_generation.py
 
 format:  ## Format code with Black
@@ -39,6 +38,7 @@ prechecks-full:  ## Run full prechecks across the repo (force full run)
 security:  ## Run security checks
 	uv run bandit -r scripts src/ -ll -iii
 	uv run pip-audit --progress-spinner=off --skip-editable
+	uv run python scripts/check_detect_secrets.py
 
 check-complexity:  ## Check cognitive complexity (max 15)
 	@echo "🔍 Checking cognitive complexity (max 15)..."

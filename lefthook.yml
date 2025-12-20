@@ -13,7 +13,7 @@ pre-commit:
       run: uv run isort {staged_files}
       stage_fixed: true
     detect-secrets:
-      run: uv run detect-secrets scan --baseline .secrets.baseline
+      run: uv run python scripts/check_detect_secrets.py
     validate-site:
       run: uv run python scripts/validate_site_generation.py
 
