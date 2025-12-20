@@ -133,7 +133,7 @@ def _fetch_full_articles(articles):
     }
 
     # Add API key if available for higher rate limits
-    api_key = os.getenv("DEVTO_API_KEY")
+    api_key = os.getenv("DEVTO_KEY")
     if api_key:
         headers["api-key"] = api_key
 

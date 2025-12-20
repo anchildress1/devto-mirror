@@ -3,7 +3,7 @@
 # Prefer the project's venv python if present, otherwise fall back to system `python`.
 PYTHON := $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python)
 
-.PHONY: help test lint format install clean check ai-checks security
+.PHONY: help install test lint format clean check ai-checks security
 .PHONY: check-complexity
 
 help:  ## Show this help message
@@ -12,16 +12,19 @@ help:  ## Show this help message
 
 install:  ## Install development dependencies
 	uv sync --locked --group dev
-	# Ensure pre-commit is executed via uv so we use the pinned dev toolchain
-	uv run pre-commit install
+	# Ensure lefthook is executed via uv so we use the pinned dev toolchain
+	uv run lefthook install
 
 test:  ## Run unit tests
-	uv run coverage run --source src,scripts -m unittest discover -s tests -p 'test_*.py'
+	uv run coverage run --source src -m unittest discover -s tests -p 'test_*.py'
 	uv run coverage report --fail-under=80
 	uv run coverage html
 
-lint:  ## Run pre-commit checks (formatting, linting, security)
-	uv run pre-commit run --all-files
+lint:  ## Run linting checks (formatting, linting, security)
+	uv run isort --check-only --profile black --line-length 120 src/ tests/ scripts/
+	uv run flake8 src/ tests/ scripts/
+	uv run detect-secrets scan --baseline .secrets.baseline
+	uv run python scripts/validate_site_generation.py
 
 format:  ## Format code with Black
 	uv run black src/ tests/ scripts/ --line-length 120
@@ -34,7 +37,7 @@ prechecks-full:  ## Run full prechecks across the repo (force full run)
 
 security:  ## Run security checks
 	uv run bandit -r scripts src/ -ll -iii
-	uv run pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-wj6h-64fc-37mp --ignore-vuln GHSA-7f5h-v6xp-fcq8
+	uv run pip-audit --progress-spinner=off --skip-editable
 
 check-complexity:  ## Check cognitive complexity (max 15)
 	@echo "🔍 Checking cognitive complexity (max 15)..."
@@ -56,5 +59,10 @@ clean:  ## Clean up generated files
 	rm -rf htmlcov/
 	rm -rf .coverage
 	rm -rf __pycache__/
+	rm -rf .mypy_cache/
+	rm -rf .pytest_cache/
+	rm -rf src/devto_mmirror.egg-info/
+	rm -rf dist/
+	rm -rf build/
 	find . -name "*.pyc" -delete
 	find . -name "__pycache__" -type d -exec rm -rf {} +

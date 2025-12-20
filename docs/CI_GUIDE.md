@@ -78,7 +78,7 @@ This workflow deploys to a single location:
 
 - `DEVTO_USERNAME`: Repository variable (required) - Your Dev.to username
 - `GH_USERNAME`: Repository variable (required) - Your GitHub username for Pages URLs
-- `DEVTO_API_KEY`: Repository secret (optional for public content, required for private/draft posts)
+- `DEVTO_KEY`: Repository secret (optional for public content, required for private/draft posts)
 - `PAGES_REPO`: Auto-derived from `github.repository`
 - `GITHUB_TOKEN`: Auto-provided for Pages deployment
 - `FORCE_FULL_REGEN`: Passed from workflow_dispatch input to force full site regeneration

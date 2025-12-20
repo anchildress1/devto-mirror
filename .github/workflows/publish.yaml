@@ -6,7 +6,7 @@ name: Generate and Publish Dev.to Mirror Site
 #   - Used for constructing GitHub Pages URLs
 #
 # Optional repository secrets:
-# - DEVTO_API_KEY: Dev.to API key (optional for public content, required for private/draft posts)
+# - DEVTO_KEY: Dev.to API key (optional for public content, required for private/draft posts)
 
 on:
   schedule:
@@ -46,7 +46,7 @@ jobs:
     env:
       DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
       GH_USERNAME: ${{ vars.GH_USERNAME }}
-      DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+      DEVTO_KEY: ${{ secrets.DEVTO_KEY }}
     steps:
       - uses: actions/checkout@v6
         with:

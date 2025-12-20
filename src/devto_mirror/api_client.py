@@ -27,7 +27,7 @@ def create_devto_session() -> requests.Session:
     Environment Variables:
         CI: Set to "true" to indicate CI environment
         GITHUB_ACTIONS: Set to "true" to indicate GitHub Actions
-        DEVTO_API_KEY: Optional API key for higher rate limits
+        DEVTO_KEY: Optional API key for higher rate limits
 
     Returns:
         Configured requests.Session with appropriate headers
@@ -42,7 +42,7 @@ def create_devto_session() -> requests.Session:
         "Accept": "application/vnd.forem.api-v1+json",
     }
 
-    api_key = os.getenv("DEVTO_API_KEY")
+    api_key = os.getenv("DEVTO_KEY")
     if api_key:
         headers["api-key"] = api_key
 

@@ -1,1 +1,3 @@
-[See AGENTS.md](../AGENTS.md)
+- [See AGENTS.md](../AGENTS.md) for all instructions in this repo.
+- Use [./docs/AGENTS.md](../docs/AGENTS.md) for all documentation.
+- Use [./.github/workflows/AGENTS.md](./workflows/AGENTS.md) for any GHA file.
