@@ -9,6 +9,9 @@ venv/
 .venv/
 .env
 !.env.example
+*.egg-info/
+dist/
+build/
 
 # Test files
 test_incremental_temp/

@@ -6,11 +6,16 @@ name: Generate and Publish Dev.to Mirror Site
 #   - Used for constructing GitHub Pages URLs
 #
 # Optional repository secrets:
-# - DEVTO_API_KEY: Dev.to API key (optional for public content, required for private/draft posts)
+# - DEVTO_KEY: Dev.to API key (optional for public content, required for private/draft posts)
 
 on:
   schedule:
     - cron: "40 14 * * 3"  # At 9:40 AM EST every Wednesday
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/publish.yaml'
   workflow_dispatch:
     inputs:
       force_full_regen:
@@ -41,11 +46,29 @@ jobs:
     env:
       DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
       GH_USERNAME: ${{ vars.GH_USERNAME }}
-      DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+      DEVTO_KEY: ${{ secrets.DEVTO_KEY }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Restore last run timestamp
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code origin gh-pages >/dev/null 2>&1; then
+            git fetch origin gh-pages --depth=1
+            if git show origin/gh-pages:last_run.txt >/dev/null 2>&1; then
+              TIMESTAMP=$(git show origin/gh-pages:last_run.txt)
+              echo "$TIMESTAMP" > last_run.txt
+              echo "🔄 Restored last_run.txt from gh-pages: \`$TIMESTAMP\`" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ last_run.txt not found on gh-pages branch" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "🆕 gh-pages branch does not exist yet; skipping last_run restore" >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v7
@@ -75,7 +98,7 @@ jobs:
           echo "## 🏗️ Site Generation" >> $GITHUB_STEP_SUMMARY
           echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Repo: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
-          make generate-site
+          uv run python scripts/generate_site.py
           echo "✅ Generated" >> $GITHUB_STEP_SUMMARY
 
       - name: Validate generated site
@@ -119,6 +142,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_deploy
           publish_branch: gh-pages
+          keep_files: true
           force_orphan: false
           user_name: ci-bot
           user_email: actions@users.noreply.github.com

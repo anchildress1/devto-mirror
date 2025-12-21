@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Site generation validation script for pre-commit checks.
+Site generation validation script for lefthook checks.
 Tests that generate_site.py can run without errors in a dry-run mode.
 """
 

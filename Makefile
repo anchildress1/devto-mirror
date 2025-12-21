@@ -3,8 +3,8 @@
 # Prefer the project's venv python if present, otherwise fall back to system `python`.
 PYTHON := $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python)
 
-.PHONY: help test test-coverage lint format install clean check validate security
-.PHONY: test-crawler analyze-crawlers check-complexity
+.PHONY: help install test lint format clean check ai-checks security
+.PHONY: check-complexity
 
 help:  ## Show this help message
 	@echo "Available commands:"
@@ -12,19 +12,19 @@ help:  ## Show this help message
 
 install:  ## Install development dependencies
 	uv sync --locked --group dev
-	# Ensure pre-commit is executed via uv so we use the pinned dev toolchain
-	uv run pre-commit install
+	# Ensure lefthook is executed via uv so we use the pinned dev toolchain
+	# Skip lefthook installation in CI environments (GITHUB_ACTIONS, CI)
+	@if [ -z "$$CI$$GITHUB_ACTIONS" ]; then uv run lefthook install; fi
 
 test:  ## Run unit tests
-	uv run python -m unittest discover -s tests -p 'test_*.py'
-
-test-coverage:  ## Run tests with coverage report
-	uv run coverage run -m unittest discover -s tests -p 'test_*.py'
-	uv run coverage report
+	uv run coverage run --source src -m unittest discover -s tests -p 'test_*.py'
+	uv run coverage report --fail-under=80
 	uv run coverage html
 
-lint:  ## Run pre-commit checks (formatting, linting, security)
-	uv run pre-commit run --all-files
+lint:  ## Run linting checks (formatting, linting, security)
+	uv run isort --check-only --profile black --line-length 120 src/ tests/ scripts/
+	uv run flake8 src/ tests/ scripts/
+	uv run python scripts/validate_site_generation.py
 
 format:  ## Format code with Black
 	uv run black src/ tests/ scripts/ --line-length 120
@@ -37,7 +37,8 @@ prechecks-full:  ## Run full prechecks across the repo (force full run)
 
 security:  ## Run security checks
 	uv run bandit -r scripts src/ -ll -iii
-	uv run pip-audit --progress-spinner=off --skip-editable --ignore-vuln GHSA-4xh5-x5gv-qwph --ignore-vuln GHSA-wj6h-64fc-37mp --ignore-vuln GHSA-7f5h-v6xp-fcq8
+	uv run pip-audit --progress-spinner=off --skip-editable
+	uv run python scripts/check_detect_secrets.py
 
 check-complexity:  ## Check cognitive complexity (max 15)
 	@echo "🔍 Checking cognitive complexity (max 15)..."
@@ -45,42 +46,24 @@ check-complexity:  ## Check cognitive complexity (max 15)
 		echo "❌ Functions with complexity >15 found. See docs/COMPLEXITY_REFACTORING.md" && exit 1 || \
 		echo "✅ All functions within complexity limits"
 
-validate-site:  ## Validate site generation script
-	uv run python scripts/validate_site_generation.py
-
-generate-site:  ## Generate the site locally (creates HTML files in posts/)
-	uv run python scripts/generate_site.py
-
-# Crawler testing helpers
-test-crawler:  ## Run crawler access test script. Provide BASE_URL as environment variable if needed.
-	uv run python scripts/test_crawler_access.py $(BASE_URL)
-
-analyze-crawlers:  ## Run GitHub Pages crawler analysis. Provide BASE_URL as an environment variable if needed.
-	uv run python scripts/analyze_github_pages_crawlers.py $(BASE_URL)
-
-check-imports:  ## Check for missing dependencies by running a dry-run of the site generator
-	VALIDATION_MODE=true uv run python scripts/generate_site.py
-
-validate:  ## Single command: format → lint → security → complexity → test + site (POC ready)
+ai-checks:  ## Single command: format → lint → security → complexity → test + site (POC ready)
 	@set -e; \
-	echo "🔍 format → lint → security → complexity → test..."; \
+	echo "🔍 format → lint → security → complexity → test"; \
 	$(MAKE) format && echo "  ✓ format" || (echo "  ✗ format"; exit 1); \
 	$(MAKE) lint && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
 	$(MAKE) security && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
 	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ⚠ complexity (see docs/COMPLEXITY_REFACTORING.md)"; exit 0); \
 	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
-	$(MAKE) check-imports && echo "  ✓ imports" || (echo "  ✗ imports"; exit 1); \
-	$(MAKE) validate-site && echo "  ✓ site" || (echo "  ✗ site"; exit 1); \
 	echo "✅ Ready to commit."
-
-check: validate  ## Alias for validate
 
 clean:  ## Clean up generated files
 	rm -rf htmlcov/
 	rm -rf .coverage
 	rm -rf __pycache__/
+	rm -rf .mypy_cache/
+	rm -rf .pytest_cache/
+	rm -rf src/devto_mirror.egg-info/
+	rm -rf dist/
+	rm -rf build/
 	find . -name "*.pyc" -delete
 	find . -name "__pycache__" -type d -exec rm -rf {} +
-
-# Quick aliases
-coverage: test-coverage  ## Alias for test-coverage

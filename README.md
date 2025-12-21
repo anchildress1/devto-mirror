@@ -27,13 +27,13 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 
 [![GitHub License](https://img.shields.io/badge/license-Polyform_Shield_1.0.0-yellow?style=for-the-badge)](./LICENSE) ![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge) ![Repo Size](https://img.shields.io/github/repo-size/anchildress1/devto-mirror?style=for-the-badge) ![Last Commit](https://img.shields.io/github/last-commit/anchildress1/devto-mirror?style=for-the-badge)
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/publish.yaml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Publish%20Dev.to%20Mirror%20Site&color=brightgreen)](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml) [![CodeQL Analysis](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/codeql.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=CodeQL%20Analysis&color=brightgreen)](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml) [![Security and Lint CI](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/security-ci.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Security%20and%20Quality%20CI&color=brightgreen)](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/publish.yaml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Publish%20Dev.to%20Mirror%20Site)](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml) [![CodeQL Analysis](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/codeql.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=CodeQL%20Analysis)](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml) [![Security and Lint CI](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/security-ci.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Security%20and%20Quality%20CI)](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml)
 
 ![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Fdevto-mirror%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.project.requires-python&style=for-the-badge&logo=python&logoColor=fff&label=Python&color=3776AB) ![uv Badge](https://img.shields.io/badge/uv-DE5FE9?logo=uv&logoColor=fff&style=for-the-badge) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=for-the-badge) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=for-the-badge)
 
 ![Verdent Badge](https://img.shields.io/badge/Verdent-00D486?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VmVyZGVudDwvdGl0bGU+CjxwYXRoIGQ9Ik0xNy42IDkuOUMxNy42IDEyLjEgMTYuOCAxNC4yIDE1LjQgMTUuN0wxNS4xIDE2QzEzLjcgMTcuNSAxMi44IDE5LjYgMTIuOCAyMS44QzEyLjggMjIuNSAxMi45IDIzLjIgMTMuMSAyMy45QzEwLjcgMjIuOSA4LjggMjAuOSA4IDE4LjRDNy44IDE3LjYgNy43IDE2LjggNy43IDE2QzcuNyAxMy44IDguNSAxMS44IDkuOCAxMC4zTDE1LjMgNEMxNi4yIDUgMTYuOSA2LjEgMTcuMyA3LjVDMTcuNSA4LjIgMTcuNiA5IDE3LjYgOS45WiIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNMTQuMyAyMi43QzE0LjMgMjAuNSAxNS4xIDE4LjQgMTYuNSAxNi45TDE2LjggMTYuNkMxOC4yIDE1LjEgMTkuMSAxMyAxOS4xIDEwLjhDMTkuMSAxMCAxOSA5LjQgMTguOCA4LjdDMjEuMiA5LjcgMjMuMSAxMS43IDIzLjkgMTQuMkMyNCAxNSAyNC4yIDE1LjggMjQuMiAxNi42QzI0LjIgMTguOCAyMy40IDIwLjggMjIuMSAyMi4zTDE2LjYgMjguNkMxNS43IDI3LjYgMTUgMjYuNSAxNC42IDI1LjFDMTQuNCAyNC4zIDE0LjMgMjMuNSAxNC4zIDIyLjdaIiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==) ![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=for-the-badge)
 
-![Conventional Commits Badge](https://img.shields.io/badge/Conventional%20Commits-FE5196?logo=conventionalcommits&logoColor=fff&style=for-the-badge) ![pre-commit Badge](https://img.shields.io/badge/pre--commit-FAB040?logo=precommit&logoColor=fff&style=for-the-badge) ![Dependabot Badge](https://img.shields.io/badge/Dependabot-025E8C?logo=dependabot&logoColor=fff&style=for-the-badge)
+![Conventional Commits Badge](https://img.shields.io/badge/Conventional%20Commits-FE5196?logo=conventionalcommits&logoColor=fff&style=for-the-badge) ![Lefthook Badge](https://img.shields.io/badge/Lefthook-FF1E1E?logo=lefthook&logoColor=fff&style=for-the-badge) ![Dependabot Badge](https://img.shields.io/badge/Dependabot-025E8C?logo=dependabot&logoColor=fff&style=for-the-badge)
 
  [![BuyMeACoffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black&style=for-the-badge)](https://www.buymeacoffee.com/anchildress1) [![dev.to Badge](https://img.shields.io/badge/dev.to-0A0A0A?logo=devdotto&logoColor=fff&style=for-the-badge)](https://dev.to/anchildress1) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin\&logoColor=white&style=for-the-badge)](https://www.linkedin.com/in/anchildress1/) [![Medium](https://img.shields.io/badge/Medium-000?logo=medium&logoColor=fff&style=for-the-badge)](https://medium.com/@anchildress1) [![Reddit Badge](https://img.shields.io/badge/Reddit-FF4500?logo=reddit&logoColor=fff&style=for-the-badge)](https://www.reddit.com/user/anchildress1/)
 
@@ -48,7 +48,7 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
   - `DEVTO_USERNAME` – your Dev.to username
   - `GH_USERNAME` – your GitHub username
 3. **(Optional) Set API key** (Settings → Actions → Secrets):
-  - `DEVTO_API_KEY` – for private/draft posts
+  - `DEVTO_KEY` – for private/draft posts
 4. **Delete** `gh-pages` branch if it exists
 5. **Update** `comments.txt` file (or delete it completely)
 6. **Run workflow** Actions → [Generate and Publish Dev.to Mirror Site](https://github.com/1nchildress1/devto-mirror/actions) → Run workflow
@@ -80,7 +80,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # Or update to latest version
 uv self --no-python-downloads update
 
-# Install dependencies and pre-commit hooks
+# Install dependencies and lefthook hooks
 make install
 
 # Configure environment
@@ -88,10 +88,7 @@ cp .env.example .env
 # Edit .env with your DEVTO_USERNAME and GH_USERNAME
 
 # Run validation
-make validate
-
-# Generate site (optional for local testing)
-make generate-site
+make ai-checks
 ```
 
 ## Documentation 📚

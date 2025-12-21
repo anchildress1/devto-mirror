@@ -20,7 +20,6 @@ dev = [
     "bandit>=1.8.0",
     "pip-audit>=2.0.0",
     "flake8>=6.1.0",
-    "pre-commit>=4.3.0",
     "gitlint>=0.16.0",
     "detect-secrets>=1.0.0",
     "black>=24.0.0",
@@ -44,6 +43,12 @@ target-version = ['py312']
 [tool.isort]
 profile = "black"
 line_length = 120
+
+[tool.flake8]
+max-line-length = 120
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "htmlcov"]
 
 [tool.coverage.run]
 source = ["src", "scripts"]

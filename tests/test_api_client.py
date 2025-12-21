@@ -46,12 +46,12 @@ class TestCreateDevtoSession(unittest.TestCase):
 
         self.assertEqual(self.session.headers["User-Agent"], "DevTo-Mirror-Bot/1.0 (GitHub-Actions)")
 
-    @patch.dict("os.environ", {"DEVTO_API_KEY": "test-api-key-123"}, clear=True)
+    @patch.dict("os.environ", {"DEVTO_KEY": "not-a-real-thing"}, clear=True)
     def test_includes_api_key_when_provided(self):
         """Test that API key is included in headers when env var is set."""
         self.session = create_devto_session()
 
-        self.assertEqual(self.session.headers["api-key"], "test-api-key-123")
+        self.assertEqual(self.session.headers["api-key"], "not-a-real-thing")
 
     @patch.dict("os.environ", {}, clear=True)
     def test_no_api_key_when_not_provided(self):

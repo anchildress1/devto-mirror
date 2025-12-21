@@ -25,7 +25,7 @@ Tests whether major search engine crawlers can access the site by simulating dif
 
 ```bash
 # Use the Makefile helper which runs the script via uv. Optionally pass BASE_URL env var.
-make test-crawler BASE_URL=https://your-site.example
+BASE_URL=https://your-site.example uv run python scripts/test_crawler_access.py
 ```
 
 **Output:**
@@ -47,7 +47,8 @@ Analyzes GitHub Pages deployment for crawler restrictions and compares with robo
 
 ```bash
 # Use the Makefile helper which runs the analysis via uv. Optionally pass BASE_URL env var.
-make analyze-crawlers BASE_URL=https://your-site.example
+BASE_URL=https://your-site.example
+uv run python scripts/analyze_github_pages_crawlers.py
 ```
 
 **Output:**
@@ -106,18 +107,6 @@ This implementation satisfies the following requirements:
 - **Requirement 2.4:** IF GitHub Pages blocks any crawlers from accessing content, THEN THE Deployment_Platform SHALL be migrated to an alternative service
 
 **Result:** No migration needed - GitHub Pages allows unrestricted crawler access.
-
-## Usage in CI/CD
-
-These scripts can be integrated into GitHub Actions workflows for continuous monitoring:
-
-```yaml
-- name: Test Crawler Access
-  run: make test-crawler
-
-- name: Analyze GitHub Pages Restrictions
-  run: make analyze-crawlers
-```
 
 ## Future Monitoring
 

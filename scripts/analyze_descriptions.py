@@ -12,14 +12,10 @@ Usage:
 If no file is specified, defaults to posts_data.json
 """
 import json
-import pathlib
 import sys
 from pathlib import Path
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-
-from scripts.constants import (
+from .constants import (
     POSTS_DATA_FILE,
     SEO_DESCRIPTION_LIMIT,
     SEO_DESCRIPTION_WARNING,

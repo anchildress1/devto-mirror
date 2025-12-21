@@ -78,7 +78,7 @@ This workflow deploys to a single location:
 
 - `DEVTO_USERNAME`: Repository variable (required) - Your Dev.to username
 - `GH_USERNAME`: Repository variable (required) - Your GitHub username for Pages URLs
-- `DEVTO_API_KEY`: Repository secret (optional for public content, required for private/draft posts)
+- `DEVTO_KEY`: Repository secret (optional for public content, required for private/draft posts)
 - `PAGES_REPO`: Auto-derived from `github.repository`
 - `GITHUB_TOKEN`: Auto-provided for Pages deployment
 - `FORCE_FULL_REGEN`: Passed from workflow_dispatch input to force full site regeneration
@@ -89,13 +89,13 @@ This workflow deploys to a single location:
 
 #### CRITICAL: uv and Makefile Integration
 
-This workflow uses `uv` for dependency management and runs `make check` for validation. A common mistake is calling `uv run make check`, which causes failures.
+This workflow uses `uv` for dependency management and runs `make ai-checks` for validation. A common mistake is calling `uv run make ai-checks`, which causes failures.
 
 ❌ **WRONG** (causes "No such file or directory" errors):
 
 ```yaml
 - name: Run validation
-  run: uv run make check
+  run: uv run make ai-checks
 ```
 
 ✅ **CORRECT**:
@@ -105,7 +105,7 @@ This workflow uses `uv` for dependency management and runs `make check` for vali
   run: uv sync --locked --group dev
 
 - name: Run validation
-  run: make check
+  run: make ai-checks
 ```
 
 **Why this matters**: The Makefile targets already use `uv run` internally for all tools (black, flake8, bandit, etc.). Calling `uv run make` creates a nested `uv run` context where the inner commands fail to find executables.
@@ -298,16 +298,16 @@ make[1]: *** [Makefile:30: format] Error 2
 
 ```yaml
 # Before (broken)
-- run: uv run make check
+- run: uv run make ai-checks
 
 # After (fixed)
-- run: make check
+- run: make ai-checks
 ```
 
 **Explanation**: The Makefile already wraps tool invocations with `uv run`. The workflow only needs to:
 
 1. Run `uv sync --locked --group dev` to install dependencies
-2. Call Makefile targets directly (e.g., `make check`, `make test`)
+2. Call Makefile targets directly (e.g., `make ai-checks`, `make test`)
 
 Double-wrapping with `uv run make` breaks the execution context.
 
@@ -322,7 +322,7 @@ Double-wrapping with `uv run make` breaks the execution context.
   run: uv sync --locked --group dev
 
 - name: Run checks
-  run: make validate
+  run: make ai-checks
 ```
 
 ### Issue: Workflow output too verbose
@@ -334,7 +334,7 @@ Double-wrapping with `uv run make` breaks the execution context.
 - name: Run validation
   run: |
     echo "## 🔍 Validation Results" >> $GITHUB_STEP_SUMMARY
-    make check
+    make ai-checks
     echo "✅ All checks passed" >> $GITHUB_STEP_SUMMARY
 ```
 
@@ -355,11 +355,11 @@ Double-wrapping with `uv run make` breaks the execution context.
 ```yaml
 # ✅ CORRECT - Call make directly
 - name: Run validation
-  run: make check
+  run: make ai-checks
 
 # ❌ WRONG - Do NOT wrap in uv run
 - name: Run validation
-  run: uv run make check  # This will fail!
+  run: uv run make ai-checks  # This will fail!
 ```
 
 **Running Python scripts directly:**
@@ -371,13 +371,13 @@ Double-wrapping with `uv run make` breaks the execution context.
 
 # ✅ CORRECT - Or use make targets that wrap them
 - name: Generate site
-  run: make generate-site
+  run: make ai-checks
 ```
 
 **Summary:**
 
 - After `uv sync --locked`, the environment is ready
-- Makefile targets = call directly (e.g., `make test`, `make check`)
+- Makefile targets = call directly (e.g., `make test`, `make ai-checks`)
 - Python scripts = use `uv run python script.py` OR use make targets
 - Never nest: `uv run make` is always wrong
 
