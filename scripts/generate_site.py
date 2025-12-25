@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 from jinja2 import Environment, select_autoescape
 from slugify import slugify
 
+from devto_mirror.html_sanitization import sanitize_html_content
 from scripts.constants import POSTS_DATA_FILE
 from scripts.path_utils import sanitize_filename, sanitize_slug, validate_safe_path
 from scripts.utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link, get_post_template
@@ -339,44 +340,6 @@ def strip_html(text):
         return ""
     cleaned = bleach.clean(text, tags=[], strip=True)
     return " ".join(cleaned.split()).strip()
-
-
-def sanitize_html_content(content):
-    """
-    Basic HTML sanitization to allow common formatting tags while removing potentially harmful content.
-    Uses bleach for robust sanitization.
-    """
-    if not content:
-        return ""
-
-    allowed_tags = [
-        "p",
-        "br",
-        "strong",
-        "em",
-        "a",
-        "code",
-        "pre",
-        "blockquote",
-        "ul",
-        "ol",
-        "li",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "img",
-        "hr",
-    ]
-    allowed_attributes = {
-        "a": ["href"],
-        # allow width/height/loading so we can avoid CLS and improve Lighthouse scores
-        "img": ["src", "alt", "width", "height", "style", "class", "title", "loading"],
-    }
-
-    return bleach.clean(content, tags=allowed_tags, attributes=allowed_attributes)
 
 
 def ensure_img_dimensions(content: str, cover_src: str | None = None) -> str:
