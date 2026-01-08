@@ -220,6 +220,7 @@ def fetch_all_articles_from_api(last_run_iso=None):
     """Public API that returns full-article objects after pagination.
     Delegates to smaller helpers to keep complexity low.
     """
+    # Testing hook: allow forcing an empty feed without hitting the network
     if os.getenv("DEVTO_MIRROR_FORCE_EMPTY_FEED", "").lower() in ("true", "1", "yes"):
         return []
 
