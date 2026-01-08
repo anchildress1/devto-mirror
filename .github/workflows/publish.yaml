@@ -91,6 +91,7 @@ jobs:
         run: make install
 
       - name: Generate site
+        id: generate
         env:
           PAGES_REPO: ${{ github.repository }}
           FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}
@@ -102,18 +103,21 @@ jobs:
           echo "✅ Generated" >> $GITHUB_STEP_SUMMARY
 
       - name: Validate generated site
+        if: steps.generate.outputs.no_new_posts != 'true'
         run: |
           echo "## ✅ Site Validation" >> $GITHUB_STEP_SUMMARY
           uv run python scripts/validate_site_generation.py
           echo "✅ Validation passed" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate sitemap and index
+        if: steps.generate.outputs.no_new_posts != 'true'
         run: |
           echo "## 📄 Generating Sitemap" >> $GITHUB_STEP_SUMMARY
           uv run python scripts/render_index_sitemap.py
           echo "✅ Sitemap generated" >> $GITHUB_STEP_SUMMARY
 
       - name: Prepare deployment directory
+        if: steps.generate.outputs.no_new_posts != 'true'
         env:
           GH_USERNAME: ${{ vars.GH_USERNAME }}
         run: |
@@ -136,6 +140,7 @@ jobs:
           sed "s|{root_home}|$SITE_HOME|g" assets/llms.txt > _deploy/llms.txt
 
       - name: Deploy to gh-pages
+        if: steps.generate.outputs.no_new_posts != 'true'
         timeout-minutes: 5
         uses: peaceiris/actions-gh-pages@v4
         with:
