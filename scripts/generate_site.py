@@ -191,8 +191,6 @@ def _fetch_full_article_json(
             print(f"  ❌ Request error for article {article_id}: {e}")
             return None
 
-    return None
-
 
 def _fetch_full_articles(articles):
     """Fetch full article content for each article (needed for body_html).
