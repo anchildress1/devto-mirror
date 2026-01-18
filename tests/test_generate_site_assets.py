@@ -64,7 +64,15 @@ class TestGenerateSiteAssets(unittest.TestCase):
         restore_or_remove(self._robots_backup, self.robots_path)
         restore_or_remove(self._llms_backup, self.llms_path)
         # Best-effort cleanup of generated artifacts
-        for fname in ("robots.txt", "llms.txt", "index.html", "sitemap.xml", "posts_data.json", "last_run.txt"):
+        for fname in (
+            "robots.txt",
+            "llms.txt",
+            "index.html",
+            "sitemap.xml",
+            "posts_data.json",
+            "last_run.txt",
+            "no_new_posts.flag",
+        ):
             path = os.path.join(ROOT, fname)
             if os.path.exists(path):
                 os.remove(path)  # Best-effort cleanup
@@ -81,6 +89,7 @@ class TestGenerateSiteAssets(unittest.TestCase):
         # environment configuration when spawning the generator subprocess.
         test_env = {
             "DEVTO_USERNAME": "testuser",
+            "GH_USERNAME": "testuser",
             "PAGES_REPO": "testuser/repo",
             # Use validation mode to avoid network calls
             "VALIDATION_MODE": "true",
@@ -136,6 +145,18 @@ class TestGenerateSiteAssets(unittest.TestCase):
                 os.rename(tmp_r, self.robots_path)
             if tmp_l:
                 os.rename(tmp_l, self.llms_path)
+
+    def test_no_new_posts_short_circuits_gracefully(self):
+        res = self._run_generate(
+            {
+                "DEVTO_MIRROR_FORCE_EMPTY_FEED": "true",
+                # Disable validation mode so the empty feed path is exercised without network calls
+                "VALIDATION_MODE": "false",
+            }
+        )
+        self.assertEqual(res.returncode, 0, msg=f"Generator failed on empty feed: {res.stderr.decode()}")
+        marker_path = Path(ROOT) / "no_new_posts.flag"
+        self.assertTrue(marker_path.exists(), "No-new-posts marker should be created")
 
 
 if __name__ == "__main__":

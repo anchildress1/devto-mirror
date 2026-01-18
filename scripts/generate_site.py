@@ -36,6 +36,7 @@ load_dotenv()
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 GH_USERNAME = os.getenv("GH_USERNAME", "").strip()
 LAST_RUN_FILE = "last_run.txt"
+NO_NEW_POSTS_FILE = "no_new_posts.flag"
 VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes")
 
 if not VALIDATION_MODE:
@@ -76,6 +77,22 @@ def set_last_run_timestamp():
     """Writes the current UTC timestamp to the run file."""
     p = pathlib.Path(LAST_RUN_FILE)
     p.write_text(datetime.now(timezone.utc).isoformat(), encoding="utf-8")
+
+
+def mark_no_new_posts():
+    """Create marker file and emit GitHub Actions output for no-op runs."""
+    marker_path = pathlib.Path(NO_NEW_POSTS_FILE)
+    marker_path.write_text("true", encoding="utf-8")
+
+    gh_output = os.getenv("GITHUB_OUTPUT")
+    if gh_output:
+        with open(gh_output, "a", encoding="utf-8") as fh:
+            fh.write("no_new_posts=true\n")
+
+    summary_file = os.getenv("GITHUB_STEP_SUMMARY")
+    if summary_file:
+        with open(summary_file, "a", encoding="utf-8") as summary:
+            summary.write("⚠️ No new posts found since last run. Skipping generation.\n")
 
 
 def _fetch_article_pages(last_run_iso=None):
@@ -203,6 +220,11 @@ def fetch_all_articles_from_api(last_run_iso=None):
     """Public API that returns full-article objects after pagination.
     Delegates to smaller helpers to keep complexity low.
     """
+    # Testing hook (for test suites/local development only; do not enable in production):
+    # allows forcing an empty feed without hitting the network.
+    if os.getenv("DEVTO_MIRROR_FORCE_EMPTY_FEED", "").lower() in ("true", "1", "yes"):
+        return []
+
     if VALIDATION_MODE:
         # Return mock data for validation
         # Uncomment the next line to test validation failure detection:
@@ -595,7 +617,8 @@ if not new_posts:
     print("No new posts to process. Exiting.")
     # Still update the timestamp to avoid re-checking the same period
     set_last_run_timestamp()
-    exit()
+    mark_no_new_posts()
+    sys.exit(0)
 
 # Load existing posts from previous runs
 existing_posts_data = load_existing_posts()
