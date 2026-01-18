@@ -140,18 +140,11 @@ def _fetch_article_pages(last_run_iso=None):
     return articles
 
 
-def _fetch_full_articles(articles):
-    """Fetch full article content for each article (needed for body_html).
-    Kept separate so the pagination implementation remains easy to reason about.
-    """
-    print(f"Found {len(articles)} articles, fetching full content...")
-    full_articles = []
-    failed_articles = []
+def _is_ci_environment() -> bool:
+    return os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
 
-    # Detect CI environment and adjust settings
-    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
 
-    # Create a session for connection reuse with V1 API
+def _create_devto_v1_session(*, is_ci: bool) -> requests.Session:
     session = requests.Session()
     headers = {
         "User-Agent": "DevTo-Mirror-Bot/1.0 (GitHub-Actions)" if is_ci else "DevTo-Mirror-Bot/1.0",
@@ -164,35 +157,59 @@ def _fetch_full_articles(articles):
         headers["api-key"] = api_key
 
     session.headers.update(headers)
+    return session
+
+
+def _fetch_full_article_json(
+    session: requests.Session,
+    *,
+    article_id: int,
+    max_retries: int = 3,
+    timeout: int = 30,
+    initial_retry_delay: int = 2,
+) -> dict | None:
+    retry_delay = initial_retry_delay
+    for attempt in range(max_retries):
+        try:
+            full_response = session.get(f"https://dev.to/api/articles/{article_id}", timeout=timeout)
+            full_response.raise_for_status()
+            return full_response.json()
+        except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
+            if attempt < max_retries - 1:
+                print(f"  ⚠️  Timeout/connection error on attempt {attempt + 1}, " f"retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
+                retry_delay *= 2  # Exponential backoff
+                continue
+            print(f"  ❌ Failed to fetch article {article_id} after {max_retries} attempts: {e}")
+            return None
+        except requests.exceptions.RequestException as e:
+            print(f"  ❌ Request error for article {article_id}: {e}")
+            return None
+
+
+def _fetch_full_articles(articles):
+    """Fetch full article content for each article (needed for body_html).
+    Kept separate so the pagination implementation remains easy to reason about.
+    """
+    print(f"Found {len(articles)} articles, fetching full content...")
+    full_articles = []
+    failed_articles = []
+
+    # Detect CI environment and adjust settings
+    is_ci = _is_ci_environment()
+
+    # Create a session for connection reuse with V1 API
+    session = _create_devto_v1_session(is_ci=is_ci)
 
     for i, article in enumerate(articles):
         print(f"Fetching full content for article {i + 1}/{len(articles)}: {article.get('title')}")
 
-        # Retry logic for individual article fetching
-        max_retries = 3
-        retry_delay = 2
-        timeout = 30
-
-        for attempt in range(max_retries):
-            try:
-                full_response = session.get(f"https://dev.to/api/articles/{article['id']}", timeout=timeout)
-                full_response.raise_for_status()
-                full_articles.append(full_response.json())
-                break
-
-            except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
-                if attempt < max_retries - 1:
-                    print(f"  ⚠️  Timeout/connection error on attempt {attempt + 1}, retrying in {retry_delay}s...")
-                    time.sleep(retry_delay)
-                    retry_delay *= 2  # Exponential backoff
-                else:
-                    print(f"  ❌ Failed to fetch article {article['id']} after {max_retries} attempts: {e}")
-                    failed_articles.append(article)
-
-            except requests.exceptions.RequestException as e:
-                print(f"  ❌ Request error for article {article['id']}: {e}")
-                failed_articles.append(article)
-                break
+        article_id = int(article.get("id") or 0)
+        full = _fetch_full_article_json(session, article_id=article_id)
+        if full is None:
+            failed_articles.append(article)
+        else:
+            full_articles.append(full)
 
         # Rate limiting between requests
         if i < len(articles) - 1:
@@ -208,6 +225,28 @@ def _fetch_full_articles(articles):
     return full_articles
 
 
+def _convert_cached_post_to_devto_article(item: dict) -> dict | None:
+    if not isinstance(item, dict):
+        return None
+
+    url = (item.get("url") or item.get("link") or "").strip()
+    return {
+        "id": item.get("id") or 0,
+        "title": item.get("title") or "Untitled",
+        "url": url,
+        "published_at": item.get("published_at") or item.get("date") or "",
+        "body_html": item.get("body_html") or item.get("content_html") or "",
+        "description": (item.get("description") or "").strip(),
+        "cover_image": item.get("cover_image") or "",
+        "tag_list": item.get("tag_list") or item.get("tags") or [],
+        "slug": item.get("slug") or "",
+        "user": {
+            "name": item.get("author") or "",
+            "username": DEVTO_USERNAME,
+        },
+    }
+
+
 def _try_load_cached_articles():
     """Try to load articles from cached posts_data.json as fallback."""
     try:
@@ -215,33 +254,17 @@ def _try_load_cached_articles():
             print(f"📁 Loading cached articles from {POSTS_DATA_FILE}")
             with open(POSTS_DATA_FILE, "r", encoding="utf-8") as f:
                 cached_data = json.load(f)
-                if cached_data and len(cached_data) > 0:
-                    print(f"✅ Found {len(cached_data)} cached articles")
-                    # posts_data.json stores mirror-specific keys (link/date/content_html/etc).
-                    # Convert to Dev.to API-like objects so Post() can consume them safely.
-                    converted = []
-                    for item in cached_data:
-                        if not isinstance(item, dict):
-                            continue
-                        url = (item.get("url") or item.get("link") or "").strip()
-                        converted.append(
-                            {
-                                "id": item.get("id") or 0,
-                                "title": item.get("title") or "Untitled",
-                                "url": url,
-                                "published_at": item.get("published_at") or item.get("date") or "",
-                                "body_html": item.get("body_html") or item.get("content_html") or "",
-                                "description": (item.get("description") or "").strip(),
-                                "cover_image": item.get("cover_image") or "",
-                                "tag_list": item.get("tag_list") or item.get("tags") or [],
-                                "slug": item.get("slug") or "",
-                                "user": {
-                                    "name": item.get("author") or "",
-                                    "username": DEVTO_USERNAME,
-                                },
-                            }
-                        )
-                    return converted
+
+            if cached_data:
+                print(f"✅ Found {len(cached_data)} cached articles")
+                # posts_data.json stores mirror-specific keys (link/date/content_html/etc).
+                # Convert to Dev.to API-like objects so Post() can consume them safely.
+                converted: list[dict] = []
+                for item in cached_data:
+                    converted_item = _convert_cached_post_to_devto_article(item)
+                    if converted_item is not None:
+                        converted.append(converted_item)
+                return converted
         print("❌ No cached articles available")
         return []
     except Exception as e:
@@ -399,6 +422,30 @@ def strip_html(text):
     return " ".join(cleaned.split()).strip()
 
 
+def _img_tag_has_dimensions(tag: str) -> bool:
+    # Accept either single or double quotes, and arbitrary whitespace.
+    has_width = re.search(r"\bwidth\s*=\s*(['\"])\d+\1", tag, flags=re.IGNORECASE)
+    has_height = re.search(r"\bheight\s*=\s*(['\"])\d+\1", tag, flags=re.IGNORECASE)
+    return bool(has_width and has_height)
+
+
+def _choose_img_size_for_src(*, src_val: str, cover_src: str | None) -> tuple[int, int]:
+    if cover_src and src_val and cover_src in src_val:
+        return 1000, 420
+    if "/cover" in src_val or "cover_image" in src_val:
+        return 1000, 420
+    return 800, 450
+
+
+def _add_img_dimensions_to_tag(*, tag: str, width: int, height: int) -> str:
+    updated = tag
+    if "width=" not in updated:
+        updated = updated.replace("<img", f'<img width="{width}"', 1)
+    if "height=" not in updated:
+        updated = updated.replace("<img", f'<img height="{height}"', 1)
+    return updated
+
+
 def ensure_img_dimensions(content: str, cover_src: str | None = None) -> str:
     """
     Add width/height attributes to <img> tags when missing. This helps browsers reserve
@@ -412,38 +459,17 @@ def ensure_img_dimensions(content: str, cover_src: str | None = None) -> str:
     if not content:
         return content
 
-    def _choose_size(src_val: str) -> tuple[int, int]:
-        # Decide size based on image source
-        if cover_src and src_val and cover_src in src_val:
-            return 1000, 420
-        if "/cover" in src_val or "cover_image" in src_val:
-            return 1000, 420
-        return 800, 450
-
-    def _normalize_img_tag(tag: str) -> str:
-        """Return a normalized img tag with width and height if they were missing."""
-        # Skip if already has width and height
-        if re.search(r"width\s*=\s*\"\d+\"", tag) and re.search(r"height\s*=\s*\"\d+\"", tag):
+    def _replacer(match: re.Match[str]) -> str:
+        tag = match.group(0)
+        if _img_tag_has_dimensions(tag):
             return tag
 
-        src_match = re.search(r"src\s*=\s*\"([^\"]+)\"", tag)
-        src_val = src_match.group(1) if src_match else ""
-        width, height = _choose_size(src_val)
+        src_match = re.search(r"\bsrc\s*=\s*(['\"])(.*?)\1", tag, flags=re.IGNORECASE)
+        src_val = src_match.group(2) if src_match else ""
+        width, height = _choose_img_size_for_src(src_val=src_val, cover_src=cover_src)
+        return _add_img_dimensions_to_tag(tag=tag, width=width, height=height)
 
-        # Add attributes and return updated tag; preserve existing attributes
-        if "width=" not in tag:
-            tag = tag.replace("<img", f'<img width="{width}"', 1)
-        if "height=" not in tag:
-            tag = tag.replace("<img", f'<img height="{height}"', 1)
-        return tag
-
-    # Simpler substitution approach: iterate over found tags and replace
-    tags = re.findall(r"<img[^>]*>", content, flags=re.IGNORECASE)
-    for tag in tags:
-        normalized = _normalize_img_tag(tag)
-        if normalized != tag:
-            content = content.replace(tag, normalized)
-    return content
+    return re.sub(r"<img\b[^>]*>", _replacer, content, flags=re.IGNORECASE)
 
 
 class Post:
