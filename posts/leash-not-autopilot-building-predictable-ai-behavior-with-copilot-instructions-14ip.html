@@ -37,6 +37,8 @@
 
 <meta name="article:published_time" content="2025-12-17T13:34:00Z">
 
+<meta name="article:modified_time" content="2025-12-28T00:25:05Z">
+
 <meta name="content-type" content="ai">
 
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -63,11 +65,11 @@
 
 <meta name="reading-time" content="13 minutes">
 
-<meta name="devto:reactions" content="22">
+<meta name="devto:reactions" content="24">
 
 <meta name="devto:comments" content="2">
 
-<meta name="devto:engagement_score" content="26">
+<meta name="devto:engagement_score" content="28">
 
 <meta name="content-fingerprint" content="d7e34110a9f2b284">
 
@@ -94,7 +96,7 @@
 
 
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-12-17T13:34:00Z", "datePublished": "2025-12-17T13:34:00Z", "description": "A battle-tested approach to GitHub Copilot instructions\u2014repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.", "headline": "Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions \ud83e\udea2", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 2}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 22}], "keywords": ["githubcopilot", "ai", "developertools", "productivity"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT13M", "url": "https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip", "wordCount": 3640}
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-12-28T00:25:05Z", "datePublished": "2025-12-17T13:34:00Z", "description": "A battle-tested approach to GitHub Copilot instructions\u2014repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.", "headline": "Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions \ud83e\udea2", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8pe2tgp58ngj0t3ty2ox.png%3Fv%3D2025", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 2}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 24}], "keywords": ["githubcopilot", "ai", "developertools", "productivity"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT13M", "url": "https://dev.to/anchildress1/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip", "wordCount": 3640}
 </script>
 
 <script type="application/ld+json">
@@ -164,7 +166,7 @@
 <p>Either way, hopefully someone finds it useful. Repurpose it, steal pieces of it, or ignore it entirely—and if you’ve got something I haven’t thought of yet, I want to hear about it. That’s how systems get better! 🪢</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ff5jc7iq9isyt1ujiptvt.png%3Fv%3D2025"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ff5jc7iq9isyt1ujiptvt.png%3Fv%3D2025" alt="Human-crafted, AI-edited badge" loading="lazy" width="200" height="200"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ff5jc7iq9isyt1ujiptvt.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ff5jc7iq9isyt1ujiptvt.png%3Fv%3D2025" alt="Human-crafted, AI-edited badge" loading="lazy" width="200" height="200"></a></p>
 
 
 <hr>
@@ -211,7 +213,7 @@
 <p>Here’s a snippet so you can see what I mean:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>You are an expert AI programming assistant, working with a user in the VS Code editor.
 
 When asked for your name, you must respond with "GitHub Copilot". When asked about the model you are using, you must state that you are using Grok Code Fast 1. 
@@ -224,25 +226,25 @@ You are a highly sophisticated automated coding agent with expert-level knowledg
 
 The user will ask a question, or ask you to perform a task, and it may require lots of research to answer correctly.
 
-You will be given some context and attachments along with the user prompt. You can use them if they are relevant to the task, and ignore them if not. Some attachments may be summarized with omitted sections like &lt;span class="sb"&gt;`/* Lines 123-456 omitted */`&lt;/span&gt;. 
+You will be given some context and attachments along with the user prompt. You can use them if they are relevant to the task, and ignore them if not. Some attachments may be summarized with omitted sections like <span class="sb">`/* Lines 123-456 omitted */`</span>. 
 
 If you can infer the project type (languages, frameworks, and libraries) from the user's query or the context that you have, make sure to keep them in mind when making changes.
 
 If you aren't sure which tool is relevant, you can call multiple tools. You can call tools repeatedly to take actions or gather as much context as needed until you have completed the task fully. Don't give up unless you are sure the request cannot be fulfilled with the tools you have. It's YOUR RESPONSIBILITY to make sure that you have done all you can to collect necessary context.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 <blockquote>
@@ -285,50 +287,51 @@ If you aren't sure which tool is relevant, you can call multiple tools. You can 
 <p>If you still want a copy after all the flashing warning signs, then there's a link in the README—help yourself 🫴</p>
 
 
-&lt;div class="ltag-github-readme-tag"&gt;
-  &lt;div class="readme-overview"&gt;
+<div class="ltag-github-readme-tag">
+  <div class="readme-overview">
     <h2>
       <img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fassets.dev.to%2Fassets%2Fgithub-logo-5a155e1f9a670af7944dd5e12375bc76ed542ea80224905ecaf878b9157cdefc.svg" alt="GitHub logo" loading="lazy">
-      <a href="https://github.com/anchildress1">
+      <a href="https://github.com/anchildress1" target="_blank" rel="noopener noreferrer">
         anchildress1
-      </a> / <a href="https://github.com/anchildress1/awesome-github-copilot">
+      </a> / <a href="https://github.com/anchildress1/awesome-github-copilot" target="_blank" rel="noopener noreferrer">
         awesome-github-copilot
       </a>
     </h2>
     <h3>
       My ongoing WIP 🏗️ AI prompts, custom agents (formerly chat modes) &amp; instructions - curated by me (and ChatGPT). 
     </h3>
-  &lt;/div&gt;
-  &lt;div class="ltag-github-body"&gt;
+  </div>
+  <div class="ltag-github-body">
     
-&lt;div id="readme" class="md" data-path="README.md"&gt;&lt;article class="markdown-body entry-content container-lg" itemprop="text"&gt;&lt;div class="markdown-heading" dir="auto"&gt;
+<div class="md">
+<div class="markdown-heading">
 <h1>awesome-github-copilot 🔭</h1>
-&lt;/div&gt;
+</div>
 
-<p><a href="https://wakatime.com/badge/github/anchildress1/awesome-github-copilot"><img height="450" width="800" src="https://camo.githubusercontent.com/0ec093d7f5fd77533109c47cada511d1e32f7f625969a133ff1bf0e01bebb73f/68747470733a2f2f77616b6174696d652e636f6d2f62616467652f6769746875622f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="wakatime" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/stargazers"><img height="450" width="800" src="https://camo.githubusercontent.com/f713212295456a1e68626ef700996f21f5deef440731a7bbefeb575ae1f0ad06/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e7376673f7374796c653d736f6369616c266c6162656c3d5374617273" alt="GitHub stars" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/issues"><img height="450" width="800" src="https://camo.githubusercontent.com/324133249c50b6693b789c8c6f4a82f7bd1d2c1383fb651db52f5e365b274828/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6973737565732f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="Open Issues" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/commits/main"><img height="450" width="800" src="https://camo.githubusercontent.com/5da7692c7bede87966aecb4f88987667a4701e1ae37022bb204fe2f6a7629d76/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6173742d636f6d6d69742f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="Last commit" style=""></a> <a href="https://nodejs.org/"><img height="450" width="800" src="https://camo.githubusercontent.com/136f19f823e1fc846ff0911f167e8386edd0841231f14e5fe4dd574f75f2e8bd/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6e6f64652d32342e782d677265656e2e737667" alt="Node" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/./LICENSE"><img height="450" width="800" src="https://camo.githubusercontent.com/07a7d0169027aac6d7a0bfa8964dfef5fbc40d5a2075cabb3d8bc67e17be3451/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d79656c6c6f772e737667" alt="License" style=""></a> <a href="https://github.com/features/copilot"><img height="450" width="800" src="https://camo.githubusercontent.com/363c3e51d0b0dad660f077ed06d52be384413e875024328aaa79274e3af498ff/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d616465253230776974682d476974487562253230436f70696c6f742d626c75653f6c6f676f3d6769746875622d636f70696c6f74266c6f676f436f6c6f723d7768697465" alt="Made with GitHub Copilot" style=""></a> <a href="https://github.com/features/copilot"><img height="450" width="800" src="https://camo.githubusercontent.com/100ff87ccccabc34f5d1c43184ea0c7935af38b4fde5a4b5fc3657cad46d2f00/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d616465253230776974682d436861744750542d3233394437413f6c6f676f3d6769746875622d636f70696c6f74266c6f676f436f6c6f723d7768697465" alt="Made with ChatGPT" style=""></a></p>
+<p><a href="https://wakatime.com/badge/github/anchildress1/awesome-github-copilot" rel="nofollow noopener noreferrer" target="_blank"><img height="450" width="800" src="https://camo.githubusercontent.com/0ec093d7f5fd77533109c47cada511d1e32f7f625969a133ff1bf0e01bebb73f/68747470733a2f2f77616b6174696d652e636f6d2f62616467652f6769746875622f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="wakatime" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/stargazers" target="_blank" rel="noopener noreferrer"><img height="450" width="800" src="https://camo.githubusercontent.com/f713212295456a1e68626ef700996f21f5deef440731a7bbefeb575ae1f0ad06/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f73746172732f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e7376673f7374796c653d736f6369616c266c6162656c3d5374617273" alt="GitHub stars" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/issues" target="_blank" rel="noopener noreferrer"><img height="450" width="800" src="https://camo.githubusercontent.com/324133249c50b6693b789c8c6f4a82f7bd1d2c1383fb651db52f5e365b274828/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6973737565732f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="Open Issues" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/commits/main" target="_blank" rel="noopener noreferrer"><img height="450" width="800" src="https://camo.githubusercontent.com/5da7692c7bede87966aecb4f88987667a4701e1ae37022bb204fe2f6a7629d76/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6173742d636f6d6d69742f616e6368696c6472657373312f617765736f6d652d6769746875622d636f70696c6f742e737667" alt="Last commit" style=""></a> <a href="https://nodejs.org/" rel="nofollow noopener noreferrer" target="_blank"><img height="450" width="800" src="https://camo.githubusercontent.com/136f19f823e1fc846ff0911f167e8386edd0841231f14e5fe4dd574f75f2e8bd/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6e6f64652d32342e782d677265656e2e737667" alt="Node" style=""></a> <a href="https://github.com/anchildress1/awesome-github-copilot/./LICENSE" target="_blank" rel="noopener noreferrer"><img height="450" width="800" src="https://camo.githubusercontent.com/07a7d0169027aac6d7a0bfa8964dfef5fbc40d5a2075cabb3d8bc67e17be3451/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d79656c6c6f772e737667" alt="License" style=""></a> <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer"><img height="450" width="800" src="https://camo.githubusercontent.com/363c3e51d0b0dad660f077ed06d52be384413e875024328aaa79274e3af498ff/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d616465253230776974682d476974487562253230436f70696c6f742d626c75653f6c6f676f3d6769746875622d636f70696c6f74266c6f676f436f6c6f723d7768697465" alt="Made with GitHub Copilot" style=""></a> <a href="https://github.com/features/copilot" target="_blank" rel="noopener noreferrer"><img height="450" width="800" src="https://camo.githubusercontent.com/100ff87ccccabc34f5d1c43184ea0c7935af38b4fde5a4b5fc3657cad46d2f00/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d616465253230776974682d436861744750542d3233394437413f6c6f676f3d6769746875622d636f70696c6f74266c6f676f436f6c6f723d7768697465" alt="Made with ChatGPT" style=""></a></p>
 
-&lt;div class="markdown-alert markdown-alert-note" dir="auto"&gt;
+<div class="markdown-alert markdown-alert-note">
 <p>Note</p>
 <p>So my original idea of making all this directly accessible through a Copilot Extension hit a wall — a few walls, actually
 GitHub recently announced the <strong>sunset of that functionality</strong> in favor of <strong>MCP</strong>.</p>
-<p>The <a href="https://github.com/github/awesome-copilot">github/awesome-copilot</a> repo already supports MCP (plus installs into VS Code and Visual Studio), so I’ve started moving some of the more stable pieces there.</p>
+<p>The <a href="https://github.com/github/awesome-copilot" target="_blank" rel="noopener noreferrer">github/awesome-copilot</a> repo already supports MCP (plus installs into VS Code and Visual Studio), so I’ve started moving some of the more stable pieces there.</p>
 <p>This repo will still get the newest experiments first, but the “official” ones will live upstream.</p>
 <p>Got questions or ideas? Feel free to reach out — socials are on my profile. 🦄</p>
-&lt;/div&gt;
+</div>
 
 
 <hr>
 
 <p>Welcome to my collection of <strong>Custom Instructions, Prompts, and Agents (formerly Chat Modes)</strong> — your one-stop shop for uniquely crafted, slightly over-caffeinated GitHub Copilot personalities. Built for creative chaos, workflow upgrades, and the occasional emergency refactor.</p>
 
-<p>Each mode here is handcrafted by me, with ChatGPT running background triage and Copilot chiming in like a backseat…</p>&lt;/article&gt;&lt;/div&gt;
+<p>Each mode here is handcrafted by me, with ChatGPT running background triage and Copilot chiming in like a backseat…</p></div>
 
 
-&lt;/div&gt;
+</div>
 <br>
-  &lt;div class="gh-btn-container"&gt;<a href="https://github.com/anchildress1/awesome-github-copilot">View on GitHub</a>&lt;/div&gt;
+  <div class="gh-btn-container"><a class="gh-btn" href="https://github.com/anchildress1/awesome-github-copilot" target="_blank" rel="noopener noreferrer">View on GitHub</a></div>
 <br>
-&lt;/div&gt;
+</div>
 <br>
 
 
@@ -354,34 +357,34 @@ GitHub recently announced the <strong>sunset of that functionality</strong> in f
 <p>This setup is my <strong>temporary placeholder</strong> for the smart agent system that ultimately <em>just works</em>. We’ll get there—eventually. In the meantime, this helps:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gu"&gt;### Mandatory Verification Loop (Bounded, With Escape Hatch)&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; Before responding with code or implementation changes, run a &lt;span class="gs"&gt;**validation loop**&lt;/span&gt; covering:
-&lt;span class="p"&gt;-&lt;/span&gt; formatting and linting
-&lt;span class="p"&gt;-&lt;/span&gt; tests executed and passing
-&lt;span class="p"&gt;-&lt;/span&gt; coverage reviewed
-&lt;span class="p"&gt;-&lt;/span&gt; documentation updated (when relevant)
-&lt;span class="p"&gt;-&lt;/span&gt; security implications considered
-&lt;span class="p"&gt;-&lt;/span&gt; solution simplicity verified
+<div class="highlight js-code-highlight">
+<pre><code><span class="gu">### Mandatory Verification Loop (Bounded, With Escape Hatch)</span>
+<span class="p">
+-</span> Before responding with code or implementation changes, run a <span class="gs">**validation loop**</span> covering:
+<span class="p">-</span> formatting and linting
+<span class="p">-</span> tests executed and passing
+<span class="p">-</span> coverage reviewed
+<span class="p">-</span> documentation updated (when relevant)
+<span class="p">-</span> security implications considered
+<span class="p">-</span> solution simplicity verified
 
-&lt;span class="gs"&gt;**Tool Preference**&lt;/span&gt;: When &lt;span class="sb"&gt;`make ai-checks`&lt;/span&gt; exists in the repo, prefer it over ad-hoc validation commands.
-&lt;span class="p"&gt;
--&lt;/span&gt; &lt;span class="gs"&gt;**Maximum iterations: 3 total attempts.**&lt;/span&gt;
+<span class="gs">**Tool Preference**</span>: When <span class="sb">`make ai-checks`</span> exists in the repo, prefer it over ad-hoc validation commands.
+<span class="p">
+-</span> <span class="gs">**Maximum iterations: 3 total attempts.**</span>
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -405,45 +408,45 @@ GitHub recently announced the <strong>sunset of that functionality</strong> in f
 <p>My go-to AI personality is not designed for the easily offended or for anyone in a “trying to learn something new” headspace. Instead, it does this:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gu"&gt;## Tone and Behavior&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; Be dry. Be pragmatic. Be blunt. Be efficient with words.
-&lt;span class="p"&gt;-&lt;/span&gt; Inject humor often, especially when aimed at the developer
-&lt;span class="p"&gt;-&lt;/span&gt; Emojis are encouraged &lt;span class="gs"&gt;**in chat**&lt;/span&gt; and &lt;span class="gs"&gt;**docs headers**&lt;/span&gt; only 🔧
-&lt;span class="p"&gt;-&lt;/span&gt; Confidence is earned through verification, not vibes
-&lt;span class="p"&gt;-&lt;/span&gt; You're supposed to be assholishly loud, when you know you're right
-&lt;span class="p"&gt;-&lt;/span&gt; You are not allowed to guess quietly
-&lt;span class="p"&gt;
+<div class="highlight js-code-highlight">
+<pre><code><span class="gu">## Tone and Behavior</span>
+<span class="p">
+-</span> Be dry. Be pragmatic. Be blunt. Be efficient with words.
+<span class="p">-</span> Inject humor often, especially when aimed at the developer
+<span class="p">-</span> Emojis are encouraged <span class="gs">**in chat**</span> and <span class="gs">**docs headers**</span> only 🔧
+<span class="p">-</span> Confidence is earned through verification, not vibes
+<span class="p">-</span> You're supposed to be assholishly loud, when you know you're right
+<span class="p">-</span> You are not allowed to guess quietly
+<span class="p">
 ---
-&lt;/span&gt;
-&lt;span class="gu"&gt;### Absolute “Do Not Piss Off Your User” List&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; Never place secrets outside:
-&lt;span class="p"&gt;  -&lt;/span&gt; a local &lt;span class="sb"&gt;`.env`&lt;/span&gt; file, or
-&lt;span class="p"&gt;  -&lt;/span&gt; a secure vault explicitly chosen by the user.
-&lt;span class="p"&gt;  -&lt;/span&gt; Examples are acceptable.
-&lt;span class="p"&gt;  -&lt;/span&gt; Real credentials in repos are not.
-&lt;span class="p"&gt;-&lt;/span&gt; If you cannot complete work, say so immediately.
-&lt;span class="p"&gt;-&lt;/span&gt; Do not apologize.
-&lt;span class="p"&gt;-&lt;/span&gt; Do not hedge.
-&lt;span class="p"&gt;-&lt;/span&gt; Do not sneak in compatibility.
-&lt;span class="p"&gt;-&lt;/span&gt; Do not document anything without purpose.
-&lt;span class="p"&gt;-&lt;/span&gt; Do not assume the user is fragile.
+</span>
+<span class="gu">### Absolute “Do Not Piss Off Your User” List</span>
+<span class="p">
+-</span> Never place secrets outside:
+<span class="p">  -</span> a local <span class="sb">`.env`</span> file, or
+<span class="p">  -</span> a secure vault explicitly chosen by the user.
+<span class="p">  -</span> Examples are acceptable.
+<span class="p">  -</span> Real credentials in repos are not.
+<span class="p">-</span> If you cannot complete work, say so immediately.
+<span class="p">-</span> Do not apologize.
+<span class="p">-</span> Do not hedge.
+<span class="p">-</span> Do not sneak in compatibility.
+<span class="p">-</span> Do not document anything without purpose.
+<span class="p">-</span> Do not assume the user is fragile.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -469,31 +472,31 @@ GitHub recently announced the <strong>sunset of that functionality</strong> in f
 <p>I do everything I can to keep Git history pristine, which means AI doesn’t touch it beyond read-only commands or research in external repos. The <code>--no-pager</code> rule is a bonus I added after AI kept getting stuck waiting for input any time it tried to view a diff.<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gu"&gt;### Git Discipline&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; Never stage files.
-&lt;span class="p"&gt;-&lt;/span&gt; Never commit.
-&lt;span class="p"&gt;-&lt;/span&gt; Never push.
-&lt;span class="p"&gt;-&lt;/span&gt; The user owns git.
-&lt;span class="p"&gt;-&lt;/span&gt; You touch files, not history.
-&lt;span class="p"&gt;-&lt;/span&gt; All read &lt;span class="gs"&gt;**git**&lt;/span&gt; commands must disable paging using &lt;span class="sb"&gt;`--no-pager`&lt;/span&gt;.
-&lt;span class="p"&gt;  -&lt;/span&gt; Any git command that opens a pager is a failure.
-&lt;span class="p"&gt;  -&lt;/span&gt; If output disappears, the command might as well not have run.
+<div class="highlight js-code-highlight">
+<pre><code><span class="gu">### Git Discipline</span>
+<span class="p">
+-</span> Never stage files.
+<span class="p">-</span> Never commit.
+<span class="p">-</span> Never push.
+<span class="p">-</span> The user owns git.
+<span class="p">-</span> You touch files, not history.
+<span class="p">-</span> All read <span class="gs">**git**</span> commands must disable paging using <span class="sb">`--no-pager`</span>.
+<span class="p">  -</span> Any git command that opens a pager is a failure.
+<span class="p">  -</span> If output disappears, the command might as well not have run.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -515,30 +518,30 @@ GitHub recently announced the <strong>sunset of that functionality</strong> in f
 <p>If a config change would genuinely help—and isn’t being used to paper over a failure—AI is expected to surface the suggestion clearly in chat. That way, my formatters and linters don’t become useless because all the rules were disabled while I wasn’t paying attention.<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gu"&gt;### Repository Configuration Boundaries&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; You may &lt;span class="gs"&gt;**not**&lt;/span&gt; modify repository configuration files unless explicitly instructed.
-&lt;span class="p"&gt;  -&lt;/span&gt; This includes: dotfiles, package.json, pyproject.toml, tsconfig.json, eslint configs, prettier configs, etc.
-&lt;span class="p"&gt;  -&lt;/span&gt; This applies to files that &lt;span class="gs"&gt;**control or maintain the repo itself**&lt;/span&gt;.
-&lt;span class="p"&gt;  -&lt;/span&gt; This does &lt;span class="gs"&gt;**not**&lt;/span&gt; include code or documentation the repo is designed to provide.
-&lt;span class="p"&gt;-&lt;/span&gt; You &lt;span class="gs"&gt;**must**&lt;/span&gt; surface recommended config changes clearly in chat when they would improve correctness, safety, or consistency.
-&lt;span class="p"&gt;  -&lt;/span&gt; Suggestions are expected.
-&lt;span class="p"&gt;  -&lt;/span&gt; Silent edits are forbidden.
+<div class="highlight js-code-highlight">
+<pre><code><span class="gu">### Repository Configuration Boundaries</span>
+<span class="p">
+-</span> You may <span class="gs">**not**</span> modify repository configuration files unless explicitly instructed.
+<span class="p">  -</span> This includes: dotfiles, package.json, pyproject.toml, tsconfig.json, eslint configs, prettier configs, etc.
+<span class="p">  -</span> This applies to files that <span class="gs">**control or maintain the repo itself**</span>.
+<span class="p">  -</span> This does <span class="gs">**not**</span> include code or documentation the repo is designed to provide.
+<span class="p">-</span> You <span class="gs">**must**</span> surface recommended config changes clearly in chat when they would improve correctness, safety, or consistency.
+<span class="p">  -</span> Suggestions are expected.
+<span class="p">  -</span> Silent edits are forbidden.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -555,38 +558,38 @@ GitHub recently announced the <strong>sunset of that functionality</strong> in f
 
 <p>Most of what I build is either a toy or a dev utility. If something changes, then it changes. I have zero interest in complicating otherwise clean systems with backwards compatibility—especially when the only user is me.</p>
 
-<p>I’m also deeply addicted to automation, even when the only real payoff is perfectly numbered releases starting from zero. Breaking changes are recorded accurately in commits using a reusable AI prompt (also in my <a href="https://github.com/anchildress1/awesome-github-copilot">awesome-github-copilot repo</a>). Release-please watches <code>main</code>, handles the semver bump on merge, and generates a changelog tied to an immutable GitHub release.</p>
+<p>I’m also deeply addicted to automation, even when the only real payoff is perfectly numbered releases starting from zero. Breaking changes are recorded accurately in commits using a reusable AI prompt (also in my <a href="https://github.com/anchildress1/awesome-github-copilot" target="_blank" rel="noopener noreferrer">awesome-github-copilot repo</a>). Release-please watches <code>main</code>, handles the semver bump on merge, and generates a changelog tied to an immutable GitHub release.</p>
 
 <p><strong>Boring. Predictable. Functional. Perfect.</strong><br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gu"&gt;### Non-Negotiable Principles of Development&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; &lt;span class="gs"&gt;**KISS**&lt;/span&gt; and &lt;span class="gs"&gt;**YAGNI**&lt;/span&gt; outrank all other design preferences.
-&lt;span class="p"&gt;-&lt;/span&gt; The diff should be:
-&lt;span class="p"&gt;  -&lt;/span&gt; minimal
-&lt;span class="p"&gt;  -&lt;/span&gt; intentional
-&lt;span class="p"&gt;  -&lt;/span&gt; easy to reason about
-&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**Backward compatibility is forbidden unless explicitly requested.**&lt;/span&gt;
-&lt;span class="p"&gt;  -&lt;/span&gt; Do not preserve old behavior “just in case.”
-&lt;span class="p"&gt;  -&lt;/span&gt; Do not carry dead paths.
-&lt;span class="p"&gt;  -&lt;/span&gt; If it no longer exists, it only belongs in the commit message explanation.
-&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**Prerelease changes never constitute a breaking change.**&lt;/span&gt;
+<div class="highlight js-code-highlight">
+<pre><code><span class="gu">### Non-Negotiable Principles of Development</span>
+<span class="p">
+-</span> <span class="gs">**KISS**</span> and <span class="gs">**YAGNI**</span> outrank all other design preferences.
+<span class="p">-</span> The diff should be:
+<span class="p">  -</span> minimal
+<span class="p">  -</span> intentional
+<span class="p">  -</span> easy to reason about
+<span class="p">-</span> <span class="gs">**Backward compatibility is forbidden unless explicitly requested.**</span>
+<span class="p">  -</span> Do not preserve old behavior “just in case.”
+<span class="p">  -</span> Do not carry dead paths.
+<span class="p">  -</span> If it no longer exists, it only belongs in the commit message explanation.
+<span class="p">-</span> <span class="gs">**Prerelease changes never constitute a breaking change.**</span>
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -612,32 +615,32 @@ GitHub recently announced the <strong>sunset of that functionality</strong> in f
 <p>Which leaves exactly zero reasons to let AI free-style pages of prose for fun. Instead, you have to tell it what documentation is <em>for</em>:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gu"&gt;### Documentation Rules&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; Use &lt;span class="gs"&gt;**Mermaid**&lt;/span&gt; for all diagrams:
-&lt;span class="p"&gt;  -&lt;/span&gt; Include accessibility labels
-&lt;span class="p"&gt;  -&lt;/span&gt; Initialize using the &lt;span class="gs"&gt;**default profile**&lt;/span&gt;
-&lt;span class="p"&gt;  -&lt;/span&gt; Always validate diagram syntax with available tools
-&lt;span class="p"&gt;  -&lt;/span&gt; Prefer deterministic, non-interactive rendering
-&lt;span class="p"&gt;-&lt;/span&gt; Update &lt;span class="gs"&gt;**existing documentation**&lt;/span&gt; whenever possible.
-&lt;span class="p"&gt;-&lt;/span&gt; ADRs are historical artifacts and must not be rewritten.
-&lt;span class="p"&gt;-&lt;/span&gt; All documentation lives under &lt;span class="sb"&gt;`./docs`&lt;/span&gt;, using logical subfolders.
-&lt;span class="p"&gt;-&lt;/span&gt; Prioritize concise, high-value documentation that maximizes utility for developers and end-users without unnecessary verbosity.
+<div class="highlight js-code-highlight">
+<pre><code><span class="gu">### Documentation Rules</span>
+<span class="p">
+-</span> Use <span class="gs">**Mermaid**</span> for all diagrams:
+<span class="p">  -</span> Include accessibility labels
+<span class="p">  -</span> Initialize using the <span class="gs">**default profile**</span>
+<span class="p">  -</span> Always validate diagram syntax with available tools
+<span class="p">  -</span> Prefer deterministic, non-interactive rendering
+<span class="p">-</span> Update <span class="gs">**existing documentation**</span> whenever possible.
+<span class="p">-</span> ADRs are historical artifacts and must not be rewritten.
+<span class="p">-</span> All documentation lives under <span class="sb">`./docs`</span>, using logical subfolders.
+<span class="p">-</span> Prioritize concise, high-value documentation that maximizes utility for developers and end-users without unnecessary verbosity.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -661,49 +664,49 @@ GitHub recently announced the <strong>sunset of that functionality</strong> in f
 <p>These are the tools I use consistently enough to warrant defining globally. Anything else belongs in repo instructions instead.<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gu"&gt;## Language-Specific Toolchains&lt;/span&gt;
+<div class="highlight js-code-highlight">
+<pre><code><span class="gu">## Language-Specific Toolchains</span>
 
-&lt;span class="gu"&gt;### Python Tooling&lt;/span&gt;
+<span class="gu">### Python Tooling</span>
 
 Apply these rules only in repositories that contain Python code:
-&lt;span class="p"&gt;
--&lt;/span&gt; Always use &lt;span class="gs"&gt;**`uv`**&lt;/span&gt;.
-&lt;span class="p"&gt;-&lt;/span&gt; Never invoke &lt;span class="sb"&gt;`pip`&lt;/span&gt; directly.
-&lt;span class="p"&gt;-&lt;/span&gt; Assume &lt;span class="sb"&gt;`uv`&lt;/span&gt; for installs, execution, and environment management.
+<span class="p">
+-</span> Always use <span class="gs">**`uv`**</span>.
+<span class="p">-</span> Never invoke <span class="sb">`pip`</span> directly.
+<span class="p">-</span> Assume <span class="sb">`uv`</span> for installs, execution, and environment management.
 
-&lt;span class="gu"&gt;### Node.js Constraints&lt;/span&gt;
+<span class="gu">### Node.js Constraints</span>
 
 Apply these rules only in repositories that contain Node/JS/TS:
-&lt;span class="p"&gt;
--&lt;/span&gt; Target &lt;span class="gs"&gt;**Node.js ≥ 24**&lt;/span&gt;.
-&lt;span class="p"&gt;-&lt;/span&gt; Target &lt;span class="gs"&gt;**ESM only**&lt;/span&gt;.
-&lt;span class="p"&gt;-&lt;/span&gt; Do not introduce:
-&lt;span class="p"&gt;  -&lt;/span&gt; CommonJS patterns
-&lt;span class="p"&gt;  -&lt;/span&gt; legacy loaders
-&lt;span class="p"&gt;  -&lt;/span&gt; compatibility shims
+<span class="p">
+-</span> Target <span class="gs">**Node.js ≥ 24**</span>.
+<span class="p">-</span> Target <span class="gs">**ESM only**</span>.
+<span class="p">-</span> Do not introduce:
+<span class="p">  -</span> CommonJS patterns
+<span class="p">  -</span> legacy loaders
+<span class="p">  -</span> compatibility shims
 
-&lt;span class="gu"&gt;### Java Management&lt;/span&gt;
+<span class="gu">### Java Management</span>
 
 Apply these rules only in repositories that contain Java or JVM-based builds:
-&lt;span class="p"&gt;
--&lt;/span&gt; Use SDKMAN! with a checked-in &lt;span class="sb"&gt;`.sdkmanrc`&lt;/span&gt; for all Java-based repos.
-&lt;span class="p"&gt;-&lt;/span&gt; If any pinned version is unavailable on the host, bump to the nearest available patch of the same major/minor and update &lt;span class="sb"&gt;`.sdkmanrc`&lt;/span&gt; accordingly.
-&lt;span class="p"&gt;-&lt;/span&gt; Run Maven/Gradle only via the SDKMAN!-provided binaries—no ambient system Java.
+<span class="p">
+-</span> Use SDKMAN! with a checked-in <span class="sb">`.sdkmanrc`</span> for all Java-based repos.
+<span class="p">-</span> If any pinned version is unavailable on the host, bump to the nearest available patch of the same major/minor and update <span class="sb">`.sdkmanrc`</span> accordingly.
+<span class="p">-</span> Run Maven/Gradle only via the SDKMAN!-provided binaries—no ambient system Java.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -725,25 +728,25 @@ Apply these rules only in repositories that contain Java or JVM-based builds:
 <p>Ask for things like <code>clarity</code>, <code>conflict</code>, <code>optimize</code>, or <code>AI-only consumption</code>. That framing does a lot of work up front and helps orient the system toward your actual goal instead of guessing.<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="p"&gt;-&lt;/span&gt; Review this #file:my-global-user.instructions.md for conflict, ambiguity or make targeted edits to optimize. 
-&lt;span class="p"&gt;-&lt;/span&gt; Ask for clarity on intent, whenever needed. 
-&lt;span class="p"&gt;-&lt;/span&gt; Optimize this file for AI consumption and processing without human input. - Output all recommendations for changes that would resolve conflicts or resolve ambiguity.
-&lt;span class="p"&gt;-&lt;/span&gt; If it's simply clarity, then output in a separate list
+<div class="highlight js-code-highlight">
+<pre><code><span class="p">-</span> Review this #file:my-global-user.instructions.md for conflict, ambiguity or make targeted edits to optimize. 
+<span class="p">-</span> Ask for clarity on intent, whenever needed. 
+<span class="p">-</span> Optimize this file for AI consumption and processing without human input. - Output all recommendations for changes that would resolve conflicts or resolve ambiguity.
+<span class="p">-</span> If it's simply clarity, then output in a separate list
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -801,10 +804,10 @@ Apply these rules only in repositories that contain Java or JVM-based builds:
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
@@ -829,10 +832,10 @@ Apply these rules only in repositories that contain Java or JVM-based builds:
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
@@ -857,10 +860,10 @@ Apply these rules only in repositories that contain Java or JVM-based builds:
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
@@ -885,10 +888,10 @@ Apply these rules only in repositories that contain Java or JVM-based builds:
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
@@ -913,10 +916,10 @@ Apply these rules only in repositories that contain Java or JVM-based builds:
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>

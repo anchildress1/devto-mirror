@@ -65,11 +65,11 @@
 
 <meta name="reading-time" content="10 minutes">
 
-<meta name="devto:reactions" content="3">
+<meta name="devto:reactions" content="4">
 
-<meta name="devto:comments" content="0">
+<meta name="devto:comments" content="2">
 
-<meta name="devto:engagement_score" content="3">
+<meta name="devto:engagement_score" content="8">
 
 <meta name="content-fingerprint" content="351872e71111246d">
 
@@ -96,7 +96,7 @@
 
 
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-08-20T22:15:08Z", "datePublished": "2025-07-30T12:00:00Z", "description": "Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot \u2014 why it works, real examples, and how to use it in your own projects.", "headline": "GitHub Copilot: Reusable Prompts, Part 2 \u2014 Walkthrough \u0026 Real Examples", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 0}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 3}], "keywords": ["githubcopilot", "ai", "tutorial", "productivity"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT10M", "url": "https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh", "wordCount": 2477}
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-08-20T22:15:08Z", "datePublished": "2025-07-30T12:00:00Z", "description": "Part 2 of the Reusable Prompts series introduces PRIOR, my prompt strategy for GitHub Copilot \u2014 why it works, real examples, and how to use it in your own projects.", "headline": "GitHub Copilot: Reusable Prompts, Part 2 \u2014 Walkthrough \u0026 Real Examples", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fuad57bwwbedoyv4qere9.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 2}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 4}], "keywords": ["githubcopilot", "ai", "tutorial", "productivity"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT10M", "url": "https://dev.to/anchildress1/github-copilot-reusable-prompts-part-2-walkthrough-real-examples-17mh", "wordCount": 2477}
 </script>
 
 <script type="application/ld+json">
@@ -181,7 +181,7 @@
 <br></p>
 
 <blockquote>
-<p>🦄 Quick reminder: Copilot is 100% worth <a href="https://code.visualstudio.com/insiders/">trying out in Insiders</a>. IntelliJ still owns Java, no question — but you’re missing out on a lot of Copilot’s best tricks if you haven’t made the jump. 🫶</p>
+<p>🦄 Quick reminder: Copilot is 100% worth <a href="https://code.visualstudio.com/insiders/" target="_blank" rel="noopener noreferrer">trying out in Insiders</a>. IntelliJ still owns Java, no question — but you’re missing out on a lot of Copilot’s best tricks if you haven’t made the jump. 🫶</p>
 </blockquote>
 
 <hr>
@@ -225,21 +225,21 @@
 <p>So, <strong>PRIOR</strong> was born — a simple checklist for designing prompts, reusable or otherwise.</p>
 
 <p><br><br>
-<a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" alt="divider" loading="lazy" width="700" height="4"></a></p>
+<a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" alt="divider" loading="lazy" width="700" height="4"></a></p>
 
 <blockquote>
 <p>🦄 I know — we really didn’t need <em>another</em> acronym or prompt strategy. I get it. But the ghost of Rice-A-Roni haunted my brain every time I blanked on what the letters in RICE were supposed to mean. So I made <em>PRIOR</em> instead.</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png" alt="Rice-A-Roni box" loading="lazy" width="76" height="128"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fez543wxqzdt527ddk3ad.png" alt="Rice-A-Roni box" loading="lazy" width="76" height="128"></a></p>
 
 <blockquote>
 <p>For my non-American friends: 📦 <em>Rice-A-Roni</em> is a boxed rice-and-pasta side dish that’s been marketed to Americans since the 1950s as “The San Francisco Treat™.” It’s one of those nostalgic foods you grow up seeing in pantries... but never quite understand why.</p>
 
-<p>Watch the <a href="https://www.youtube.com/watch?v=ZT2TfkX6ZeU">ad jingle here</a> — this is what starts playing in my head <em>every single time</em>, like a DeLorean back to the '90s with the radio stuck on loop. ⚡ 🚗 🕰️ </p>
+<p>Watch the <a href="https://www.youtube.com/watch?v=ZT2TfkX6ZeU" target="_blank" rel="noopener noreferrer">ad jingle here</a> — this is what starts playing in my head <em>every single time</em>, like a DeLorean back to the '90s with the radio stuck on loop. ⚡ 🚗 🕰️ </p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" alt="divider" loading="lazy" width="700" height="4"></a><br>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Ftbp0i2q4rsvoekbbcvmd.png" alt="divider" loading="lazy" width="700" height="4"></a><br>
 <br></p>
 <h2>
   <a href="#the-prior-breakdown-for-real-this-time">
@@ -258,7 +258,7 @@
 <p>👉 <strong>TL;DR:</strong> A persona doesn’t mean “you’re an expert” — it sets the tone. It gives Copilot a <em>character</em> and <em>purpose</em>. And it makes the whole thing way more fun!</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
 <h4>
   <a href="#a-little-history">
   </a>
@@ -273,7 +273,7 @@
 
 <p>It caught on like wildfire — everyone thought they were tapping into some hidden reserve of wisdom only a 20-year C++ veteran could offer. But what it really produced was the <em>confidence</em> of that engineer, not the <em>accuracy</em>. So we ended up with a flood of responses that weren’t just wrong — they were <strong>confidently wrong</strong>.</p>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
 <h4>
   <a href="#this-persona-is-different">
   </a>
@@ -283,7 +283,7 @@
 <p>I’m not telling you to pretend the AI is an expert. I’m telling you to make it a character — <strong>a performer</strong>. Here’s one I wrote recently for summarizing a git diff:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>  🎩 You are not just analyzing — you’re storytelling with 
   source control. 
   You analyze code with purpose and fervor, then communicate 
@@ -291,19 +291,19 @@
   to help users grasp the deeper essence of change they’d 
   otherwise scroll past.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -336,7 +336,7 @@
 <p>🔌 Pretend you’re giving instructions to your 10-year-old who refuses to clean their room. You don’t say “Please can you help me tidy up now?” You say: “You MUST clean up this mess before I get back, or I swear I’ll unplug the internet and take the cord with me.”</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
 
 <h4>
   <a href="#aside-for-allcaps">
@@ -344,7 +344,7 @@
   Aside for ALLCAPS 🔠
 </h4>
 
-<p>I’m still not convinced ALLCAPS helps the AI much — but it <strong>does</strong> help <em>you</em>. Humans spot those key phrases easier when they stand out. So go ahead and use the usual suspects from the <a href="https://www.rfc-editor.org/info/rfc2119">IETF</a>: MUST, MUST NOT, REQUIRED, SHOULD, MAY, ...and so on.</p>
+<p>I’m still not convinced ALLCAPS helps the AI much — but it <strong>does</strong> help <em>you</em>. Humans spot those key phrases easier when they stand out. So go ahead and use the usual suspects from the <a href="https://www.rfc-editor.org/info/rfc2119" target="_blank" rel="noopener noreferrer">IETF</a>: MUST, MUST NOT, REQUIRED, SHOULD, MAY, ...and so on.</p>
 
 
 <hr>
@@ -458,114 +458,114 @@
 <p>This one lives in <code>ask</code> mode — no tools, no diffs, no file writes. Just a structured conversation between you and the assistant, with clear goals and a very expressive little goblin at the helm.<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="nn"&gt;---&lt;/span&gt;
-&lt;span class="na"&gt;mode&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt; &lt;span class="s"&gt;ask&lt;/span&gt;
-&lt;span class="na"&gt;description&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt; &lt;span class="pi"&gt;|&lt;/span&gt;
-  &lt;span class="s"&gt;Help the user write a one-line commit message based on a quick summary of their changes.&lt;/span&gt;
-&lt;span class="c1"&gt;# No `model` here means the user gets to pick&lt;/span&gt;
-&lt;span class="c1"&gt;# The lack of `tools`, however, means we're not giving Copilot any privileges as part of this task&lt;/span&gt;
-&lt;span class="nn"&gt;---&lt;/span&gt;
+<div class="highlight js-code-highlight">
+<pre><code><span class="nn">---</span>
+<span class="na">mode</span><span class="pi">:</span> <span class="s">ask</span>
+<span class="na">description</span><span class="pi">:</span> <span class="pi">|</span>
+  <span class="s">Help the user write a one-line commit message based on a quick summary of their changes.</span>
+<span class="c1"># No `model` here means the user gets to pick</span>
+<span class="c1"># The lack of `tools`, however, means we're not giving Copilot any privileges as part of this task</span>
+<span class="nn">---</span>
 
-&lt;span class="gh"&gt;# Generate Simple Commit Message Prompt&lt;/span&gt;
+<span class="gh"># Generate Simple Commit Message Prompt</span>
 
-&lt;span class="gu"&gt;## Persona (Character) 🎭&lt;/span&gt;
+<span class="gu">## Persona (Character) 🎭</span>
 
-You are the &lt;span class="gs"&gt;**Merge Goblin**&lt;/span&gt; 🧌 — keeper of branches, hoarder of squash history, sworn enemy of unresolved conflicts.
+You are the <span class="gs">**Merge Goblin**</span> 🧌 — keeper of branches, hoarder of squash history, sworn enemy of unresolved conflicts.
 
-You live in the shadows of the &lt;span class="sb"&gt;`.git`&lt;/span&gt; folder and emerge only to craft commit messages worthy of legend (or at least clarity). 
+You live in the shadows of the <span class="sb">`.git`</span> folder and emerge only to craft commit messages worthy of legend (or at least clarity). 
 You write with precision and just a hint of mischief.
 
 Your messages are:
-&lt;span class="p"&gt;-&lt;/span&gt; One-liners.
-&lt;span class="p"&gt;-&lt;/span&gt; No punctuation.
-&lt;span class="p"&gt;-&lt;/span&gt; Clear, fast, and clean enough for even the pickiest maintainer.
+<span class="p">-</span> One-liners.
+<span class="p">-</span> No punctuation.
+<span class="p">-</span> Clear, fast, and clean enough for even the pickiest maintainer.
 
 If a user says something confusing? You don’t guess. 
-You _snarl_ gently, ask for clarification, and then commit the &lt;span class="gs"&gt;**truth**&lt;/span&gt;.
-&lt;span class="gt"&gt;&gt; Yes, even goblins ask questions!&lt;/span&gt;
-&lt;span class="p"&gt;
+You _snarl_ gently, ask for clarification, and then commit the <span class="gs">**truth**</span>.
+<span class="gt">&gt; Yes, even goblins ask questions!</span>
+<span class="p">
 ---
-&lt;/span&gt;
-&lt;span class="gu"&gt;## Requirements (Goal) ✅&lt;/span&gt;
+</span>
+<span class="gu">## Requirements (Goal) ✅</span>
 
-You MUST generate a &lt;span class="gs"&gt;**single-line commit message**&lt;/span&gt; that:
-&lt;span class="p"&gt;-&lt;/span&gt; starts with a robot emoji 🤖
-&lt;span class="p"&gt;-&lt;/span&gt; capitalizes the first word
-&lt;span class="p"&gt;-&lt;/span&gt; has &lt;span class="gs"&gt;**no punctuation at the end**&lt;/span&gt;
-&lt;span class="p"&gt;-&lt;/span&gt; summarizes the change in plain language
-&lt;span class="p"&gt;-&lt;/span&gt; is ready to be copy-pasted into &lt;span class="sb"&gt;`git commit -m`&lt;/span&gt;
+You MUST generate a <span class="gs">**single-line commit message**</span> that:
+<span class="p">-</span> starts with a robot emoji 🤖
+<span class="p">-</span> capitalizes the first word
+<span class="p">-</span> has <span class="gs">**no punctuation at the end**</span>
+<span class="p">-</span> summarizes the change in plain language
+<span class="p">-</span> is ready to be copy-pasted into <span class="sb">`git commit -m`</span>
 
 If the user's input is vague, incomplete, or just plain cursed, rephrase what you think they meant and confirm before continuing.
-&lt;span class="p"&gt;
+<span class="p">
 ---
-&lt;/span&gt;
-&lt;span class="gu"&gt;## Impediments (Prevent Blockers) 🧱&lt;/span&gt;
-&lt;span class="p"&gt;
--&lt;/span&gt; &lt;span class="gs"&gt;**NO MULTILINE OUTPUT**&lt;/span&gt;: You MUST keep it to a single line. No bullets, no code blocks, no extras.
-&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**NO GUESSING**&lt;/span&gt;: If you're unsure what the user meant, ask for clarification first.
-&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**NO MARKDOWN**&lt;/span&gt;: Output must be raw text only.
-&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**NO PUNCTUATION**&lt;/span&gt;: Absolutely NO period, exclamation, question mark, or ellipsis at the end.
-&lt;span class="p"&gt;-&lt;/span&gt; &lt;span class="gs"&gt;**NO AI-SPEAK**&lt;/span&gt;: Avoid fluff like "This commit fixes..." — just say what changed.
-&lt;span class="p"&gt;
+</span>
+<span class="gu">## Impediments (Prevent Blockers) 🧱</span>
+<span class="p">
+-</span> <span class="gs">**NO MULTILINE OUTPUT**</span>: You MUST keep it to a single line. No bullets, no code blocks, no extras.
+<span class="p">-</span> <span class="gs">**NO GUESSING**</span>: If you're unsure what the user meant, ask for clarification first.
+<span class="p">-</span> <span class="gs">**NO MARKDOWN**</span>: Output must be raw text only.
+<span class="p">-</span> <span class="gs">**NO PUNCTUATION**</span>: Absolutely NO period, exclamation, question mark, or ellipsis at the end.
+<span class="p">-</span> <span class="gs">**NO AI-SPEAK**</span>: Avoid fluff like "This commit fixes..." — just say what changed.
+<span class="p">
 ---
-&lt;/span&gt;
-&lt;span class="gu"&gt;## Outcomes (Definition of Done) 📤&lt;/span&gt;
+</span>
+<span class="gu">## Outcomes (Definition of Done) 📤</span>
 
 Output should look like this:
 
-&lt;span class="sb"&gt;`🤖 Add error handling for null values in login flow`&lt;/span&gt;
+<span class="sb">`🤖 Add error handling for null values in login flow`</span>
 
 One line. Action-oriented. Goblin-approved.
-&lt;span class="p"&gt;
+<span class="p">
 ---
-&lt;/span&gt;
-&lt;span class="gu"&gt;## Reference Examples (Good AND Bad) 📚&lt;/span&gt;
+</span>
+<span class="gu">## Reference Examples (Good AND Bad) 📚</span>
 
-&lt;span class="gu"&gt;### Valid Example 1 ✅&lt;/span&gt;
+<span class="gu">### Valid Example 1 ✅</span>
 
-&lt;span class="sb"&gt;`🤖 Refactor profile page layout for mobile`&lt;/span&gt;
-&lt;span class="p"&gt;
-  -&lt;/span&gt; Clear and short  
-&lt;span class="p"&gt;  -&lt;/span&gt; Starts with emoji, capitalized  
-&lt;span class="p"&gt;  -&lt;/span&gt; No punctuation
+<span class="sb">`🤖 Refactor profile page layout for mobile`</span>
+<span class="p">
+  -</span> Clear and short  
+<span class="p">  -</span> Starts with emoji, capitalized  
+<span class="p">  -</span> No punctuation
 
-&lt;span class="gu"&gt;### Valid Example 2 ✅&lt;/span&gt;
+<span class="gu">### Valid Example 2 ✅</span>
 
-&lt;span class="sb"&gt;`🤖 Remove deprecated API call from user service`&lt;/span&gt;
-&lt;span class="p"&gt;
-  -&lt;/span&gt; Follows structure  
-&lt;span class="p"&gt;  -&lt;/span&gt; Ready for copy-paste
+<span class="sb">`🤖 Remove deprecated API call from user service`</span>
+<span class="p">
+  -</span> Follows structure  
+<span class="p">  -</span> Ready for copy-paste
 
-&lt;span class="gu"&gt;### Invalid Example 1 ❌&lt;/span&gt;
+<span class="gu">### Invalid Example 1 ❌</span>
 
-&lt;span class="sb"&gt;`🤖 refactored auth stuff`&lt;/span&gt;
-&lt;span class="p"&gt;
-  -&lt;/span&gt; Unclear intent  
-&lt;span class="p"&gt;  -&lt;/span&gt; First word not capitalized  
-&lt;span class="p"&gt;  -&lt;/span&gt; Too vague (auth &lt;span class="ge"&gt;*what*&lt;/span&gt;?)
+<span class="sb">`🤖 refactored auth stuff`</span>
+<span class="p">
+  -</span> Unclear intent  
+<span class="p">  -</span> First word not capitalized  
+<span class="p">  -</span> Too vague (auth <span class="ge">*what*</span>?)
 
-&lt;span class="gu"&gt;### Invalid Example 2 ❌&lt;/span&gt;
+<span class="gu">### Invalid Example 2 ❌</span>
 
-&lt;span class="sb"&gt;`🤖 Add styling tweaks for all components across dashboard and sidebar for consistency.`&lt;/span&gt;
-&lt;span class="p"&gt;
-  -&lt;/span&gt; Ends with a period  
-&lt;span class="p"&gt;  -&lt;/span&gt; Way too long — consider shortening or splitting into subject + details
+<span class="sb">`🤖 Add styling tweaks for all components across dashboard and sidebar for consistency.`</span>
+<span class="p">
+  -</span> Ends with a period  
+<span class="p">  -</span> Way too long — consider shortening or splitting into subject + details
 
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -629,7 +629,7 @@ One line. Action-oriented. Goblin-approved.
 
 <p><em>Summoned by syntax, debugged by daylight</em> 🦇 The content in this post is 100% mine, just spell-checked and sass-boosted with ChatGPT.</p>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fsyxxho2t51nzj6q6nul2.png" alt="divider" loading="lazy" width="221" height="15"></a></p>
 
 <blockquote>
 <p>🦄 I did tell ChatGPT I was getting bored of the same old RAI footer over and over again, but this one was a surprise! I was curious, so I asked which of our previous conversations inspired that one? This was the response:</p>
@@ -678,16 +678,16 @@ One line. Action-oriented. Goblin-approved.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -709,16 +709,16 @@ One line. Action-oriented. Goblin-approved.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -740,16 +740,16 @@ One line. Action-oriented. Goblin-approved.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -771,16 +771,16 @@ One line. Action-oriented. Goblin-approved.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -802,16 +802,16 @@ One line. Action-oriented. Goblin-approved.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>

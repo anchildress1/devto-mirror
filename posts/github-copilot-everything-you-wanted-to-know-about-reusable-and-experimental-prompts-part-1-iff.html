@@ -197,62 +197,62 @@
 
 <p>► <code>.github/copilot-instructions.md</code> — This is your repo’s “how to act” guide for Copilot and is <em>always</em> in context. It sets the baseline behavior for your project and tells Copilot what to expect from your workflow and contributors.</p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>Using what you know about our current release system, write a git command to view the total number of commits pushed to main since the last tagged version.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 <p>► <code>.github/instructions/secure-coding-principles.instruction.md</code> — Think of this as a reusable, specialized playbook. Use these for rules or guidelines you want Copilot to follow everywhere, or for specific situations - like always doing a security review, or making sure React code has matching tests.</p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>With rules defined in #secure-coding-principles.instruction.md, perform a thorough code review of all staged changes. When you are finished, post a new pull request review with all your comments or suggestions for changes to meet minimum guidelines defined by this repo.
 ---
 With everything you know from the #rules-for-react.instruction.md, build a new component for the frontend along with unit and integration tests.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 <p>► <code>.github/prompts/something-for-copilot-to-do-regularly.prompt.md</code> — This is where you automate repeatable workflows. It’s a set of step-by-step instructions Copilot can follow whenever you trigger it with a slash command in chat.</p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>/generate-conventional-commit using only staged changes for JIRA-1234.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 <blockquote>
 <p>🐉 Who needs to memorize Vim macros or survive Emacs keybindings when you can just hit “/” in the chat and watch Copilot handle the rest?</p>
@@ -290,42 +290,43 @@ With everything you know from the #rules-for-react.instruction.md, build a new c
 
 <p>Here’s where things get interesting: Copilot doesn’t just work in one “mode” - it’s got a whole range, from chill Q&amp;A to full-on automation beast. Pick your mode wisely!</p>
 
-&lt;div class="table-wrapper-paragraph"&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Mode&lt;/th&gt;
-&lt;th&gt;What It Does&lt;/th&gt;
-&lt;th&gt;When To Use&lt;/th&gt;
-&lt;th&gt;Power Level&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Ask&lt;/td&gt;
-&lt;td&gt;Answers questions, suggests ideas - your personal Stack Overflow, minus the snark.&lt;/td&gt;
-&lt;td&gt;Research, quick advice, copy snippets&lt;/td&gt;
-&lt;td&gt;🟢 Low&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Edit&lt;/td&gt;
-&lt;td&gt;Changes code in-place, optimized for speed—think “find and replace,” but actually smart.&lt;/td&gt;
-&lt;td&gt;Step-by-step or explicit code changes&lt;/td&gt;
-&lt;td&gt;🟡 Medium&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Agent&lt;/td&gt;
-&lt;td&gt;Multi-step, can use tools, context, and reasoning. Give it instructions and let it run wild (within reason).&lt;/td&gt;
-&lt;td&gt;Automation, complex flows, integrations&lt;/td&gt;
-&lt;td&gt;🔴 High&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Custom&lt;/td&gt;
-&lt;td&gt;Depends on it's goal from the user... so many choices!&lt;/td&gt;
-&lt;td&gt;Automation, complex flows, integrations, team magic&lt;/td&gt;
-&lt;td&gt;💜 Extreme&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;&lt;/div&gt;
+<div class="table-wrapper-paragraph">
+
+
+
+Mode
+What It Does
+When To Use
+Power Level
+
+
+
+
+Ask
+Answers questions, suggests ideas - your personal Stack Overflow, minus the snark.
+Research, quick advice, copy snippets
+🟢 Low
+
+
+Edit
+Changes code in-place, optimized for speed—think “find and replace,” but actually smart.
+Step-by-step or explicit code changes
+🟡 Medium
+
+
+Agent
+Multi-step, can use tools, context, and reasoning. Give it instructions and let it run wild (within reason).
+Automation, complex flows, integrations
+🔴 High
+
+
+Custom
+Depends on it's goal from the user... so many choices!
+Automation, complex flows, integrations, team magic
+💜 Extreme
+
+
+</div>
 
 <blockquote>
 <p>🦄 Let me know how curious you are about these custom chat modes - I'm still experimenting and figuring out what they can (and can't) do. If you’ve got questions, wild theories, or even better, your own examples... drop them in the comments! 🚦💬</p>
@@ -344,37 +345,38 @@ With everything you know from the #rules-for-react.instruction.md, build a new c
 <p>✨ I know, I reuse this table a lot - but hey, good models deserve a callback.</p>
 </blockquote>
 
-&lt;div class="table-wrapper-paragraph"&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Model&lt;/th&gt;
-&lt;th&gt;Best For&lt;/th&gt;
-&lt;th&gt;Notes &amp; Quirks&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;GPT-4.1, GPT-4o&lt;/td&gt;
-&lt;td&gt;Creative debugging, “Where do I start?”&lt;/td&gt;
-&lt;td&gt;Needs hand-holding on long tasks. Free for most users.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;o3/4-mini, Gemini&lt;/td&gt;
-&lt;td&gt;Pattern-matching, log sleuthing&lt;/td&gt;
-&lt;td&gt;Great for “explain these logs,” not for wild creative leaps.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Gemini 2.5&lt;/td&gt;
-&lt;td&gt;Tedious but simple, long-form tasks&lt;/td&gt;
-&lt;td&gt;Decent at bulk work, rarely surprises (good or bad).&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Claude Sonnet 3.5–4&lt;/td&gt;
-&lt;td&gt;Root cause, deep logic, “why did this happen?”&lt;/td&gt;
-&lt;td&gt;Loves complex analysis but rarely offers alternate approaches unless you nudge.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;&lt;/div&gt;
+<div class="table-wrapper-paragraph">
+
+
+
+Model
+Best For
+Notes &amp; Quirks
+
+
+
+
+GPT-4.1, GPT-4o
+Creative debugging, “Where do I start?”
+Needs hand-holding on long tasks. Free for most users.
+
+
+o3/4-mini, Gemini
+Pattern-matching, log sleuthing
+Great for “explain these logs,” not for wild creative leaps.
+
+
+Gemini 2.5
+Tedious but simple, long-form tasks
+Decent at bulk work, rarely surprises (good or bad).
+
+
+Claude Sonnet 3.5–4
+Root cause, deep logic, “why did this happen?”
+Loves complex analysis but rarely offers alternate approaches unless you nudge.
+
+
+</div>
 
 
 <hr>
@@ -415,7 +417,7 @@ With everything you know from the #rules-for-react.instruction.md, build a new c
   Bonus Tools — More Power, More Fun 🛠️✨🎉
 </h4>
 
-<p>Some of my favorite extras come from the <a href="https://support.atlassian.com/rovo/docs/getting-started-with-the-atlassian-remote-mcp-server/">Atlassian MCP-Remote</a> server, but if you have the ability to install GitHub Apps then check out <a href="https://github.com/marketplace/atlassian">Rovo</a>, too:</p>
+<p>Some of my favorite extras come from the <a href="https://support.atlassian.com/rovo/docs/getting-started-with-the-atlassian-remote-mcp-server/" target="_blank" rel="noopener noreferrer">Atlassian MCP-Remote</a> server, but if you have the ability to install GitHub Apps then check out <a href="https://github.com/marketplace/atlassian" target="_blank" rel="noopener noreferrer">Rovo</a>, too:</p>
 
 <ul>
 <li>
@@ -431,7 +433,7 @@ With everything you know from the #rules-for-react.instruction.md, build a new c
 </ul>
 
 <blockquote>
-<p>💎 <a href="https://docs.github.com/en/copilot/concepts/about-copilot-coding-agent">Coding Agent has serious limitations</a>, so check the docs before letting it run wild!</p>
+<p>💎 <a href="https://docs.github.com/en/copilot/concepts/about-copilot-coding-agent" target="_blank" rel="noopener noreferrer">Coding Agent has serious limitations</a>, so check the docs before letting it run wild!</p>
 </blockquote>
 
 
@@ -450,32 +452,32 @@ With everything you know from the #rules-for-react.instruction.md, build a new c
 <p><strong>Prompt:</strong> <code>.github/prompts/generate-commit-message.prompt.md</code><br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="nn"&gt;---&lt;/span&gt;
-&lt;span class="na"&gt;mode&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt; &lt;span class="s"&gt;ask&lt;/span&gt;
-&lt;span class="na"&gt;description&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt; &lt;span class="pi"&gt;|&lt;/span&gt;
-    &lt;span class="s"&gt;This prompt is used to generate a commit message based on changes staged in a Git repository.&lt;/span&gt;
-&lt;span class="na"&gt;tools&lt;/span&gt;&lt;span class="pi"&gt;:&lt;/span&gt;
-&lt;span class="pi"&gt;-&lt;/span&gt; &lt;span class="s"&gt;changes&lt;/span&gt;
-&lt;span class="nn"&gt;---&lt;/span&gt;
+<div class="highlight js-code-highlight">
+<pre><code><span class="nn">---</span>
+<span class="na">mode</span><span class="pi">:</span> <span class="s">ask</span>
+<span class="na">description</span><span class="pi">:</span> <span class="pi">|</span>
+    <span class="s">This prompt is used to generate a commit message based on changes staged in a Git repository.</span>
+<span class="na">tools</span><span class="pi">:</span>
+<span class="pi">-</span> <span class="s">changes</span>
+<span class="nn">---</span>
 
-&lt;span class="gh"&gt;# Generate Commit Changes Prompt&lt;/span&gt;
+<span class="gh"># Generate Commit Changes Prompt</span>
 
 Review all code currently staged and use your chat history, if available, to populate details about the changes. Use the information to generate a concise and informative commit message. It should follow conventional commit standards with a clear type, subject, and bullet points for details.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -502,29 +504,29 @@ Review all code currently staged and use your chat history, if available, to pop
 <p>Once you have this (or any other) reusable prompt stored in VS Code, use a slash command to invoke it in the chat interface. Given the above example, you'd prompt Copilot in the chat with something like<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>/generate-commit-message consider only staged files and generate a new commit that starts with a unique emoji
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
 <p>Considering all the rules I have set up elsewhere outside of that reusable prompt, I still ended up with a nice clean conventional commit (for the most part).<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>🦄 chore: update commit message generation prompt for clarity
 
 • Instructs to review all staged code and use chat history for context
@@ -532,19 +534,19 @@ Review all code currently staged and use your chat history, if available, to pop
 • Specifies format: clear type, subject, and bullet points for details
 • Ensures only staged changes are considered for commit message generation 😊👍
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -674,16 +676,16 @@ Review all code currently staged and use your chat history, if available, to pop
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -705,16 +707,16 @@ Review all code currently staged and use your chat history, if available, to pop
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -736,16 +738,16 @@ Review all code currently staged and use your chat history, if available, to pop
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -767,16 +769,16 @@ Review all code currently staged and use your chat history, if available, to pop
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -798,16 +800,16 @@ Review all code currently staged and use your chat history, if available, to pop
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>

@@ -65,11 +65,11 @@
 
 <meta name="reading-time" content="8 minutes">
 
-<meta name="devto:reactions" content="0">
+<meta name="devto:reactions" content="7">
 
 <meta name="devto:comments" content="0">
 
-<meta name="devto:engagement_score" content="0">
+<meta name="devto:engagement_score" content="7">
 
 <meta name="content-fingerprint" content="27194a296cea3887">
 
@@ -96,7 +96,7 @@
 
 
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2026-01-12T23:25:44Z", "datePublished": "2026-01-14T12:22:00Z", "description": "Why AI orchestration, context limits, and trust matter more than speed\u2014and what building for the next five to ten years actually looks like.", "headline": "Waiting, With Intent: Designing AI Systems for the Long Game \ud83e\udded", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Frofa5lb8e99t19vma01h.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 0}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 0}], "keywords": ["agentic", "ai", "architecture", "devrel"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/waiting-with-intent-designing-ai-systems-for-the-long-game-1abg", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT8M", "url": "https://dev.to/anchildress1/waiting-with-intent-designing-ai-systems-for-the-long-game-1abg", "wordCount": 1814}
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2026-01-12T23:25:44Z", "datePublished": "2026-01-14T12:22:00Z", "description": "Why AI orchestration, context limits, and trust matter more than speed\u2014and what building for the next five to ten years actually looks like.", "headline": "Waiting, With Intent: Designing AI Systems for the Long Game \ud83e\udded", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Frofa5lb8e99t19vma01h.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 0}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 7}], "keywords": ["agentic", "ai", "architecture", "devrel"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/waiting-with-intent-designing-ai-systems-for-the-long-game-1abg", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT8M", "url": "https://dev.to/anchildress1/waiting-with-intent-designing-ai-systems-for-the-long-game-1abg", "wordCount": 1814}
 </script>
 
 <script type="application/ld+json">
@@ -164,7 +164,7 @@
 <p>One of those big challenges is what I keep calling the “memory problem.” I've designed a solution for my own personal agent to manage long-term memory. Yes—I'm aware that GitHub is inevitably going to beat me to a viable solution. <em>Again</em>. But I'm one of those people who will attempt to solve a problem first, get it wrong at least ten different times, and <em>then</em> do the research to fill in the knowledge gaps. Now I just have to muster up enough oomph to actually do it. 🐉🧚‍♀️</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fg4wzwazhknufn2ou2to7.png"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fg4wzwazhknufn2ou2to7.png" alt="Human-crafted, AI-edited badge" loading="lazy" width="200" height="200"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fg4wzwazhknufn2ou2to7.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fg4wzwazhknufn2ou2to7.png" alt="Human-crafted, AI-edited badge" loading="lazy" width="200" height="200"></a></p>
 
 
 <hr>
@@ -196,7 +196,7 @@
 
 <p>The agent will typically make space by compacting information. It will ask the LLM to summarize key points and then it literally drops the original full length novel completely from your active context and replaces it with the cliff notes version. The more summarization, the less accurate things get over time. So naturally you retry prompts while adding back the dropped details and you end up making more calls for a single task overall. The model has to process more and more input just to get you back to the same answer you already had—not necessarily a better one.</p>
 
-<p>People know this is a problem. Tools like <a href="https://github.com/toon-format/toon">Toon</a> exist specifically to minimize input impact for AI. We also have tools like <a href="https://docs.github.com/?search-overlay-open=true&amp;search-overlay-input=runSubagent&amp;search-overlay-ask-ai=true">Copilot's <code>#runSubagent</code></a> to help manage context within a single agent. These aren't true solutions though—they are signals. These are the problems people are trying to solve yesterday while we wait for the next AI evolution to emerge.</p>
+<p>People know this is a problem. Tools like <a href="https://github.com/toon-format/toon" target="_blank" rel="noopener noreferrer">Toon</a> exist specifically to minimize input impact for AI. We also have tools like <a href="https://docs.github.com/?search-overlay-open=true&amp;search-overlay-input=runSubagent&amp;search-overlay-ask-ai=true" target="_blank" rel="noopener noreferrer">Copilot's <code>#runSubagent</code></a> to help manage context within a single agent. These aren't true solutions though—they are signals. These are the problems people are trying to solve yesterday while we wait for the next AI evolution to emerge.</p>
 
 
 <hr>
@@ -216,7 +216,7 @@
 <p>Smaller pieces of work are then sent to the LLM with only relevant context, which is when smarter agents will start to appear. This is where summarization stops and you retain the original intent at both a high-level and at the lowest-level. When we get here, AI generation stops being the problem—the new problem is coordinating all those tiny pieces of work and still accomplishing the larger goal without re-prompting anything previously stated or defined elsewhere already. <em>Welcome to the world of true agent orchestration</em>!</p>
 
 <blockquote>
-<p>💡 <strong>ProTip:</strong> If you want a sneak peek of what this looks like, check out <a href="https://verdent.ai">Verdent.ai</a>. Of all the solutions I've worked with, Verdent is the only one that's truly designed for agent orchestration. It also excels in VS Code and wins every coding competition I've put it in.</p>
+<p>💡 <strong>ProTip:</strong> If you want a sneak peek of what this looks like, check out <a href="https://verdent.ai" target="_blank" rel="noopener noreferrer">Verdent.ai</a>. Of all the solutions I've worked with, Verdent is the only one that's truly designed for agent orchestration. It also excels in VS Code and wins every coding competition I've put it in.</p>
 </blockquote>
 
 
@@ -235,7 +235,7 @@
 <p>Multi-model opposition fits naturally here, too. Different models trained by different companies catch different things. Then the agent can pick one model  to implement and another to review. The point is that they disagree by default and then they converge around a common goal. This is a pivotal moment in the future landscape because officially the LLM is no longer the center of gravity—the agentic system is.</p>
 
 <blockquote>
-<p>🎤 <strong>ShoutOut</strong> <a href="https://dev.to/marcosomma">@marcosomma</a> wrote a brilliant article on <a href="https://dev.to/marcosomma/loopnode-how-orka-orchestrates-iterated-thought-until-agreement-emerges-17l2">the concept of agent convergence</a> a while back and it's still one of my favorites. Worth the read if you missed it!</p>
+<p>🎤 <strong>ShoutOut</strong> <a class="mentioned-user" href="https://dev.to/marcosomma">@marcosomma</a> wrote a brilliant article on <a href="https://dev.to/marcosomma/loopnode-how-orka-orchestrates-iterated-thought-until-agreement-emerges-17l2">the concept of agent convergence</a> a while back and it's still one of my favorites. Worth the read if you missed it!</p>
 </blockquote>
 
 
@@ -304,6 +304,127 @@
   
 
   <!-- Related Posts Section -->
+  
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/can-we-set-the-record-straight-ai-content-and-a-bit-of-sanity-1inj.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Can We Set the Record Straight? AI, Content, and a Bit of Sanity 🙏
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A story-driven look at AI content, bans, why process matters, and why a little honesty beats a blanket rule every time.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#devrel</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/top-10-github-copilot-updates-you-actually-need-to-know-about-297d.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Top 10 GitHub Copilot Updates You Actually Need to Know About 💥
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">GitHub Copilot’s wild late-October 2025 release: agents, smarter reviews, embeddings, metrics, and that one “helpful” test that nearly went to prod. Chaotic, hilarious, and absolutely worth the read.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Copilot Premium Requests—More Than Asked, Exactly What You Need 💸
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Did AI Erase Attribution? Your Git History Is Missing a Co-Author
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Your AI assistant might be the most productive co-author you’ve ever had, but your git history doesn’t know it. Here’s how to fix that.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+    </ul>
+  </section>
   
 
   <p><a href="https://dev.to/anchildress1/waiting-with-intent-designing-ai-systems-for-the-long-game-1abg">Read on Dev.to →</a></p>

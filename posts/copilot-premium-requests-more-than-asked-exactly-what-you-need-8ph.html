@@ -161,14 +161,14 @@
 
 <p>Anyway—this unscheduled detour has a good reason. 🌊 The flood of questions about Copilot’s <em>premium request limits</em> is back, right on schedule. If you added up the messages from every random channel I watch, you could set an atomic clock by this monthly “why am I out of requests?” panic. The closer we get to the first of the month, the faster the confusion multiplies.</p>
 
-<p>These limits are constantly misunderstood, misquoted, or just plain outdated. Honestly, that’s not really surprising—GitHub changes billing often and rarely broadcasts it beyond the <a href="https://github.blog/changelog/?label=copilot&amp;opened-months=10">official changelog</a>. There’s plenty of folklore about how to stretch your monthly allotment too—some of it is even good advice!—but dependable output is another story entirely.</p>
+<p>These limits are constantly misunderstood, misquoted, or just plain outdated. Honestly, that’s not really surprising—GitHub changes billing often and rarely broadcasts it beyond the <a href="https://github.blog/changelog/?label=copilot&amp;opened-months=10" target="_blank" rel="noopener noreferrer">official changelog</a>. There’s plenty of folklore about how to stretch your monthly allotment too—some of it is even good advice!—but dependable output is another story entirely.</p>
 
 <p>So, consider this your wallet-friendly survival guide for that final tight stretch before usage limits reset at midnight UTC on the first of each month—a few truths about GitHub Copilot’s premium requests, plus the workflow tweaks I rely on daily across both Pro and Enterprise.</p>
 
 <p>🎭 <strong>Fair warning:</strong> In case you're new to my ramblings, I’m an easily amused dev with a <em>touch</em> of dramatic flair (understatement?). Let’s see if I can make the boring-but-necessary Copilot billing rules entertaining enough to survive this post—<em>and</em> maybe save you a few premium requests along the way.</p>
 </blockquote>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5e0o7kt9ey2sz1uzllih.png%3FV%3D2025"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5e0o7kt9ey2sz1uzllih.png%3FV%3D2025" alt="Human-crafted, AI-Edited badge" loading="lazy" width="200" height="200"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5e0o7kt9ey2sz1uzllih.png%3FV%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5e0o7kt9ey2sz1uzllih.png%3FV%3D2025" alt="Human-crafted, AI-Edited badge" loading="lazy" width="200" height="200"></a></p>
 
 
 <hr>
@@ -202,9 +202,9 @@
 
 <p>When the concept of premium requests was first introduced, it was nothing more than a seemingly arbitrary and proprietary—read, hidden—calculation describing a unit of AI usage that's in a serious, long-term relationship with your monthly bill. Otherwise, it was a complete mystery to everyone. I mean, even GitHub had a hard time trying to explain what was happening!</p>
 
-<p>For the record, most IDE integrations now have a built-in monitoring system in the form of a tiny Copilot button in your status bar. Don't expect any real metrics from this view, for that you'd have to check out your <a href="https://github.com/settings/billing/premium_requests_usage">GitHub settings for billing</a> (unless you're under a larger organization or enterprise, then that view is usually routed directly to admins instead). For quick view though, this version is very convenient.</p>
+<p>For the record, most IDE integrations now have a built-in monitoring system in the form of a tiny Copilot button in your status bar. Don't expect any real metrics from this view, for that you'd have to check out your <a href="https://github.com/settings/billing/premium_requests_usage" target="_blank" rel="noopener noreferrer">GitHub settings for billing</a> (unless you're under a larger organization or enterprise, then that view is usually routed directly to admins instead). For quick view though, this version is very convenient.</p>
 
-<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgleewmhul44yofowt99g.png%3Fv%3D2025"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgleewmhul44yofowt99g.png%3Fv%3D2025" alt="VS Code Insiders screenshot of Copilot Premium Request monitoring view" loading="lazy" width="571" height="874"></a></p>
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgleewmhul44yofowt99g.png%3Fv%3D2025" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fgleewmhul44yofowt99g.png%3Fv%3D2025" alt="VS Code Insiders screenshot of Copilot Premium Request monitoring view" loading="lazy" width="571" height="874"></a></p>
 
 <p>Not everyone was aware of the announcement GitHub made sharing their plan to start enforcing premium request limits. But these premium requests had been around for a while by then—they just lacked meaning from the user's perspective. After a few false starts, GitHub officially started enforcing this seemingly arbitrary calculation starting June 18, 2025. So, <em>I knew</em> the death of free unrestricted access was approaching—<em>fast</em>. So right up until that date, I used Copilot literally as much as possible. </p>
 
@@ -234,19 +234,19 @@
 <strong>The request is also multiplied by your model's multiplier.</strong> Some models cost less and others cost more. Besides, not all models are great at <em>everything</em> anyway (not even Claude!)</li>
 </ol>
 
-<p>There are a couple of exceptions to this standard, but the rules are subject to change at any time and without warning. Especially for preview features. If you don't have an active line to <a href="https://github.blog/changelog/?label=copilot&amp;opened-months=10">GitHub's Changelog</a> in some form, now's the perfect time to fix that problem! As of today (meaning the <code>Posted on</code> date at the top), exceptions include:</p>
+<p>There are a couple of exceptions to this standard, but the rules are subject to change at any time and without warning. Especially for preview features. If you don't have an active line to <a href="https://github.blog/changelog/?label=copilot&amp;opened-months=10" target="_blank" rel="noopener noreferrer">GitHub's Changelog</a> in some form, now's the perfect time to fix that problem! As of today (meaning the <code>Posted on</code> date at the top), exceptions include:</p>
 
 <ol>
 <li>
-<strong><a href="https://docs.github.com/en/copilot/concepts/auto-model-selection">Auto model selection</a></strong> is billed at 90% cost. It's a new feature designed to reduce <em>rate limits</em> by automatically selecting the <em>most available</em> model—note that this is not the same thing as the most <em>appropriate model</em>! However, for small scale, non-critical tasks it's a great way to rack up easy savings.</li>
+<strong><a href="https://docs.github.com/en/copilot/concepts/auto-model-selection" target="_blank" rel="noopener noreferrer">Auto model selection</a></strong> is billed at 90% cost. It's a new feature designed to reduce <em>rate limits</em> by automatically selecting the <em>most available</em> model—note that this is not the same thing as the most <em>appropriate model</em>! However, for small scale, non-critical tasks it's a great way to rack up easy savings.</li>
 <li>
-<strong><a href="https://docs.github.com/en/copilot/concepts/spark">GitHub Spark</a></strong> is billed at 4x cost for every single prompt. Yes—Spark is fantastic! You're paying for that with every prompt you send, too! </li>
+<strong><a href="https://docs.github.com/en/copilot/concepts/spark" target="_blank" rel="noopener noreferrer">GitHub Spark</a></strong> is billed at 4x cost for every single prompt. Yes—Spark is fantastic! You're paying for that with every prompt you send, too! </li>
 </ol>
 
 <blockquote>
 <p>Also <strong>quick PSA</strong>, just in case: Spark is <em>not a chat bot</em>—don’t waste your prompts expecting Copilot-styled answers. You prompt, it codes—period.</p>
 
-<p>🦄 <a href="https://github.com/spark">GitHub Spark</a> is still pretty new and is currently available if you have an Enterprise or Pro+ subscription. I'm not sure how long that will last, but historically access has been expanded to include the Business tier next, followed by Pro, and finally the Free tier.</p>
+<p>🦄 <a href="https://github.com/spark" target="_blank" rel="noopener noreferrer">GitHub Spark</a> is still pretty new and is currently available if you have an Enterprise or Pro+ subscription. I'm not sure how long that will last, but historically access has been expanded to include the Business tier next, followed by Pro, and finally the Free tier.</p>
 </blockquote>
 
 
@@ -260,65 +260,66 @@
 
 <p>You can consider these guys thoroughly tested and mildly abused: here’s the model lineup I actually use—what works, what breaks, and when it’s worth the cost. </p>
 
-&lt;div class="table-wrapper-paragraph"&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;<strong>Model</strong>&lt;/th&gt;
-&lt;th&gt;<strong>Multiplier</strong>&lt;/th&gt;
-&lt;th&gt;<strong>Best For</strong>&lt;/th&gt;
-&lt;th&gt;<strong>Beware Of</strong>&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;GPT-4.1&lt;/td&gt;
-&lt;td&gt;0x = Free&lt;/td&gt;
-&lt;td&gt;Great for exploring ideas or acting as a rubber duck. Surprisingly creative.&lt;/td&gt;
-&lt;td&gt;Weak on structured implementation unless carefully guided (even with <a href="https://github.com/github/awesome-copilot/blob/main/chatmodes/4.1-Beast.chatmode.md">Beast Mode</a>).&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;o4-mini&lt;/td&gt;
-&lt;td&gt;0.33x&lt;/td&gt;
-&lt;td&gt;Finds obscure patterns in small, focused data sets. Excellent for root-cause analysis.&lt;/td&gt;
-&lt;td&gt;Overwhelmed by large context windows—keep inputs tight.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Grok Code Fast 1&lt;/td&gt;
-&lt;td&gt;0x = Free&lt;/td&gt;
-&lt;td&gt;Speedy, accurate edits when given clear instructions.&lt;/td&gt;
-&lt;td&gt;Trades reasoning for speed—logic decisions become coin flips.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;GPT-5-mini&lt;/td&gt;
-&lt;td&gt;0x = Free&lt;/td&gt;
-&lt;td&gt;Handles small-to-medium tasks cleanly. Can reliably handle smallish leaps of logic.&lt;/td&gt;
-&lt;td&gt;Constant stream of chaos in chat output—don’t read mid-generation unless you enjoy mild terror.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Gemini 2.5 Pro&lt;/td&gt;
-&lt;td&gt;1×&lt;/td&gt;
-&lt;td&gt;Strong at complex mid-sized tasks with reliable results.&lt;/td&gt;
-&lt;td&gt;Availability fluctuates wildly.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Claude Sonnet 4.5&lt;/td&gt;
-&lt;td&gt;1×&lt;/td&gt;
-&lt;td&gt;Excellent at visual reasoning and UI logic.&lt;/td&gt;
-&lt;td&gt;Loves building glitter-bomb tangents of documentation you never asked for.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Claude Opus 4.1&lt;/td&gt;
-&lt;td&gt;10×&lt;/td&gt;
-&lt;td&gt;Ideal for planning large epics and solving hard problems.&lt;/td&gt;
-&lt;td&gt;Only runs in “Ask” mode—no agent execution.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;&lt;/div&gt;
+<div class="table-wrapper-paragraph">
+
+
+
+<strong>Model</strong>
+<strong>Multiplier</strong>
+<strong>Best For</strong>
+<strong>Beware Of</strong>
+
+
+
+
+GPT-4.1
+0x = Free
+Great for exploring ideas or acting as a rubber duck. Surprisingly creative.
+Weak on structured implementation unless carefully guided (even with <a href="https://github.com/github/awesome-copilot/blob/main/chatmodes/4.1-Beast.chatmode.md" target="_blank" rel="noopener noreferrer">Beast Mode</a>).
+
+
+o4-mini
+0.33x
+Finds obscure patterns in small, focused data sets. Excellent for root-cause analysis.
+Overwhelmed by large context windows—keep inputs tight.
+
+
+Grok Code Fast 1
+0x = Free
+Speedy, accurate edits when given clear instructions.
+Trades reasoning for speed—logic decisions become coin flips.
+
+
+GPT-5-mini
+0x = Free
+Handles small-to-medium tasks cleanly. Can reliably handle smallish leaps of logic.
+Constant stream of chaos in chat output—don’t read mid-generation unless you enjoy mild terror.
+
+
+Gemini 2.5 Pro
+1×
+Strong at complex mid-sized tasks with reliable results.
+Availability fluctuates wildly.
+
+
+Claude Sonnet 4.5
+1×
+Excellent at visual reasoning and UI logic.
+Loves building glitter-bomb tangents of documentation you never asked for.
+
+
+Claude Opus 4.1
+10×
+Ideal for planning large epics and solving hard problems.
+Only runs in “Ask” mode—no agent execution.
+
+
+</div>
 
 <blockquote>
 <p>🦄 For the record, there's quite a few models missing from this list. GitHub keeps pushing more before I can figure out the current one! I'm on it, but these things take time...</p>
 
-<p>💡 <strong>ProTip:</strong> Model availability is based on license tier, environment, and chat mode. Always check <a href="https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/ai-models/supported-models">GitHub Docs</a> for what’s actually usable.</p>
+<p>💡 <strong>ProTip:</strong> Model availability is based on license tier, environment, and chat mode. Always check <a href="https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/ai-models/supported-models" target="_blank" rel="noopener noreferrer">GitHub Docs</a> for what’s actually usable.</p>
 </blockquote>
 
 
@@ -347,42 +348,42 @@
 <p>I shared this same prompt last week, but it’s still the perfect example of how I work. You could even adapt it into <a href="https://dev.to/anchildress1/github-copilot-everything-you-wanted-to-know-about-reusable-and-experimental-prompts-part-1-iff">your own reusable prompt</a>. I probably would have done that already had I not gotten sick of rewriting a new one every time a new model debuts!<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
-<pre><code>&lt;span class="gh"&gt;# ─────────────── CONTEXT ───────────────&lt;/span&gt;
-&lt;span class="p"&gt;-&lt;/span&gt; Using #atlassian/atlassian-mcp-server, pull info for JIRA-123, including any linked documentation in Confluence.  
-&lt;span class="p"&gt;-&lt;/span&gt; Gather info to assess changes required in this #codebase.  
+<div class="highlight js-code-highlight">
+<pre><code><span class="gh"># ─────────────── CONTEXT ───────────────</span>
+<span class="p">-</span> Using #atlassian/atlassian-mcp-server, pull info for JIRA-123, including any linked documentation in Confluence.  
+<span class="p">-</span> Gather info to assess changes required in this #codebase.  
 
-&lt;span class="gh"&gt;# ─────────────── TASK BREAKDOWN ───────────────&lt;/span&gt;
-&lt;span class="p"&gt;-&lt;/span&gt; DO NOT MAKE CHANGES YET.  
-&lt;span class="p"&gt;-&lt;/span&gt; Break this story into concise iterative pieces that include testing at every step.  
+<span class="gh"># ─────────────── TASK BREAKDOWN ───────────────</span>
+<span class="p">-</span> DO NOT MAKE CHANGES YET.  
+<span class="p">-</span> Break this story into concise iterative pieces that include testing at every step.  
 
-&lt;span class="gh"&gt;# ─────────────── OUTPUT STRUCTURE ───────────────&lt;/span&gt;
-&lt;span class="p"&gt;-&lt;/span&gt; Document all iterative steps required to meet all acceptance criteria as an ordered list of individual steps with an accompanying unordered checklist.  
-&lt;span class="p"&gt;-&lt;/span&gt; Each numbered step should be clear enough that any AI agent can be prompted one step at a time to complete and fully test with both integration and unit tests, whenever applicable.  
+<span class="gh"># ─────────────── OUTPUT STRUCTURE ───────────────</span>
+<span class="p">-</span> Document all iterative steps required to meet all acceptance criteria as an ordered list of individual steps with an accompanying unordered checklist.  
+<span class="p">-</span> Each numbered step should be clear enough that any AI agent can be prompted one step at a time to complete and fully test with both integration and unit tests, whenever applicable.  
 
-&lt;span class="gh"&gt;# ─────────────── SCOPE GUARDRAIL ───────────────&lt;/span&gt;
-&lt;span class="p"&gt;-&lt;/span&gt; DO NOT break down tasks unnecessarily—the goal is for each step to be both meaningful and fully testable.  
+<span class="gh"># ─────────────── SCOPE GUARDRAIL ───────────────</span>
+<span class="p">-</span> DO NOT break down tasks unnecessarily—the goal is for each step to be both meaningful and fully testable.  
 
-&lt;span class="gh"&gt;# ─────────────── COMPLETION CRITERIA ───────────────&lt;/span&gt;
-&lt;span class="p"&gt;-&lt;/span&gt; When all items are marked complete, acceptance criteria for this story should be met and all happy, sad, and edge-case paths accounted for.  
+<span class="gh"># ─────────────── COMPLETION CRITERIA ───────────────</span>
+<span class="p">-</span> When all items are marked complete, acceptance criteria for this story should be met and all happy, sad, and edge-case paths accounted for.  
 
-&lt;span class="gh"&gt;# ─────────────── ADMIN NOTES ───────────────&lt;/span&gt;
-&lt;span class="p"&gt;-&lt;/span&gt; Include documentation updates and any relevant deployment tasks.  
-&lt;span class="p"&gt;-&lt;/span&gt; Save this concise story breakdown in a new file named &lt;span class="sb"&gt;`./progress.tmp`&lt;/span&gt;.
+<span class="gh"># ─────────────── ADMIN NOTES ───────────────</span>
+<span class="p">-</span> Include documentation updates and any relevant deployment tasks.  
+<span class="p">-</span> Save this concise story breakdown in a new file named <span class="sb">`./progress.tmp`</span>.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 <p>I can’t stress enough how important Human-in-the-Loop (HITL) review is here. This output becomes your map for Copilot from now until completion. There’s rarely reason to waste premium requests iterating accuracy here; you’ll fix more by reading through and making quick corrections yourself.</p>
@@ -398,12 +399,12 @@
   Aside for Spec Kit 🧰
 </h3>
 
-<p>I’ll sometimes use <a href="https://github.github.com/spec-kit/">Spec Kit</a> for planning. It’s excellent at writing ultra-detailed requirements, though the “you get what you pay for” rule applies. A detailed spec usually costs at minimum five premium requests—worth it for complex work, but overkill for the small stuff.</p>
+<p>I’ll sometimes use <a href="https://github.github.com/spec-kit/" target="_blank" rel="noopener noreferrer">Spec Kit</a> for planning. It’s excellent at writing ultra-detailed requirements, though the “you get what you pay for” rule applies. A detailed spec usually costs at minimum five premium requests—worth it for complex work, but overkill for the small stuff.</p>
 
 <p>If I’m dealing with serious complexity, Spec Kit is a must-have. For quick stories, you’ll spend more defining the spec than just prompting Copilot to code it in one shot.</p>
 
 <blockquote>
-<p>🦄 If you haven’t tried <a href="https://github.github.com/spec-kit/">Spec Kit</a> yet, it’s worth a spin. Maybe their flavor clicks with you and the cost becomes worth it—in which case, great!—if it works for you, then go with it!</p>
+<p>🦄 If you haven’t tried <a href="https://github.github.com/spec-kit/" target="_blank" rel="noopener noreferrer">Spec Kit</a> yet, it’s worth a spin. Maybe their flavor clicks with you and the cost becomes worth it—in which case, great!—if it works for you, then go with it!</p>
 </blockquote>
 
 <hr>
@@ -417,42 +418,43 @@
 
 <p>My usual picks here are Grok or GPT-5-mini—despite mini’s flair for chaos, both deliver solid implementations when given the right step. That said, choose by scenario:</p>
 
-&lt;div class="table-wrapper-paragraph"&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;<strong>Use Case</strong>&lt;/th&gt;
-&lt;th&gt;<strong>Model</strong>&lt;/th&gt;
-&lt;th&gt;<strong>Cost</strong>&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Requires logical decision-making?&lt;/td&gt;
-&lt;td&gt;GPT-5-mini&lt;/td&gt;
-&lt;td&gt;FREE&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Step-by-step plan already defined?&lt;/td&gt;
-&lt;td&gt;Grok&lt;/td&gt;
-&lt;td&gt;FREE&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Data-heavy or analytical task?&lt;/td&gt;
-&lt;td&gt;o4-mini&lt;/td&gt;
-&lt;td&gt;0.33&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Slightly bloated but non-critical?&lt;/td&gt;
-&lt;td&gt;Auto&lt;/td&gt;
-&lt;td&gt;0.90&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Truly complex or experimental?&lt;/td&gt;
-&lt;td&gt;Claude/GPT&lt;/td&gt;
-&lt;td&gt;1×&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;&lt;/div&gt;
+<div class="table-wrapper-paragraph">
+
+
+
+<strong>Use Case</strong>
+<strong>Model</strong>
+<strong>Cost</strong>
+
+
+
+
+Requires logical decision-making?
+GPT-5-mini
+FREE
+
+
+Step-by-step plan already defined?
+Grok
+FREE
+
+
+Data-heavy or analytical task?
+o4-mini
+0.33
+
+
+Slightly bloated but non-critical?
+Auto
+0.90
+
+
+Truly complex or experimental?
+Claude/GPT
+1×
+
+
+</div>
 
 <p>This list doesn’t cover every case—it just reflects the scenarios I see most often. And yes, I've been (accurately) accused of vanishing whenever UI work appears; my status with frontend dev remains set to “it’s complicated.” </p>
 
@@ -475,19 +477,19 @@
 
 <p>My exaggeratedly simple CoT example:</p>
 
-<p>&lt;link rel="stylesheet" href="https://assets.dev.to/assets/katex-7b986a08a52ed11e0e3379cd9c4bb3ccb187f09c249a1de099b16c423e34bb76.css"&gt;
+<p>
 
 </p>
-&lt;div class="katex-element"&gt;
-  &lt;span class="katex-display"&gt;&lt;span class="katex"&gt;&lt;span class="katex-mathml"&gt;&lt;math xmlns="http://www.w3.org/1998/Math/MathML" display="block"&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;S&lt;/mi&gt;&lt;mi&gt;T&lt;/mi&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mi&gt;R&lt;/mi&gt;&lt;mi&gt;T&lt;/mi&gt;&lt;mo&gt;→&lt;/mo&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mo&gt;→&lt;/mo&gt;&lt;mi&gt;B&lt;/mi&gt;&lt;mo&gt;→&lt;/mo&gt;&lt;mi&gt;C&lt;/mi&gt;&lt;mo&gt;→&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;→&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;→&lt;/mo&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;→&lt;/mo&gt;&lt;mi&gt;E&lt;/mi&gt;&lt;mi&gt;N&lt;/mi&gt;&lt;mi&gt;D&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding="application/x-tex"&gt;START → A → B → C → 1 → 2 → 3 → END &lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class="katex-html" aria-hidden="true"&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6833em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.13889em;"&gt;ST&lt;/span&gt;&lt;span class="mord mathnormal"&gt;A&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.13889em;"&gt;RT&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;→&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6833em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal"&gt;A&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;→&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6833em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.05017em;"&gt;B&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;→&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6833em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.07153em;"&gt;C&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;→&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6444em;"&gt;&lt;/span&gt;&lt;span class="mord"&gt;1&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;→&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6444em;"&gt;&lt;/span&gt;&lt;span class="mord"&gt;2&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;→&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6444em;"&gt;&lt;/span&gt;&lt;span class="mord"&gt;3&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;span class="mrel"&gt;→&lt;/span&gt;&lt;span class="mspace" style="margin-right:0.2778em;"&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="base"&gt;&lt;span class="strut" style="height:0.6833em;"&gt;&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.10903em;"&gt;EN&lt;/span&gt;&lt;span class="mord mathnormal" style="margin-right:0.02778em;"&gt;D&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
-&lt;/div&gt;
+<div class="katex-element">
+  <span class="katex-display"><span class="katex"><span class="katex-mathml">START→A→B→C→1→2→3→ENDSTART → A → B → C → 1 → 2 → 3 → END </span><span class="katex-html"><span class="base"><span class="strut"></span><span class="mord mathnormal">ST</span><span class="mord mathnormal">A</span><span class="mord mathnormal">RT</span><span class="mspace"></span><span class="mrel">→</span><span class="mspace"></span></span><span class="base"><span class="strut"></span><span class="mord mathnormal">A</span><span class="mspace"></span><span class="mrel">→</span><span class="mspace"></span></span><span class="base"><span class="strut"></span><span class="mord mathnormal">B</span><span class="mspace"></span><span class="mrel">→</span><span class="mspace"></span></span><span class="base"><span class="strut"></span><span class="mord mathnormal">C</span><span class="mspace"></span><span class="mrel">→</span><span class="mspace"></span></span><span class="base"><span class="strut"></span><span class="mord">1</span><span class="mspace"></span><span class="mrel">→</span><span class="mspace"></span></span><span class="base"><span class="strut"></span><span class="mord">2</span><span class="mspace"></span><span class="mrel">→</span><span class="mspace"></span></span><span class="base"><span class="strut"></span><span class="mord">3</span><span class="mspace"></span><span class="mrel">→</span><span class="mspace"></span></span><span class="base"><span class="strut"></span><span class="mord mathnormal">EN</span><span class="mord mathnormal">D</span></span></span></span></span>
+</div>
 
 
 
 <p>Or with words, if you prefer:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>CoT is nothing more than step-by-step directions.
 Sometimes, it looks like the prompt example above.
 But that's not a requirement of any kind.
@@ -501,19 +503,19 @@ Continue until you're finished.
 But you can abandon ship at any point—
 before anything gets too complicated.
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -594,16 +596,16 @@ before anything gets too complicated.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -625,16 +627,16 @@ before anything gets too complicated.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -656,16 +658,16 @@ before anything gets too complicated.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -687,16 +689,16 @@ before anything gets too complicated.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -718,16 +720,16 @@ before anything gets too complicated.
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>

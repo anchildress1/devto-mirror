@@ -198,7 +198,7 @@
 <p><strong>How the provider (GitHub, Microsoft, etc.) designs and delivers Copilot</strong> - safe, fair, and transparent. </p>
 
 <blockquote>
-<p>Want the official version? <a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai">Check Microsoft's builders page</a>!</p>
+<p>Want the official version? <a href="https://learn.microsoft.com/en-us/azure/machine-learning/concept-responsible-ai" target="_blank" rel="noopener noreferrer">Check Microsoft's builders page</a>!</p>
 </blockquote>
 </li>
 <li><p><strong>How you use Copilot (or any AI)</strong> - what you build, how you share it, and what you let out into the world. That’s the half I’m tackling here.</p></li>
@@ -213,7 +213,7 @@
   🔒 The “Yeah, But” List: Copilot Limitations
 </h2>
 
-<p>Based on <a href="https://docs.github.com/en/copilot/responsible-use-of-github-copilot-features/responsible-use-of-github-copilot-chat-in-your-ide?tool=vscode#limitations-of-github-copilot-chat">GitHub’s official docs</a>, plus my spin for maximum realness:</p>
+<p>Based on <a href="https://docs.github.com/en/copilot/responsible-use-of-github-copilot-features/responsible-use-of-github-copilot-chat-in-your-ide?tool=vscode#limitations-of-github-copilot-chat" target="_blank" rel="noopener noreferrer">GitHub’s official docs</a>, plus my spin for maximum realness:</p>
 
 <ul>
 <li>
@@ -274,24 +274,24 @@
 <p>If Copilot whipped up your report (and it’s not code), just tack on a quick footer. Seriously - a copy, a paste, and you’re done. Want to automate it? Set up a user instruction and let Copilot add the credit line for you:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>---
 
 Generated with the help of GitHub Copilot, as directed by [YOUR NAME]
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -318,31 +318,31 @@ Generated with the help of GitHub Copilot, as directed by [YOUR NAME]
 <p>🪦 Confession: I used to be the world’s <strong>worst committer</strong>! think “welp, THAT didn’t work” as a real commit message. And yes, it happened more than once...</p>
 </blockquote>
 
-<p>Eventually, I went on a mission to find a clear, repeatable way to flag my AI-assisted commits. The answer? <a href="https://www.conventionalcommits.org/en/v1.0.0/#summary">Conventional Commits</a> (plus a linter for good measure). </p>
+<p>Eventually, I went on a mission to find a clear, repeatable way to flag my AI-assisted commits. The answer? <a href="https://www.conventionalcommits.org/en/v1.0.0/#summary" target="_blank" rel="noopener noreferrer">Conventional Commits</a> (plus a linter for good measure). </p>
 
 <p>Never seen one? Here’s what it looks like:<br>
 </p>
 
-&lt;div class="highlight js-code-highlight"&gt;
+<div class="highlight js-code-highlight">
 <pre><code>feat(api): [JIRA-123] Add api for xyz
 
 [optional bulleted list of changes]
 
 [footers - where the magic happens]
 </code></pre>
-&lt;div class="highlight__panel js-actions-panel"&gt;
-&lt;div class="highlight__panel-action js-fullscreen-code-action"&gt;
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-on"&gt;&lt;title&gt;Enter fullscreen mode&lt;/title&gt;
-    &lt;path d="M16 3h6v6h-2V5h-4V3zM2 3h6v2H4v4H2V3zm18 16v-4h2v6h-6v-2h4zM4 19h4v2H2v-6h2v4z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
 
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewbox="0 0 24 24" class="highlight-action crayons-icon highlight-action--fullscreen-off"&gt;&lt;title&gt;Exit fullscreen mode&lt;/title&gt;
-    &lt;path d="M18 7h4v2h-6V3h2v4zM8 9H2V7h4V3h2v6zm10 8v4h-2v-6h6v2h-4zM8 15v6H6v-4H2v-2h6z"&gt;&lt;/path&gt;
-&lt;/svg&gt;
 
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
 
 
 
@@ -529,10 +529,10 @@ Me: “You’ve got to be kidding me...”</p>
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#tutorial</span>
@@ -557,10 +557,10 @@ Me: “You’ve got to be kidding me...”</p>
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#tutorial</span>
@@ -585,10 +585,10 @@ Me: “You’ve got to be kidding me...”</p>
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#tutorial</span>
@@ -613,10 +613,10 @@ Me: “You’ve got to be kidding me...”</p>
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#tutorial</span>
@@ -641,10 +641,10 @@ Me: “You’ve got to be kidding me...”</p>
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#ai</span>
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+                             margin: 0 2px; color:#495057;">#ai</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#tutorial</span>
