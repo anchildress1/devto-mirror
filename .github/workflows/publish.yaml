@@ -100,7 +100,31 @@ jobs:
           echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Repo: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
           uv run python scripts/generate_site.py
-          echo "✅ Generated" >> $GITHUB_STEP_SUMMARY
+
+      - name: Note site generation success
+        if: steps.generate.outputs.no_new_posts != 'true'
+        run: echo "✅ Generated" >> $GITHUB_STEP_SUMMARY
+
+      - name: Prepare timestamp-only deployment
+        if: steps.generate.outputs.no_new_posts == 'true'
+        run: |
+          mkdir -p _deploy
+          [ -f .nojekyll ] && cp .nojekyll _deploy/
+          [ -f last_run.txt ] && cp last_run.txt _deploy/
+
+      - name: Deploy timestamp-only update
+        if: steps.generate.outputs.no_new_posts == 'true'
+        timeout-minutes: 5
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_deploy
+          publish_branch: gh-pages
+          keep_files: true
+          force_orphan: false
+          user_name: ci-bot
+          user_email: actions@users.noreply.github.com
+          commit_message: 'chore: deploy dev.to mirror (timestamp only)'
 
       - name: Validate generated site
         if: steps.generate.outputs.no_new_posts != 'true'
