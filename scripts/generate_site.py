@@ -168,6 +168,11 @@ def _fetch_full_article_json(
     timeout: int = 30,
     initial_retry_delay: int = 2,
 ) -> dict | None:
+    # Defensive: if the caller asks for zero attempts, be explicit about returning None.
+    # (Avoids mixing explicit and implicit returns.)
+    if max_retries < 1:
+        return None
+
     retry_delay = initial_retry_delay
     for attempt in range(max_retries):
         try:
@@ -176,7 +181,7 @@ def _fetch_full_article_json(
             return full_response.json()
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
             if attempt < max_retries - 1:
-                print(f"  ⚠️  Timeout/connection error on attempt {attempt + 1}, " f"retrying in {retry_delay}s...")
+                print(f"  ⚠️  Timeout/connection error on attempt {attempt + 1}, retrying in {retry_delay}s...")
                 time.sleep(retry_delay)
                 retry_delay *= 2  # Exponential backoff
                 continue
@@ -351,8 +356,7 @@ env = Environment(autoescape=select_autoescape(["html", "xml"]))
 # Get the post template (from file or inline fallback)
 PAGE_TMPL = get_post_template()
 
-COMMENT_NOTE_TMPL = env.from_string(
-    """<!doctype html><html lang="en"><head>
+COMMENT_NOTE_TMPL = env.from_string("""<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ title }}</title>
 <link rel="canonical" href="{{ canonical }}">
@@ -405,8 +409,7 @@ COMMENT_NOTE_TMPL = env.from_string(
   <p><a href="{{ url }}">Open on Dev.to →</a></p>
 </main>
 </body></html>
-"""
-)
+""")
 
 
 # ----------------------------
