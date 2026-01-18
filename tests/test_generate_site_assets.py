@@ -6,6 +6,7 @@ These tests run the script in VALIDATION_MODE to avoid network calls.
 """
 
 import glob
+import json
 import os
 import shutil
 import subprocess  # nosec: B404
@@ -147,16 +148,42 @@ class TestGenerateSiteAssets(unittest.TestCase):
                 os.rename(tmp_l, self.llms_path)
 
     def test_no_new_posts_short_circuits_gracefully(self):
+        # Simulate a normal (non-validation) incremental run where there are no new posts.
+        # Create a last_run.txt so the generator treats this as an incremental check.
+        (Path(ROOT) / "last_run.txt").write_text("2025-01-01T00:00:00+00:00", encoding="utf-8")
+
         res = self._run_generate(
             {
                 "DEVTO_MIRROR_FORCE_EMPTY_FEED": "true",
                 # Disable validation mode so the empty feed path is exercised without network calls
                 "VALIDATION_MODE": "false",
+                # Ensure we are not in full-regeneration mode
+                "FORCE_FULL_REGEN": "false",
             }
         )
         self.assertEqual(res.returncode, 0, msg=f"Generator failed on empty feed: {res.stderr.decode()}")
         marker_path = Path(ROOT) / "no_new_posts.flag"
         self.assertTrue(marker_path.exists(), "No-new-posts marker should be created")
+
+        # When short-circuiting, we should not generate full site artifacts.
+        self.assertFalse(os.path.exists(os.path.join(ROOT, "index.html")), "index.html should not be generated")
+        self.assertFalse(os.path.exists(os.path.join(ROOT, "sitemap.xml")), "sitemap.xml should not be generated")
+
+    def test_generate_runs_gracefully_with_zero_posts(self):
+        # Simulate a user with no posts (or no new posts + no cached state) during validation.
+        # The generator must still produce required artifacts and exit 0.
+        res = self._run_generate(extra_env={"VALIDATION_NO_POSTS": "true"})
+        self.assertEqual(res.returncode, 0, msg=f"Generator failed with zero posts: {res.stderr.decode()}")
+
+        # Required artifacts should still exist.
+        for fname in ("index.html", "sitemap.xml", "posts_data.json", "last_run.txt"):
+            path = os.path.join(ROOT, fname)
+            self.assertTrue(os.path.exists(path), msg=f"Missing required artifact: {fname}")
+
+        # posts_data.json should be valid JSON and (in this case) empty.
+        with open(os.path.join(ROOT, "posts_data.json"), "r", encoding="utf-8") as f:
+            data = json.load(f)
+        self.assertEqual(data, [], msg="Expected posts_data.json to be an empty list when zero posts are available")
 
 
 if __name__ == "__main__":

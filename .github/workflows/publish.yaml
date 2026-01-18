@@ -66,6 +66,13 @@ jobs:
             else
               echo "⚠️ last_run.txt not found on gh-pages branch" >> $GITHUB_STEP_SUMMARY
             fi
+
+            if git show origin/gh-pages:posts_data.json >/dev/null 2>&1; then
+              git show origin/gh-pages:posts_data.json > posts_data.json
+              echo "🔄 Restored posts_data.json from gh-pages" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ posts_data.json not found on gh-pages branch" >> $GITHUB_STEP_SUMMARY
+            fi
           else
             echo "🆕 gh-pages branch does not exist yet; skipping last_run restore" >> $GITHUB_STEP_SUMMARY
           fi

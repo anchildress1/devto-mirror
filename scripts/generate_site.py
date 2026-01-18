@@ -7,6 +7,7 @@ import re
 import sys
 import time
 from datetime import datetime, timezone
+from typing import NamedTuple
 
 # Add parent directory to path for imports BEFORE other local imports
 sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
@@ -64,6 +65,13 @@ if AI_OPTIMIZATION_AVAILABLE:
     except Exception as e:
         logging.warning(f"Failed to initialize AI optimization manager: {e}")
         ai_manager = None
+
+
+class FetchArticlesResult(NamedTuple):
+    articles: list[dict]
+    success: bool
+    no_new_posts: bool
+    source: str
 
 
 def get_last_run_timestamp():
@@ -209,7 +217,31 @@ def _try_load_cached_articles():
                 cached_data = json.load(f)
                 if cached_data and len(cached_data) > 0:
                     print(f"✅ Found {len(cached_data)} cached articles")
-                    return cached_data
+                    # posts_data.json stores mirror-specific keys (link/date/content_html/etc).
+                    # Convert to Dev.to API-like objects so Post() can consume them safely.
+                    converted = []
+                    for item in cached_data:
+                        if not isinstance(item, dict):
+                            continue
+                        url = (item.get("url") or item.get("link") or "").strip()
+                        converted.append(
+                            {
+                                "id": item.get("id") or 0,
+                                "title": item.get("title") or "Untitled",
+                                "url": url,
+                                "published_at": item.get("published_at") or item.get("date") or "",
+                                "body_html": item.get("body_html") or item.get("content_html") or "",
+                                "description": (item.get("description") or "").strip(),
+                                "cover_image": item.get("cover_image") or "",
+                                "tag_list": item.get("tag_list") or item.get("tags") or [],
+                                "slug": item.get("slug") or "",
+                                "user": {
+                                    "name": item.get("author") or "",
+                                    "username": DEVTO_USERNAME,
+                                },
+                            }
+                        )
+                    return converted
         print("❌ No cached articles available")
         return []
     except Exception as e:
@@ -217,50 +249,75 @@ def _try_load_cached_articles():
         return []
 
 
-def fetch_all_articles_from_api(last_run_iso=None):
-    """Public API that returns full-article objects after pagination.
-    Delegates to smaller helpers to keep complexity low.
+def fetch_all_articles_from_api(last_run_iso=None) -> FetchArticlesResult:
+    """Return full-article objects plus fetch metadata.
+
+    We distinguish between:
+    - *no new posts* (a successful incremental check that yields nothing)
+    - *API failure* (where we may fall back to cached posts_data.json)
+
+    That distinction matters because advancing last_run.txt on API failure can
+    permanently skip content.
     """
-    # Testing hook (for test suites/local development only; do not enable in production):
-    # allows forcing an empty feed without hitting the network.
+    # Testing hook (test suites/local development only): force empty feed without network calls.
     if os.getenv("DEVTO_MIRROR_FORCE_EMPTY_FEED", "").lower() in ("true", "1", "yes"):
-        return []
+        return FetchArticlesResult(
+            articles=[],
+            success=True,
+            no_new_posts=bool(last_run_iso),
+            source="forced-empty",
+        )
 
     if VALIDATION_MODE:
+        # Allow tests/validation to simulate an account with zero posts.
+        # This must still generate required artifacts without attempting network calls.
+        if os.getenv("VALIDATION_NO_POSTS", "").lower() in ("true", "1", "yes"):
+            return FetchArticlesResult(articles=[], success=True, no_new_posts=False, source="validation")
+
         # Return mock data for validation
         # Uncomment the next line to test validation failure detection:
         # raise RuntimeError("Test validation failure")
-        return [
-            {
-                "id": 1,
-                "title": "Test Article",
-                "url": f"https://dev.to/{DEVTO_USERNAME}/test-article",
-                "published_at": "2024-01-01T00:00:00Z",
-                "body_html": "<p>Test content</p>",
-                "description": "Test description",
-                "cover_image": "",
-                "tag_list": ["test", "validation"],
-                "slug": "test-article",
-            }
-        ]
+        return FetchArticlesResult(
+            articles=[
+                {
+                    "id": 1,
+                    "title": "Test Article",
+                    "url": f"https://dev.to/{DEVTO_USERNAME}/test-article",
+                    "published_at": "2024-01-01T00:00:00Z",
+                    "body_html": "<p>Test content</p>",
+                    "description": "Test description",
+                    "cover_image": "",
+                    "tag_list": ["test", "validation"],
+                    "slug": "test-article",
+                }
+            ],
+            success=True,
+            no_new_posts=False,
+            source="mock",
+        )
 
     try:
         summaries = _fetch_article_pages(last_run_iso=last_run_iso)
         if not summaries:
-            print("⚠️  No article summaries found, checking for cached data...")
-            return _try_load_cached_articles()
+            # If we're doing incremental updates, this means a successful no-op run.
+            if last_run_iso:
+                return FetchArticlesResult(articles=[], success=True, no_new_posts=True, source="api")
+            # Otherwise: the user has no posts (or none are accessible).
+            return FetchArticlesResult(articles=[], success=True, no_new_posts=False, source="api")
 
         full_articles = _fetch_full_articles(summaries)
         if not full_articles:
             print("⚠️  No full articles fetched, checking for cached data...")
-            return _try_load_cached_articles()
+            cached = _try_load_cached_articles()
+            return FetchArticlesResult(articles=cached, success=False, no_new_posts=False, source="cache")
 
-        return full_articles
+        return FetchArticlesResult(articles=full_articles, success=True, no_new_posts=False, source="api")
 
     except Exception as e:
         print(f"❌ Error fetching articles from API: {e}")
         print("⚠️  Trying to use cached data as fallback...")
-        return _try_load_cached_articles()
+        cached = _try_load_cached_articles()
+        return FetchArticlesResult(articles=cached, success=False, no_new_posts=False, source="cache")
 
 
 # ----------------------------
@@ -571,34 +628,31 @@ if force_full_regen:
 else:
     last_run_timestamp = get_last_run_timestamp()
 
-api_articles = fetch_all_articles_from_api(last_run_timestamp)
+# Load existing posts from previous runs (in CI this may be restored from gh-pages)
+existing_posts_data = load_existing_posts()
+existing_links = {getattr(p, "link", "") for p in existing_posts_data}
 
-# Convert API articles to Post objects
-new_posts = [Post(article) for article in api_articles]
+fetch_result = fetch_all_articles_from_api(last_run_timestamp)
 
-if not new_posts:
+if fetch_result.no_new_posts:
     print("No new posts to process. Exiting.")
     # Still update the timestamp to avoid re-checking the same period
     set_last_run_timestamp()
     mark_no_new_posts()
     sys.exit(0)
 
-# Load existing posts from previous runs
-existing_posts_data = load_existing_posts()
+candidate_posts = [Post(article) for article in fetch_result.articles]
 
-# Create a set of existing post URLs for faster lookup
-existing_links = {getattr(p, "link", "") for p in existing_posts_data}
+if force_full_regen and fetch_result.success and fetch_result.source == "api":
+    truly_new_posts = candidate_posts
+    all_posts_data = [p.to_dict() for p in candidate_posts]
+else:
+    # Filter out posts that already exist
+    truly_new_posts = [p for p in candidate_posts if getattr(p, "link", "") not in existing_links]
 
-# Filter out new posts that already exist
-truly_new_posts = []
-for post in new_posts:
-    if post.link not in existing_links:
-        truly_new_posts.append(post)
-
-# Combine all posts: existing + truly new
-all_posts_data = existing_posts_data.copy()
-for post in truly_new_posts:
-    all_posts_data.append(post.to_dict())
+    # Combine all posts: existing + truly new (as dicts)
+    all_posts_data = [p.to_dict() for p in existing_posts_data]
+    all_posts_data.extend([p.to_dict() for p in truly_new_posts])
 
 # Deduplicate and sort all posts by date, newest first
 all_posts_data = dedupe_posts_by_link(all_posts_data)
@@ -606,7 +660,15 @@ all_posts_data = dedupe_posts_by_link(all_posts_data)
 # Convert dicts back to Post objects for rendering
 all_posts = [Post.from_dict(p) for p in all_posts_data]
 
-print(f"Found {len(truly_new_posts)} new posts. Total posts: {len(all_posts)}")
+if truly_new_posts:
+    print(f"Found {len(truly_new_posts)} new posts. Total posts: {len(all_posts)}")
+else:
+    if all_posts:
+        print(f"No new posts found. Using {len(all_posts)} existing posts.")
+    else:
+        print("No posts found (new or existing). Generating an empty site.")
+
+site_author = all_posts[0].author if all_posts else DEVTO_USERNAME
 
 
 # Generate (or regenerate) HTML files for all posts and ensure the
@@ -665,8 +727,9 @@ for p in all_posts:
 # Save the updated posts data for next run
 save_posts_data(all_posts_data)
 
-# Update the timestamp for the next run
-set_last_run_timestamp()
+# Update the timestamp for the next run only if we successfully checked the API.
+if fetch_result.success:
+    set_last_run_timestamp()
 
 # ----------------------------
 # Build minimal comment pages (optional)
@@ -690,7 +753,7 @@ if comment_items:
             url=c["url"],
             social_image=social_image,
             site_name=f"{DEVTO_USERNAME}—Dev.to Mirror",
-            author=p.author,
+            author=site_author,
             enhanced_metadata={},  # Comments don't have enhanced metadata yet
         )
         # Ensure local path is safe. Re-sanitize the filename component to be defensive
