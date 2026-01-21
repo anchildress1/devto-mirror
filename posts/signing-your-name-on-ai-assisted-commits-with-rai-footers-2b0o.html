@@ -1,0 +1,467 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️</title>
+<link rel="canonical" href="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">
+<meta name="description" content="Your AI assistant can help write the code, but your git history still needs a human signature. Here’s how RAI footers make AI attribution explicit.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">
+<meta property="og:title" content="Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️">
+<meta property="og:description" content="Your AI assistant can help write the code, but your git history still needs a human signature. Here’s how RAI footers make AI attribution explicit.">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqd6krd92zdruhous0l9d.png%3Fv%3D2026">
+<meta property="og:site_name" content="anchildress1—Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">
+<meta name="twitter:title" content="Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️">
+<meta name="twitter:description" content="Your AI assistant can help write the code, but your git history still needs a human signature. Here’s how RAI footers make AI attribution explicit.">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqd6krd92zdruhous0l9d.png%3Fv%3D2026">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️">
+<meta property="linkedin:description" content="Your AI assistant can help write the code, but your git history still needs a human signature. Here’s how RAI footers make AI attribution explicit.">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqd6krd92zdruhous0l9d.png%3Fv%3D2026">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqd6krd92zdruhous0l9d.png%3Fv%3D2026">
+<meta name="author" content="Ashley Childress">
+<meta name="keywords" content="githubcopilot, ai, automation, git">
+
+<!-- AI-Specific Enhanced Metadata -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:published_time" content="2026-01-21T11:46:00Z">
+
+<meta name="content-type" content="ai">
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<meta name="content-language" content="en">
+
+<meta name="generator" content="anchildress1—Dev.to Mirror AI-Optimized Mirror">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<meta name="theme-color" content="#000000">
+
+<meta name="canonical" content="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">
+
+<meta name="source-platform" content="dev.to">
+
+<meta name="source-url" content="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">
+
+<meta name="source-author-profile" content="https://dev.to/anchildress1">
+
+<meta name="source-post-id" content="3179594">
+
+<meta name="original-published-date" content="2026-01-21T11:46:00Z">
+
+<meta name="reading-time" content="4 minutes">
+
+<meta name="devto:reactions" content="1">
+
+<meta name="devto:comments" content="0">
+
+<meta name="devto:engagement_score" content="1">
+
+<meta name="content-fingerprint" content="35a8b58418559ad2">
+
+
+
+<!-- Cross-Reference Attribution Meta Tags -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:publisher" content="Dev.to">
+
+<meta name="article:source" content="Dev.to">
+
+<meta name="content:source" content="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">
+
+<meta name="content:original_publisher" content="Dev.to">
+
+<meta name="article:published_time" content="2026-01-21T11:46:00Z">
+
+
+
+<!-- JSON-LD Structured Data -->
+
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2026-01-21T11:46:00Z", "datePublished": "2026-01-21T11:46:00Z", "description": "Your AI assistant can help write the code, but your git history still needs a human signature. Here\u2019s how RAI footers make AI attribution explicit.", "headline": "Signing Your Name on AI-Assisted Commits with RAI Footers \ud83d\udee1\ufe0f\u270d\ufe0f", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqd6krd92zdruhous0l9d.png%3Fv%3D2026", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 0}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 1}], "keywords": ["githubcopilot", "ai", "automation", "git"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://anchildress1.github.io/devto-mirror"}, "timeRequired": "PT4M", "url": "https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o", "wordCount": 949}
+</script>
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://anchildress1.github.io/devto-mirror", "name": "Home", "position": 1}, {"@type": "ListItem", "item": "https://anchildress1.github.io/devto-mirror/posts", "name": "Posts", "position": 2}, {"@type": "ListItem", "item": "https://anchildress1.github.io/devto-mirror/posts/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o.html", "name": "Signing Your Name on AI-Assisted Commits with RAI Footers \ud83d\udee1\ufe0f\u270d\ufe0f", "position": 3}]}
+</script>
+
+
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️</a></h1>
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fqd6krd92zdruhous0l9d.png%3Fv%3D2026?v=2"
+      width="1000" height="420"
+      alt="Banner image for Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️"
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
+  
+  <p><em>Published: 2026-01-21T11:46:00Z</em></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #ai
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #automation
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #git
+            </span>
+        
+    </p>
+    
+  <p><em>Your AI assistant can help write the code, but your git history still needs a human signature. Here’s how RAI footers make AI attribution explicit.</em></p>
+
+  <!-- Enhanced Dev.to Attribution -->
+  
+  <div style="border: 1px solid #e0e0e0; padding: 15px; margin: 20px 0;
+                    background-color: #f9f9f9; border-radius: 5px;">
+            <p style="margin: 0; font-style: italic; color: #666;">
+                <strong>📝 Originally published on Dev.to</strong><br>
+                by Ashley Childress on 2026-01-21T11:46:00Z
+            </p>
+            <p style="margin: 10px 0 0 0;">
+                <a href="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o"
+                   style="color: #3b49df; text-decoration: none; font-weight: bold;"
+                   target="_blank" rel="noopener">
+                    → Read the original article on Dev.to
+                </a>
+            </p>
+        </div>
+  
+
+  <article><blockquote>
+<p>🦄 I know it's been a minute (<em>months!</em>), but I said I wouldn't forget about the follow-up for this one and I have not! It's been nagging at me to finish, but I wanted to have <em>something</em> to show for it first. I got that done quick enough; however, Release Please was not nearly as straightforward to learn as I anticipated considering I set up dual packages in a mono-repo as my "simple" setup. Yes—I curse myself, but holidays were also involved in the shenanigans!</p>
+
+<p>I'm going to try not to bore you with the nitty-gritty—we're all smart devs around here—but I have to finish my original thought or this outstanding post will nag at me forever. I'm not counting out a third though, because I do still have more ideas. Me and attribution deserve a break from each other after this though, so we’ll save that for future-me to consider. 🔮✨</p>
+</blockquote>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fan9phm5swbi8hrxec6p3.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fan9phm5swbi8hrxec6p3.png" alt="Human-created, AI-edited badge" loading="lazy" width="200" height="200"></a></p>
+
+
+<hr>
+
+<h2>
+  <a href="#brief-but-inspirational-backstory">
+  </a>
+  Brief but Inspirational Backstory ✨
+</h2>
+
+<p>If you missed the original version, I’ll sum it up quickly: it’s always bugged me that AI joined the party and never had to make itself permanently known. Not responsibility—that’s on us as devs regardless—but as a co-author. So I came up with an idea to fix that and over the break I quickly threw together a working version of enforcement for both CommitLint and GitLint in Python.</p>
+
+<p>I call this a <strong>RAI footer</strong>, short for <em>Responsible AI attribution</em>. Not policy. Not governance. Just a mechanical signal in your commit history that makes AI assistance explicit and pairs it with a human signoff. The goal isn’t to moralize commits. It’s to remove ambiguity about authorship once AI enters the workflow.</p>
+
+<blockquote>
+<p>🦄 The <a href="https://github.com/ChecKMarKDevTools/rai-lint" target="_blank" rel="noopener noreferrer">README</a> already explains what this is and how to use it properly, if you’re curious</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#doesnt-live-alone">
+  </a>
+  Doesn’t Live Alone 🔗
+</h2>
+
+<p>I have to point out that this RAI footer is just a baby step and it does <em>absolutely nothing</em> to fix potential problems that may crop up from code that's committed without proper human-in-the-loop (HITL) oversight.</p>
+
+<p>To make this system work as designed, I leaned on Git’s built-in functionality. The <code>--signoff</code> flag is an extension of legal requirements often used in open source for a Developer Certificate of Origin (DCO). This adds a literal footer to the commit stating that you, as a verified author, are also adding a layer of legal accountability. You didn’t just push code. You agreed to the project’s rules.</p>
+
+<p>Which is a whole lot of legal framing for a system that has zero interest in what lawyers are doing.</p>
+
+<p>My version instead says: <em>I’m signing my name. This is correct.</em> That’s it.</p>
+
+<p>In practice, your commit looks something like this:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>git commit <span class="nt">-s</span> <span class="nt">-m</span> <span class="s2">"chore: Add trouble in spades
+
+Assisted-by: GitHub Copilot &lt;copilot@github.com&gt;"</span>
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<p>And the result you end up with when you look back at <code>git log</code>:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>Author: Ashley Childress &lt;6563688+anchildress1@users.noreply.github.com&gt;
+Date:   Sat Jan 17 00:32:38 2026 -0500
+
+chore: Add trouble in spades
+
+Assisted-by: GitHub Copilot &lt;copilot@github.com&gt;
+Signed-off-by: Ashley Childress &lt;6563688+anchildress1@users.noreply.github.com&gt;
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<p>In this context, it’s really less a legal signature and more Scout’s Honor. The one <code>-s</code> flag is your HITL review stating you’ve personally signed off on this commit in its entirety, which includes the AI attribution footer.</p>
+
+<p>When both footers are paired together in the context of a single commit, it says beyond any doubt that you—aka the verified author—were aware of the changes and approved the code AI did or did not contribute.</p>
+
+<blockquote>
+<p>🦄 This gets you through the configuration, but on its own it’s not very impressive. Also, there’s really not anything new or earth-shattering I’ve done here—I simply repurposed the existing system.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#one-last-tiny-helper">
+  </a>
+  One Last Tiny Helper 🧩
+</h2>
+
+<p>Generally speaking, anything that pops up on my “continuous work” radar and <em>can</em> be automated is eventually automated. This is no different.</p>
+
+<p>I’ve commented somewhere before that I used to be the world’s absolute worst committer. Truth? I still am. Copilot, however, generally does a much better job.</p>
+
+<p>I have a <a href="https://github.com/anchildress1/awesome-github-copilot/blob/main/prompts/generate-commit-message.prompt.md" target="_blank" rel="noopener noreferrer"><code>generate-commit-message</code> prompt</a> designed with this entire flow in mind, that’s designed to look at staged files by default (with fallback), create a conventional commit message, and assign its own attribution based on the chat history. It’s far from perfect, but does a decent job at getting you in the ballpark!</p>
+
+<blockquote>
+<p>🦄 Help a girl out and leave a star if you find anything useful!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#the-boring-future">
+  </a>
+  The Boring Future 🚧
+</h2>
+
+<p>This is really all there is to the enforcement part—at least to carry us over until the AI estimators do a better job at guessing when AI helps or not!</p>
+
+<p>The future and arguably more important piece of this is reporting those stats back for your repo. It’s not good enough to state that AI helped anymore. We need to start proving that it’s not all terrible code!</p>
+
+<p>From here, I envision a centralized reusable workflow that pulls a diff of all commits and roughly guesstimates the percentage of code that AI contributed. Update a static Shields.io badge (for now) on the README.</p>
+
+<p>You could get really fancy with this if you wanted to, but honestly there’s other tooling that will catch up before that becomes necessary! This is just meant to hold us over until that tech emerges. Fingers crossed that point is sooner rather than later. 🤞</p>
+
+
+<hr>
+
+<h2>
+  <a href="#the-part-where-i-sign-my-name">
+  </a>
+  🛡️ The Part Where I Sign My Name
+</h2>
+
+<p>This post was written by me. ChatGPT assisted with editing and clarity. It didn’t choose the ideas, make the decisions, or approve the work. If something here is wrong, confusing, or incomplete, that responsibility belongs to the human who signed it. AI can assist. Authorship still requires someone willing to put their name on the result.</p>
+
+</article>
+
+  <!-- Dev.to Backlinks -->
+  
+  <div style="margin: 20px 0; padding: 10px; border-left: 4px solid #3b49df; background-color: #f8f9ff;">
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
+                💬 Join the discussion about "Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️" on Dev.to:
+            </p>
+            <p style="margin: 5px 0 0 0;">
+                <a href="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o"
+                   style="color: #3b49df; font-weight: bold; text-decoration: none;"
+                   target="_blank" rel="noopener">
+                    View comments and reactions →
+                </a>
+            </p>
+        </div>
+  
+
+  <!-- Related Posts Section -->
+  
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Did AI Erase Attribution? Your Git History Is Missing a Co-Author
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Your AI assistant might be the most productive co-author you’ve ever had, but your git history doesn’t know it. Here’s how to fix that.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#automation</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/top-10-github-copilot-updates-you-actually-need-to-know-about-297d.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Top 10 GitHub Copilot Updates You Actually Need to Know About 💥
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">GitHub Copilot’s wild late-October 2025 release: agents, smarter reviews, embeddings, metrics, and that one “helpful” test that nearly went to prod. Chaotic, hilarious, and absolutely worth the read.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Copilot Premium Requests—More Than Asked, Exactly What You Need 💸
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-copilot-chat-modes-from-chaos-to-command-54k0.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents: From Chaos to Command 🎛️
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">You’ve built your first GitHub Copilot c̶h̶a̶t̶ ̶m̶o̶d̶e̶ agent—now it’s time to tame it. Here’s how to set up, test, and share custom modes like a professional who occasionally yells at their AI.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  <p><a href="https://dev.to/anchildress1/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o">Read on Dev.to →</a></p>
+</main>
+</body></html>
+</text>
+</invoke>
