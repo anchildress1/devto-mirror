@@ -1,8 +1,8 @@
 # Dev.to Mirror—The Set-and-Forget AI Crawler
 
-🔗 **Live Site:** [anchildress1.github.io/devto-mirror](https://anchildress1.github.io/devto-mirror/)
+🔗 **Live Site:** [checkmarkdevtools.github.io/devto-mirror](https://checkmarkdevtools.github.io/devto-mirror/)
 
-![anchildress1/devto-mirror social card: A colorful crawler](https://github.com/anchildress1/devto-mirror/blob/main/assets/new-devto-mirror-crawlies-banner.jpg)
+![checkmarkdevtools/devto-mirror social card: A colorful crawler](https://github.com/checkmarkdevtools/devto-mirror/blob/main/assets/new-devto-mirror-crawlies-banner.jpg)
 
 This Copilot generated utility helps make your Dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante’s DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.tx—_that's it_ (although I'm slowly working through enhancements). If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
 
@@ -25,11 +25,11 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 
 ## Repo Stuff
 
-[![GitHub License](https://img.shields.io/badge/license-Polyform_Shield_1.0.0-yellow?style=for-the-badge)](./LICENSE) ![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge) ![Repo Size](https://img.shields.io/github/repo-size/anchildress1/devto-mirror?style=for-the-badge) ![Last Commit](https://img.shields.io/github/last-commit/anchildress1/devto-mirror?style=for-the-badge)
+[![GitHub License](https://img.shields.io/badge/license-Polyform_Shield_1.0.0-yellow?style=for-the-badge)](./LICENSE) ![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge) ![Repo Size](https://img.shields.io/github/repo-size/checkmarkdevtools/devto-mirror?style=for-the-badge) ![Last Commit](https://img.shields.io/github/last-commit/checkmarkdevtools/devto-mirror?style=for-the-badge)
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/publish.yaml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Publish%20Dev.to%20Mirror%20Site)](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml) [![CodeQL Analysis](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/codeql.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=CodeQL%20Analysis)](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml) [![Security and Lint CI](https://img.shields.io/github/actions/workflow/status/anchildress1/devto-mirror/security-ci.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Security%20and%20Quality%20CI)](https://github.com/anchildress1/devto-mirror/actions/workflows/security-ci.yml)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/checkmarkdevtools/devto-mirror/publish.yaml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Publish%20Dev.to%20Mirror%20Site)](https://github.com/anchildress1/devto-mirror/actions/workflows/publish.yaml) [![CodeQL Analysis](https://img.shields.io/github/actions/workflow/status/checkmarkdevtools/devto-mirror/codeql.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=CodeQL%20Analysis)](https://github.com/anchildress1/devto-mirror/actions/workflows/codeql.yml) [![Security and Lint CI](https://img.shields.io/github/actions/workflow/status/checkmarkdevtools/devto-mirror/security-ci.yml?branch=main&style=for-the-badge&logo=github&logoColor=fff&label=Security%20and%20Quality%20CI)](https://github.com/checkmarkdevtools/devto-mirror/actions/workflows/security-ci.yml)
 
-![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fanchildress1%2Fdevto-mirror%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.project.requires-python&style=for-the-badge&logo=python&logoColor=fff&label=Python&color=3776AB) ![uv Badge](https://img.shields.io/badge/uv-DE5FE9?logo=uv&logoColor=fff&style=for-the-badge) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=for-the-badge) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=for-the-badge)
+![Python Badge](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcheckmarkdevtools%2Fdevto-mirror%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.project.requires-python&style=for-the-badge&logo=python&logoColor=fff&label=Python&color=3776AB) ![uv Badge](https://img.shields.io/badge/uv-DE5FE9?logo=uv&logoColor=fff&style=for-the-badge) ![Jinja Badge](https://img.shields.io/badge/Jinja-7E0C1B?logo=jinja&logoColor=fff&style=for-the-badge) ![GitHub Actions Badge](https://img.shields.io/badge/GitHub%20Actions-2088FF?logo=githubactions&logoColor=fff&style=for-the-badge) ![GitHub Pages Badge](https://img.shields.io/badge/GitHub%20Pages-222?logo=githubpages&logoColor=fff&style=for-the-badge)
 
 ![Verdent Badge](https://img.shields.io/badge/Verdent-00D486?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VmVyZGVudDwvdGl0bGU+CjxwYXRoIGQ9Ik0xNy42IDkuOUMxNy42IDEyLjEgMTYuOCAxNC4yIDE1LjQgMTUuN0wxNS4xIDE2QzEzLjcgMTcuNSAxMi44IDE5LjYgMTIuOCAyMS44QzEyLjggMjIuNSAxMi45IDIzLjIgMTMuMSAyMy45QzEwLjcgMjIuOSA4LjggMjAuOSA4IDE4LjRDNy44IDE3LjYgNy43IDE2LjggNy43IDE2QzcuNyAxMy44IDguNSAxMS44IDkuOCAxMC4zTDE1LjMgNEMxNi4yIDUgMTYuOSA2LjEgMTcuMyA3LjVDMTcuNSA4LjIgMTcuNiA5IDE3LjYgOS45WiIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNMTQuMyAyMi43QzE0LjMgMjAuNSAxNS4xIDE4LjQgMTYuNSAxNi45TDE2LjggMTYuNkMxOC4yIDE1LjEgMTkuMSAxMyAxOS4xIDEwLjhDMTkuMSAxMCAxOSA5LjQgMTguOCA4LjdDMjEuMiA5LjcgMjMuMSAxMS43IDIzLjkgMTQuMkMyNCAxNSAyNC4yIDE1LjggMjQuMiAxNi42QzI0LjIgMTguOCAyMy40IDIwLjggMjIuMSAyMi4zTDE2LjYgMjguNkMxNS43IDI3LjYgMTUgMjYuNSAxNC42IDI1LjFDMTQuNCAyNC4zIDE0LjMgMjMuNSAxNC4zIDIyLjdaIiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==) ![GitHub Copilot Badge](https://img.shields.io/badge/GitHub%20Copilot-000?logo=githubcopilot&logoColor=fff&style=for-the-badge)
 
@@ -71,7 +71,7 @@ Fetches posts via Dev.to API (incremental updates via `last_run.txt`). Generates
 ## Local Development
 
 ```bash
-git clone https://github.com/anchildress1/devto-mirror.git
+git clone https://github.com/checkmarkdevtools/devto-mirror.git
 cd devto-mirror
 
 # Install uv if you don't have it
