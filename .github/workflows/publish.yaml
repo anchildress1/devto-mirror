@@ -164,6 +164,7 @@ jobs:
           # Add static config files
           [ -f sitemap.xml ] && cp sitemap.xml _deploy/
           [ -f google6b80426bb396f31f.html ] && cp google6b80426bb396f31f.html _deploy/
+          [ -f algolia_verification.html ] && cp algolia_verification.html _deploy/
 
           # Process template files
           SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"

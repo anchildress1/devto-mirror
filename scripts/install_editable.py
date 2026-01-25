@@ -5,6 +5,7 @@ This helper ensures the install is invoked from the project root and gives a
 clear error message if `pyproject.toml` or `setup.py` are missing. Use this in
 CI or local shells instead of calling `pip install -e .` directly.
 """
+
 import subprocess  # nosec: B404
 import sys
 from pathlib import Path

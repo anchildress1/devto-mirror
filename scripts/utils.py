@@ -161,8 +161,7 @@ POST_TEMPLATE_INLINE = """<!doctype html><html lang="en"><head>
 </body></html>"""
 
 # Shared templates
-INDEX_TMPL = env.from_string(
-    """<!doctype html><html lang="en"><head>
+INDEX_TMPL = env.from_string("""<!doctype html><html lang="en"><head>
 <meta charset="utf-8">
 <title>{{ username }}—Dev.to Mirror</title>
 <link rel="canonical" href="{{ canonical }}">
@@ -220,11 +219,9 @@ INDEX_TMPL = env.from_string(
   <p>Canonical lives on Dev.to. This is just a crawler-friendly mirror.</p>
 </main>
 </body></html>
-"""
-)
+""")
 
-SITEMAP_TMPL = env.from_string(
-    """<?xml version="1.0" encoding="UTF-8"?>
+SITEMAP_TMPL = env.from_string("""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>{{ home }}</loc></url>
   {% for p in posts %}
@@ -234,8 +231,7 @@ SITEMAP_TMPL = env.from_string(
     <url><loc>{{ home }}{{ c.local }}</loc></url>
   {% endfor %}
 </urlset>
-"""
-)
+""")
 
 
 def parse_date(date_str):

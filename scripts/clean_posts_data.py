@@ -5,6 +5,7 @@ Keeps the newest post when duplicates are found (based on parsed date), backs up
 
 Usage: python -m scripts.clean_posts_data
 """
+
 import json
 from datetime import datetime
 from pathlib import Path

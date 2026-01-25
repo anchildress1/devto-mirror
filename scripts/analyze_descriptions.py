@@ -11,6 +11,7 @@ Usage:
 
 If no file is specified, defaults to posts_data.json
 """
+
 import json
 import sys
 from pathlib import Path

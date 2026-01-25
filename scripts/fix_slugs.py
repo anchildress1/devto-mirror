@@ -5,6 +5,7 @@ This script fixes the issue where slugs were truncated and missing Dev.to post I
 
 Usage: python3 scripts/fix_slugs.py
 """
+
 import json
 import pathlib
 

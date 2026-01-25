@@ -27,7 +27,7 @@ def _load_json(payload: str) -> dict[str, Any]:
 
 def main() -> int:
     proc = subprocess.run(
-        ["detect-secrets", "scan"],
+        ["detect-secrets", "scan", "--baseline", ".secrets.baseline"],
         capture_output=True,
         text=True,
     )
