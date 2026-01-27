@@ -8,7 +8,7 @@ for interacting with the Dev.to API.
 import logging
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 
 import requests
@@ -131,18 +131,39 @@ def filter_new_articles(data: List[dict], last_run_iso: Optional[str]) -> List[d
         logger.error(f"Invalid ISO format for last_run_iso: {last_run_iso}")
         raise ValueError(f"last_run_iso must be valid ISO 8601 format: {e}") from e
 
-    result = []
-    for article in data:
-        published_at = article.get("published_at")
-        if not published_at:
-            logger.debug(f"Skipping article without published_at: {article.get('id', 'unknown')}")
-            continue
+    # Normalize naive datetimes to UTC for safe comparison.
+    if last_run_dt.tzinfo is None:
+        last_run_dt = last_run_dt.replace(tzinfo=timezone.utc)
+
+    def _parse_api_timestamp(value: object) -> datetime | None:
+        if not value:
+            return None
         try:
-            article_dt = datetime.fromisoformat(published_at.replace("Z", "+00:00"))
-            if article_dt > last_run_dt:
-                result.append(article)
-        except (ValueError, AttributeError):
-            logger.warning(f"Skipping article with invalid published_at: {published_at}")
+            dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        except (ValueError, TypeError):
+            return None
+        if dt.tzinfo is None:
+            return dt.replace(tzinfo=timezone.utc)
+        return dt
+
+    def _activity_timestamp(article: dict) -> datetime | None:
+        # Dev.to commonly provides: created_at, published_at, edited_at.
+        # We treat a post as "new since last run" if it was *published or edited* since last run.
+        candidates = [
+            article.get("edited_at"),
+            article.get("updated_at"),
+            article.get("published_at"),
+        ]
+        dts = [dt for dt in (_parse_api_timestamp(v) for v in candidates) if dt is not None]
+        return max(dts) if dts else None
+
+    result: list[dict] = []
+    for article in data:
+        activity_dt = _activity_timestamp(article)
+        if activity_dt is None:
+            logger.debug(f"Skipping article without parseable activity timestamp: {article.get('id', 'unknown')}")
             continue
+        if activity_dt > last_run_dt:
+            result.append(article)
 
     return result

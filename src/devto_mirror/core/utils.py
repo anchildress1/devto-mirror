@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 # Use a Jinja environment with autoescape enabled for HTML/XML templates
 # Also add FileSystemLoader to load templates from files
-template_dir = pathlib.Path(__file__).parent / "templates"
+template_dir = pathlib.Path(__file__).parent.parent / "templates"
 env = Environment(
     loader=FileSystemLoader(template_dir) if template_dir.exists() else None,
     autoescape=select_autoescape(["html", "xml"]),
@@ -284,37 +284,107 @@ def parse_date(date_str):
 
 def dedupe_posts_by_link(posts_list):
     """
-    Remove duplicate posts based on their 'link' field.
-    Keeps the post with the most recent date when duplicates are found.
-    Returns a list of posts sorted by date (newest first).
+    Remove duplicate posts based on stable identity.
+
+    Identity rules:
+    - Prefer Dev.to article id (from top-level "id" or "api_data.id")
+    - Fall back to canonical link (top-level "link")
+
+    When duplicates are found, keep the post with the most recent *activity*
+    timestamp (edited/updated/published). This ensures delta runs can update
+    existing mirrored posts.
+
+    Returns a list of posts sorted by the same activity timestamp (newest first).
     """
     if not posts_list:
         return []
 
     posts_map = {}
 
+    def _identity_key(post_dict: dict) -> str | None:
+        api_data = post_dict.get("api_data") if isinstance(post_dict.get("api_data"), dict) else {}
+        try:
+            post_id = int(post_dict.get("id") or api_data.get("id") or 0)
+        except (TypeError, ValueError):
+            post_id = 0
+        if post_id:
+            return f"id:{post_id}"
+
+        link = (post_dict.get("link") or "").strip()
+        if link.endswith("/"):
+            link = link[:-1]
+        if link:
+            return f"link:{link}"
+        return None
+
+    def _activity_dt(post_dict: dict) -> datetime | None:
+        api_data = post_dict.get("api_data") if isinstance(post_dict.get("api_data"), dict) else {}
+        candidates = [
+            api_data.get("edited_at"),
+            api_data.get("updated_at"),
+            post_dict.get("edited_at"),
+            post_dict.get("updated_at"),
+            api_data.get("published_at"),
+            post_dict.get("published_at"),
+            post_dict.get("date"),
+        ]
+        dts = [dt for dt in (parse_date(v) for v in candidates) if dt is not None]
+        return max(dts) if dts else None
+
+    def _merge_posts(*, primary: dict, secondary: dict) -> dict:
+        """Merge missing fields from secondary into primary (primary wins)."""
+        merged = dict(primary)
+        for field in (
+            "title",
+            "link",
+            "date",
+            "content_html",
+            "description",
+            "slug",
+            "cover_image",
+            "tags",
+            "author",
+            "id",
+        ):
+            if not merged.get(field) and secondary.get(field):
+                merged[field] = secondary[field]
+
+        # Merge api_data shallowly; primary wins on conflicts.
+        primary_api = primary.get("api_data") if isinstance(primary.get("api_data"), dict) else {}
+        secondary_api = secondary.get("api_data") if isinstance(secondary.get("api_data"), dict) else {}
+        merged_api = dict(secondary_api)
+        merged_api.update(primary_api)
+        merged["api_data"] = merged_api
+        return merged
+
     for post in posts_list:
-        link = post.get("link") if isinstance(post, dict) else getattr(post, "link", None)
-        if not link:
-            continue
-
         post_dict = post.to_dict() if hasattr(post, "to_dict") else post
-        new_date = parse_date(post_dict.get("date"))
-
-        existing = posts_map.get(link)
-        if existing is None:
-            posts_map[link] = post_dict
+        if not isinstance(post_dict, dict):
             continue
 
-        existing_date = parse_date(existing.get("date"))
-        # Keep the newer post when possible
-        if new_date and (not existing_date or new_date > existing_date):
-            posts_map[link] = post_dict
+        key = _identity_key(post_dict)
+        if not key:
+            continue
+
+        incoming_dt = _activity_dt(post_dict)
+
+        existing = posts_map.get(key)
+        if existing is None:
+            posts_map[key] = post_dict
+            continue
+
+        existing_dt = _activity_dt(existing)
+        if incoming_dt and (not existing_dt or incoming_dt > existing_dt):
+            # Incoming is newer: keep it, but don't drop missing fields.
+            posts_map[key] = _merge_posts(primary=post_dict, secondary=existing)
+        else:
+            # Existing stays, but it may be missing fields that incoming has.
+            posts_map[key] = _merge_posts(primary=existing, secondary=post_dict)
 
     def _post_date_key(p):
         # Ensure the fallback minimum datetime is timezone-aware (UTC)
         fallback = datetime.min.replace(tzinfo=timezone.utc)
-        return parse_date(p.get("date")) or fallback
+        return _activity_dt(p) or fallback
 
     deduped = sorted(posts_map.values(), key=_post_date_key, reverse=True)
     return deduped

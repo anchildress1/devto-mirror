@@ -16,7 +16,7 @@ import json
 import sys
 from pathlib import Path
 
-from .constants import (
+from devto_mirror.core.constants import (
     POSTS_DATA_FILE,
     SEO_DESCRIPTION_LIMIT,
     SEO_DESCRIPTION_WARNING,

@@ -10,10 +10,10 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from .constants import POSTS_DATA_FILE
-from .utils import parse_date
+from devto_mirror.core.constants import POSTS_DATA_FILE
+from devto_mirror.core.utils import parse_date
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[3]
 DATA_FILE = ROOT / POSTS_DATA_FILE
 BACKUP_FILE = ROOT / f"{POSTS_DATA_FILE}.bak"
 
