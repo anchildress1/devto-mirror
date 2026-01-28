@@ -2,7 +2,7 @@
 
 import unittest
 
-from devto_mirror.robots_parser import (
+from devto_mirror.core.robots_parser import (
     _extract_sitemap,
     _parse_user_agent_line,
     _parse_user_agent_rules,

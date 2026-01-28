@@ -3,7 +3,7 @@
 
 import unittest
 
-from devto_mirror.html_sanitization import sanitize_html_content
+from devto_mirror.core.html_sanitization import sanitize_html_content
 
 
 class TestHtmlSanitization(unittest.TestCase):

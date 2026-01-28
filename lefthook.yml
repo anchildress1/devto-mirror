@@ -12,15 +12,16 @@ pre-commit:
       glob: "*.py"
       run: uv run isort {staged_files}
       stage_fixed: true
+    security:
+      run: make security
+      stage_fixed: true
+
+pre-push:
+  parallel: true
+  commands:
+    tests:
+      run: make test
     detect-secrets:
       run: uv run python scripts/check_detect_secrets.py
     validate-site:
       run: uv run python scripts/validate_site_generation.py
-
-pre-push:
-  parallel: false
-  commands:
-    security:
-      run: make security
-    tests:
-      run: make test

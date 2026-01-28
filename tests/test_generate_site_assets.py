@@ -1,5 +1,5 @@
 """
-Tests to ensure `scripts/generate_site.py` handles optional asset files (robots.txt, llms.txt)
+Tests to ensure `devto_mirror.site_generation.generator` handles optional asset files (robots.txt, llms.txt)
 gracefully and creates them in the project root when present.
 
 These tests run the script in VALIDATION_MODE to avoid network calls.
@@ -100,13 +100,24 @@ class TestGenerateSiteAssets(unittest.TestCase):
         if extra_env:
             env.update(extra_env)
 
-        # Run the generator as a subprocess to execute the top-level script
+        # Run the generator as a subprocess using the module path
         import sys
 
-        # Use the current Python executable to avoid relying on PATH; this
-        # reduces bandit warnings about partial executable paths.
+        # Add src to PYTHONPATH so the subprocess can find the package
+        src_path = os.path.join(ROOT, "src")
+        env_pythonpath = env.get("PYTHONPATH", "")
+        # Prepend src to PYTHONPATH
+        if env_pythonpath:
+            env["PYTHONPATH"] = f"{src_path}{os.pathsep}{env_pythonpath}"
+        else:
+            env["PYTHONPATH"] = src_path
+
+        # Use -m to run the module
         res = subprocess.run(
-            [sys.executable, "scripts/generate_site.py"], cwd=ROOT, env=env, capture_output=True
+            [sys.executable, "-m", "devto_mirror.site_generation.generator"],
+            cwd=ROOT,
+            env=env,
+            capture_output=True,
         )  # nosec: B603
         return res
 

@@ -48,11 +48,10 @@ class TestValidateSiteGeneration(unittest.TestCase):
     @patch("builtins.print")
     @patch("scripts.validate_site_generation.load_dotenv")
     @patch("scripts.validate_site_generation.subprocess.run")
-    @patch("scripts.validate_site_generation.shutil.copy2")
     @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
     @patch("scripts.validate_site_generation.Path")
     def test_validate_site_generation_success(
-        self, mock_path, mock_temp_dir, mock_copy, mock_subprocess, mock_load_dotenv, mock_print
+        self, mock_path, mock_temp_dir, mock_subprocess, mock_load_dotenv, mock_print
     ):
         """Test successful site generation validation."""
         self._setup_path_mocks(mock_path, mock_temp_dir)
@@ -73,11 +72,10 @@ class TestValidateSiteGeneration(unittest.TestCase):
     @patch("builtins.print")
     @patch("scripts.validate_site_generation.load_dotenv")
     @patch("scripts.validate_site_generation.subprocess.run")
-    @patch("scripts.validate_site_generation.shutil.copy2")
     @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
     @patch("scripts.validate_site_generation.Path")
     def test_validate_site_generation_failure(
-        self, mock_path, mock_temp_dir, mock_copy, mock_subprocess, mock_load_dotenv, mock_print
+        self, mock_path, mock_temp_dir, mock_subprocess, mock_load_dotenv, mock_print
     ):
         """Test failed site generation validation."""
         self._setup_path_mocks(mock_path, mock_temp_dir)
@@ -102,11 +100,10 @@ class TestValidateSiteGeneration(unittest.TestCase):
     @patch("builtins.print")
     @patch("scripts.validate_site_generation.load_dotenv")
     @patch("scripts.validate_site_generation.subprocess.run")
-    @patch("scripts.validate_site_generation.shutil.copy2")
     @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
     @patch("scripts.validate_site_generation.Path")
     def test_validate_site_generation_timeout(
-        self, mock_path, mock_temp_dir, mock_copy, mock_subprocess, mock_load_dotenv, mock_print
+        self, mock_path, mock_temp_dir, mock_subprocess, mock_load_dotenv, mock_print
     ):
         """Test site generation validation timeout."""
         self._setup_path_mocks(mock_path, mock_temp_dir)
@@ -125,11 +122,10 @@ class TestValidateSiteGeneration(unittest.TestCase):
     @patch("builtins.print")
     @patch("scripts.validate_site_generation.load_dotenv")
     @patch("scripts.validate_site_generation.subprocess.run")
-    @patch("scripts.validate_site_generation.shutil.copy2")
     @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
     @patch("scripts.validate_site_generation.Path")
     def test_validate_site_generation_exception(
-        self, mock_path, mock_temp_dir, mock_copy, mock_subprocess, mock_load_dotenv, mock_print
+        self, mock_path, mock_temp_dir, mock_subprocess, mock_load_dotenv, mock_print
     ):
         """Test site generation validation with unexpected exception."""
         self._setup_path_mocks(mock_path, mock_temp_dir)
@@ -180,49 +176,9 @@ class TestValidateSiteGeneration(unittest.TestCase):
     @patch("builtins.print")
     @patch("scripts.validate_site_generation.load_dotenv")
     @patch("scripts.validate_site_generation.subprocess.run")
-    @patch("scripts.validate_site_generation.shutil.copy2")
     @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
     @patch("scripts.validate_site_generation.Path")
-    def test_file_copying_logic(
-        self, mock_path, mock_temp_dir, mock_copy, mock_subprocess, mock_load_dotenv, mock_print
-    ):
-        """Test that necessary files are copied to temp directory."""
-        self._setup_path_mocks(mock_path, mock_temp_dir)
-
-        # Mock file existence checks to return True for optional files
-        mock_workspace_root = MagicMock()
-        mock_script_dir = MagicMock()
-        mock_script_dir.parent = mock_workspace_root
-        mock_path.return_value.parent = mock_script_dir
-
-        # Mock that optional files exist
-        def mock_exists_side_effect():
-            return True  # Simplify - just return True for all existence checks
-
-        mock_workspace_root.__truediv__.return_value.exists.side_effect = mock_exists_side_effect
-
-        # Mock successful subprocess
-        mock_result = MagicMock()
-        mock_result.returncode = 0
-        mock_subprocess.return_value = mock_result
-
-        validate_site_generation()
-
-        # Check that copy2 was called (files were copied)
-        self.assertTrue(mock_copy.called)
-
-        # Check that subprocess was called
-        mock_subprocess.assert_called_once()
-
-    @patch("builtins.print")
-    @patch("scripts.validate_site_generation.load_dotenv")
-    @patch("scripts.validate_site_generation.subprocess.run")
-    @patch("scripts.validate_site_generation.shutil.copy2")
-    @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
-    @patch("scripts.validate_site_generation.Path")
-    def test_environment_variable_setup(
-        self, mock_path, mock_temp_dir, mock_copy, mock_subprocess, mock_load_dotenv, mock_print
-    ):
+    def test_environment_variable_setup(self, mock_path, mock_temp_dir, mock_subprocess, mock_load_dotenv, mock_print):
         """Test that environment variables are properly set for subprocess."""
         self._setup_path_mocks(mock_path, mock_temp_dir)
 

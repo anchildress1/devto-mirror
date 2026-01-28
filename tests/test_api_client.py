@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 
 import requests
 
-from devto_mirror.api_client import create_devto_session, fetch_page_with_retry, filter_new_articles
+from devto_mirror.core.api_client import create_devto_session, fetch_page_with_retry, filter_new_articles
 
 
 class TestCreateDevtoSession(unittest.TestCase):
@@ -94,7 +94,7 @@ class TestFetchPageWithRetry(unittest.TestCase):
         self.assertIsNone(result)
         self.assertEqual(self.session.get.call_count, 1)
 
-    @patch("devto_mirror.api_client.time.sleep")
+    @patch("devto_mirror.core.api_client.time.sleep")
     def test_retries_on_timeout(self, mock_sleep):
         """Test that timeout triggers retry with exponential backoff."""
         expected_data = [{"id": 1}]
@@ -112,7 +112,7 @@ class TestFetchPageWithRetry(unittest.TestCase):
         self.assertEqual(self.session.get.call_count, 2)
         mock_sleep.assert_called_once_with(1)
 
-    @patch("devto_mirror.api_client.time.sleep")
+    @patch("devto_mirror.core.api_client.time.sleep")
     def test_retries_on_connection_error(self, mock_sleep):
         """Test that ConnectionError triggers retry."""
         expected_data = [{"id": 1}]
@@ -129,7 +129,7 @@ class TestFetchPageWithRetry(unittest.TestCase):
         self.assertEqual(result, expected_data)
         self.assertEqual(self.session.get.call_count, 2)
 
-    @patch("devto_mirror.api_client.time.sleep")
+    @patch("devto_mirror.core.api_client.time.sleep")
     def test_returns_none_after_max_retries_exhausted(self, mock_sleep):
         """Test that None is returned after all retries fail."""
         self.session.get.side_effect = requests.exceptions.ReadTimeout("Persistent timeout")
@@ -140,7 +140,7 @@ class TestFetchPageWithRetry(unittest.TestCase):
         self.assertEqual(self.session.get.call_count, 3)
         self.assertEqual(mock_sleep.call_count, 2)
 
-    @patch("devto_mirror.api_client.time.sleep")
+    @patch("devto_mirror.core.api_client.time.sleep")
     def test_exponential_backoff_delay(self, mock_sleep):
         """Test that retry delay doubles with each attempt."""
         expected_data = [{"id": 1}]
@@ -196,7 +196,7 @@ class TestFilterNewArticles(unittest.TestCase):
         self.assertEqual(result, articles)
 
     def test_filters_articles_after_last_run(self):
-        """Test that only articles after last_run are returned."""
+        """Test that only articles with activity after last_run are returned."""
         articles = [
             {"id": 1, "published_at": "2024-01-01T00:00:00Z"},
             {"id": 2, "published_at": "2024-01-03T00:00:00Z"},
@@ -274,8 +274,8 @@ class TestFilterNewArticles(unittest.TestCase):
 
         self.assertEqual(result, articles)
 
-    def test_skips_articles_with_missing_published_at(self):
-        """Test that articles missing published_at field are skipped."""
+    def test_skips_articles_with_no_activity_timestamp(self):
+        """Test that articles missing edited/updated/published timestamps are skipped."""
         articles = [
             {"id": 1, "published_at": "2024-01-03T00:00:00Z"},
             {"id": 2},
@@ -290,7 +290,7 @@ class TestFilterNewArticles(unittest.TestCase):
         self.assertEqual(result[1]["id"], 3)
 
     def test_skips_articles_with_malformed_published_at(self):
-        """Test that articles with invalid timestamps are skipped."""
+        """Test that articles with no parseable activity timestamp are skipped."""
         articles = [
             {"id": 1, "published_at": "2024-01-03T00:00:00Z"},
             {"id": 2, "published_at": "not-a-date"},
@@ -303,6 +303,51 @@ class TestFilterNewArticles(unittest.TestCase):
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0]["id"], 1)
         self.assertEqual(result[1]["id"], 3)
+
+    def test_includes_articles_edited_after_last_run_even_if_published_before(self):
+        articles = [
+            {
+                "id": 1,
+                "published_at": "2024-01-01T00:00:00Z",
+                "edited_at": "2024-01-03T00:00:00Z",
+            },
+            {
+                "id": 2,
+                "published_at": "2024-01-01T00:00:00Z",
+                "edited_at": "2024-01-01T12:00:00Z",
+            },
+        ]
+        last_run = "2024-01-02T00:00:00+00:00"
+
+        result = filter_new_articles(articles, last_run)
+
+        self.assertEqual([a["id"] for a in result], [1])
+
+    def test_includes_articles_with_only_edited_at(self):
+        articles = [
+            {"id": 1, "edited_at": "2024-01-03T00:00:00Z"},
+            {"id": 2},
+        ]
+        last_run = "2024-01-02T00:00:00+00:00"
+
+        result = filter_new_articles(articles, last_run)
+
+        self.assertEqual([a["id"] for a in result], [1])
+
+    def test_prefers_most_recent_activity_timestamp(self):
+        articles = [
+            {
+                "id": 1,
+                "published_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-03T00:00:00Z",
+                "edited_at": "2024-01-04T00:00:00Z",
+            }
+        ]
+        last_run = "2024-01-03T12:00:00+00:00"
+
+        result = filter_new_articles(articles, last_run)
+
+        self.assertEqual([a["id"] for a in result], [1])
 
 
 if __name__ == "__main__":

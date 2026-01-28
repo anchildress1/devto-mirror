@@ -6,7 +6,8 @@ import sys
 import urllib.parse
 
 from slugify import slugify
-from utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
+
+from devto_mirror.core.utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link
 
 ROOT = pathlib.Path(".")
 

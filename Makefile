@@ -37,12 +37,16 @@ prechecks-full:  ## Run full prechecks across the repo (force full run)
 
 security:  ## Run security checks
 	uv run bandit -r scripts src/ -ll -iii
-	uv run pip-audit --progress-spinner=off --skip-editable
+	@if [ "$$CI" = "true" ] || [ "$$GITHUB_ACTIONS" = "true" ] || [ "$$PIP_AUDIT" = "1" ]; then \
+		uv run python scripts/run_pip_audit.py; \
+	else \
+		echo "Skipping pip-audit (set PIP_AUDIT=1 to enable locally)"; \
+	fi
 	uv run python scripts/check_detect_secrets.py
 
 check-complexity:  ## Check cognitive complexity (max 15)
 	@echo "🔍 Checking cognitive complexity (max 15)..."
-	@uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\([1-9][6-9]\)|([2-9][0-9]\)|([1-9][0-9]{2,}\))" && \
+	@uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\(((1[6-9])|([2-9][0-9])|([1-9][0-9]{2,}))\)" && \
 		echo "❌ Functions with complexity >15 found. See docs/COMPLEXITY_REFACTORING.md" && exit 1 || \
 		echo "✅ All functions within complexity limits"
 

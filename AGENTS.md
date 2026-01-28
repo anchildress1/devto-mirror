@@ -4,7 +4,7 @@
 
 - `src/`: application package only
   - `src/devto_mirror/ai_optimization/`: optional AI modules
-- `scripts/`: runnable entrypoints + helpers (MUST NOT contain application modules)
+- `scripts/`: runnable entrypoints + helpers (legacy, move code out opportunistically)
 - `tests/`: `unittest`
 - `assets/`: templates/static inputs (edit these, not generated root artifacts)
 - `docs/`: documentation (doc-specific rules live in `docs/AGENTS.md`)
