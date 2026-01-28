@@ -11,7 +11,7 @@ Policy:
 - Locally we prefer developer-flow: timeout/error prints a warning and exits 0.
 
 Controls:
-- PIP_AUDIT_TIMEOUT_SECONDS: int, default 60
+- PIP_AUDIT_TIMEOUT_SECONDS: int, default 120 in CI/strict mode, 15 locally
 - PIP_AUDIT_STRICT: if set to "1" forces strict mode even outside CI
 """
 

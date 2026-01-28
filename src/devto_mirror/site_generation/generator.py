@@ -504,7 +504,7 @@ def main():
 
     # Update the timestamp for the next run only if we successfully checked the API.
     if fetch_result.success:
-        set_last_run_timestamp()
+        set_last_run_timestamp(LAST_RUN_FILE)
 
     # ----------------------------
     # Build minimal comment pages (optional)

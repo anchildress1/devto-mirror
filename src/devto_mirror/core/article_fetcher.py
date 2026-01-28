@@ -11,6 +11,7 @@ import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import requests
 
@@ -25,7 +26,7 @@ class FetchArticlesResult:
     source: str
 
 
-def _get_first_val(sources: list[dict], keys: list[str], default: any = "") -> any:
+def _get_first_val(sources: list[dict], keys: list[str], default: Any = "") -> Any:
     for source in sources:
         for key in keys:
             if val := source.get(key):
@@ -140,6 +141,8 @@ def _fetch_full_article_json(
             return None
         except requests.exceptions.RequestException:
             return None
+
+    return None
 
 
 def _fetch_full_articles(*, article_summaries: list[dict]) -> tuple[list[dict], list[dict]]:
