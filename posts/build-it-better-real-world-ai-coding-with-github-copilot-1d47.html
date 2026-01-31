@@ -1,0 +1,798 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>⚙️ Build It Better: Real-World AI Coding with GitHub Copilot</title>
+<link rel="canonical" href="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">
+<meta name="description" content="Originally shared as an internal how-to document.            GitHub Copilot as a true pair...">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">
+<meta property="og:title" content="⚙️ Build It Better: Real-World AI Coding with GitHub Copilot">
+<meta property="og:description" content="Originally shared as an internal how-to document.            GitHub Copilot as a true pair...">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fkvg6wzqbawpim3n0bh69.png">
+<meta property="og:site_name" content="anchildress1—Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">
+<meta name="twitter:title" content="⚙️ Build It Better: Real-World AI Coding with GitHub Copilot">
+<meta name="twitter:description" content="Originally shared as an internal how-to document.            GitHub Copilot as a true pair...">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fkvg6wzqbawpim3n0bh69.png">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="⚙️ Build It Better: Real-World AI Coding with GitHub Copilot">
+<meta property="linkedin:description" content="Originally shared as an internal how-to document.            GitHub Copilot as a true pair...">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fkvg6wzqbawpim3n0bh69.png">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fkvg6wzqbawpim3n0bh69.png">
+<meta name="author" content="Ashley Childress">
+<meta name="keywords" content="githubcopilot, ai, productivity, tutorial">
+
+<!-- AI-Specific Enhanced Metadata -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:published_time" content="2025-07-09T12:10:00Z">
+
+<meta name="article:modified_time" content="2025-07-18T00:57:19Z">
+
+<meta name="content-type" content="tutorial">
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<meta name="content-language" content="en">
+
+<meta name="generator" content="anchildress1—Dev.to Mirror AI-Optimized Mirror">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<meta name="theme-color" content="#000000">
+
+<meta name="canonical" content="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">
+
+<meta name="source-platform" content="dev.to">
+
+<meta name="source-url" content="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">
+
+<meta name="source-author-profile" content="https://dev.to/anchildress1">
+
+<meta name="source-post-id" content="2658695">
+
+<meta name="original-published-date" content="2025-07-09T12:10:00Z">
+
+<meta name="reading-time" content="8 minutes">
+
+<meta name="devto:reactions" content="4">
+
+<meta name="devto:comments" content="0">
+
+<meta name="devto:engagement_score" content="4">
+
+<meta name="content-fingerprint" content="aeaec913017eb2d8">
+
+
+
+<!-- Cross-Reference Attribution Meta Tags -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:publisher" content="Dev.to">
+
+<meta name="article:source" content="Dev.to">
+
+<meta name="content:source" content="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">
+
+<meta name="content:original_publisher" content="Dev.to">
+
+<meta name="article:published_time" content="2025-07-09T12:10:00Z">
+
+
+
+<!-- JSON-LD Structured Data -->
+
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-07-18T00:57:19Z", "datePublished": "2025-07-09T12:10:00Z", "description": "Originally shared as an internal how-to document.            GitHub Copilot as a true pair...", "headline": "\u2699\ufe0f Build It Better: Real-World AI Coding with GitHub Copilot", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fkvg6wzqbawpim3n0bh69.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 0}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 4}], "keywords": ["githubcopilot", "ai", "productivity", "tutorial"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://crawly.checkmarkdevtools.dev"}, "timeRequired": "PT8M", "url": "https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47", "wordCount": 1864}
+</script>
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev", "name": "Home", "position": 1}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts", "name": "Posts", "position": 2}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts/build-it-better-real-world-ai-coding-with-github-copilot-1d47.html", "name": "\u2699\ufe0f Build It Better: Real-World AI Coding with GitHub Copilot", "position": 3}]}
+</script>
+
+
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">⚙️ Build It Better: Real-World AI Coding with GitHub Copilot</a></h1>
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fkvg6wzqbawpim3n0bh69.png?v=2"
+      width="1000" height="420"
+      alt="Banner image for ⚙️ Build It Better: Real-World AI Coding with GitHub Copilot"
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
+  
+  <p><em>Published: 2025-07-09T12:10:00Z</em></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #ai
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #productivity
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #tutorial
+            </span>
+        
+    </p>
+    
+  <p><em>Originally shared as an internal how-to document.            GitHub Copilot as a true pair...</em></p>
+
+  <!-- Enhanced Dev.to Attribution -->
+  
+  <div style="border: 1px solid #e0e0e0; padding: 15px; margin: 20px 0;
+                    background-color: #f9f9f9; border-radius: 5px;">
+            <p style="margin: 0; font-style: italic; color: #666;">
+                <strong>📝 Originally published on Dev.to</strong><br>
+                by Ashley Childress on 2025-07-09T12:10:00Z
+            </p>
+            <p style="margin: 10px 0 0 0;">
+                <a href="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47"
+                   style="color: #3b49df; text-decoration: none; font-weight: bold;"
+                   target="_blank" rel="noopener">
+                    → Read the original article on Dev.to
+                </a>
+            </p>
+        </div>
+  
+
+  <article><blockquote>
+<p>Originally shared as an internal how-to document.</p>
+</blockquote>
+
+<h2>
+  <a href="#github-copilot-as-a-true-pair-programmer">
+  </a>
+  GitHub Copilot as a true pair programmer
+</h2>
+
+<p>I've spent a lot of time testing workflows, instructions and prompts. Some with more context, some with less. I've gotten some great results and some spectacular failures! Here's an overview of what I found works for nearly every scenario when using GitHub Copilot Agent mode as a pair implementation specialist.</p>
+
+<h2>
+  <a href="#tldr">
+  </a>
+  📌 TL;DR
+</h2>
+
+<ol>
+<li>Set up repo-level instructions &amp; starter template</li>
+<li>Know your goal &amp; break tasks into stories</li>
+<li>Explore options in Ask mode for planning</li>
+<li>Design a comprehensive, context-rich prompt</li>
+<li>Spell out rules, conventions &amp; self-review steps</li>
+<li>Choose the right AI model for each task</li>
+<li>Require a self-review pass</li>
+<li>Supervise your AI pair—pause &amp; redirect</li>
+<li>Review &amp; refine changes like a seasoned engineer</li>
+<li>Provide feedback, reprompt &amp; repeat</li>
+</ol>
+
+
+<hr>
+
+<h2>
+  <a href="#1-set-up-repolevel-instructions">
+  </a>
+  1. Set Up Repo-Level Instructions
+</h2>
+
+<p><strong>Why it matters</strong>: Repo instructions give Copilot the context it needs before any new code exists. This is your baseline and everything from here on will depend on this. </p>
+
+<blockquote>
+<p>🔁 If you missed it, check out my previous post <a href="https://dev.to/anchildress11/all-ive-learned-about-github-copilot-instructions-so-far-5bm7">All I’ve Learned About GitHub Copilot Instructions (So Far)</a>.</p>
+</blockquote>
+
+<p>If you're starting a brand new project, use a starter template to scaffold basic structure and create a minimum set of instructions that includes:</p>
+
+<div class="table-wrapper-paragraph">
+
+
+
+Category
+Description
+Notes
+
+
+
+
+Project Overview
+What does this repo do? Why does it matter?
+
+
+
+Testing Requirements
+TDD strategy, code coverage %, test types, error handling, edge cases.
+I never had a great opportunity to test Copilot's reaction to TDD. Add your experience below!
+
+
+Documentation
+Javadoc, README, Swagger/OpenAPI specs.
+✨ If you want something a little more advanced, look into mermaid diagrams!
+
+
+Design &amp; Security
+Architecture constraints, naming conventions, auth rules.
+
+
+
+Review Rules
+Checklist for self-reviews and criteria for acceptance.
+This step will save you a ton of time in the long run.
+
+
+</div>
+
+
+<hr>
+
+<h2>
+  <a href="#2-know-your-goal-amp-break-it-down">
+  </a>
+  2. Know Your Goal &amp; Break It Down
+</h2>
+
+<p>✨ Side-project vibe-code?<br>
+🛠️ Production bug fix?<br>
+🌀 Somewhere in between?</p>
+
+<p>Define your end goal, then split work into small, targeted stories that Copilot can handle one step at a time. If a task can be broken down further, do so - you’ll get better results. The smaller and more targeted you define the task, the better results you’ll get in the end.</p>
+
+<blockquote>
+<p>💡 <strong>ProTip</strong>: Give Copilot access to your issue tracker via an MCP server. That's one less thing to copy/paste and you can add an update clause in your prompt to let Copilot handle the comments and even issue tracking status or labels directly.</p>
+</blockquote>
+
+<hr>
+<h2>
+  <a href="#3-explore-in-ask-mode">
+  </a>
+  3. Explore in Ask Mode
+</h2>
+
+<p>If you know exactly how, why, and where, then you can probably skip this step. Otherwise, before coding, do a little exploring with Copilot Ask mode. Prompt it with something like:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>Given requirements in JIRA-123, analyze #codebase and propose 3 implementation options with pros/cons. Score each by simplicity &amp; maintainability. Recommend one.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<p>Iterate until uncertainties are surfaced and addressed. This is also the perfect time to validate your setup, including the story itself and custom instructions. Ask yourself, is the result what you expected it to be? If not, can you pinpoint which detail was unclear or too complex?</p>
+
+<p>This is not only a great time to improve your custom instructions and story definition, but also explore alternative approaches. You might even think of something you wouldn't have otherwise. </p>
+
+<blockquote>
+<p>⚠️ <strong>Be careful</strong> with overconfident models. Sometimes you will read an explanation presented with such a high degree of certainty that you’ll catch yourself agreeing with it regardless of whether it actually makes sense for your use case.</p>
+
+<p>💡 <strong>ProTip</strong>: Ask mode is perfect for exploration. It prevents Copilot from making changes to the code before you’re ready and it saves a premium request.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#4-design-a-comprehensive-prompt">
+  </a>
+  4. Design a Comprehensive Prompt
+</h2>
+
+<p>Consider how you want to prompt Copilot to complete its task. For a high-impact production fix, you will probably want to keep a tight leash on the exact implementation. The more straightforward the prompt and instructions are, the less room Copilot has to veer off its intended path or hallucinate a better implementation than the one you had planned. </p>
+
+<p>Your prompt should include:</p>
+
+<ol>
+<li>Specific <code>#file</code> or <code>#selection</code> that is relevant to the task</li>
+<li>Open any related or secondary files in the editor as additional context</li>
+<li>A numbered list of implementation steps, if you need better control or visibility along the way.</li>
+<li>Specify any important design patterns, security concerns, or future work planned (can also be separate <code>.github/instructions/specific-guidelines.instruction.md</code> files in the repo for ultimate reusability.</li>
+<li>Identify any important config files (like <code>./eslint.config.js</code> or <code>./vitest.config.js</code>) that Copilot must adhere to and put them in context with #file.</li>
+<li>For complex tasks, add an extra step instructing Copilot to consider at least X alternative approaches before starting work. Assess whether the detailed implementation plan covers all edge cases and error scenarios appropriately. If not, then update accordingly before moving on.</li>
+</ol>
+
+<p>It's always better to be more specific and more strict than to provide no guidance at all. If that means your prompt is closer to the size of a 3-page essay, then that's OK! Try it out and make changes later, if needed.</p>
+
+<h3>
+  <a href="#example-prompt">
+  </a>
+  ‼️ Example prompt:
+</h3>
+
+
+
+<div class="highlight js-code-highlight">
+<pre><code><span class="nx">Assess</span> <span class="k">this</span> <span class="err">#</span><span class="nx">codebase</span> <span class="k">in</span> <span class="nx">conjunction</span> <span class="kd">with</span> <span class="nx">the</span> <span class="err">#</span><span class="nx">file</span><span class="p">:</span><span class="nx">README</span><span class="p">.</span><span class="nx">md</span><span class="p">.</span> <span class="nx">Use</span> <span class="err">#</span><span class="nx">githubRepo</span> <span class="nx">tool</span> <span class="nx">to</span> <span class="nx">reference</span> <span class="nx">other</span> <span class="nx">codebases</span><span class="p">,</span> <span class="k">as</span> <span class="nx">needed</span><span class="p">.</span> 
+<span class="nx">Without</span> <span class="nx">making</span> <span class="nx">any</span> <span class="nx">changes</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">existing</span> <span class="nx">code</span><span class="p">,</span> <span class="nx">generate</span> <span class="nx">a</span> <span class="k">new</span> <span class="nx">PROJECT_DIAGRAM</span><span class="p">.</span><span class="nx">md</span> <span class="nx">file</span> <span class="nx">that</span> <span class="nx">correctly</span> <span class="nx">illustrates</span> <span class="nx">a</span> <span class="nx">mermaid</span> <span class="nx">diagram</span> <span class="k">for</span> <span class="k">this</span> <span class="nx">repository</span><span class="p">.</span> 
+<span class="nx">Adhere</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">guidelines</span><span class="p">:</span>
+<span class="mi">1</span><span class="p">.</span> <span class="nx">The</span> <span class="nx">primary</span> <span class="nx">project</span> <span class="nx">diagram</span> <span class="nx">should</span> <span class="nx">be</span> <span class="nx">a</span> <span class="nx">very</span> <span class="nx">high</span><span class="o">-</span><span class="nx">level</span> <span class="nx">and</span> <span class="nx">only</span> <span class="nx">include</span> <span class="nx">inputs</span><span class="p">,</span> <span class="nx">major</span> <span class="nx">functionality</span><span class="o">/</span><span class="nx">business</span> <span class="nx">logic</span><span class="o">/</span><span class="nx">outputs</span><span class="p">.</span> 
+   <span class="nx">If</span> <span class="nx">it</span> <span class="nx">links</span> <span class="nx">to</span> <span class="nx">a</span> <span class="nx">separate</span> <span class="nx">project</span><span class="p">,</span> <span class="nx">those</span> <span class="nx">should</span> <span class="nx">be</span> <span class="nx">well</span> <span class="nx">documented</span><span class="p">.</span>
+<span class="mi">2</span><span class="p">.</span> <span class="nx">For</span> <span class="nx">each</span> <span class="nx">primary</span> <span class="nx">use</span> <span class="k">case</span> <span class="nx">you</span> <span class="nx">can</span> <span class="nx">identify</span><span class="p">,</span> <span class="nx">generate</span> <span class="nx">a</span> <span class="nx">diagram</span> <span class="k">for</span> <span class="nx">it</span> <span class="nx">that</span> <span class="nx">includes</span> <span class="nx">enough</span> <span class="nx">detail</span> <span class="nx">to</span> <span class="nb">document</span> <span class="nx">the</span> <span class="nx">process</span> <span class="nx">end</span> <span class="nx">to</span> <span class="nx">end</span><span class="p">,</span> 
+   <span class="nx">but</span> <span class="nx">leave</span> <span class="nx">out</span> <span class="nx">any</span> <span class="nx">irrelevant</span> <span class="nx">processing</span> <span class="nx">or</span> <span class="dl">"</span><span class="s2">common sense</span><span class="dl">"</span> <span class="nx">logic</span><span class="p">.</span> 
+<span class="mi">3</span><span class="p">.</span> <span class="nx">Every</span> <span class="nx">diagram</span> <span class="nx">should</span> <span class="nx">have</span> <span class="nx">its</span> <span class="nx">own</span> <span class="nx">section</span> <span class="nx">that</span> <span class="nx">includes</span> <span class="nx">the</span> <span class="nx">mermaid</span> <span class="nx">diagram</span> <span class="nx">itself</span><span class="p">,</span> <span class="nx">a</span> <span class="nx">brief</span> <span class="nx">description</span> <span class="k">of</span> <span class="nx">its</span> <span class="nx">purpose</span><span class="p">,</span> 
+   <span class="nx">any</span> <span class="nx">external</span> <span class="nx">factors</span> <span class="nx">or</span> <span class="nx">links</span><span class="p">,</span> <span class="nx">troubleshooting</span> <span class="nx">steps</span> <span class="k">for</span> <span class="nx">common</span> <span class="nx">failures</span><span class="p">,</span> <span class="nx">and</span> <span class="nx">suggested</span> <span class="nx">future</span> <span class="nx">improvements</span><span class="p">,</span>
+   <span class="k">if</span> <span class="nx">any</span> <span class="nx">exist</span><span class="p">,</span> <span class="nx">that</span> <span class="nx">would</span> <span class="nx">improve</span> <span class="nx">maintainability</span> <span class="nx">or</span> <span class="nx">eliminate</span> <span class="nx">potential</span> <span class="nx">bugs</span><span class="p">.</span>
+<span class="mi">4</span><span class="p">.</span> <span class="nx">Ensure</span> <span class="k">this</span> <span class="k">new</span> <span class="nx">project_diagram</span> <span class="nx">is</span> <span class="nx">linked</span> <span class="nx">to</span> <span class="k">from</span> <span class="nx">the</span> <span class="nx">primary</span> <span class="err">#</span><span class="nx">file</span><span class="p">:</span><span class="nx">README</span><span class="p">.</span><span class="nx">md</span>
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 <strong>ProTip</strong>: Mermaid diagrams are a great addition to any <code>README.md</code> and GitHub renders them without any help on your end. If you want the preview to display in VS Code, you'll need to install an extension. I use <a href="https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid" target="_blank" rel="noopener noreferrer">bierner.markdown-mermaid</a> but there's a ton of them available.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#5-spell-out-rules-amp-guidelines">
+  </a>
+  5. Spell Out Rules &amp; Guidelines
+</h2>
+
+<p>Reference your <code>README.md</code> or <code>.github/custom-instructions.md</code> file when defining strict guidelines, especially if a commit hook or linter is involved.</p>
+
+<p>In your prompt, try adding something similar to:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>Follow conventions in README.md: Javadoc, pass all tests, adhere to secure coding guidelines.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<p>For narrow tasks, add file-specific context:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>Implement within #MyComponent.tsx, preserve API interface.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>🏹 <strong>One prompt → one premium request</strong> in Agent Mode. Maximize your premium usage by combining as much information and context into a single prompt as possible.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#6-choose-the-right-ai-model">
+  </a>
+  6. Choose the Right AI Model
+</h2>
+
+<p>The model you choose is probably the next biggest impact to the overall implementation and outcome. When in doubt, try the cheapest one first (aka smallest premium multiplier). If it doesn't work the first time, <code>/clear</code> everything and then re-submit the prompt.</p>
+
+<div class="table-wrapper-paragraph">
+
+
+
+Task
+Recommended Model
+Alternate Model
+
+
+
+
+New feature or complex logic
+Claude Sonnet (any version)
+Claude Opus
+
+
+Quick fix
+o3/4-mini
+Gemini 2.0 Flash
+
+
+Heavy analysis or debugging
+o3/4 (regular)
+Gemini 2.5 Pro
+
+
+Ideation or creative exploration
+GPT-4.1
+GPT-4.5
+
+
+</div>
+
+<blockquote>
+<p>📌 Refer to <a href="https://docs.github.com/en/copilot/reference/ai-models/choosing-the-right-ai-model-for-your-task" target="_blank" rel="noopener noreferrer">GitHub's model cheatsheet</a> for more detailed info about picking the right model.</p>
+
+<p>💡 <strong>ProTip</strong>: The VS Code Chat extension works like your terminal - just press the up arrow key to rotate through previous chats, even after you've cleared them. You can also use the history button at the top to return to a previously cleared chat.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#7-require-a-selfreview-pass">
+  </a>
+  7. Require a Self-Review Pass
+</h2>
+
+<p>Either in the overall initial prompt or in a custom-instructions file, instruct GitHub Copilot to complete a detailed self-review of all changes made according to a set guideline (security, optimization, maintainability, etc):<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>- Pass all tests &amp; coverage checks
+- Meet lint &amp; format requirements
+- Perform a detailed self-review with a focus on secure coding practices
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>💡 <strong>ProTip</strong>: You'll save on premium requests if you include the self-review requirements in the initial prompt. However, you'll get better results if you separate the review step from the implementation (be sure to <code>/clear</code> and consider changing the model, too!)</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#8-supervise-your-ai-pair">
+  </a>
+  8. Supervise Your AI Pair
+</h2>
+
+<p>Always follow these basic guidelines whenever you're working with GitHub Copilot:</p>
+
+<ol>
+<li>
+<p><strong>Never leave Copilot unattended</strong> (ask me how I know 🤣)</p>
+
+<blockquote>
+<p>☝️ Asked and answered <a href="https://dev.to/anchildress1/github-copilot-agent-mode-the-mistake-you-never-want-to-make-1mmh">here</a>.</p>
+</blockquote>
+</li>
+<li><p>When in doubt, pause the task</p></li>
+<li><p>Clarify &amp; redirect whenever needed </p></li>
+<li><p>Resume only when context is clear</p></li>
+<li><p>Communicate manual edits with Copilot (else they'll get overwritten)</p></li>
+</ol>
+
+<blockquote>
+<p>💡 <strong>ProTip</strong>: It doesn't seem to cost anything extra to simply pause execution, assess, and then resume. However, if you end up sending a new prompt to redirect they will charge you the standard premium request fee (whenever I figure out what that really means, I'll let you know!)</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#9-review-like-a-human">
+  </a>
+  9. Review Like a Human
+</h2>
+
+<p>Use VS Code’s diff view to accept/reset line-by-line. Keep changes by default and reset unwanted bits in Source Control - this helps prevent accidental resets.</p>
+
+<p>Pick your battles. Don’t spend premium requests on minor formatting or nitpicks. Sometimes you have to accept that it's never going to be 100% perfect. Don't be afraid to jump in and take over when you need to.</p>
+
+<blockquote>
+<p>🚨 Channel your inner code review boss, every single time. Whether AI helped out or not, you’re always on the hook for clean, accurate code. Double-check, polish, and take pride in your commits - it’s your name on the line, so make sure it’s something you’d want to sign off on!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#10-refine-reprompt-amp-repeat">
+  </a>
+  10. Refine, Reprompt &amp; Repeat
+</h2>
+
+<p>Treat every interaction with Copilot like you're teaching a junior dev. Use every available opportunity to improve your instructions, prompt, or clarify your goal:</p>
+
+<ul>
+<li>Ask clarifying questions</li>
+<li>Get alternate solutions</li>
+<li>Propose different approaches (then let Copilot pick)</li>
+<li>Prompt Copilot to challenge logic</li>
+<li>Flag missing tests/docs with inline or PR comments</li>
+</ul>
+
+<blockquote>
+<p>💡 <strong>ProTip</strong>: Copilot is a powerful teammate, but it’s not a one-size-fits-all solution - especially when you’re dealing with brand-new repos, high-stakes production fires, or anything that needed to be done yesterday. Save yourself a headache: choose your AI battles wisely, and don’t try to make AI your Swiss Army knife for every situation. Sometimes, the fastest route is a good old-fashioned human touch.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#your-turn">
+  </a>
+  💬 Your Turn:
+</h2>
+
+<p>What worked (or spectacularly failed)? Any surprises when pairing with GitHub Copilot? </p>
+
+<p>Share your personal wins, no-repeat plans, and unique stories below!</p>
+
+
+<hr>
+
+<blockquote>
+<h3>
+  <a href="#rai-disclaimer">
+  </a>
+  🛡️ RAI Disclaimer
+</h3>
+
+<p>Everything I share here is my own perspective—created with the help of AI tools (GitHub Copilot, ChatGPT, and their friends), but always with a human in the loop. I do my best to catch accidental bias and fact-check, but if you ever spot something odd, let me know! AI isn’t perfect, and neither am I.</p>
+
+<p><strong>TL; DR:</strong> AI helped, but you can blame me for the <strong>chaos</strong>! 🫠</p>
+</blockquote>
+
+</article>
+
+  <!-- Dev.to Backlinks -->
+  
+  <div style="margin: 20px 0; padding: 10px; border-left: 4px solid #3b49df; background-color: #f8f9ff;">
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
+                💬 Join the discussion about "⚙️ Build It Better: Real-World AI Coding with GitHub Copilot" on Dev.to:
+            </p>
+            <p style="margin: 5px 0 0 0;">
+                <a href="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47"
+                   style="color: #3b49df; font-weight: bold; text-decoration: none;"
+                   target="_blank" rel="noopener">
+                    View comments and reactions →
+                </a>
+            </p>
+        </div>
+  
+
+  <!-- Related Posts Section -->
+  
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-copilot-chat-modes-from-chaos-to-command-54k0.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents: From Chaos to Command 🎛️
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">You’ve built your first GitHub Copilot c̶h̶a̶t̶ ̶m̶o̶d̶e̶ agent—now it’s time to tame it. Here’s how to set up, test, and share custom modes like a professional who occasionally yells at their AI.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-copilot-chat-modes-explained-with-personality-2f4c.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents Explained (with Personality) 🎭
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">The third way to shape how GitHub Copilot responds:  c̶h̶a̶t̶ ̶m̶o̶d̶e̶s̶ agents. Now officially documented and live in your repo, they let you define Copilot’s behavior with your own personality, tone, and workflow—because coding assistants should sound like you.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/copilot-premium-requests-more-than-asked-exactly-what-you-need-8ph.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Copilot Premium Requests—More Than Asked, Exactly What You Need 💸
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Learn how to stretch every GitHub Copilot premium request, avoid quota meltdowns, and still get reliable AI output. Includes tested models, workflows, and prompt tips.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/demystifying-coding-agent-prompts-that-always-work-2on7.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Demystifying Coding Agent: Prompts That Always Work ✨
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A field guide to the safest, most reliable GitHub Coding Agent prompts—feature docs, test specs, bug fixes, and more—all proven to ship without breaking anything.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-coding-agent-the-magical-autonomous-ai-the-prequel-4h11.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Coding Agent the Magical Autonomous AI: The Prequel
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Everything you need to know about setting up GitHub&#39;s Coding Agent for best results—setup, advanced tricks, and gotchas from real stories and wins. Chaos, fun, and no filter.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  <p><a href="https://dev.to/anchildress1/build-it-better-real-world-ai-coding-with-github-copilot-1d47">Read on Dev.to →</a></p>
+</main>
+</body></html>
+</text>

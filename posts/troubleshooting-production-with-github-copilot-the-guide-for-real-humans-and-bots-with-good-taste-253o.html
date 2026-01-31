@@ -1,0 +1,634 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)</title>
+<link rel="canonical" href="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">
+<meta name="description" content="Welcome to Copilot Troubleshooting, Real-World Edition    ⚠️ This guide assumes you have...">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">
+<meta property="og:title" content="Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)">
+<meta property="og:description" content="Welcome to Copilot Troubleshooting, Real-World Edition    ⚠️ This guide assumes you have...">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjxdfl79nlp19a29aw9ti.png">
+<meta property="og:site_name" content="anchildress1—Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">
+<meta name="twitter:title" content="Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)">
+<meta name="twitter:description" content="Welcome to Copilot Troubleshooting, Real-World Edition    ⚠️ This guide assumes you have...">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjxdfl79nlp19a29aw9ti.png">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)">
+<meta property="linkedin:description" content="Welcome to Copilot Troubleshooting, Real-World Edition    ⚠️ This guide assumes you have...">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjxdfl79nlp19a29aw9ti.png">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjxdfl79nlp19a29aw9ti.png">
+<meta name="author" content="Ashley Childress">
+<meta name="keywords" content="githubcopilot, ai, productivity, learning">
+
+<!-- AI-Specific Enhanced Metadata -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:published_time" content="2025-06-25T12:15:00Z">
+
+<meta name="article:modified_time" content="2025-10-20T21:14:19Z">
+
+<meta name="content-type" content="ai">
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<meta name="content-language" content="en">
+
+<meta name="generator" content="anchildress1—Dev.to Mirror AI-Optimized Mirror">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<meta name="theme-color" content="#000000">
+
+<meta name="canonical" content="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">
+
+<meta name="source-platform" content="dev.to">
+
+<meta name="source-url" content="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">
+
+<meta name="source-author-profile" content="https://dev.to/anchildress1">
+
+<meta name="source-post-id" content="2623155">
+
+<meta name="original-published-date" content="2025-06-25T12:15:00Z">
+
+<meta name="reading-time" content="7 minutes">
+
+<meta name="devto:reactions" content="15">
+
+<meta name="devto:comments" content="9">
+
+<meta name="devto:engagement_score" content="33">
+
+<meta name="content-fingerprint" content="d53a2295a554dfcf">
+
+
+
+<!-- Cross-Reference Attribution Meta Tags -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:publisher" content="Dev.to">
+
+<meta name="article:source" content="Dev.to">
+
+<meta name="content:source" content="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">
+
+<meta name="content:original_publisher" content="Dev.to">
+
+<meta name="article:published_time" content="2025-06-25T12:15:00Z">
+
+
+
+<!-- JSON-LD Structured Data -->
+
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-10-20T21:14:19Z", "datePublished": "2025-06-25T12:15:00Z", "description": "Welcome to Copilot Troubleshooting, Real-World Edition    \u26a0\ufe0f This guide assumes you have...", "headline": "Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjxdfl79nlp19a29aw9ti.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 9}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 15}], "keywords": ["githubcopilot", "ai", "productivity", "learning"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://crawly.checkmarkdevtools.dev"}, "timeRequired": "PT7M", "url": "https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o", "wordCount": 1662}
+</script>
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev", "name": "Home", "position": 1}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts", "name": "Posts", "position": 2}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o.html", "name": "Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)", "position": 3}]}
+</script>
+
+
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)</a></h1>
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fjxdfl79nlp19a29aw9ti.png?v=2"
+      width="1000" height="420"
+      alt="Banner image for Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)"
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
+  
+  <p><em>Published: 2025-06-25T12:15:00Z</em></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #ai
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #productivity
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #learning
+            </span>
+        
+    </p>
+    
+  <p><em>Welcome to Copilot Troubleshooting, Real-World Edition    ⚠️ This guide assumes you have...</em></p>
+
+  <!-- Enhanced Dev.to Attribution -->
+  
+  <div style="border: 1px solid #e0e0e0; padding: 15px; margin: 20px 0;
+                    background-color: #f9f9f9; border-radius: 5px;">
+            <p style="margin: 0; font-style: italic; color: #666;">
+                <strong>📝 Originally published on Dev.to</strong><br>
+                by Ashley Childress on 2025-06-25T12:15:00Z
+            </p>
+            <p style="margin: 10px 0 0 0;">
+                <a href="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o"
+                   style="color: #3b49df; text-decoration: none; font-weight: bold;"
+                   target="_blank" rel="noopener">
+                    → Read the original article on Dev.to
+                </a>
+            </p>
+        </div>
+  
+
+  <article><h2>
+  <a href="#welcome-to-copilot-troubleshooting-realworld-edition">
+  </a>
+  Welcome to Copilot Troubleshooting, Real-World Edition
+</h2>
+
+<blockquote>
+<p>⚠️ This guide assumes you have access to a paid version of GitHub Copilot. If you're using the free model, remember they may charge <strong>extra premium usage</strong> on top of what is stated here. (Yes, it’s annoying. No, we can’t change it. Yet.)</p>
+</blockquote>
+
+
+<hr>
+
+<p>Ever faced a production incident and thought, “If only I could clone myself and brute-force this root cause?”</p>
+
+<p>Good news: you can’t clone yourself, but you can borrow Copilot’s AI brain (and, with a little strategy, solve issues faster—without nuking your premium usage).</p>
+
+<p>Let’s break down a real, developer-friendly workflow for using Copilot to track down, debug, and document production bugs—without the drama, confusion, or unplanned premium burns.</p>
+
+
+<hr>
+
+<h2>
+  <a href="#quick-model-cheat-sheet">
+  </a>
+  ✨ Quick Model Cheat Sheet
+</h2>
+
+<div class="table-wrapper-paragraph">
+
+
+
+Model
+Best Use Case
+💸 Premium Multiplier
+
+
+
+
+<strong>GPT-4.1</strong>
+Creative debugging, “Where do I start?”
+<strong>FREE</strong>
+
+
+<strong>o3/4-mini, Gemini 2.0</strong>
+Pattern matching, “Here’s the logs, now tell me what happened.”
+<strong>0.25–0.33x</strong>
+
+
+<strong>Claude Sonnet, Gemini 2.5</strong>
+Root cause analysis, “X happened because of Y—how to prevent it?”
+<strong>1x</strong>
+
+
+</div>
+
+<blockquote>
+<p>🤖 <strong>Agent mode uses one premium request per user prompt</strong>, but is almost always required to get the best results.</p>
+
+<p>🔗 <a href="https://docs.github.com/en/copilot/managing-copilot/understanding-and-managing-copilot-usage/understanding-and-managing-requests-in-copilot" target="_blank" rel="noopener noreferrer">More details on Copilot premium usage</a></p>
+
+<p>No, there's not a lot there and <strong>nobody</strong> is happy about that. </p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#where-to-start-before-copilot-even-knows-theres-a-fire">
+  </a>
+  🧰 Where to Start (Before Copilot Even Knows There’s a Fire)
+</h2>
+
+<p>Resist the urge to throw the entire prod environment at Copilot. Better input = better, cheaper results.</p>
+
+<ul>
+<li>
+<strong>Check your basics:</strong> What errors do you see? When did it start? What systems or tables are involved?</li>
+<li>
+<strong>Scan logs for obvious fails:</strong> Don’t dump everything—look for timestamps, error keywords, stack traces, or anything weird.
+
+<ul>
+<li>You'll also want to exclude those annoying <code>/health</code> and <code>/metrics</code> logs, unless they're explicitly related to the issue.</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<strong>Peek at relevant tables/data:</strong> Query only what you need—skip the full DB export if a few rows tell the story.</li>
+
+<li>
+
+<strong>Export just the relevant stuff:</strong> Save logs/output as <code>.txt</code> or <code>.csv</code> for easy copy-paste.
+
+<ul>
+<li>
+<strong>Limit your window:</strong> 3–4 minutes before to 1–2 minutes after the incident is usually plenty.</li>
+<li>
+<strong>Target your data:</strong> Pull only the section you think matters.</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<strong>Minimize noise, maximize signal:</strong> Copilot can handle both 10 lines and 10,000 - but you'll always get better results with less (and you'll limit premium usage by eliminating those pesky multi-turn conversations <strong>UPDATE</strong> After I originally posted this, a <a href="https://www.youtube.com/watch?v=QcaQVnznugA&amp;t=4672s" target="_blank" rel="noopener noreferrer">VS Code livestream</a> confirmed they do not charge extra premium requests for multi-turns in agent mode).</li>
+
+</ul>
+
+<h3>
+  <a href="#tldr-start-small-if-copilot-needs-more-scale-up">
+  </a>
+  <strong>TL;DR;</strong> Start small - if Copilot needs more, scale up.
+</h3>
+
+
+<hr>
+
+<h2>
+  <a href="#pick-a-platform">
+  </a>
+  🖥️ Pick a Platform
+</h2>
+
+<p>I use VS Code Insiders because the Copilot feature set there is the best by a mile.<br>
+But hey, if IntelliJ, Eclipse, DataGrip, or even GitHub.com is your jam? You do you. Copilot works everywhere you need it.</p>
+
+<blockquote>
+<p>🪄 ProTip:<br>
+If your incident spans multiple apps or repos, use VS Code or GitHub.com—they let you bring in context from multiple places into your Copilot chat.</p>
+</blockquote>
+
+<hr>
+<h2>
+  <a href="#prompt-copilot-the-fun-part">
+  </a>
+  🤖 Prompt Copilot: The Fun Part
+</h2>
+
+<blockquote>
+<p>🪄 ProTip:<br>
+The trick to getting the right results is to <strong>pick the right model</strong> for the job and <strong>provide explicit context</strong> in every prompt with the use of <code>#selection</code> and <code>#file</code>.</p>
+</blockquote>
+
+<p>You’ve prepped your evidence. Now let Copilot cook.</p>
+
+<p>Open a new chat in Copilot, or a new workspace for a tidy “incident folder.”</p>
+
+<p>Paste in your logs or data and open them in your editor for extra context magic.</p>
+
+<p>If there's a specific one or two repos you need to reference, add them to the workspace, too.</p>
+
+<blockquote>
+<p>⚠️ Danger: The use of <code>#codebase</code> in this context is not going to do you any favors. If you absolutely must use it, then make up for the extra input by making a super-specific prompt. </p>
+</blockquote>
+<h3>
+  <a href="#tldr-jump-straight-to-the-end-for-some-example-prompts-to-get-you-started">
+  </a>
+  <strong>TL;DR;</strong> Jump straight to the end for some example prompts to get you started!
+</h3>
+
+<hr>
+<h2>
+  <a href="#protips-for-getting-the-best-results">
+  </a>
+  ✨ ProTips for Getting the Best Results
+</h2>
+
+<ul>
+<li>
+<p><strong>Tell Copilot when it’s right!</strong> When Copilot nails it, just say: "YES, this is exactly the root cause." or if you find it yourself: "THIS is the real problem."</p>
+
+<blockquote>
+<p>Why? Keep going... the end is the best part!</p>
+</blockquote>
+</li>
+<li><p>Repeat your prompt with <strong>different context</strong>.</p></li>
+<li><p><strong>Switch the model</strong> if answers are vague or off.</p></li>
+<li><p><strong>Limit your input</strong> if answers are too broad or generalized.</p></li>
+<li><p><strong>Iterate:</strong> Each prompt should get a bit more specific or focused.</p></li>
+<li><p><strong>Don’t depend on long chat memory!</strong> They will roll over eventually.</p></li>
+<li><p>🌀 Stuck? Save the chat (it’s in your history), <strong>/clear</strong>, and try a new approach.</p></li>
+<li><p><strong>Walk it off:</strong> Sometimes the best debugging happens outside the IDE.</p></li>
+</ul>
+
+<blockquote>
+<p>🦄 <strong>UPDATE:</strong> The outrageous number of tools usually loaded into context makes this one a little harder to manage, especially after MCPs were added to the extension list. The overall context windows are just too small to complete an entire round of debugging start to finish without running into constant "summarizing" for the extra space. Get around this by having Copilot output summary info at the end of each specific task in a separate <code>./progress.tmp</code> file. That becomes your baseline for documentation later.</p>
+</blockquote>
+
+<hr>
+<h2>
+  <a href="#rinse-repeat-and-trust-the-process">
+  </a>
+  🔄 Rinse, Repeat, and Trust the Process
+</h2>
+
+<p><strong>Stick with it:</strong></p>
+
+<p>Keep iterating, keep switching models, keep changing your angle—until you can say, “YES—here’s the problem!”</p>
+
+<p>Could take 20 minutes… or a couple of hours. Don’t let it eat your whole day (or your Copilot pool).</p>
+
+<hr>
+<h2>
+  <a href="#the-really-fun-part-make-your-report-aka-let-copilot-flex-for-you">
+  </a>
+  📄 The <strong>Really</strong> Fun Part = Make Your Report (aka Let Copilot Flex for You!)
+</h2>
+
+<p>Remember all those “YES” and “THIS is the real problem” confirmations?</p>
+
+<p>Now, Agent Mode is really worth the premium because you can save a ton of time and have Copilot summarize the entire session in style.</p>
+
+<p>Prompt it with something like:<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>Using everything confirmed as correct above, generate a concise incident report following #mcpOrFetchTool [BPM template or example link here]. Include all supporting queries and relevant logs. <span class="gs">**DO NOT GUESS**</span> - insert a TBD placeholder instead. Append a footer to the end of the document stating "This content was generated by GitHub Copilot as directed by FirstName LastName on June 25, 2025". Output results directly in #confluenceTool using appropriate confluence-specific styling.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<p>Review, add screenshots, and call it "Phase 1 done".</p>
+
+<blockquote>
+<p>🛡️ <strong>Responsible AI disclaimer:</strong> Please, keep the footer! We all know AI's aren't perfect and neither are humans. Make sure everyone reading your report clearly understands where it came from, even if you do spend the next hour reviewing it for accuracy.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#bonus-real-prompt-examples-that-work">
+  </a>
+  💡 <strong>Bonus:</strong> Real Prompt Examples That Work
+</h2>
+
+<blockquote>
+<p>Note the similarities in all of these = <strong>specific</strong> with only relevant <strong>context</strong></p>
+
+<p>Every file in the examples below is already filtered to only <strong>relevant</strong> data (check the first step). You won't get the same results if you use these with a full dump.</p>
+</blockquote>
+
+<ol>
+<li><p>A prod incident related to #selection [logFileSnippet] occurred at exactly 3:32 AM EDT. The affected data makes me think it could be related to #selection [dataDumpErrorRow]. Analyze the codebase starting with #selection [API endpoint] and summarize if that is possible in 1-2 sentences? Briefly explain your reasoning.</p></li>
+<li><p>I found this log: <code>small log excerpt</code><br>
+The stack trace indicates it was thrown from #selection. What are the top 3-4 things that could have caused this in 100 words or less?</p></li>
+<li><p>Help me identify any patterns that could explain timeouts based on #file:logOrTableDataFile.csv. If consistent patterns are identified, then scan the logic starting #selection [BL input] and assess the top 3 likely causes. Output a results table with the method name, rating from 1-5 indicating likelihood of cause, and a suggested improvement for the related code.</p></li>
+<li><p>An uncaught exception ultimately caught #selection [specific catch block] occurred at exactly 8:02 PM shortly after the batch is initially triggered with a load of X. Use #logFile.txt and identify 3–4 possible causes with a short explanation for each. List them in order starting with the most likely root cause.</p></li>
+<li><p>Map info from #logFile.txt to #smallDbDump.csv to output a likely sequence of events. Include a brief explanation and 1–2 ways to mitigate this error in the future.</p></li>
+<li><p>#goodRunLog.txt is the expected output for this app, but today we saw #unexplainedMess.txt instead. Did anything change in #favoriteTool [pull_request_diff, list_commits, get_tag, etc] that would explain the sudden change? Output a bulleted list in order of most recent change.</p></li>
+<li><p>This screenshot [just paste it] shows a spike in latency at 2:52 PM. Is there anything in #correspondingLogs.txt that would explain this? List all possible offenders ranked in order of most frequent occurrence.</p></li>
+<li><p>All queries used by this app are in #queryFolder. List the top 3 problematic queries along with suggested improvements in order, starting with the most impactful. Explain your reasoning for each in less than 20 words.</p></li>
+<li><p><code>Detailed summary of what was observed in the data</code> #daoOrSchema.sql Help me identify the root cause. Let’s start with a query of table_a that records all failures of Y. Use the FK to match it to records in table_b and group them in 15-minute intervals by error code to identify spikes. Include total count and average frequency in the result. Output a SQL query that can be executed in MySQL.</p></li>
+<li><p><strong>when things start to get really extreme:</strong> /clear #fullLog.txt, #nonsenseDbDump.csv, #selection [API base] #codeFileNobodyWillClaim.java <code>the only explanation I could think of that really doesn't make any sense</code><br>
+Look for patterns, recurring errors, smelly code, and anything else that could possibly explain Z. Give me 4 ideas I can use as a starting point for more debugging and tell me 2 things that it couldn't possibly be.</p></li>
+</ol>
+
+
+<hr>
+
+<h2>
+  <a href="#lets-see-what-realworld-sanitized-results-you-get">
+  </a>
+  Let's see what real-world (sanitized) results you get!
+</h2>
+
+<p>Post your wins here and share what you did to get them. I can't wait to see what you guys come up with 🦾</p>
+
+
+<hr>
+
+<blockquote>
+<h3>
+  <a href="#rai-disclaimer">
+  </a>
+  🛡️ RAI Disclaimer
+</h3>
+
+<p>Everything I share here is my own perspective—created with the help of AI tools (GitHub Copilot, ChatGPT, and their friends), but always with a human in the loop. I do my best to catch accidental bias and fact-check, but if you ever spot something odd, let me know! AI isn’t perfect, and neither am I.</p>
+
+<p><strong>TL; DR:</strong> AI helped, but you can blame me for the <strong>chaos</strong>! 🫠</p>
+</blockquote>
+
+</article>
+
+  <!-- Dev.to Backlinks -->
+  
+  <div style="margin: 20px 0; padding: 10px; border-left: 4px solid #3b49df; background-color: #f8f9ff;">
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
+                💬 Join the discussion about "Troubleshooting Production with GitHub Copilot: The Guide for Real Humans (and Bots with Good Taste)" on Dev.to:
+            </p>
+            <p style="margin: 5px 0 0 0;">
+                <a href="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o"
+                   style="color: #3b49df; font-weight: bold; text-decoration: none;"
+                   target="_blank" rel="noopener">
+                    View comments and reactions →
+                </a>
+            </p>
+        </div>
+  
+
+  <!-- Related Posts Section -->
+  
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/all-ive-learned-about-github-copilot-instructions-so-far-5bm7.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            📋 All I’ve Learned About GitHub Copilot Instructions (So Far)
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">📢 Just a Heads Up   I’ve started sharing these at work as well, so what you’re seeing here...</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#learning</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Did AI Erase Attribution? Your Git History Is Missing a Co-Author
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Your AI assistant might be the most productive co-author you’ve ever had, but your git history doesn’t know it. Here’s how to fix that.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-copilot-chat-modes-from-chaos-to-command-54k0.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents: From Chaos to Command 🎛️
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">You’ve built your first GitHub Copilot c̶h̶a̶t̶ ̶m̶o̶d̶e̶ agent—now it’s time to tame it. Here’s how to set up, test, and share custom modes like a professional who occasionally yells at their AI.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/github-copilot-chat-modes-explained-with-personality-2f4c.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            GitHub Copilot C̴h̴a̴t̴ ̴M̴o̴d̴e̴s̴ Agents Explained (with Personality) 🎭
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">The third way to shape how GitHub Copilot responds:  c̶h̶a̶t̶ ̶m̶o̶d̶e̶s̶ agents. Now officially documented and live in your repo, they let you define Copilot’s behavior with your own personality, tone, and workflow—because coding assistants should sound like you.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#productivity</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  <p><a href="https://dev.to/anchildress1/troubleshooting-production-with-github-copilot-the-guide-for-real-humans-and-bots-with-good-taste-253o">Read on Dev.to →</a></p>
+</main>
+</body></html>
+</text>

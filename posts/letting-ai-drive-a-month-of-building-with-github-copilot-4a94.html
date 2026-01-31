@@ -1,0 +1,737 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>🧠 Letting AI Drive: A Month of Building with GitHub Copilot</title>
+<link rel="canonical" href="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">
+<meta name="description" content="“When the going gets weird, the weird turn pro.” — Hunter S. Thompson            What happens when...">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">
+<meta property="og:title" content="🧠 Letting AI Drive: A Month of Building with GitHub Copilot">
+<meta property="og:description" content="“When the going gets weird, the weird turn pro.” — Hunter S. Thompson            What happens when...">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5q4icjaorkkrasrgw9in.png">
+<meta property="og:site_name" content="anchildress1—Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">
+<meta name="twitter:title" content="🧠 Letting AI Drive: A Month of Building with GitHub Copilot">
+<meta name="twitter:description" content="“When the going gets weird, the weird turn pro.” — Hunter S. Thompson            What happens when...">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5q4icjaorkkrasrgw9in.png">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="🧠 Letting AI Drive: A Month of Building with GitHub Copilot">
+<meta property="linkedin:description" content="“When the going gets weird, the weird turn pro.” — Hunter S. Thompson            What happens when...">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5q4icjaorkkrasrgw9in.png">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5q4icjaorkkrasrgw9in.png">
+<meta name="author" content="Ashley Childress">
+<meta name="keywords" content="githubcopilot, ai, developers, casestudy">
+
+<!-- AI-Specific Enhanced Metadata -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:published_time" content="2025-06-11T12:15:36Z">
+
+<meta name="article:modified_time" content="2025-07-13T06:43:39Z">
+
+<meta name="content-type" content="ai">
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<meta name="content-language" content="en">
+
+<meta name="generator" content="anchildress1—Dev.to Mirror AI-Optimized Mirror">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<meta name="theme-color" content="#000000">
+
+<meta name="canonical" content="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">
+
+<meta name="source-platform" content="dev.to">
+
+<meta name="source-url" content="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">
+
+<meta name="source-author-profile" content="https://dev.to/anchildress1">
+
+<meta name="source-post-id" content="2584691">
+
+<meta name="original-published-date" content="2025-06-11T12:15:36Z">
+
+<meta name="reading-time" content="3 minutes">
+
+<meta name="devto:reactions" content="0">
+
+<meta name="devto:comments" content="2">
+
+<meta name="devto:engagement_score" content="4">
+
+<meta name="content-fingerprint" content="f41dfd130ce6311d">
+
+
+
+<!-- Cross-Reference Attribution Meta Tags -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:publisher" content="Dev.to">
+
+<meta name="article:source" content="Dev.to">
+
+<meta name="content:source" content="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">
+
+<meta name="content:original_publisher" content="Dev.to">
+
+<meta name="article:published_time" content="2025-06-11T12:15:36Z">
+
+
+
+<!-- JSON-LD Structured Data -->
+
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2025-07-13T06:43:39Z", "datePublished": "2025-06-11T12:15:36Z", "description": "\u201cWhen the going gets weird, the weird turn pro.\u201d \u2014 Hunter S. Thompson            What happens when...", "headline": "\ud83e\udde0 Letting AI Drive: A Month of Building with GitHub Copilot", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1000,height=500,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5q4icjaorkkrasrgw9in.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 2}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 0}], "keywords": ["githubcopilot", "ai", "developers", "casestudy"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://crawly.checkmarkdevtools.dev"}, "timeRequired": "PT3M", "url": "https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94", "wordCount": 817}
+</script>
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev", "name": "Home", "position": 1}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts", "name": "Posts", "position": 2}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts/letting-ai-drive-a-month-of-building-with-github-copilot-4a94.html", "name": "\ud83e\udde0 Letting AI Drive: A Month of Building with GitHub Copilot", "position": 3}]}
+</script>
+
+
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">🧠 Letting AI Drive: A Month of Building with GitHub Copilot</a></h1>
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F5q4icjaorkkrasrgw9in.png?v=2"
+      width="1000" height="420"
+      alt="Banner image for 🧠 Letting AI Drive: A Month of Building with GitHub Copilot"
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
+  
+  <p><em>Published: 2025-06-11T12:15:36Z</em></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #githubcopilot
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #ai
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #developers
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #casestudy
+            </span>
+        
+    </p>
+    
+  <p><em>“When the going gets weird, the weird turn pro.” — Hunter S. Thompson            What happens when...</em></p>
+
+  <!-- Enhanced Dev.to Attribution -->
+  
+  <div style="border: 1px solid #e0e0e0; padding: 15px; margin: 20px 0;
+                    background-color: #f9f9f9; border-radius: 5px;">
+            <p style="margin: 0; font-style: italic; color: #666;">
+                <strong>📝 Originally published on Dev.to</strong><br>
+                by Ashley Childress on 2025-06-11T12:15:36Z
+            </p>
+            <p style="margin: 10px 0 0 0;">
+                <a href="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94"
+                   style="color: #3b49df; text-decoration: none; font-weight: bold;"
+                   target="_blank" rel="noopener">
+                    → Read the original article on Dev.to
+                </a>
+            </p>
+        </div>
+  
+
+  <article><blockquote>
+<p>“When the going gets weird, the weird turn pro.”<br><br>
+— Hunter S. Thompson</p>
+</blockquote>
+
+<h2>
+  <a href="#what-happens-when-you-stop-writing-code-and-start-managing-your-ai-developer-instead">
+  </a>
+  What happens when you stop writing code and start managing your AI developer instead?
+</h2>
+
+
+<hr>
+
+<h2>
+  <a href="#tldr">
+  </a>
+  ⚡ TL;DR;
+</h2>
+
+<p>I gave GitHub Copilot full control of a built-from-scratch NodeJS project for a month.<br><br>
+ChatGPT handled planning, strategy, UX input, and story writing.<br><br>
+I acted as manager, director, and chaos wrangler.</p>
+
+<p>The result:<br><br>
+A working prototype, repeatable prompt patterns, and serious lessons on using AI as your dev partner.</p>
+
+
+<hr>
+
+<h2>
+  <a href="#setup">
+  </a>
+  👋 Setup
+</h2>
+
+<p>Built as a personal experiment on a work machine (private, for now).</p>
+
+<p><strong>Toolchain:</strong></p>
+
+<ul>
+<li>
+<strong>VS Code Insiders</strong>, started in Codespaces for safety</li>
+<li>
+<strong>Full access granted</strong> to terminal, extensions, file tree, everything</li>
+<li>
+<strong>Linting + formatting</strong>: ESLint, Prettier, Remark, Commitlint (strictly enforced)</li>
+<li>
+<strong>Testing</strong>: Vitest with 90%+ coverage enforcement</li>
+<li>
+<strong>Copilot handled</strong>: Code, tests, docs, commit messages, pull requests, story <em>implementation</em>
+</li>
+<li>
+<strong>ChatGPT handled</strong>: Story <em>writing</em>, backlog creation, research, branding</li>
+<li>
+<strong>Workflow</strong>: Start with instructions (repo-level + personal) → evolve into structured prompts → iterate and commit</li>
+</ul>
+
+<blockquote>
+<p>Most <code>//human input</code> lines were documentation. Actual code edits? Maybe two — one for manual testing and one was copy/pasted.</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#how-i-actually-prompt-github-copilot">
+  </a>
+  🧪 How I Actually Prompt (GitHub Copilot)
+</h2>
+
+<h3>
+  <a href="#copilot-agent-settings">
+  </a>
+  🧠 Copilot Agent Settings
+</h3>
+
+<blockquote>
+<p>Note: By default, <code>Ask</code> mode doesn't save historical context</p>
+</blockquote>
+
+<p>Depending on what I’m doing, I pick a specific model under <code>Agent</code> mode:</p>
+
+<ul>
+<li>
+<p>🛠️ <strong>Feature implementation, heavy refactor, full A→Q problem-solving</strong>  </p>
+
+<ul>
+<li>Claude Sonnet 4 or Claude Sonnet 3.7</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<p>🧪 <strong>Testing, docs, explanation, general idea bouncing</strong>  </p>
+
+<ul>
+<li>GPT-4.1 or GPT-4o</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<p>🔍 <strong>Somewhere in between</strong>  </p>
+
+<ul>
+<li>Gemini 2.5 Pro (when it actually works)</li>
+</ul>
+
+
+</li>
+
+<li>
+
+<p>⚙️ <strong>Light scripting, config setup, follow-along patterns</strong>  </p>
+
+<ul>
+<li>o4-mini</li>
+</ul>
+
+
+</li>
+
+</ul>
+
+
+<hr>
+
+<h3>
+  <a href="#mostused-contexts">
+  </a>
+  🧷 Most-Used Contexts
+</h3>
+
+<ul>
+<li>
+<code>#terminalLastCommand</code>
+</li>
+<li>
+<code>#selection</code>
+</li>
+<li><code>#file</code></li>
+</ul>
+
+
+<hr>
+
+<h3>
+  <a href="#my-goto-prompts">
+  </a>
+  🧠 My Go-To Prompts
+</h3>
+
+<h4>
+  <a href="#when-im-stuck">
+  </a>
+  When I’m Stuck
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre><code><span class="gh">#codebase I want to build a &lt;thing&gt; for &lt;goal&gt;.  </span>
+Given current best practices in <span class="nt">&lt;language&gt;</span>, analyze the top 3 ways to implement it. 
+List 2 pros/cons for each. 
+Rate 1–5 for complexity, ease of use, maintainability. 
+Rank them and explain why.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<blockquote>
+<p>Even when the simplest ones didn’t work right away, they always got the ball rolling. If needed, I clarified or reset with <code>/clear</code> and tried again.</p>
+</blockquote>
+
+<h4>
+  <a href="#doesnt-compile">
+  </a>
+  Doesn't Compile
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre><code>/fix #the-file-copilot-prob-broke-anyway.js
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<h4>
+  <a href="#failing-tests">
+  </a>
+  Failing Tests
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre><code>/fix #terminalLastCommand
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+<h4>
+  <a href="#lint-errors">
+  </a>
+  Lint errors
+</h4>
+
+
+
+<div class="highlight js-code-highlight">
+<pre><code>/fix #problems
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+
+
+<hr>
+
+<h2>
+  <a href="#the-copilot-hell-loop-is-real">
+  </a>
+  ☠️ The Copilot Hell Loop Is Real
+</h2>
+
+<p>It happens: Copilot spirals into broken logic and keeps rewriting working code.</p>
+
+<p>Here’s what works:<br><br>
+<strong>Pause → Redirect → Resume</strong><br><br>
+(But don’t wait too long — or your fix becomes <code>git reset --hard HEAD</code>.)</p>
+
+
+<hr>
+
+<h2>
+  <a href="#what-i-learned">
+  </a>
+  📚 What I Learned
+</h2>
+
+<h3>
+  <a href="#models-matter">
+  </a>
+  ✅ Models Matter
+</h3>
+
+<p>Pick the right one — it'll save you hours of rework.</p>
+
+<h3>
+  <a href="#specific-prompts-win">
+  </a>
+  ✅ Specific Prompts Win
+</h3>
+
+<p>Copilot thrives on intent and clarity, not vague instructions.</p>
+
+<h3>
+  <a href="#backandforth-works">
+  </a>
+  ✅ Back-and-Forth Works
+</h3>
+
+<p><code>#selection I was thinking of doing X here — would you recommend that?</code><br><br>
+Copilot actually responds meaningfully.</p>
+
+<h3>
+  <a href="#commit-while-it-works">
+  </a>
+  ✅ Commit While It Works
+</h3>
+
+<p>Don’t wait for perfect. Save progress, iterate fast.</p>
+
+<h3>
+  <a href="#no-plan-no-problem-sometimes">
+  </a>
+  ✅ No Plan? No Problem (Sometimes)
+</h3>
+
+<p>Just stay curious and let your Copilot riff with you.</p>
+
+<h3>
+  <a href="#-raw-codebase-endraw-for-direct-implementation-doesnt-work-for-me">
+  </a>
+  ❌ <code>#codebase</code> for Direct Implementation Doesn't Work (for Me)
+</h3>
+
+<p>I know it's a headline feature, but asking Copilot to <code>/implement-feature JIRA-123 #codebase</code> has <strong>never</strong> worked well for me.<br><br>
+What <em>does</em> work? <strong>Asking targeted questions</strong>, especially during active review or when you’re trying to break down next steps.</p>
+
+<h3>
+  <a href="#longrunning-chat-histories-hit-a-wall">
+  </a>
+  ⚠️ Long-Running Chat Histories Hit a Wall
+</h3>
+
+<p>Even if you think building a giant rolling context will help, Copilot's memory eventually falls off.<br><br>
+What worked better:<br><br>
+<strong>Story → review → refine → commit → /clear</strong><br><br>
+Repeat that and results stayed sharp.</p>
+
+<h3>
+  <a href="#try-it-vs-code-speech-for-conversational-prompts">
+  </a>
+  🎤 Try It: VS Code Speech for Conversational Prompts
+</h3>
+
+<p>VS Code Speech gives you a “hey code!” style interaction with Copilot.<br><br>
+You can speak out goals, requests, or reviews and let it translate to code suggestions.<br><br>
+⚠️ Just watch your token usage — premium-style interactions can balloon into fast rate limits if you're not careful.</p>
+
+<h3>
+  <a href="#chatgpt-worth-the-subscription">
+  </a>
+  ✅ ChatGPT = Worth the subscription
+</h3>
+
+<p>Docs, strategies, structure, creative writing, even “Hey, does this make sense?” moments.<br><br>
+We can't always live in code (plus, who can resist playing with pictures and color?)</p>
+
+<blockquote>
+<p>Yes, it helped with this post too!</p>
+</blockquote>
+
+
+<hr>
+
+<h2>
+  <a href="#lets-talk">
+  </a>
+  ✨ Let’s Talk
+</h2>
+
+<p>Questions? Want to swap prompts, patterns, or war stories? Hit me up — just give me a few weeks to recover.<br><br>
+I’m still prepping for the internal demo and approvals.</p>
+
+
+<hr>
+
+<p><em>This was Part 1 of a 2-part breakdown.</em>  </p>
+
+<p><strong>Next up</strong>: The build, the metrics, and what 600,000+ lines of AI-generated code actually look like in the wild. <a href="https://dev.to/anchildress1/from-hell-loops-to-happy-commits-38c4">Letting AI Drive: From Hell Loops to Happy Commits</a>.</p>
+
+
+<hr>
+
+<blockquote>
+<h3>
+  <a href="#rai-disclaimer">
+  </a>
+  🛡️ RAI Disclaimer
+</h3>
+
+<p>Everything I share here is my own perspective—created with the help of AI tools (GitHub Copilot, ChatGPT, and their friends), but always with a human in the loop. I do my best to catch accidental bias and fact-check, but if you ever spot something odd, let me know! AI isn’t perfect, and neither am I.</p>
+
+<p><strong>TL; DR:</strong> AI helped, but you can blame me for the <strong>chaos</strong>! 🫠</p>
+</blockquote>
+
+</article>
+
+  <!-- Dev.to Backlinks -->
+  
+  <div style="margin: 20px 0; padding: 10px; border-left: 4px solid #3b49df; background-color: #f8f9ff;">
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
+                💬 Join the discussion about "🧠 Letting AI Drive: A Month of Building with GitHub Copilot" on Dev.to:
+            </p>
+            <p style="margin: 5px 0 0 0;">
+                <a href="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94"
+                   style="color: #3b49df; font-weight: bold; text-decoration: none;"
+                   target="_blank" rel="noopener">
+                    View comments and reactions →
+                </a>
+            </p>
+        </div>
+  
+
+  <!-- Related Posts Section -->
+  
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/from-hell-loops-to-happy-commits-38c4.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            📈 Letting AI Drive: From Hell Loops to Happy Commits
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">What does 600,000+ lines of AI-generated code look like in the wild?            🛠️ What I...</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#developers</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#casestudy</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/signing-your-name-on-ai-assisted-commits-with-rai-footers-2b0o.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Signing Your Name on AI-Assisted Commits with RAI Footers 🛡️✍️
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Your AI assistant can help write the code, but your git history still needs a human signature. Here’s how RAI footers make AI attribution explicit.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/did-ai-erase-attribution-your-git-history-is-missing-a-co-author-1m2l.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Did AI Erase Attribution? Your Git History Is Missing a Co-Author
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Your AI assistant might be the most productive co-author you’ve ever had, but your git history doesn’t know it. Here’s how to fix that.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/leash-not-autopilot-building-predictable-ai-behavior-with-copilot-instructions-14ip.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Leash, Not Autopilot: Building Predictable AI Behavior with Copilot Instructions 🪢
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A battle-tested approach to GitHub Copilot instructions—repo rules, priority stacks, validation loops, and why AI needs boundaries to be useful.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="posts/top-10-github-copilot-updates-you-actually-need-to-know-about-297d.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Top 10 GitHub Copilot Updates You Actually Need to Know About 💥
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">GitHub Copilot’s wild late-October 2025 release: agents, smarter reviews, embeddings, metrics, and that one “helpful” test that nearly went to prod. Chaotic, hilarious, and absolutely worth the read.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#githubcopilot</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  <p><a href="https://dev.to/anchildress1/letting-ai-drive-a-month-of-building-with-github-copilot-4a94">Read on Dev.to →</a></p>
+</main>
+</body></html>
+</text>
