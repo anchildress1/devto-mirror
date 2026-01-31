@@ -9,8 +9,58 @@ import logging
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
+from devto_mirror.core.url_utils import post_page_href
+
 # Configure logging
 logger = logging.getLogger(__name__)
+
+
+def _clean_tag_list(tags: Any) -> list[str]:
+    if not isinstance(tags, list):
+        return []
+    cleaned: list[str] = []
+    for tag in tags:
+        if isinstance(tag, str) and tag.strip():
+            cleaned.append(tag.strip())
+    return cleaned
+
+
+def _score_related_post(
+    *,
+    current_slug: str,
+    current_tags: list[str],
+    current_tags_lower: list[str],
+    other_post: Any,
+) -> dict | None:
+    other_slug = getattr(other_post, "slug", "")
+    if other_slug == current_slug:
+        return None
+
+    other_tags = _clean_tag_list(getattr(other_post, "tags", []))
+    if not other_tags:
+        return None
+
+    other_tags_lower = [t.lower() for t in other_tags]
+    shared = set(current_tags_lower) & set(other_tags_lower)
+    if not shared:
+        return None
+
+    exact = set(current_tags) & set(other_tags)
+    score = len(shared) + (len(exact) * 0.5)
+
+    return {
+        "post": other_post,
+        "score": score,
+        "shared_tags": list(shared),
+        "exact_matches": list(exact),
+    }
+
+
+def _safe_local_link_for_post(post: Any) -> str:
+    try:
+        return post_page_href(getattr(post, "slug", ""))
+    except ValueError:
+        return ""
 
 
 def add_source_attribution(post: Any, site_config: Optional[Dict[str, str]] = None) -> Dict[str, str]:
@@ -101,51 +151,29 @@ def generate_related_links(post: Any, all_posts: List[Any], max_related: int = 5
     Returns:
         List of related post dictionaries with title, link, and relevance info
     """
-    related_posts = []
+    related_posts: list[dict[str, str]] = []
 
     try:
         # Get current post tags
-        current_tags = getattr(post, "tags", [])
-        if not current_tags or not isinstance(current_tags, list):
+        current_tags = _clean_tag_list(getattr(post, "tags", []))
+        if not current_tags:
             logger.debug(f"No tags found for post: {getattr(post, 'slug', 'unknown')}")
             return related_posts
 
         current_slug = getattr(post, "slug", "")
-        current_tags_lower = [tag.lower() for tag in current_tags if isinstance(tag, str)]
+        current_tags_lower = [tag.lower() for tag in current_tags]
 
         # Score other posts based on tag overlap
-        post_scores = []
+        post_scores: list[dict] = []
         for other_post in all_posts:
-            other_slug = getattr(other_post, "slug", "")
-
-            # Skip the current post
-            if other_slug == current_slug:
-                continue
-
-            other_tags = getattr(other_post, "tags", [])
-            if not other_tags or not isinstance(other_tags, list):
-                continue
-
-            other_tags_lower = [tag.lower() for tag in other_tags if isinstance(tag, str)]
-
-            # Calculate tag overlap score
-            shared_tags = set(current_tags_lower) & set(other_tags_lower)
-            if shared_tags:
-                # Score based on number of shared tags and tag rarity
-                score = len(shared_tags)
-
-                # Boost score for exact tag matches (case-sensitive)
-                exact_matches = set(current_tags) & set(other_tags)
-                score += len(exact_matches) * 0.5
-
-                post_scores.append(
-                    {
-                        "post": other_post,
-                        "score": score,
-                        "shared_tags": list(shared_tags),
-                        "exact_matches": list(exact_matches),
-                    }
-                )
+            scored = _score_related_post(
+                current_slug=current_slug,
+                current_tags=current_tags,
+                current_tags_lower=current_tags_lower,
+                other_post=other_post,
+            )
+            if scored:
+                post_scores.append(scored)
 
         # Sort by score (highest first) and take top results
         post_scores.sort(key=lambda x: x["score"], reverse=True)
@@ -154,11 +182,12 @@ def generate_related_links(post: Any, all_posts: List[Any], max_related: int = 5
         # Format related posts for template use
         for item in top_posts:
             related_post = item["post"]
+            local_link = _safe_local_link_for_post(related_post)
             related_posts.append(
                 {
                     "title": getattr(related_post, "title", "Untitled"),
                     "link": getattr(related_post, "link", ""),
-                    "local_link": f"posts/{getattr(related_post, 'slug', '')}.html",
+                    "local_link": local_link,
                     "description": getattr(related_post, "description", ""),
                     "shared_tags": item["shared_tags"],
                     "relevance_score": item["score"],

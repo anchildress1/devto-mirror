@@ -18,7 +18,7 @@ install:  ## Install development dependencies
 
 test:  ## Run unit tests
 	uv run coverage run --source src -m unittest discover -s tests -p 'test_*.py'
-	uv run coverage report --fail-under=80
+	uv run coverage report --fail-under=80.9
 	uv run coverage html
 
 lint:  ## Run linting checks (formatting, linting, security)
@@ -56,7 +56,7 @@ ai-checks:  ## Single command: format → lint → security → complexity → t
 	$(MAKE) format && echo "  ✓ format" || (echo "  ✗ format"; exit 1); \
 	$(MAKE) lint && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
 	$(MAKE) security && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
-	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ⚠ complexity (see docs/COMPLEXITY_REFACTORING.md)"; exit 0); \
+	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ✗ complexity (see docs/COMPLEXITY_REFACTORING.md)"; exit 1); \
 	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
 	echo "✅ Ready to commit."
 
