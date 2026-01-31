@@ -2,8 +2,11 @@ name: Generate and Publish Dev.to Mirror Site
 
 # Required repository variables:
 # - DEVTO_USERNAME: Your Dev.to username (required)
-# - GH_USERNAME: Your GitHub username (required)
+# - GH_USERNAME: Your GitHub username (required if SITE_DOMAIN not set)
 #   - Used for constructing GitHub Pages URLs
+# - SITE_DOMAIN: Custom domain for the site (optional)
+#   - Example: crawly.checkmarkdevtools.dev
+#   - If set, overrides GitHub Pages URL construction
 #
 # Optional repository secrets:
 # - DEVTO_KEY: Dev.to API key (optional for public content, required for private/draft posts)
@@ -46,6 +49,7 @@ jobs:
     env:
       DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
       GH_USERNAME: ${{ vars.GH_USERNAME }}
+      SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
       DEVTO_KEY: ${{ secrets.DEVTO_KEY }}
     steps:
       - uses: actions/checkout@v6
@@ -106,7 +110,7 @@ jobs:
           echo "## 🏗️ Site Generation" >> $GITHUB_STEP_SUMMARY
           echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Repo: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
-          uv run python scripts/generate_site.py
+          uv run python -m devto_mirror.site_generation.generator
 
       - name: Note site generation success
         if: steps.generate.outputs.no_new_posts != 'true'
@@ -144,13 +148,14 @@ jobs:
         if: steps.generate.outputs.no_new_posts != 'true'
         run: |
           echo "## 📄 Generating Sitemap" >> $GITHUB_STEP_SUMMARY
-          uv run python scripts/render_index_sitemap.py
+          uv run python -m devto_mirror.site_generation.renderer
           echo "✅ Sitemap generated" >> $GITHUB_STEP_SUMMARY
 
       - name: Prepare deployment directory
         if: steps.generate.outputs.no_new_posts != 'true'
         env:
           GH_USERNAME: ${{ vars.GH_USERNAME }}
+          SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
         run: |
           mkdir -p _deploy
           cp .nojekyll _deploy/
@@ -166,8 +171,12 @@ jobs:
           [ -f google6b80426bb396f31f.html ] && cp google6b80426bb396f31f.html _deploy/
           [ -f algolia_verification.html ] && cp algolia_verification.html _deploy/
 
-          # Process template files
-          SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
+          # Process template files with domain resolution
+          if [ -n "$SITE_DOMAIN" ]; then
+            SITE_HOME="https://${SITE_DOMAIN}/"
+          else
+            SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
+          fi
           sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
           sed "s|{root_home}|$SITE_HOME|g" assets/llms.txt > _deploy/llms.txt
 

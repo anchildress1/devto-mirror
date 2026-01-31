@@ -46,7 +46,8 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 1. **Fork** this repo
 2. **Set variables** (Settings → Actions → Variables):
   - `DEVTO_USERNAME` – your Dev.to username
-  - `GH_USERNAME` – your GitHub username
+  - `SITE_DOMAIN` – (optional) custom domain like `crawly.checkmarkdevtools.dev`
+  - `GH_USERNAME` – your GitHub username (required if not using custom domain)
 3. **(Optional) Set API key** (Settings → Actions → Secrets):
   - `DEVTO_KEY` – for private/draft posts
 4. **Delete** `gh-pages` branch if it exists

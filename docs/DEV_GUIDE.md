@@ -52,18 +52,31 @@ The project uses a `.env` file for local development configuration. This keeps s
 **Required variables:**
 
 - `DEVTO_USERNAME`: Your Dev.to username (e.g., "anchildress1")
-- `PAGES_REPO`: Your GitHub repository in format "username/repo-name" (e.g., "anchildress1/devto-mirror")
+
+**Site URL configuration (one required):**
+
+- `SITE_DOMAIN`: Custom domain (e.g., "crawly.checkmarkdevtools.dev")
+- `GH_USERNAME`: GitHub username (e.g., "anchildress1") - used if `SITE_DOMAIN` not set
 
 **Optional variables:**
 
 - `FORCE_FULL_REGEN`: Set to "true" to regenerate all posts instead of incremental updates
 - `VALIDATION_MODE`: Set to "true" to use mock data instead of API calls (for testing)
 
-**Example .env file:**
+**Example .env file (with custom domain):**
 
 ```bash
 DEVTO_USERNAME=your-username
-PAGES_REPO=your-username/devto-mirror
+SITE_DOMAIN=crawly.checkmarkdevtools.dev
+FORCE_FULL_REGEN=false
+VALIDATION_MODE=false
+```
+
+**Example .env file (with GitHub Pages):**
+
+```bash
+DEVTO_USERNAME=your-username
+GH_USERNAME=your-github-username
 FORCE_FULL_REGEN=false
 VALIDATION_MODE=false
 ```

@@ -188,7 +188,7 @@ class TestValidateSiteGeneration(unittest.TestCase):
         mock_subprocess.return_value = mock_result
 
         # Mock environment variables to return test values
-        with patch.dict(os.environ, {"DEVTO_USERNAME": "testuser", "PAGES_REPO": "testuser/devto-mirror"}, clear=False):
+        with patch.dict(os.environ, {"DEVTO_USERNAME": "testuser", "GH_USERNAME": "testuser"}, clear=False):
             validate_site_generation()
 
         # Check that subprocess was called with correct environment
@@ -198,13 +198,57 @@ class TestValidateSiteGeneration(unittest.TestCase):
         # Check default validation values were passed
         env = call_args[1]["env"]
         self.assertEqual(env["DEVTO_USERNAME"], "testuser")
-        self.assertEqual(env["PAGES_REPO"], "testuser/devto-mirror")
+        self.assertEqual(env["GH_USERNAME"], "testuser")
         self.assertEqual(env["VALIDATION_MODE"], "true")
 
         # Check other subprocess parameters
         self.assertEqual(call_args[1]["timeout"], 60)
         self.assertTrue(call_args[1]["capture_output"])
         self.assertTrue(call_args[1]["text"])
+
+    @patch("builtins.print")
+    @patch("scripts.validate_site_generation.load_dotenv")
+    @patch("scripts.validate_site_generation.subprocess.run")
+    @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
+    @patch("scripts.validate_site_generation.Path")
+    def test_site_domain_custom(self, mock_path, mock_temp_dir, mock_subprocess, mock_load_dotenv, mock_print):
+        """Test that SITE_DOMAIN takes precedence over GH_USERNAME."""
+        self._setup_path_mocks(mock_path, mock_temp_dir)
+
+        mock_result = MagicMock()
+        mock_result.returncode = 0
+        mock_subprocess.return_value = mock_result
+
+        with patch.dict(
+            os.environ, {"DEVTO_USERNAME": "testuser", "SITE_DOMAIN": "crawly.checkmarkdevtools.dev"}, clear=False
+        ):
+            validate_site_generation()
+
+        call_args = mock_subprocess.call_args
+        env = call_args[1]["env"]
+        self.assertEqual(env["SITE_DOMAIN"], "crawly.checkmarkdevtools.dev")
+        self.assertEqual(env["VALIDATION_MODE"], "true")
+
+    @patch("builtins.print")
+    @patch("scripts.validate_site_generation.load_dotenv")
+    @patch("scripts.validate_site_generation.subprocess.run")
+    @patch("scripts.validate_site_generation.tempfile.TemporaryDirectory")
+    @patch("scripts.validate_site_generation.Path")
+    def test_site_domain_fallback(self, mock_path, mock_temp_dir, mock_subprocess, mock_load_dotenv, mock_print):
+        """Test fallback to GH_USERNAME when SITE_DOMAIN not set."""
+        self._setup_path_mocks(mock_path, mock_temp_dir)
+
+        mock_result = MagicMock()
+        mock_result.returncode = 0
+        mock_subprocess.return_value = mock_result
+
+        with patch.dict(os.environ, {"DEVTO_USERNAME": "testuser", "GH_USERNAME": "testuser"}, clear=True):
+            validate_site_generation()
+
+        call_args = mock_subprocess.call_args
+        env = call_args[1]["env"]
+        self.assertNotIn("SITE_DOMAIN", env)
+        self.assertEqual(env["GH_USERNAME"], "testuser")
 
 
 if __name__ == "__main__":

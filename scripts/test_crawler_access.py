@@ -291,7 +291,8 @@ def discover_sample_pages(base_url):
     additional_pages = []
 
     try:
-        sitemap_url = urljoin(base_url, "sitemap.xml")
+        base_url_norm = base_url.rstrip("/") + "/"
+        sitemap_url = urljoin(base_url_norm, "sitemap.xml")
         response = requests.get(sitemap_url, timeout=10)
 
         if response.status_code == 200:
@@ -302,8 +303,8 @@ def discover_sample_pages(base_url):
 
             # Convert absolute URLs to relative paths and take a sample
             for url in urls[:5]:  # Test first 5 pages
-                if url.startswith(base_url):
-                    relative_path = url[len(base_url) :].lstrip("/")
+                if url.startswith(base_url_norm):
+                    relative_path = url[len(base_url_norm) :].lstrip("/")
                     if relative_path and relative_path not in TEST_PAGES:
                         additional_pages.append(relative_path)
 
@@ -316,12 +317,16 @@ def discover_sample_pages(base_url):
 def main():
     """Main function to run crawler access tests."""
     # Get base URL from environment or use default
+    site_domain = os.getenv("SITE_DOMAIN", "").strip()
     gh_username = os.getenv("GH_USERNAME", "").strip()
-    if not gh_username:
-        print("Error: GH_USERNAME environment variable must be set")
-        sys.exit(1)
 
-    base_url = f"https://{gh_username}.github.io/devto-mirror"
+    if site_domain:
+        base_url = f"https://{site_domain}"
+    elif gh_username:
+        base_url = f"https://{gh_username}.github.io/devto-mirror"
+    else:
+        print("Error: SITE_DOMAIN or GH_USERNAME environment variable must be set")
+        sys.exit(1)
 
     # Allow override of base URL for testing
     if len(sys.argv) > 1:

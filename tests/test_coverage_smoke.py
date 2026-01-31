@@ -190,6 +190,52 @@ class TestSiteGenerationModules(unittest.TestCase):
             os.environ.clear()
             os.environ.update(old_env)
 
+    def test_generator_with_site_domain(self):
+        old_env = os.environ.copy()
+        try:
+            os.environ["VALIDATION_MODE"] = "true"
+            os.environ["DEVTO_USERNAME"] = "testuser"
+            os.environ["SITE_DOMAIN"] = "crawly.checkmarkdevtools.dev"
+            os.environ["FORCE_FULL_REGEN"] = "true"
+
+            with tempfile.TemporaryDirectory() as td:
+                root = Path(td)
+                (root / "assets").mkdir()
+                (root / "assets" / "devto-mirror.jpg").touch()
+
+                with _chdir(root):
+                    importlib.sys.modules.pop("devto_mirror.site_generation.generator", None)
+                    gen = importlib.import_module("devto_mirror.site_generation.generator")
+                    self.assertEqual(gen.HOME, "https://crawly.checkmarkdevtools.dev/")
+                    self.assertEqual(gen.ROOT_HOME, "https://crawly.checkmarkdevtools.dev/")
+        finally:
+            os.environ.clear()
+            os.environ.update(old_env)
+
+    def test_generator_fallback_to_gh_username(self):
+        old_env = os.environ.copy()
+        try:
+            os.environ["VALIDATION_MODE"] = "true"
+            os.environ["DEVTO_USERNAME"] = "testuser"
+            os.environ["GH_USERNAME"] = "testuser"
+            os.environ["FORCE_FULL_REGEN"] = "true"
+            # Ensure SITE_DOMAIN is unset so generator falls back to GH_USERNAME.
+            os.environ.pop("SITE_DOMAIN", None)
+
+            with tempfile.TemporaryDirectory() as td:
+                root = Path(td)
+                (root / "assets").mkdir()
+                (root / "assets" / "devto-mirror.jpg").touch()
+
+                with _chdir(root):
+                    importlib.sys.modules.pop("devto_mirror.site_generation.generator", None)
+                    gen = importlib.import_module("devto_mirror.site_generation.generator")
+                    self.assertEqual(gen.HOME, "https://testuser.github.io/devto-mirror/")
+                    self.assertEqual(gen.ROOT_HOME, "https://testuser.github.io/")
+        finally:
+            os.environ.clear()
+            os.environ.update(old_env)
+
     def test_generator_short_circuits_on_no_new_posts(self):
         old_env = os.environ.copy()
         try:

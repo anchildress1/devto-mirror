@@ -79,6 +79,9 @@ def load_and_merge_posts():
 
 
 def get_home_url():
+    site_domain = os.environ.get("SITE_DOMAIN", "").strip()
+    if site_domain:
+        return f"https://{site_domain}/"
     gh_username = os.environ.get("GH_USERNAME", "").strip()
     if gh_username:
         return f"https://{gh_username}.github.io/devto-mirror/"
