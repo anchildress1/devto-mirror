@@ -110,7 +110,7 @@ jobs:
           echo "## 🏗️ Site Generation" >> $GITHUB_STEP_SUMMARY
           echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 Repo: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
-          uv run python scripts/generate_site.py
+          uv run python -m devto_mirror.site_generation.generator
 
       - name: Note site generation success
         if: steps.generate.outputs.no_new_posts != 'true'
@@ -148,7 +148,7 @@ jobs:
         if: steps.generate.outputs.no_new_posts != 'true'
         run: |
           echo "## 📄 Generating Sitemap" >> $GITHUB_STEP_SUMMARY
-          uv run python scripts/render_index_sitemap.py
+          uv run python -m devto_mirror.site_generation.renderer
           echo "✅ Sitemap generated" >> $GITHUB_STEP_SUMMARY
 
       - name: Prepare deployment directory

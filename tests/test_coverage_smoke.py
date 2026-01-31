@@ -219,6 +219,8 @@ class TestSiteGenerationModules(unittest.TestCase):
             os.environ["DEVTO_USERNAME"] = "testuser"
             os.environ["GH_USERNAME"] = "testuser"
             os.environ["FORCE_FULL_REGEN"] = "true"
+            # Ensure SITE_DOMAIN is unset so generator falls back to GH_USERNAME.
+            os.environ.pop("SITE_DOMAIN", None)
 
             with tempfile.TemporaryDirectory() as td:
                 root = Path(td)

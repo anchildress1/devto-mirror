@@ -291,7 +291,8 @@ def discover_sample_pages(base_url):
     additional_pages = []
 
     try:
-        sitemap_url = urljoin(base_url, "sitemap.xml")
+        base_url_norm = base_url.rstrip("/") + "/"
+        sitemap_url = urljoin(base_url_norm, "sitemap.xml")
         response = requests.get(sitemap_url, timeout=10)
 
         if response.status_code == 200:
@@ -302,8 +303,8 @@ def discover_sample_pages(base_url):
 
             # Convert absolute URLs to relative paths and take a sample
             for url in urls[:5]:  # Test first 5 pages
-                if url.startswith(base_url):
-                    relative_path = url[len(base_url) :].lstrip("/")
+                if url.startswith(base_url_norm):
+                    relative_path = url[len(base_url_norm) :].lstrip("/")
                     if relative_path and relative_path not in TEST_PAGES:
                         additional_pages.append(relative_path)
 
