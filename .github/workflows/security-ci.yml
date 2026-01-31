@@ -31,16 +31,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          echo "## 🔧 Installing dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔧 Installing dependencies" >> "$GITHUB_STEP_SUMMARY"
           uv sync --locked --group dev
           make install
-          echo "✅ Dependencies installed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Dependencies installed" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Run validation
         run: |
-          echo "## 🔍 Validation Results" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 Validation Results" >> "$GITHUB_STEP_SUMMARY"
           make ai-checks
-          echo "✅ All checks passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All checks passed" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Generate coverage and reports
         run: |
