@@ -56,9 +56,10 @@ def validate_site_generation():
         env = os.environ.copy()
         env_updates = {
             "DEVTO_USERNAME": devto_username,
-            "VALIDATION_MODE": "true",
+            "VALIDATION_MODE": "true",  # Signal to script this is validation
             "PYTHONPATH": str(workspace_root / "src") + os.pathsep + env.get("PYTHONPATH", ""),
         }
+        # Only set SITE_DOMAIN / GH_USERNAME if we have values (preserve caller intent)
         if site_domain:
             env_updates["SITE_DOMAIN"] = site_domain
         if gh_username:
