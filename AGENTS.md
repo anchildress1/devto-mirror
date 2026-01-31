@@ -41,5 +41,6 @@
 
 ## Project-required environment
 
-- Required: `DEVTO_USERNAME`, `GH_USERNAME`
+- Required: `DEVTO_USERNAME`
+- Site URL (one required): `SITE_DOMAIN` or `GH_USERNAME`
 - Optional: `DEVTO_KEY`, `VALIDATION_MODE`, `FORCE_FULL_REGEN`, `ROOT_SITE_PAT`

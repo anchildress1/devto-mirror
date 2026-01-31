@@ -316,12 +316,16 @@ def discover_sample_pages(base_url):
 def main():
     """Main function to run crawler access tests."""
     # Get base URL from environment or use default
+    site_domain = os.getenv("SITE_DOMAIN", "").strip()
     gh_username = os.getenv("GH_USERNAME", "").strip()
-    if not gh_username:
-        print("Error: GH_USERNAME environment variable must be set")
-        sys.exit(1)
 
-    base_url = f"https://{gh_username}.github.io/devto-mirror"
+    if site_domain:
+        base_url = f"https://{site_domain}"
+    elif gh_username:
+        base_url = f"https://{gh_username}.github.io/devto-mirror"
+    else:
+        print("Error: SITE_DOMAIN or GH_USERNAME environment variable must be set")
+        sys.exit(1)
 
     # Allow override of base URL for testing
     if len(sys.argv) > 1:

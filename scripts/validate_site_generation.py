@@ -27,13 +27,14 @@ def validate_site_generation():
     # Check required environment variables
     devto_username = os.getenv("DEVTO_USERNAME")
     gh_username = os.getenv("GH_USERNAME")
+    site_domain = os.getenv("SITE_DOMAIN")
 
     if not devto_username:
         print("⚠️  DEVTO_USERNAME not set - using test value for validation")
         devto_username = "testuser"
 
-    if not gh_username:
-        print("⚠️  GH_USERNAME not set - using test value for validation")
+    if not site_domain and not gh_username:
+        print("⚠️  SITE_DOMAIN and GH_USERNAME not set - using test value for validation")
         gh_username = "testuser"
 
     # Create temporary directory for validation
@@ -53,14 +54,16 @@ def validate_site_generation():
 
         # Set up environment for validation
         env = os.environ.copy()
-        env.update(
-            {
-                "DEVTO_USERNAME": devto_username,
-                "GH_USERNAME": gh_username,
-                "VALIDATION_MODE": "true",  # Signal to script this is validation
-                "PYTHONPATH": str(workspace_root / "src") + os.pathsep + env.get("PYTHONPATH", ""),
-            }
-        )
+        env_updates = {
+            "DEVTO_USERNAME": devto_username,
+            "VALIDATION_MODE": "true",
+            "PYTHONPATH": str(workspace_root / "src") + os.pathsep + env.get("PYTHONPATH", ""),
+        }
+        if site_domain:
+            env_updates["SITE_DOMAIN"] = site_domain
+        if gh_username:
+            env_updates["GH_USERNAME"] = gh_username
+        env.update(env_updates)
 
         try:
             # Run the script in validation mode

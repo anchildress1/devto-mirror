@@ -77,7 +77,10 @@ This workflow deploys to a single location:
 **Environment Variables**:
 
 - `DEVTO_USERNAME`: Repository variable (required) - Your Dev.to username
-- `GH_USERNAME`: Repository variable (required) - Your GitHub username for Pages URLs
+- `SITE_DOMAIN`: Repository variable (optional) - Custom domain (e.g., `crawly.checkmarkdevtools.dev`)
+  - If set, overrides GitHub Pages URL construction
+  - Falls back to `GH_USERNAME`-based URL if not provided
+- `GH_USERNAME`: Repository variable (required if `SITE_DOMAIN` not set) - Your GitHub username for Pages URLs
 - `DEVTO_KEY`: Repository secret (optional for public content, required for private/draft posts)
 - `PAGES_REPO`: Auto-derived from `github.repository`
 - `GITHUB_TOKEN`: Auto-provided for Pages deployment

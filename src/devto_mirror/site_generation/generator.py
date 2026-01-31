@@ -33,6 +33,7 @@ load_dotenv()
 
 DEVTO_USERNAME = os.getenv("DEVTO_USERNAME", "").strip()
 GH_USERNAME = os.getenv("GH_USERNAME", "").strip()
+SITE_DOMAIN = os.getenv("SITE_DOMAIN", "").strip()
 LAST_RUN_FILE = "last_run.txt"
 NO_NEW_POSTS_FILE = "no_new_posts.flag"
 VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes")
@@ -40,12 +41,16 @@ VALIDATION_MODE = os.getenv("VALIDATION_MODE", "").lower() in ("true", "1", "yes
 if not VALIDATION_MODE:
     if not DEVTO_USERNAME:
         raise ValueError("Missing DEVTO_USERNAME (your Dev.to username)")
-    if not GH_USERNAME:
-        raise ValueError("Missing GH_USERNAME (your GitHub username)")
+    if not SITE_DOMAIN and not GH_USERNAME:
+        raise ValueError("Missing SITE_DOMAIN or GH_USERNAME")
 
-username = GH_USERNAME or "user"
-HOME = f"https://{username}.github.io/devto-mirror/"
-ROOT_HOME = f"https://{username}.github.io/"
+if SITE_DOMAIN:
+    HOME = f"https://{SITE_DOMAIN}/"
+    ROOT_HOME = HOME
+else:
+    username = GH_USERNAME or "user"
+    HOME = f"https://{username}.github.io/devto-mirror/"
+    ROOT_HOME = f"https://{username}.github.io/"
 
 ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
