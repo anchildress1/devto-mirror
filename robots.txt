@@ -49,5 +49,5 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://anchildress1.github.io/devto-mirror/sitemap.xml
-Host: https://anchildress1.github.io/devto-mirror/
+Sitemap: https://crawly.checkmarkdevtools.dev/sitemap.xml
+Host: https://crawly.checkmarkdevtools.dev/
