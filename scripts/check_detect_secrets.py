@@ -7,9 +7,12 @@ failing on untracked/generated artifacts.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 from typing import Any
 
 
@@ -26,11 +29,27 @@ def _load_json(payload: str) -> dict[str, Any]:
 
 
 def main() -> int:
+    baseline_path = Path(".secrets.baseline")
+    if not baseline_path.exists():
+        print("detect-secrets baseline file is missing: .secrets.baseline", file=sys.stderr)
+        return 2
+
+    # detect-secrets may update the baseline (e.g., generated_at) even when
+    # running in a read-only "check" mode. Run against a temporary copy to
+    # keep the git working tree clean.
+    baseline_payload = baseline_path.read_text(encoding="utf-8")
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", suffix=".baseline", delete=False) as tf:
+        tf.write(baseline_payload)
+        tmp_baseline = tf.name
+
     proc = subprocess.run(
-        ["detect-secrets", "scan", "--baseline", ".secrets.baseline"],
+        ["detect-secrets", "scan", "--baseline", tmp_baseline],
         capture_output=True,
         text=True,
     )
+
+    with contextlib.suppress(OSError):
+        Path(tmp_baseline).unlink()
 
     if proc.returncode != 0:
         if proc.stderr:
