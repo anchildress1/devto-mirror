@@ -17,6 +17,7 @@ from devto_mirror.core.constants import POSTS_DATA_FILE
 from devto_mirror.core.html_sanitization import sanitize_html_content
 from devto_mirror.core.path_utils import sanitize_filename, sanitize_slug, validate_safe_path
 from devto_mirror.core.run_state import get_last_run_timestamp, mark_no_new_posts, set_last_run_timestamp
+from devto_mirror.core.url_utils import build_site_urls
 from devto_mirror.core.utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link, get_post_template
 
 # Import AI optimization components
@@ -46,13 +47,14 @@ if not VALIDATION_MODE:
     if not SITE_DOMAIN and not GH_USERNAME:
         raise ValueError("Missing SITE_DOMAIN or GH_USERNAME")
 
-if SITE_DOMAIN:
-    HOME = f"https://{SITE_DOMAIN}/"
-    ROOT_HOME = HOME
-else:
-    username = GH_USERNAME or "user"
-    HOME = f"https://{username}.github.io/devto-mirror/"
-    ROOT_HOME = f"https://{username}.github.io/"
+_site_urls = build_site_urls(
+    site_domain=SITE_DOMAIN,
+    gh_username=GH_USERNAME,
+    # In validation mode, allow a placeholder GH username so templates can render.
+    fallback_gh_username=("user" if VALIDATION_MODE else None),
+)
+HOME = _site_urls.home
+ROOT_HOME = _site_urls.root_home
 
 ROOT = pathlib.Path(".")
 POSTS_DIR = ROOT / "posts"
