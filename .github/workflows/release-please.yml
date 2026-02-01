@@ -6,10 +6,7 @@ on:
       - main
   workflow_dispatch: {}
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+permissions: read-all
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,15 +16,12 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
 
     steps:
       - name: Run Release Please
         id: release
         uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38 # v4.4.0
         with:
+          token: ${{ secrets.MY_RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
