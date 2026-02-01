@@ -1,10 +1,8 @@
 name: Security and Quality CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch: {}
 
 permissions:
@@ -25,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v7
         with:
           version: "latest"
           python-version: "3.12"
@@ -33,16 +31,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          echo "## 🔧 Installing dependencies" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔧 Installing dependencies" >> "$GITHUB_STEP_SUMMARY"
           uv sync --locked --group dev
           make install
-          echo "✅ Dependencies installed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Dependencies installed" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Run validation
         run: |
-          echo "## 🔍 Validation Results" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔍 Validation Results" >> "$GITHUB_STEP_SUMMARY"
           make ai-checks
-          echo "✅ All checks passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All checks passed" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Generate coverage and reports
         run: |

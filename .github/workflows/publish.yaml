@@ -66,23 +66,23 @@ jobs:
             if git show origin/gh-pages:last_run.txt >/dev/null 2>&1; then
               TIMESTAMP=$(git show origin/gh-pages:last_run.txt)
               echo "$TIMESTAMP" > last_run.txt
-              echo "🔄 Restored last_run.txt from gh-pages: \`$TIMESTAMP\`" >> $GITHUB_STEP_SUMMARY
+              echo "🔄 Restored last_run.txt from gh-pages: \`$TIMESTAMP\`" >> "$GITHUB_STEP_SUMMARY"
             else
-              echo "⚠️ last_run.txt not found on gh-pages branch" >> $GITHUB_STEP_SUMMARY
+              echo "⚠️ last_run.txt not found on gh-pages branch" >> "$GITHUB_STEP_SUMMARY"
             fi
 
             if git show origin/gh-pages:posts_data.json >/dev/null 2>&1; then
               git show origin/gh-pages:posts_data.json > posts_data.json
-              echo "🔄 Restored posts_data.json from gh-pages" >> $GITHUB_STEP_SUMMARY
+              echo "🔄 Restored posts_data.json from gh-pages" >> "$GITHUB_STEP_SUMMARY"
             else
-              echo "⚠️ posts_data.json not found on gh-pages branch" >> $GITHUB_STEP_SUMMARY
+              echo "⚠️ posts_data.json not found on gh-pages branch" >> "$GITHUB_STEP_SUMMARY"
             fi
           else
-            echo "🆕 gh-pages branch does not exist yet; skipping last_run restore" >> $GITHUB_STEP_SUMMARY
+            echo "🆕 gh-pages branch does not exist yet; skipping last_run restore" >> "$GITHUB_STEP_SUMMARY"
           fi
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v7
         with:
           version: "latest"
           python-version: "3.12"
@@ -107,14 +107,16 @@ jobs:
           PAGES_REPO: ${{ github.repository }}
           FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}
         run: |
-          echo "## 🏗️ Site Generation" >> $GITHUB_STEP_SUMMARY
-          echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- 📦 Repo: \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## 🏗️ Site Generation"
+            echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`"
+            echo "- 📦 Repo: \`${{ github.repository }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
           uv run python -m devto_mirror.site_generation.generator
 
       - name: Note site generation success
         if: steps.generate.outputs.no_new_posts != 'true'
-        run: echo "✅ Generated" >> $GITHUB_STEP_SUMMARY
+        run: echo "✅ Generated" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Prepare timestamp-only deployment
         if: steps.generate.outputs.no_new_posts == 'true'
@@ -126,7 +128,7 @@ jobs:
       - name: Deploy timestamp-only update
         if: steps.generate.outputs.no_new_posts == 'true'
         timeout-minutes: 5
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_deploy
@@ -140,16 +142,16 @@ jobs:
       - name: Validate generated site
         if: steps.generate.outputs.no_new_posts != 'true'
         run: |
-          echo "## ✅ Site Validation" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Site Validation" >> "$GITHUB_STEP_SUMMARY"
           uv run python scripts/validate_site_generation.py
-          echo "✅ Validation passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Validation passed" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Generate sitemap and index
         if: steps.generate.outputs.no_new_posts != 'true'
         run: |
-          echo "## 📄 Generating Sitemap" >> $GITHUB_STEP_SUMMARY
+          echo "## 📄 Generating Sitemap" >> "$GITHUB_STEP_SUMMARY"
           uv run python -m devto_mirror.site_generation.renderer
-          echo "✅ Sitemap generated" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Sitemap generated" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Prepare deployment directory
         if: steps.generate.outputs.no_new_posts != 'true'
@@ -183,7 +185,7 @@ jobs:
       - name: Deploy to gh-pages
         if: steps.generate.outputs.no_new_posts != 'true'
         timeout-minutes: 5
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_deploy
