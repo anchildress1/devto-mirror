@@ -1,6 +1,9 @@
 pre-commit:
   parallel: false
   commands:
+    update-lockfiles:
+      run: uv lock
+      stage_fixed: true
     format:
       glob: "*.py"
       run: uv run black {staged_files}
