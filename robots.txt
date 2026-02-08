@@ -51,3 +51,5 @@ Allow: /
 
 Sitemap: https://crawly.checkmarkdevtools.dev/sitemap.xml
 Host: https://crawly.checkmarkdevtools.dev/
+
+# Algolia-Crawler-Verif: 3AA38D18AC4D3D8D
