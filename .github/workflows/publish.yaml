@@ -114,6 +114,16 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
           uv run python -m devto_mirror.site_generation.generator
 
+      - name: Always process robots.txt
+        run: |
+          mkdir -p _deploy
+          if [ -n "$SITE_DOMAIN" ]; then
+            SITE_HOME="https://${SITE_DOMAIN}/"
+          else
+            SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
+          fi
+          sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
+
       - name: Note site generation success
         if: steps.generate.outputs.no_new_posts != 'true'
         run: echo "✅ Generated" >> "$GITHUB_STEP_SUMMARY"

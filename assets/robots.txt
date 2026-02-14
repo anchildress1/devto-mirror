@@ -53,3 +53,4 @@ Sitemap: {root_home}sitemap.xml
 Host: {root_home}
 
 # Algolia-Crawler-Verif: 3AA38D18AC4D3D8D
+# Algolia-Crawler-Verif: 43962F24110CA782
