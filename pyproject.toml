@@ -12,7 +12,7 @@ dependencies = [
     "python-slugify>=8.0.1",
     "bleach>=6.0.0",
     "python-dotenv>=1.0.0",
-    "urllib3>=2.6.0",
+    "urllib3>=2.7.0",
 ]
 
 [dependency-groups]
