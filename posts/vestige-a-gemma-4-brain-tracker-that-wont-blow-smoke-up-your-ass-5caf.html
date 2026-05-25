@@ -1,0 +1,1010 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8">
+<title>Vestige: A Gemma 4 Brain Tracker That Won&#39;t Blow Smoke Up Your Ass</title>
+<link rel="canonical" href="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">
+<meta name="description" content="An ADHD brain tracker built on Gemma 4 (E4B + EmbeddingGemma 300M) that observes and never grades. Native audio, multi-lens extraction, on-device after one model download.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">
+<meta property="og:title" content="Vestige: A Gemma 4 Brain Tracker That Won&#39;t Blow Smoke Up Your Ass">
+<meta property="og:description" content="An ADHD brain tracker built on Gemma 4 (E4B + EmbeddingGemma 300M) that observes and never grades. Native audio, multi-lens extraction, on-device after one model download.">
+<meta property="og:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F02nksryyedv4h6lq53z7.png">
+<meta property="og:site_name" content="anchildress1—Dev.to Mirror">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">
+<meta name="twitter:title" content="Vestige: A Gemma 4 Brain Tracker That Won&#39;t Blow Smoke Up Your Ass">
+<meta name="twitter:description" content="An ADHD brain tracker built on Gemma 4 (E4B + EmbeddingGemma 300M) that observes and never grades. Native audio, multi-lens extraction, on-device after one model download.">
+<meta name="twitter:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F02nksryyedv4h6lq53z7.png">
+
+<!-- LinkedIn -->
+<meta property="linkedin:title" content="Vestige: A Gemma 4 Brain Tracker That Won&#39;t Blow Smoke Up Your Ass">
+<meta property="linkedin:description" content="An ADHD brain tracker built on Gemma 4 (E4B + EmbeddingGemma 300M) that observes and never grades. Native audio, multi-lens extraction, on-device after one model download.">
+<meta property="linkedin:image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F02nksryyedv4h6lq53z7.png">
+
+<!-- Additional Social Meta -->
+<meta name="image" content="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F02nksryyedv4h6lq53z7.png">
+<meta name="author" content="Ashley Childress">
+<meta name="keywords" content="devchallenge, gemmachallenge, gemma, android">
+
+<!-- AI-Specific Enhanced Metadata -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:published_time" content="2026-05-24T23:38:28Z">
+
+<meta name="content-type" content="challenge">
+
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+
+<meta name="content-language" content="en">
+
+<meta name="generator" content="anchildress1—Dev.to Mirror AI-Optimized Mirror">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<meta name="theme-color" content="#000000">
+
+<meta name="canonical" content="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">
+
+<meta name="source-platform" content="dev.to">
+
+<meta name="source-url" content="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">
+
+<meta name="source-author-profile" content="https://dev.to/anchildress1">
+
+<meta name="source-post-id" content="3713215">
+
+<meta name="original-published-date" content="2026-05-24T23:38:28Z">
+
+<meta name="reading-time" content="15 minutes">
+
+<meta name="devto:reactions" content="5">
+
+<meta name="devto:comments" content="2">
+
+<meta name="devto:engagement_score" content="9">
+
+<meta name="content-fingerprint" content="d27e5174034f31c0">
+
+
+
+<!-- Cross-Reference Attribution Meta Tags -->
+
+
+<meta name="article:author" content="Ashley Childress">
+
+<meta name="article:publisher" content="Dev.to">
+
+<meta name="article:source" content="Dev.to">
+
+<meta name="content:source" content="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">
+
+<meta name="content:original_publisher" content="Dev.to">
+
+<meta name="article:published_time" content="2026-05-24T23:38:28Z">
+
+
+
+<!-- JSON-LD Structured Data -->
+
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2026-05-24T23:38:28Z", "datePublished": "2026-05-24T23:38:28Z", "description": "An ADHD brain tracker built on Gemma 4 (E4B + EmbeddingGemma 300M) that observes and never grades. Native audio, multi-lens extraction, on-device after one model download.", "headline": "Vestige: A Gemma 4 Brain Tracker That Won\u0027t Blow Smoke Up Your Ass", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F02nksryyedv4h6lq53z7.png", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 2}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 5}], "keywords": ["devchallenge", "gemmachallenge", "gemma", "android"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://crawly.checkmarkdevtools.dev"}, "timeRequired": "PT15M", "url": "https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf", "wordCount": 3512}
+</script>
+
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev", "name": "Home", "position": 1}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts", "name": "Posts", "position": 2}, {"@type": "ListItem", "item": "https://crawly.checkmarkdevtools.dev/posts/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf.html", "name": "Vestige: A Gemma 4 Brain Tracker That Won\u0027t Blow Smoke Up Your Ass", "position": 3}]}
+</script>
+
+
+</head><body>
+<main>
+  <h1><a href="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">Vestige: A Gemma 4 Brain Tracker That Won&#39;t Blow Smoke Up Your Ass</a></h1>
+  
+  <img src="https://media2.dev.to/dynamic/image/width=1000,height=420,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F02nksryyedv4h6lq53z7.png?v=2"
+      width="1000" height="420"
+      alt="Banner for Vestige: A Gemma 4 Brain Tracker That Won&#39;t Blow Smoke Up Your Ass"
+      loading="lazy"
+      style="width:100%;max-width:1000px;height:auto;margin:1em 0;aspect-ratio:1000/420;">
+  
+  <p><em>Published: 2026-05-24T23:38:28Z</em></p>
+    
+    <p><strong>Tags:</strong>
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #devchallenge
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #gemmachallenge
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #gemma
+            </span> 
+        
+            <span style="background:#e9ecef; padding:2px 6px; margin:2px; border-radius:3px; font-size:0.9em; color:#495057;">
+                #android
+            </span>
+        
+    </p>
+    
+  <p><em>An ADHD brain tracker built on Gemma 4 (E4B + EmbeddingGemma 300M) that observes and never grades. Native audio, multi-lens extraction, on-device after one model download.</em></p>
+
+  <!-- Enhanced Dev.to Attribution -->
+  
+  <div style="border: 1px solid #e0e0e0; padding: 15px; margin: 20px 0;
+                    background-color: #f9f9f9; border-radius: 5px;">
+            <p style="margin: 0; font-style: italic; color: #666;">
+                <strong>📝 Originally published on Dev.to</strong><br>
+                by Ashley Childress on 2026-05-24T23:38:28Z
+            </p>
+            <p style="margin: 10px 0 0 0;">
+                <a href="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf"
+                   style="color: #3b49df; text-decoration: none; font-weight: bold;"
+                   target="_blank" rel="noopener">
+                    → Read the original article on Dev.to
+                </a>
+            </p>
+        </div>
+  
+
+  <article><p><em>This is a submission for the <a href="https://dev.to/challenges/google-gemma-2026-05-06">Gemma 4 Challenge: Build with Gemma 4</a></em></p>
+
+<h2>
+  <a href="#tldr">
+  </a>
+  TL;DR
+</h2>
+
+<ul>
+<li>
+<strong>What:</strong> <em>Vestige</em>—an ADHD-friendly Android app designed to point out the things you don't know you're doing every day. 30-second voice entries in, sourced behavioral patterns out. No grading, no gamification, no feelings prompts.</li>
+<li>
+<strong>Gemma 4 doing real work:</strong> E4B handles native audio in (no SpeechRecognizer), transcription + persona-flavored follow-up in the foreground, then a 3-lens convergence extraction pass in the background. EmbeddingGemma 300M catches vocabulary drift over time: same state, different words.</li>
+<li>
+<strong>Privacy is enforced, not claimed:</strong> sealed-by-default <code>NetworkGate</code> + a <code>verifyNoTelemetry</code> Gradle task with four independent scans (full list in <a href="#code">§Code</a>) that uploads privacy receipts as a CI artifact every run. After the model download, the app process has no remaining outbound code path.</li>
+<li>
+<strong>Proof artifacts:</strong> <a href="https://github.com/anchildress1/vestige" target="_blank" rel="noopener noreferrer">GitHub repo</a> · <a href="https://github.com/anchildress1/vestige/releases/tag/v1.0.0" target="_blank" rel="noopener noreferrer">APK + SHA-256</a>
+</li>
+</ul>
+
+
+<hr>
+
+<h2>
+  <a href="#what-i-built">
+  </a>
+  What I Built
+</h2>
+
+<blockquote>
+<p><em>vestige</em> (n.): a trace of something left behind.</p>
+</blockquote>
+
+<p><em>Vestige</em> exists because I've been trying to work out the various reasons I do any particular thing, and I found it next to impossible to accurately keep track of everything in any form.</p>
+
+<p>I don't want to journal. ChatGPT already handles the problem-solving end, and I don't need a second app for that. I don't want a tool that tells me how great I am, either; my eyes are incapable of rolling any more throughout the day than they already do at AI responses. What I wanted was the ADHD-friendly version that doesn't seem to exist anywhere: a voice notes app that points out the things that come up regularly in life that I'm not consciously aware of doing.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fe3hv3mwb9gf6tdo62uyf.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fe3hv3mwb9gf6tdo62uyf.png" alt="Pattern card proving sourced receipts with counts, dates, and quoted entry snippets" loading="lazy" width="800" height="1561"></a></p>
+
+<p>The fact that Gemma 4 runs locally means I can literally say anything out loud without wondering whether OpenAI should really know that thing I just said. <em>Vestige</em> analyzes patterns over time, not how I felt or what to do about them. That part is intentional because I assess plenty without AI's help telling me what to do about any of it. I can figure that part out on my own, thank you.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fyo6geara82i5pvxeulxt.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fyo6geara82i5pvxeulxt.png" alt="Entry detail proving Gemma's three-lens read, resolved fields, and raw model output evidence" loading="lazy" width="800" height="2056"></a></p>
+
+<p>Besides, ADHD memory isn't always a storage problem—sometimes the recall just hasn't caught up. <em>Vestige</em> is the receipt trail for that gap. Mine, specifically.</p>
+
+<h3>
+  <a href="#shapes-that-didnt-make-it">
+  </a>
+  Shapes that didn't make it 📼
+</h3>
+
+<p>The original v0 had a template grid on the capture screen. Pick "Crashed" or "Deep Space" or "Spiral" before you talk. That lasted about three days. The whole point of the app is that you don't know what shape the moment is in until after you've said the words, and making the user classify on the way in defeats the architecture. Now Gemma picks it for you.</p>
+
+<p>Every cut feature failed the same test: did the app know more after the entry than before? Only one shape passed: capture first, observe after, never grade. This is not a journal, not a mood tracker, not a gratitude app, not a therapist disguised as a subscription, for the exact same reason.</p>
+
+<h3>
+  <a href="#what-im-not-%F0%9F%A9%BB">
+  </a>
+  What I'm Not 🩻
+</h3>
+
+<p>I am not a mobile-first engineer. Android, Compose, and Material 3 were all new to me before this build, and I am not going to defend my history of avoiding UIs.</p>
+
+<p>I made a mistake I caught too late to change: of the 6 ADRs I started with, I put UI as ADR-4. Then, not thinking about it, I translated those ADRs into stories, numbers included, and decided POC UI screens would suffice for the first bit—without ever actually writing those POC stories. That meant zero manual checks for the first half of the build—only tail logs and AI-configured tests.</p>
+
+<p>A small miss in the ADR-to-stories translation, big cost in time and testing. Documenting it here because the don't-blow-smoke promise has to start at the build, not the marketing.</p>
+
+
+<hr>
+
+<h2>
+  <a href="#demo">
+  </a>
+  Demo
+</h2>
+
+<p><em>Vestige</em> is a real Android app—sideloaded, fully offline after the model download, not a mockup wearing a trench coat.</p>
+
+<p>  
+  
+</p>
+
+<blockquote>
+<p><strong>Install:</strong> Android 14+ · 12 GB RAM · 6 GB free · Galaxy S24 Ultra reference · <a href="https://github.com/anchildress1/vestige/releases/tag/v1.0.0" target="_blank" rel="noopener noreferrer">APK + SHA-256</a></p>
+</blockquote>
+
+<h3>
+  <a href="#what-to-watch-for">
+  </a>
+  What to watch for 🪧
+</h3>
+
+<div class="table-wrapper-paragraph">
+
+
+
+Timestamp
+Chapter
+What it proves
+
+
+
+
+0:00
+Intro
+Frame for the demo—what <em>Vestige</em> is and what it refuses to be
+
+
+1:14
+Airplane mode (privacy claim, on camera)
+Every radio off before the capture loop runs—privacy demonstrated, not asserted
+
+
+2:46
+Capture voice
+One tap to record; foreground call returns transcription + persona follow-up in a single streaming response
+
+
+4:12
+Gemma 3-lens results
+Background extraction lands; Literal / Inferential / Skeptical produce different reads and the resolver picks a verdict
+
+
+5:56
+Android app tour
+Pattern card with receipts—counts, dates, quoted snippets pulled from source entries; Material 3 UI
+
+
+9:18
+Review code highlights
+
+<code>ConvergenceResolver</code>— convergence as pure function
+
+
+16:51
+Export — markdown from the database
+Entries leave as plain markdown; ObjectBox is the source of truth, export is portable user-owned text
+
+
+</div>
+
+
+<hr>
+
+<h2>
+  <a href="#code">
+  </a>
+  Code
+</h2>
+
+<p>Runtime is LiteRT-LM via <code>litertlm-android:0.11.0</code> (pinned), with the model artifact <code>litert-community/gemma-4-E4B-it-litert-lm</code> from Hugging Face. One inference runtime. No llama.cpp shim, no MediaPipe parallel path, no AICore alternative. A boring choice, which is how runtime choices should behave in public.</p>
+
+<p>Audio adapter is forced to CPU (<code>AudioBackendChoice.Cpu</code>)—E4B rejects GPU there with <code>Model requires one of [cpu]</code>. Text decode still runs on GPU. The SDK made that one ugly, not me.</p>
+
+<blockquote>
+<p>⚖️ This project is licensed under <a href="https://github.com/anchildress1/vestige/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Polyform Shield 1.0.0</a> with supplemental terms.</p>
+</blockquote>
+
+
+<div class="ltag-github-readme-tag">
+  <div class="readme-overview">
+    <h2>
+      <img height="450" width="800" src="https://assets.dev.to/assets/github-logo-5a155e1f9a670af7944dd5e12375bc76ed542ea80224905ecaf878b9157cdefc.svg" alt="GitHub logo">
+      <a href="https://github.com/anchildress1" target="_blank" rel="noopener noreferrer">
+        anchildress1
+      </a> / <a href="https://github.com/anchildress1/vestige" target="_blank" rel="noopener noreferrer">
+        vestige
+      </a>
+    </h2>
+    <h3>
+      Brain tracker that won't blow smoke up your ass. Gemma 4, Android, fully local.
+    </h3>
+  </div>
+  <div class="ltag-github-body">
+    
+<div class="md">
+<div class="markdown-heading">
+<h1>Vestige</h1>
+</div>
+<p><em>A brain tracker that won't blow smoke up your ass. Gemma 4, Android, fully local.</em></p>
+<p>
+  Built for the <a href="https://dev.to/devteam/join-the-gemma-4-challenge-3000-prize-pool-for-ten-winners-23in" rel="nofollow">Gemma 4 Challenge</a> — submission category: Build with Gemma 4.<br>
+  Canonical product spec lives under <a href="https://github.com/anchildress1/vestige/./docs/" target="_blank" rel="noopener noreferrer"><code>docs/</code></a>; see <a href="https://github.com/anchildress1/vestige/AGENTS.md" target="_blank" rel="noopener noreferrer"><code>AGENTS.md</code></a> for AI agent rules
+</p>
+
+<p>
+  <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/20e9be0078ebca132b2a41e5d103e8ba9c7c2f2a03772e0abdc0a962ddfcfbd8/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f616374696f6e732f776f726b666c6f772f7374617475732f616e6368696c6472657373312f766573746967652f2e676974687562253246776f726b666c6f777325324663692e796d6c3f7374796c653d666f722d7468652d6261646765266c6f676f3d676974687562266c6162656c3d4349"><img height="450" width="800" alt="CI GHA Status" src="https://camo.githubusercontent.com/20e9be0078ebca132b2a41e5d103e8ba9c7c2f2a03772e0abdc0a962ddfcfbd8/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f616374696f6e732f776f726b666c6f772f7374617475732f616e6368696c6472657373312f766573746967652f2e676974687562253246776f726b666c6f777325324663692e796d6c3f7374796c653d666f722d7468652d6261646765266c6f676f3d676974687562266c6162656c3d4349" style=""></a>
+  <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/5b94db0ca0cafb82bb277bba3bdb988e8133cd563729ea018b675f5aa33907dc/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f616374696f6e732f776f726b666c6f772f7374617475732f616e6368696c6472657373312f766573746967652f2e676974687562253246776f726b666c6f7773253246636f6465716c2e796d6c3f7374796c653d666f722d7468652d6261646765266c6f676f3d676974687562266c6162656c3d436f6465514c"><img height="450" width="800" alt="CodeQL GitHub Actions Workflow Status" src="https://camo.githubusercontent.com/5b94db0ca0cafb82bb277bba3bdb988e8133cd563729ea018b675f5aa33907dc/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f616374696f6e732f776f726b666c6f772f7374617475732f616e6368696c6472657373312f766573746967652f2e676974687562253246776f726b666c6f7773253246636f6465716c2e796d6c3f7374796c653d666f722d7468652d6261646765266c6f676f3d676974687562266c6162656c3d436f6465514c" style=""></a>
+  <br>
+  <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ae460ce6e6e00a7bfc24daa4ae0030ca86b8743f42a4b97fd1e65c9ddeb98421/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f76696f6c6174696f6e732f616e6368696c6472657373315f766573746967653f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f26666f726d61743d73686f7274267374796c653d666f722d7468652d6261646765"><img height="450" width="800" alt="Sonar Violations" src="https://camo.githubusercontent.com/ae460ce6e6e00a7bfc24daa4ae0030ca86b8743f42a4b97fd1e65c9ddeb98421/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f76696f6c6174696f6e732f616e6368696c6472657373315f766573746967653f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f26666f726d61743d73686f7274267374796c653d666f722d7468652d6261646765" style=""></a>
+  <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/0413d74ce4ccb7dc855d501bbe1eb2d3d3096f5003db17446edf845b46ab9a1e/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f636f7665726167652f616e6368696c6472657373315f766573746967653f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f267374796c653d666f722d7468652d626164676526636f6c6f723d6c696d65677265656e"><img height="450" width="800" alt="Sonar Coverage" src="https://camo.githubusercontent.com/0413d74ce4ccb7dc855d501bbe1eb2d3d3096f5003db17446edf845b46ab9a1e/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f636f7665726167652f616e6368696c6472657373315f766573746967653f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f267374796c653d666f722d7468652d626164676526636f6c6f723d6c696d65677265656e" style=""></a>
+  <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/c9cbc6ffc3cc3b79199eedb7c8db6fdcc000359aad4787762b8073dac31816dd/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f74657374732f616e6368696c6472657373315f766573746967653f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f26636f6d706163745f6d657373616765267374796c653d666f722d7468652d6261646765"><img height="450" width="800" alt="Sonar Tests" src="https://camo.githubusercontent.com/c9cbc6ffc3cc3b79199eedb7c8db6fdcc000359aad4787762b8073dac31816dd/68747470733a2f2f696d672e736869656c64732e696f2f736f6e61722f74657374732f616e6368696c6472657373315f766573746967653f7365727665723d6874747073253341253246253246736f6e6172636c6f75642e696f26636f6d706163745f6d657373616765267374796c653d666f722d7468652d6261646765" style=""></a>
+</p>
+
+<p>
+  <a target="_blank" rel="noopener noreferrer nofollow" href="https://repository-images.githubusercontent.com/1233196257/6d5cb58c-808a-4c73-8627-ee3d5dc7ad7c"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Frepository-images.githubusercontent.com%2F1233196257%2F6d5cb58c-808a-4c73-8627-ee3d5dc7ad7c" alt="Vestige social banner" style="" loading="lazy"></a>
+</p>
+
+<div class="markdown-heading">
+<h2>Table of Contents</h2>
+</div>
+
+<ul>
+<li><a href="https://github.com/anchildress1/vestige#about" target="_blank" rel="noopener noreferrer">About</a></li>
+<li><a href="https://github.com/anchildress1/vestige#status" target="_blank" rel="noopener noreferrer">Status</a></li>
+<li><a href="https://github.com/anchildress1/vestige#features" target="_blank" rel="noopener noreferrer">Features</a></li>
+<li><a href="https://github.com/anchildress1/vestige#tech-stack" target="_blank" rel="noopener noreferrer">Tech Stack</a></li>
+<li><a href="https://github.com/anchildress1/vestige#architecture" target="_blank" rel="noopener noreferrer">Architecture</a></li>
+<li><a href="https://github.com/anchildress1/vestige#project-structure" target="_blank" rel="noopener noreferrer">Project Structure</a></li>
+<li><a href="https://github.com/anchildress1/vestige#getting-started" target="_blank" rel="noopener noreferrer">Getting Started</a></li>
+<li><a href="https://github.com/anchildress1/vestige#configuration" target="_blank" rel="noopener noreferrer">Configuration</a></li>
+<li><a href="https://github.com/anchildress1/vestige#security--privacy" target="_blank" rel="noopener noreferrer">Security &amp; Privacy</a></li>
+<li><a href="https://github.com/anchildress1/vestige#how-to-contribute" target="_blank" rel="noopener noreferrer">How to Contribute</a></li>
+<li><a href="https://github.com/anchildress1/vestige#whats-next" target="_blank" rel="noopener noreferrer">What's Next</a></li>
+<li><a href="https://github.com/anchildress1/vestige#known-limitations" target="_blank" rel="noopener noreferrer">Known Limitations</a></li>
+<li><a href="https://github.com/anchildress1/vestige#license" target="_blank" rel="noopener noreferrer">License</a></li>
+<li><a href="https://github.com/anchildress1/vestige#acknowledgements" target="_blank" rel="noopener noreferrer">Acknowledgements</a></li>
+<li><a href="https://github.com/anchildress1/vestige#author" target="_blank" rel="noopener noreferrer">Author</a></li>
+</ul>
+
+
+<hr>
+
+<div class="markdown-heading">
+<h2>About</h2>
+
+</div>
+
+<p>Vestige observes behavioral traces and surfaces patterns without therapy framing, mood scoring, or wellness vocabulary. It runs Gemma 4 E4B locally via LiteRT-LM — your voice never leaves the device, the audio bytes are discarded after inference, and entries can be exported as readable markdown at any time.</p>
+
+<p>The positioning is deliberate: cognition tracker, not journal app. Patterns are sourced — every claim cites the entries it counted. Full product spec: <a href="https://github.com/anchildress1/vestige/docs/concept-locked.md" target="_blank" rel="noopener noreferrer"><code>docs/concept-locked.md</code></a>.</p>
+
+
+<hr>
+
+<div class="markdown-heading">
+<h2>Status</h2>
+
+</div>
+
+<p>The full loop is implemented and…</p></div>
+
+
+</div>
+<br>
+  <div class="gh-btn-container"><a class="gh-btn" href="https://github.com/anchildress1/vestige" target="_blank" rel="noopener noreferrer">View on GitHub</a></div>
+<br>
+</div>
+<br>
+
+
+<h3>
+  <a href="#stack">
+  </a>
+  Stack 🧰
+</h3>
+
+<ul>
+<li>
+<strong>Inference runtime:</strong> LiteRT-LM <code>litertlm-android:0.11.0</code> (pinned)</li>
+<li>
+<strong>Models:</strong> Gemma 4 E4B (~3.66 GB, native audio + text) · EmbeddingGemma 300M (~200 MB, tone-word Vocab Drift clustering)</li>
+<li>
+<strong>Platform:</strong> Android 14+, Kotlin, Jetpack Compose, Material 3</li>
+<li>
+<strong>Persistence:</strong> ObjectBox (entries, patterns, embeddings); SharedPreferences for onboarding flags</li>
+<li>
+<strong>Build:</strong> Gradle KTS with a custom <code>verifyNoTelemetry</code> task (four scans, CI artifact every run)</li>
+<li>
+<strong>Pre-commit / pre-push:</strong> Lefthook running ktlint, detekt, secret-scan, actionlint, then full build + test</li>
+<li>
+<strong>CI:</strong> GitHub Actions running CodeQL, Sonar, Kover, commitlint, and <code>verifyNoTelemetry</code>
+</li>
+<li>
+<strong>Tests:</strong> JUnit 5 Jupiter on JVM (via <code>useJUnitPlatform()</code>), JUnit 4 + Robolectric + AndroidX Compose UI on instrumented; MockK, Turbine, coroutines-test</li>
+</ul>
+
+<h3>
+  <a href="#whats-worth-looking-at">
+  </a>
+  What's worth looking at 🪛
+</h3>
+
+<p><strong>1. Privacy as construction, not policy.</strong> Two layers—build-time gate, runtime gate—either one failing catches a leak.</p>
+
+<ul>
+<li>
+<a href="https://github.com/anchildress1/vestige/blob/main/core-model/src/main/kotlin/dev/anchildress1/vestige/model/NetworkGate.kt" target="_blank" rel="noopener noreferrer"><code>NetworkGate.kt</code></a>—sealed <code>AtomicReference</code>, opened only for the model download, resealed in <code>finally</code>. The app's only HTTP path.</li>
+<li>
+<a href="https://github.com/anchildress1/vestige/blob/main/build.gradle.kts#L509" target="_blank" rel="noopener noreferrer"><code>verifyNoTelemetry</code> Gradle task</a>—four independent scans (classpath, manifest, APK, host list); any fails the build. Receipts upload as a CI artifact every run.</li>
+</ul>
+
+<p><strong>2. Convergence math as a pure function.</strong> <a href="https://github.com/anchildress1/vestige/blob/main/core-inference/src/main/kotlin/dev/anchildress1/vestige/inference/ConvergenceResolver.kt" target="_blank" rel="noopener noreferrer"><code>ConvergenceResolver.kt</code></a>—3-lens verdict in deterministic Kotlin, no model call. ≥2-of-3 → <code>CONSENSUS</code>; one lens only → <code>CANDIDATE</code>; disagreement → <code>AMBIGUOUS</code>; Skeptical conflict over agreement → <code>CONSENSUS_WITH_CONFLICT</code>.</p>
+
+<p><strong>3. Engineering paper trail.</strong> <a href="https://github.com/anchildress1/vestige/blob/main/docs/adrs/ADR-008-parallel-lens-execution.md" target="_blank" rel="noopener noreferrer"><code>ADR-008</code></a>—full wrong-probe / right-probe correction at the top as a callout, not a footnote. Deleted ADR-009 isn't archived as superseded; per AGENTS.md, genuine mistakes get removed outright. The <a href="https://github.com/anchildress1/vestige/blob/main/docs/adrs" target="_blank" rel="noopener noreferrer">full suite of ADRs</a> is preserved in GitHub.</p>
+
+<p><strong>4. Test discipline.</strong> 1,200+ JVM <code>@Test</code> methods across 110+ files; 12 instrumented <code>*SmokeTest.kt</code> runs on the Galaxy S24 Ultra; <a href="https://github.com/anchildress1/vestige/tree/main/docs/stt-results" target="_blank" rel="noopener noreferrer"><code>docs/stt-results/</code></a> is logcat from real on-device runs, not synthesized fixtures. <a href="https://github.com/anchildress1/vestige/blob/main/lefthook.yml" target="_blank" rel="noopener noreferrer"><code>lefthook.yml</code></a> gates ktlint / detekt / secret-scan / actionlint pre-commit and the full build + test pre-push; CI adds Sonar, Kover, CodeQL, commitlint, and <code>verifyNoTelemetry</code>.</p>
+
+
+<hr>
+
+<h3>
+  <a href="#how-the-lenses-differ">
+  </a>
+  How the lenses differ 🪞
+</h3>
+
+<p>Three lens prompts define HOW to read; five surface specs define WHAT to extract. The composer joins them at runtime, the worker iterates, the resolver decides. The architecture lives in the text below.</p>
+
+<p><strong>Literal</strong> (<a href="https://github.com/anchildress1/vestige/blob/main/core-inference/src/main/resources/lenses/literal.txt" target="_blank" rel="noopener noreferrer"><code>lenses/literal.txt</code></a>):<br>
+</p>
+
+<div class="highlight js-code-highlight">
+<pre><code>## Lens: Literal
+
+Extract only what is explicitly stated in the entry text. No inference, no filling gaps.
+
+Rules:
+
+- Read each word and phrase at face value. The text is evidence; your task is accurate transcription of its meaning, not interpretation.
+- Tags: extract short kebab-case tokens for every named activity, object, time anchor, person, state word, or pattern word in the text.
+- Time anchors are behavioral tags, not metadata. Capture them.
+- `stated_commitment`: only explicit statements of intent with a specific named object.
+- Do not infer what was not said.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+<p><strong>Inferential</strong> (<a href="https://github.com/anchildress1/vestige/blob/main/core-inference/src/main/resources/lenses/inferential.txt" target="_blank" rel="noopener noreferrer"><code>lenses/inferential.txt</code></a>):<br>
+</p>
+<div class="highlight js-code-highlight">
+<pre><code>## Lens: Inferential
+
+Apply a charitable reading. Go beyond explicit words to what the text most plausibly means for this person's cognitive and behavioral state.
+
+Rules:
+
+- Read for pattern and meaning, not just surface vocabulary. What is this person experiencing?
+- Decision loops: when the user describes returning to the same choice with new framing and no resolution, capture it as a tag.
+- Avoidance sequences: when the user approaches a task and retreats, or states an intention then does something else, tag both the avoidance and the specific task.
+- User-coined idioms carry their meaning: tag the user's own phrasing verbatim and let it stand for the state it names.
+
+Inference limits:
+
+- Do not infer causes or motivations.
+- Do not infer emotional states the user did not name.
+- Retrieved history can corroborate inferences but cannot supply content that isn't anchored in the current entry.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+<p><strong>Skeptical</strong> (<a href="https://github.com/anchildress1/vestige/blob/main/core-inference/src/main/resources/lenses/skeptical.txt" target="_blank" rel="noopener noreferrer"><code>lenses/skeptical.txt</code></a>):<br>
+</p>
+<div class="highlight js-code-highlight">
+<pre><code>## Lens: Skeptical
+
+Apply an adversarial reading. Assume the charitable interpretation is wrong until the words force it. Challenge the obvious read — do not echo it.
+
+Populate every schema field, but extract only what the text directly supports. Where the natural read takes an inferential leap, refuse it: take the more conservative value the literal evidence backs, even when that disagrees with the other lenses.
+
+Adversarial layer — flag the leaps you refused to take:
+
+- `commitment-without-anchor` — a modal commitment with no specific object or deadline.
+- `unsupported-recurrence` — the user signals recurrence with no retrieved history to corroborate.
+- `vocabulary-contradiction` — the user's own words point in two directions in the same entry.
+- `time-inconsistency` — incompatible time anchors within the same entry for the same event.
+
+`flag` output format — one `flag:` line per flag: `flag: &lt;kind&gt; | &lt;snippet&gt; | &lt;note&gt;`.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+<p>Surface specs define what each schema field captures — example, <strong>State</strong> (<a href="https://github.com/anchildress1/vestige/blob/main/core-inference/src/main/resources/surfaces/state.txt" target="_blank" rel="noopener noreferrer"><code>surfaces/state.txt</code></a>):<br>
+</p>
+<div class="highlight js-code-highlight">
+<pre><code>## Surface: State
+
+Captures the user's cognitive and energy state.
+
+- The state word the user uses for their physical or cognitive condition (drained, crashed, foggy, flat, wired). Use the user's exact word, not clinical paraphrase. It must describe the person, not the event — discard manner qualifiers and effects.
+- A before/after transition between two distinct states.
+
+What goes in the schema:
+
+- Append the state word to `tags` as a short lowercase kebab-case token. Single root word only — never a clause. Omit when the entry names no such condition.
+</code></pre>
+<div class="highlight__panel js-actions-panel">
+<div class="highlight__panel-action js-fullscreen-code-action">
+    Enter fullscreen mode
+    
+
+
+    Exit fullscreen mode
+    
+
+
+</div>
+</div>
+</div>
+
+
+<blockquote>
+<p>Backed by <a href="https://github.com/anchildress1/vestige/blob/main/core-inference/src/test/kotlin/dev/anchildress1/vestige/inference/ConvergenceResolverTest.kt" target="_blank" rel="noopener noreferrer"><code>ConvergenceResolverTest.kt</code></a> (every convergence verdict including the survivors-of-failed-lens fallback) and the <a href="https://github.com/anchildress1/vestige/blob/main/docs/stt-results/stt-d-2026-05-12-gpu-skep-rerun1.md" target="_blank" rel="noopener noreferrer">STT-D divergence run</a> (73% meaningful divergence on-device against a ≥50% bar).</p>
+</blockquote>
+
+<hr>
+<h2>
+  <a href="#how-i-used-gemma-4">
+  </a>
+  How I Used Gemma 4
+</h2>
+
+<p>Gemma 4 E4B does the heavy lifting. EmbeddingGemma 300M is the tone-word clustering helper that earns its 200 MB when the user's vocabulary drifts. They do not share a job, because that is how you avoid building soup with a logo on it.</p>
+<h3>
+  <a href="#why-e4b">
+  </a>
+  Why E4B 🧭
+</h3>
+
+<p>E4B is the path I validated end-to-end: native audio in, local structured extraction, and enough quality for the 3-lens resolver to be worth the wait. The 31B Dense and 26B MoE are the wrong hardware story for a phone; the real choice was E2B vs E4B.</p>
+
+<div class="table-wrapper-paragraph">
+
+
+
+Requirement
+E2B
+E4B
+
+
+
+
+Native audio in (no SpeechRecognizer)
+✅
+✅
+
+
+Foreground answer fast enough that the app still feels usable
+✅ (lighter, faster)
+✅
+
+
+Structured background extraction quality floor under 3-lens load
+E4B was the validated path; E2B traded down quality/headroom for size/speed
+Holds, but the prompt stack was already trimmed once to land it
+
+
+</div>
+
+<p>E2B is lighter and probably wins on raw foreground latency. The reason it did not get its own bake-off is that the E4B run was already tight: the 3-lens prompt stack only landed after I scaled the guidance back once, and the product still needed native audio, structured extraction, and enough reasoning headroom for the resolver to matter. A smaller model would have meant another prompt cut against a quality floor that was already the hard part. Cold-start cost is uglier than I'd like, but I chose the path that survived the on-device receipts.</p>
+
+<p>A cloud-class model would have made the latency story nicer and taken the user's voice entry somewhere the entire product says it will not go. E4B keeps the sensitive part on the phone, with no outbound path from the app process during normal use.</p>
+<h3>
+  <a href="#native-audio-no-speechrecognizer">
+  </a>
+  Native audio, no SpeechRecognizer 🛰️
+</h3>
+
+<p>The foreground call is the only one the user waits on directly. Audio goes in via <code>LiteRtLmEngine.streamMessageContents</code>; transcription and the persona follow-up come back together as a single streaming <code>{transcription, follow_up}</code> response—so the user waits once instead of through two consecutive spinners while the model gets philosophical in a broom closet. I tried splitting it in two on-device; didn't help. Back together it stays.</p>
+
+<p>Behind the foreground sits the rest of the inference work: 3 background lens calls per entry (Literal / Inferential / Skeptical, sequential per ADR-008's single-session ceiling), 1 background pattern analysis pass every 3 completed entries, and a best-effort Gemma wording call when a temporal-relative pattern lands. All background, all queued, all invisible to the user.</p>
+
+<p>The follow-up is single-turn by design in v1. Cross-entry intelligence lives in pattern detection, deterministic prior-entry candidates, tone-word clustering, and stored evidence—exactly where it can be audited instead of hand-waved.</p>
+<h3>
+  <a href="#three-lenses-one-resolver">
+  </a>
+  Three lenses, one resolver 🪞
+</h3>
+
+<p>Once the entry is saved, the background pass runs three independent Gemma reads over the same transcript:</p>
+
+<ol>
+<li>Literal</li>
+<li>Inferential</li>
+<li>Skeptical</li>
+</ol>
+
+<p>Each pass extracts across five surfaces:</p>
+
+<ol>
+<li>Behavior</li>
+<li>State</li>
+<li>Vocabulary</li>
+<li>Commitment</li>
+<li>Recurrence</li>
+</ol>
+
+<p>Recurrence is the one surface the model doesn't decide alone—the app builds a deterministic candidate from prior entries first, then asks the model to judge whether the current entry actually repeats the candidate or just happens to land at the same clock time. The model never emits a pattern ID; the app owns that mapping. The Skeptical lens still adds <code>unsupported-recurrence</code> flags when the user signals "again" with no corroborating history.</p>
+
+<p>The resolver (see <a href="#code">§Code</a>) compares the three reads before anything is committed, and surfaces conflict as conflict instead of guessing with better typography.</p>
+
+<div class="table-wrapper-paragraph">
+
+
+
+Step
+Purpose
+Example
+
+
+
+
+<strong>User entry</strong>
+Input
+"Crashed at noon. Fine before — wired even. Then gone."
+
+
+<strong>Literal</strong>
+Surface words only.
+Tags: <code>crashed</code>, <code>noon</code>, <code>wired</code><br>Vocabulary: <code>crashed</code>
+
+
+
+<strong>Inferential</strong>
+Adds the pattern read.
+Tags: <code>crashed</code>, <code>noon</code>, <code>wired</code>, <code>post-noon-crash</code>, <code>energy-flip</code><br>Vocabulary: <code>depleted</code>.
+
+
+<strong>Skeptical</strong>
+Flags inconsistencies.
+Tags: <code>crashed</code>, <code>noon</code>, <code>wired</code><br>Vocabulary: <code>crashed</code><br>Flag: <code>vocabulary-contradiction</code>
+
+
+
+<strong>Resolver</strong>
+Reconcile differences.
+Vocabulary lands <code>CONSENSUS_WITH_CONFLICT</code> on <code>crashed</code>.<br>Literal and Skeptical agree, but Skeptical's <code>vocabulary-contradiction</code> flag elevates the verdict above plain <code>CONSENSUS</code>.
+
+
+</div>
+
+<p>The multi-lens approach only earns its keep if the lenses actually produce different reads. Three identical responses would have been useless and three times the wait.</p>
+
+<p>So I built a test for that. The bar: at least 50% of test entries showing meaningful field-level divergence between the three reads. The <a href="https://github.com/anchildress1/vestige/blob/main/docs/stt-results/stt-d-2026-05-12-gpu-skep-rerun1.md" target="_blank" rel="noopener noreferrer">STT-D divergence run</a> hit 73% with 97.8% parse stability and zero timeouts; with greedy decoding plus a fixed seed the outputs were byte-identical across runs—so 73% is signal, not sampling noise.</p>
+
+<p>After the flat <code>key: value</code> lens contract + model-emitted <code>template_label</code> landed, the rebuilt path was re-captured in <a href="https://github.com/anchildress1/vestige/blob/main/docs/stt-results/stt-h-2026-05-24.md" target="_blank" rel="noopener noreferrer">STT-H 2026-05-24</a>: 12/12 entries succeed, 3/3 lenses parse on first attempt, zero retries, AUDIT dropped 8/12 → 4/12, and six distinct archetypes are in play (up from near-total audit). Lens disagreement is real—<code>wired-third-night</code> resolves AUDIT on lens votes tunnel-exit/audit/audit; <code>tuesday-stalled</code> resolves AFTERMATH on aftermath/aftermath/audit—which is exactly the disagreement the convergence math was built to resolve. Mean latency landed ~38s per entry (thermal on a back-to-back GPU session; the same path ran 21.2s cold on 2026-05-23).</p>
+<h3>
+  <a href="#i-was-wrong-about-being-wrong">
+  </a>
+  I was wrong about being wrong 🪨
+</h3>
+
+<p><a href="https://github.com/anchildress1/vestige/blob/main/docs/adrs/ADR-008-parallel-lens-execution.md" target="_blank" rel="noopener noreferrer">ADR-008</a> started as a parallel 3-lens dispatch design. The paper version looked clean: one engine, multiple session contexts, same convergence math, cheaper wall-clock. The first probe said no. The second probe said maybe. The on-device run said absolutely not, and it gave me a table because apparently humiliation has formatting preferences.</p>
+
+<div class="table-wrapper-paragraph">
+
+
+
+Lens
+Attempts
+Wall clock
+Outcome
+
+
+
+
+<code>SKEPTICAL</code>
+1
+14.7s
+parsed ✅
+
+
+<code>LITERAL</code>
+2
+95ms
+
+<code>FAILED_PRECONDITION</code> ❌
+
+
+<code>INFERENTIAL</code>
+2
+92ms
+
+<code>FAILED_PRECONDITION</code> ❌
+
+
+</div>
+
+<p>One session won the race; the other two never got a turn. The scary part was not the SDK limitation. The scary part was that the resolver fallback could have made the app look successful while silently running one lens instead of three.</p>
+
+<p>v1 ships sequential—the one path LiteRT-LM actually executes on-device. The convergence verdicts stay the same. v1 trades wall-clock, not correctness.</p>
+<h3>
+  <a href="#the-wrapper-had-to-go">
+  </a>
+  The wrapper had to go 🪤
+</h3>
+
+<p>Smoke tests gauged cold-start at 3–5s; actual on-device runs landed near 20s, and a background extraction thread kicked off the moment recording stopped—so a second recording attempt sat there ~30s before the user saw anything.</p>
+
+<p>Fix: drop the long-lived <code>Conversation</code> wrapper and call <code>LiteRtLmEngine.streamMessageContents</code> directly per inference. Each call gets a fresh ephemeral conversation that front-loads the KV for the 3×5 lens prompt and—the actual UX win—lets a foreground capture cancel any running background inference instead of queueing behind it. Doesn't speed the model up, but the user stops waiting on processes they didn't know existed.</p>
+<h3>
+  <a href="#embeddinggemma-catches-vocabulary-drift">
+  </a>
+  EmbeddingGemma catches vocabulary drift 🪡
+</h3>
+
+<p>EmbeddingGemma 300M powers one surface in v1: the <strong>Vocab Drift</strong> pattern card. Each entry's tone word—the single felt-quality word the vocabulary lens emits (<code>vocabularyWord</code>)—gets embedded, and <code>EmbeddingClustering</code> groups entries by cosine similarity. Threshold is 0.30, unchanged across calibration: the root cause was the axis, not the threshold. When the same state shows up under different words—"drained" one week, "wiped" the next, "running on empty" the week after—the cluster forms on the feeling, not on the topic. That is the +200 MB justification.</p>
+
+<p>Cost: ~200 MB resident and ~880ms per embed on CPU.</p>
+
+<p>Verified on-device (S24 Ultra, EXTRACT=1 re-seed): 18 toned entries clustered to sizes <code>[6, 4, 2, …]</code>; the <strong>Drained Vocab Frequency</strong> pattern minted and surfaces on the scoreboard. A toneless entry (no <code>vocabularyWord</code>) is excluded entirely so factual logs don't get assigned a fabricated feeling.</p>
+
+<p>The clustering only shows up when entries have actually been vectored: clustering needs at least six usable vectors before it runs, and a Vocab Drift pattern needs a cluster of at least four members (VOCAB_THRESHOLD). Seed the debug build without extraction running and there's nothing to display.</p>
+
+<p><a href="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fk3qoqrgnhyvtdnwda4n4.png" class="article-body-image-wrapper"><img src="https://media2.dev.to/dynamic/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2Fk3qoqrgnhyvtdnwda4n4.png" alt="Vocab Drift pattern proving EmbeddingGemma grouped drained, wiped, and running-on-empty entries by tone" loading="lazy" width="800" height="1561"></a></p>
+
+<hr>
+<h2>
+  <a href="#whats-next">
+  </a>
+  What's next 🎟️
+</h2>
+
+<p>v1 ships narrow on purpose. Two deferrals carry the headline weight.</p>
+
+<p><strong>Tighten the archetype language</strong> — moving <code>template_label</code> off the deterministic <code>TemplateLabeler</code> to a model-emitted, majority-resolved pick landed in v1. The latest STT-H run parsed 12/12 entries with zero retries, dropped <code>AUDIT</code> from 8/12 to 4/12, and surfaced six distinct archetypes. The next pass is prompt polish for borderline entries, not fixing a broken picker.</p>
+
+<p><strong>Agentic tool-calling</strong> — letting E4B call into the pattern-detection layer as functions (resolver-as-tool-call instead of deterministic Kotlin). External benchmarks land local function-calling around 75% reliability; the shipped path parses 12/12 lens calls on first attempt with deterministic Kotlin doing the convergence math. Not a swap until the tool-calling floor rises.</p>
+
+<hr>
+<h2>
+  <a href="#what-helped">
+  </a>
+  What helped 🪙
+</h2>
+
+<p>Planning ran through Claude Cowork and Codex Chat—messy thinking before any of it became a story.</p>
+
+<p>In the codebase: Claude Code as primary, Codex as the secondary and reviewer, GitHub Copilot keeping things tidy on the way to merge. CI in GitHub Actions ran CodeQL and the <code>verifyNoTelemetry</code> privacy gate on every PR. Sonar ran the whole way (always free).</p>
+
+<p>For the Android knowledge I didn't have, I sourced existing skills where they existed and wrote new ones where they didn't. The Lefthook pre-push gate enforced 1,200+ tests on every push—slowed things down, caught a ton of errors before they made it into the codebase. A trade I'd make again.</p>
+
+<p>ADRs kept up with my thinking over time. Stories kept the build on schedule—<em>mostly...</em></p>
+
+<p>--</p>
+<h2>
+  <a href="#closing">
+  </a>
+  Closing 🎬
+</h2>
+
+<p>I still don't know why I do half the things I do. With <em>Vestige</em> I just don't get to pretend I haven't done them.</p>
+
+<p>Your brain drops things. <em>Vestige</em> does not.</p>
+
+
+<div class="ltag__user ltag__user__id__3224358">
+    <a href="/anchildress1" class="ltag__user__link profile-image-link">
+      <div class="ltag__user__pic">
+        <img src="https://media2.dev.to/dynamic/image/width=150,height=150,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F3224358%2F7f675c78-6aa0-466a-a5a7-c3e35440d53a.png" alt="anchildress1 image">
+      </div>
+    </a>
+  <div class="ltag__user__content">
+    <h2>
+<a class="ltag__user__link" href="/anchildress1">Ashley Childress</a>Follow
+</h2>
+    <div class="ltag__user__summary">
+      <a class="ltag__user__link" href="/anchildress1">Distributed backend specialist. Perfectly happy playing second fiddle—it means I get to chase fun ideas, dodge meetings, and break things no one told me to touch, all without anyone questioning it. 😇</a>
+    </div>
+  </div>
+</div>
+
+
+
+
+<hr>
+
+<h3>
+  <a href="#consensuswithconflict">
+  </a>
+  🛡️ Consensus_With_Conflict
+</h3>
+
+<p>Claude drafted this footer after I told it "enterprise voice is the one thing <em>Vestige</em> refuses to use." Every ADR was human-signed before merge—convergence didn't apply to the writing, and one verdict was enough when it was mine.</p>
+
+</article>
+
+  <!-- Dev.to Backlinks -->
+  
+  <div style="margin: 20px 0; padding: 10px; border-left: 4px solid #3b49df; background-color: #f8f9ff;">
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
+                💬 Join the discussion about "Vestige: A Gemma 4 Brain Tracker That Won't Blow Smoke Up Your Ass" on Dev.to:
+            </p>
+            <p style="margin: 5px 0 0 0;">
+                <a href="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf"
+                   style="color: #3b49df; font-weight: bold; text-decoration: none;"
+                   target="_blank" rel="noopener">
+                    View comments and reactions →
+                </a>
+            </p>
+        </div>
+  
+
+  <!-- Related Posts Section -->
+  
+  <section style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;
+                  border: 1px solid #e9ecef;">
+    <h3 style="margin-top: 0; color: #495057; font-size: 1.2em;">📚 Related Articles</h3>
+    <ul style="list-style: none; padding: 0; margin: 0;">
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="unearthed-the-coal-mine-behind-every-light-switch-234m.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Unearthed—The Coal Mine Behind Every Light Switch
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Your electricity traces back to a specific mine, a specific operator, a specific county. Unearthed names all three—and what it cost the mountain.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#devchallenge</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="meet-hotfix-the-dragon-your-legacy-code-deserves-4141.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Meet Hotfix—The Dragon Your Legacy Code Deserves
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">Legacy Smelter is a thermal decommission platform where a Gemini-powered dragon analyzes your code and files very serious, very unhinged postmortems.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#devchallenge</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="forged-between-coal-and-code-phi.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Forged Between Coal and Code
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A backend engineer builds an immersive narrated web experience with Canvas, WebGL, layered audio, and her own Appalachian voiceover. No frameworks. 13 ADRs.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#devchallenge</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="i-stopped-reviewing-code-a-backend-devs-experiment-with-google-gemini-5424.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            I Stopped Reviewing Code: A Backend Dev’s Experiment with Google Gemini
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">I stopped reviewing code and let Google Gemini build my UI. Then I audited the results to see what autonomy in AI development actually produces.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#devchallenge</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+      <li style="margin: 10px 0; padding: 10px; background-color: white; border-radius: 5px;
+                 border-left: 3px solid #003f8a;">
+        <div>
+          <a href="find-the-dev-post-that-needs-you-now-33ng.html" style="color: #003f8a; text-decoration: none; font-weight: bold;">
+            Find the DEV Post That Needs You Now 🫶
+          </a>
+          
+          <p style="margin: 5px 0; color: #495057; font-size: 0.9em;">A DEV Community dashboard that surfaces posts needing human replies so members can quickly find where to engage.</p>
+          
+          
+          <div style="margin: 5px 0;">
+            <small style="color: #495057;">Shared tags:
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#devchallenge</span>
+              
+            </small>
+          </div>
+          
+        </div>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  <p><a href="https://dev.to/anchildress1/vestige-a-gemma-4-brain-tracker-that-wont-blow-smoke-up-your-ass-5caf">Read on Dev.to →</a></p>
+</main>
+</body></html>
+</text>

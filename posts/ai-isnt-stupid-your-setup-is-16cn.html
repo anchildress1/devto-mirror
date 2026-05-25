@@ -37,6 +37,8 @@
 
 <meta name="article:published_time" content="2026-05-02T19:30:01Z">
 
+<meta name="article:modified_time" content="2026-05-07T20:49:07Z">
+
 <meta name="content-type" content="tutorial">
 
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -63,11 +65,11 @@
 
 <meta name="reading-time" content="6 minutes">
 
-<meta name="devto:reactions" content="2">
+<meta name="devto:reactions" content="142">
 
-<meta name="devto:comments" content="4">
+<meta name="devto:comments" content="80">
 
-<meta name="devto:engagement_score" content="10">
+<meta name="devto:engagement_score" content="302">
 
 <meta name="content-fingerprint" content="ab2ff83876bd3383">
 
@@ -94,7 +96,7 @@
 
 
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2026-05-02T19:30:01Z", "datePublished": "2026-05-02T19:30:01Z", "description": "The bare-minimum AI coding workflow\u2014pick the right model, plan first, write AGENTS.md for agents not humans, and cross-check across LLMs before you blame the tool.", "headline": "AI Isn\u0027t Stupid. Your Setup Is. \ud83d\udee0\ufe0f", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8ddakzjuqx24c2ayunsn.jpg", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 4}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 2}], "keywords": ["ai", "agents", "productivity", "tutorial"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/ai-isnt-stupid-your-setup-is-16cn", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://crawly.checkmarkdevtools.dev"}, "timeRequired": "PT6M", "url": "https://dev.to/anchildress1/ai-isnt-stupid-your-setup-is-16cn", "wordCount": 1344}
+{"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Ashley Childress", "url": "https://dev.to/anchildress1"}, "dateModified": "2026-05-07T20:49:07Z", "datePublished": "2026-05-02T19:30:01Z", "description": "The bare-minimum AI coding workflow\u2014pick the right model, plan first, write AGENTS.md for agents not humans, and cross-check across LLMs before you blame the tool.", "headline": "AI Isn\u0027t Stupid. Your Setup Is. \ud83d\udee0\ufe0f", "image": {"@type": "ImageObject", "height": 500, "url": "https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F8ddakzjuqx24c2ayunsn.jpg", "width": 1000}, "inLanguage": "en", "interactionStatistic": [{"@type": "InteractionCounter", "interactionType": "https://schema.org/CommentAction", "userInteractionCount": 80}, {"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": 142}], "keywords": ["ai", "agents", "productivity", "tutorial"], "mainEntityOfPage": {"@id": "https://dev.to/anchildress1/ai-isnt-stupid-your-setup-is-16cn", "@type": "WebPage"}, "publisher": {"@type": "Organization", "name": "anchildress1\u2014Dev.to Mirror", "url": "https://crawly.checkmarkdevtools.dev"}, "timeRequired": "PT6M", "url": "https://dev.to/anchildress1/ai-isnt-stupid-your-setup-is-16cn", "wordCount": 1384}
 </script>
 
 <script type="application/ld+json">
@@ -283,6 +285,8 @@
 
 <p>Unit. Integration. E2E. Performance. A11y (accessibility). Sonar. Semgrep. Et cetera. Then automate and run with GitHub Actions. Make the model cover positive paths, negative paths, error paths, edge cases, and the acceptance criteria you defined back in the planning phase. (You did define them, right?) Add in anything you uncover during testing explicitly, so it doesn't happen again.</p>
 
+<p><strong>Edited:</strong> Thanks for <a class="mentioned-user" href="https://dev.to/txdesk">@txdesk</a> for calling out that automated tests are not enough. My testing always includes manual verification for whatever I'm building. You need a manual validation loop that's far from the AI in order to prove it works.</p>
+
 <p>Then cross-check across models. Have Codex review Claude. Have Copilot review Codex. Each model has different blind spots and different obsessions—running them against each other in controlled doses IS the review. One LLM is a single point of failure. Three are a quorum.</p>
 
 
@@ -376,13 +380,13 @@
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -404,13 +408,13 @@
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -432,13 +436,13 @@
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -460,13 +464,13 @@
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
@@ -488,13 +492,13 @@
             <small style="color: #495057;">Shared tags:
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
-                             margin: 0 2px; color:#495057;">#tutorial</span>
-              
-                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#productivity</span>
               
                 <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
                              margin: 0 2px; color:#495057;">#ai</span>
+              
+                <span style="background: #e9ecef; padding: 1px 4px; border-radius: 2px;
+                             margin: 0 2px; color:#495057;">#tutorial</span>
               
             </small>
           </div>
