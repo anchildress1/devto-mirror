@@ -52,19 +52,19 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
   - `DEVTO_KEY` – for private/draft posts
 4. **Delete** `gh-pages` branch if it exists
 5. **Update** `comments.txt` file (or delete it completely)
-6. **Run workflow** Actions → [Generate and Publish Dev.to Mirror Site](https://github.com/1nchildress1/devto-mirror/actions) → Run workflow
+6. **Run workflow** Actions → **Deploy Dev.to Mirror to GitHub Pages** → Run workflow
 7. **Enable Pages** → Settings → Pages → Deploy from branch → `gh-pages`
 
 This will automatically pull new content from Dev every **Wednesday at 9:40 AM EST**.
 
 > [!IMPORTANT]
-> Deploying with a `gh-pages` branch is somewhat deprecated, but it was the most straightforward way to keep a running history. This eliminates unnecessary calls to the Dev API every week. If you want to force a complete refresh, you can manually trigger the `publish.yaml` workflow with the `force_full_regen` option.
+> Forks publish to GitHub Pages via the `deploy-gh-pages.yml` workflow. The upstream repo deploys to Firebase Hosting (`publish.yaml`); the `gh-pages` branch is still used as the incremental state store. Deploying with a `gh-pages` branch is somewhat deprecated, but it was the most straightforward way to keep a running history. To force a complete refresh, trigger the workflow with the `force_full_regen` option.
 
 ## How it works
 
 Fetches posts via Dev.to API (incremental updates via `last_run.txt`). Generates **plain HTML** files with canonical links back to Dev.to, AI-specific optimizations, plus sitemap and robots.txt. Optional: include comments as standalone pages via `comments.txt` or delete it entirely.
 
-**Force full regeneration:** Actions → [Generate and Publish Dev.to Mirror Site](https://github.com/1nchildress1/devto-mirror/actions) → Run workflow with `force_full_regen: true`.
+**Force full regeneration:** Actions → **Deploy Dev.to Mirror to GitHub Pages** → Run workflow with `force_full_regen: true`.
 
 > [!WARNING]
 > I've tinkered some with moving `robots.txt` and `llms.txt` to the base-level repo, but haven't been able to make it work yet. Research says it's possible, but I'm either doing it all wrong *or* AI lied to me. 🤷‍♀️ So, the [Google Search Console](https://search.google.com/search-console) have a difficult time locating these files currently. Otherwise, there doesn't seem to be any problems with keeping those files here.
