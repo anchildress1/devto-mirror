@@ -27,3 +27,30 @@ jobs:
           token: ${{ secrets.MY_RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # release-please bumps pyproject.toml but never runs `uv lock`, so the
+      # locked project version drifts. Sync it back into the open release PR.
+      - name: Checkout release PR branch
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+          token: ${{ secrets.MY_RELEASE_PLEASE_TOKEN }}
+
+      - name: Set up uv
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+
+      - name: Sync uv.lock with release version
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        run: |
+          uv lock
+          if git diff --quiet uv.lock; then
+            echo "uv.lock already in sync"
+            exit 0
+          fi
+          git config user.name "ci-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add uv.lock
+          git commit -m "chore: sync uv.lock with release version"
+          git push
