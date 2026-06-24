@@ -20,8 +20,9 @@ name: Generate and Publish Dev.to Mirror Site
 # - DEVTO_KEY: Dev.to API key (required for private/draft posts)
 
 on:
-  schedule:
-    - cron: "40 14 * * 3"  # 14:40 UTC every Wednesday (09:40 ET winter / 10:40 ET during DST)
+  # Weekly schedule disabled (#72). Re-enable to auto-publish to Firebase.
+  # schedule:
+  #   - cron: "40 14 * * 3"  # 14:40 UTC every Wednesday (09:40 ET winter / 10:40 ET during DST)
   push:
     branches:
       - main
