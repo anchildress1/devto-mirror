@@ -66,6 +66,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pages_repo: ${{ github.repository }}
           force_full_regen: ${{ inputs.force_full_regen || 'false' }}
+          state_branch: gh-pages   # forks keep state alongside the deployed site
 
       - name: Deploy timestamp-only update
         if: steps.site.outputs.no_new_posts == 'true'

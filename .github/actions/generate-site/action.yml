@@ -30,6 +30,10 @@ inputs:
     description: Force a full regeneration instead of incremental
     required: false
     default: "false"
+  state_branch:
+    description: Branch holding incremental state (last_run.txt, posts_data.json)
+    required: false
+    default: gh-pages
 
 outputs:
   no_new_posts:
@@ -43,26 +47,27 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
+        STATE_BRANCH: ${{ inputs.state_branch }}
       run: |
         set -euo pipefail
-        if git ls-remote --exit-code origin gh-pages >/dev/null 2>&1; then
-          git fetch origin gh-pages --depth=1
-          if git show origin/gh-pages:last_run.txt >/dev/null 2>&1; then
-            TIMESTAMP=$(git show origin/gh-pages:last_run.txt)
+        if git ls-remote --exit-code origin "$STATE_BRANCH" >/dev/null 2>&1; then
+          git fetch origin "$STATE_BRANCH" --depth=1
+          if git show "origin/${STATE_BRANCH}:last_run.txt" >/dev/null 2>&1; then
+            TIMESTAMP=$(git show "origin/${STATE_BRANCH}:last_run.txt")
             echo "$TIMESTAMP" > last_run.txt
-            echo "🔄 Restored last_run.txt from gh-pages: \`$TIMESTAMP\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "🔄 Restored last_run.txt from ${STATE_BRANCH}: \`$TIMESTAMP\`" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "⚠️ last_run.txt not found on gh-pages branch" >> "$GITHUB_STEP_SUMMARY"
+            echo "⚠️ last_run.txt not found on ${STATE_BRANCH} branch" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-          if git show origin/gh-pages:posts_data.json >/dev/null 2>&1; then
-            git show origin/gh-pages:posts_data.json > posts_data.json
-            echo "🔄 Restored posts_data.json from gh-pages" >> "$GITHUB_STEP_SUMMARY"
+          if git show "origin/${STATE_BRANCH}:posts_data.json" >/dev/null 2>&1; then
+            git show "origin/${STATE_BRANCH}:posts_data.json" > posts_data.json
+            echo "🔄 Restored posts_data.json from ${STATE_BRANCH}" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "⚠️ posts_data.json not found on gh-pages branch" >> "$GITHUB_STEP_SUMMARY"
+            echo "⚠️ posts_data.json not found on ${STATE_BRANCH} branch" >> "$GITHUB_STEP_SUMMARY"
           fi
         else
-          echo "🆕 gh-pages branch does not exist yet; skipping last_run restore" >> "$GITHUB_STEP_SUMMARY"
+          echo "🆕 ${STATE_BRANCH} branch does not exist yet; skipping last_run restore" >> "$GITHUB_STEP_SUMMARY"
         fi
 
     - name: Set up uv

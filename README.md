@@ -58,7 +58,7 @@ Auto-generates a static mirror of your Dev.to blog with generous `robots.txt` fo
 This will automatically pull new content from Dev every **Wednesday at 9:40 AM EST**.
 
 > [!IMPORTANT]
-> Forks publish to GitHub Pages via the `deploy-gh-pages.yml` workflow. The upstream repo deploys to Firebase Hosting (`publish.yaml`); the `gh-pages` branch is still used as the incremental state store. Deploying with a `gh-pages` branch is somewhat deprecated, but it was the most straightforward way to keep a running history. To force a complete refresh, trigger the workflow with the `force_full_regen` option.
+> Forks publish to GitHub Pages via the `deploy-gh-pages.yml` workflow, with incremental state riding along on the `gh-pages` branch. The upstream repo deploys to Firebase Hosting (`publish.yaml`) and keeps its state on a separate `mirror-state` branch. Deploying with a `gh-pages` branch is somewhat deprecated, but it was the most straightforward way to keep a running history. To force a complete refresh, trigger the workflow with the `force_full_regen` option.
 
 ## How it works
 

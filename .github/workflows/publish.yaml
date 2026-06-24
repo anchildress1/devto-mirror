@@ -2,8 +2,9 @@ name: Generate and Publish Dev.to Mirror Site
 
 # Primary deploy: generates the mirror site and publishes it to Firebase
 # Hosting. Incremental state (last_run.txt, posts_data.json) is read from and
-# written back to the gh-pages branch, which remains the state store. The
-# gh-pages *site* deploy lives in deploy-gh-pages.yml for forks.
+# written back to the dedicated `mirror-state` branch (no site, just state).
+# The gh-pages *site* deploy lives in deploy-gh-pages.yml for forks, which keep
+# their state on gh-pages alongside the deployed site.
 #
 # Required repository variables:
 # - DEVTO_USERNAME: Your Dev.to username (required)
@@ -70,6 +71,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pages_repo: ${{ github.repository }}
           force_full_regen: ${{ github.event.inputs.force_full_regen || 'false' }}
+          state_branch: mirror-state
 
       - name: Authenticate to Google Cloud
         if: steps.site.outputs.no_new_posts != 'true'
@@ -97,20 +99,20 @@ jobs:
             --non-interactive
           echo "✅ Deployed to https://${FIREBASE_PROJECT_ID}.web.app" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Persist incremental state to gh-pages
+      - name: Stage incremental state
         timeout-minutes: 5
         run: |
           mkdir -p _state
           [ -f last_run.txt ] && cp last_run.txt _state/
           [ -f posts_data.json ] && cp posts_data.json _state/
 
-      - name: Push state to gh-pages
+      - name: Push state to mirror-state branch
         timeout-minutes: 5
         uses: peaceiris/actions-gh-pages@1ef5a1b1df4c63fe21a2242edbee6cac921ece01 # v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_state
-          publish_branch: gh-pages
+          publish_branch: mirror-state
           keep_files: true
           force_orphan: false
           user_name: ci-bot

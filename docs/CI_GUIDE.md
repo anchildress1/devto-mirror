@@ -12,7 +12,7 @@ The project uses a multi-workflow architecture designed for separation of concer
 - **`security-ci.yml`**: Quality assurance and security scanning
 - **`codeql.yml`**: Advanced security analysis
 
-This separation allows for independent execution, targeted permissions, and easier maintenance. The `gh-pages` branch remains the incremental **state store** (`last_run.txt`, `posts_data.json`) for both deploy paths.
+This separation allows for independent execution, targeted permissions, and easier maintenance. Incremental **state** (`last_run.txt`, `posts_data.json`) lives on a dedicated `mirror-state` branch upstream; forks keep their state on `gh-pages` alongside the deployed site. The composite action takes a `state_branch` input so both paths share one mechanism.
 
 ## Core Workflows Deep Dive
 
@@ -31,7 +31,7 @@ This separation allows for independent execution, targeted permissions, and easi
 1. Generates the site via the shared `generate-site` composite action.
 2. Authenticates to Google Cloud with Workload Identity Federation (`google-github-actions/auth`).
 3. Deploys `_deploy/` to **Firebase Hosting** (`firebase deploy --only hosting`) at `https://<project>.web.app`.
-4. Pushes the refreshed incremental state (`last_run.txt`, `posts_data.json`) back to the `gh-pages` branch (`keep_files: true`) so the next run stays incremental.
+4. Pushes the refreshed incremental state (`last_run.txt`, `posts_data.json`) back to the `mirror-state` branch (`keep_files: true`) so the next run stays incremental. `mirror-state` holds no site — just state — and is delete-protected via the `pages` ruleset.
 
 **Required configuration** (repository variables):
 
