@@ -11,6 +11,18 @@ have to reverse-engineer intent from commit archaeology and caffeine stains.
 
 ---
 
+## [1.1.0](https://github.com/anchildress1/devto-mirror/compare/v1.0.1...v1.1.0) (2026-06-24)
+
+
+### Features
+
+* **ci:** Firebase Hosting deploy + gh-pages as callable fork workflow ([#90](https://github.com/anchildress1/devto-mirror/issues/90)) ([482471f](https://github.com/anchildress1/devto-mirror/commit/482471f1da6af0ba0ab826ae4fa7d7d809ebbcc6))
+
+
+### Bug Fixes
+
+* **ci:** sync uv.lock in release PR + use logging.exception ([#92](https://github.com/anchildress1/devto-mirror/issues/92)) ([3c2928f](https://github.com/anchildress1/devto-mirror/commit/3c2928ff5af6ebfb1ae30a33923d5dde97520fe7))
+
 ## [1.0.1](https://github.com/ChecKMarKDevTools/devto-mirror/compare/v1.0.0...v1.0.1) (2026-02-24)
 
 
