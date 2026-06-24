@@ -10,6 +10,9 @@ name: Generate and Publish Dev.to Mirror Site
 # - DEVTO_USERNAME: Your Dev.to username (required)
 # - GH_USERNAME: Your GitHub username (required if SITE_DOMAIN not set)
 # - SITE_DOMAIN: Custom domain for the site (optional)
+# - FIREBASE_WEB_CONFIG: Firebase web app config JSON (optional). When set,
+#     the generated pages include the Firebase Analytics snippet. Forks leave
+#     this unset and ship no analytics. This is public web config, not a secret.
 # - GCP_WORKLOAD_IDENTITY_PROVIDER: Full WIF provider resource name
 #     (projects/<num>/locations/global/workloadIdentityPools/<pool>/providers/<provider>)
 # - GCP_DEPLOY_SERVICE_ACCOUNT: Email of the deploy service account
@@ -77,6 +80,7 @@ jobs:
           force_full_regen: ${{ github.event.inputs.force_full_regen || 'false' }}
           state_branch: mirror-state
           fallback_site_url: https://${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}.web.app/
+          firebase_web_config: ${{ vars.FIREBASE_WEB_CONFIG }}
 
       - name: Authenticate to Google Cloud
         if: steps.site.outputs.no_new_posts != 'true'
