@@ -6,35 +6,45 @@ This guide provides an in-depth technical explanation of the GitHub Actions work
 
 The project uses a multi-workflow architecture designed for separation of concerns, security, and reliability:
 
-- **`publish.yaml`**: Core site generation and deployment (two-stage: project site + root config files)
+- **`publish.yaml`**: Primary deploy — generates the site and publishes to **Firebase Hosting** (Workload Identity Federation; no long-lived key)
+- **`deploy-gh-pages.yml`**: Fork-friendly GitHub Pages deploy (callable/manual/scheduled-on-forks) — preserves the original `gh-pages` behavior
+- **`.github/actions/generate-site`**: Composite action shared by both deploy workflows so they generate identical output
 - **`security-ci.yml`**: Quality assurance and security scanning
 - **`codeql.yml`**: Advanced security analysis
 
-This separation allows for independent execution, targeted permissions, and easier maintenance.
+This separation allows for independent execution, targeted permissions, and easier maintenance. Incremental **state** (`last_run.txt`, `posts_data.json`) lives on a dedicated `mirror-state` branch upstream; forks keep their state on `gh-pages` alongside the deployed site. The composite action takes a `state_branch` input so both paths share one mechanism.
 
 ## Core Workflows Deep Dive
 
-### `publish.yaml` - Site Generation Pipeline
+### `publish.yaml` - Primary Deploy (Firebase Hosting)
 
 **Technical Implementation**:
 
 ```yaml
-# Scheduled: Weekly Wednesday 9:40 AM EST (cron: '40 13 * * 3')
+# Scheduled: Weekly, 14:40 UTC Wednesday — 09:40 ET in winter, 10:40 ET during DST (cron: '40 14 * * 3')
 # Manual: workflow_dispatch with optional inputs (force_full_regen)
+# Auth: Workload Identity Federation (OIDC) — no service-account key in the repo
 ```
 
 **Deployment Architecture**:
 
-This workflow deploys to a single location:
+1. Generates the site via the shared `generate-site` composite action.
+2. Authenticates to Google Cloud with Workload Identity Federation (`google-github-actions/auth`).
+3. Deploys `_deploy/` to **Firebase Hosting** (`firebase deploy --only hosting`) at `https://<project>.web.app`.
+4. Pushes the refreshed incremental state (`last_run.txt`, `posts_data.json`) back to the `mirror-state` branch (`keep_files: true`) so the next run stays incremental. `mirror-state` holds no site — just state — and is delete-protected via the `pages` ruleset.
 
-- **Project Repository (`gh-pages` branch)**: Full mirror site at `https://<username>.github.io/devto-mirror/`
-  - Complete post archive
-  - Index page with post listings
-  - Project-specific sitemap.xml
-  - Comments pages (if configured)
-  - robots.txt (optimized for crawlers)
-  - llms.txt (AI crawler instructions)
-  - google verification file
+**Required configuration** (repository variables):
+
+- `GCP_WORKLOAD_IDENTITY_PROVIDER`: full WIF provider resource name
+- `GCP_DEPLOY_SERVICE_ACCOUNT`: deploy SA email (needs `roles/firebasehosting.admin`)
+- `FIREBASE_PROJECT_ID`: Firebase project id (optional; defaults to `anchildress1`)
+
+### `deploy-gh-pages.yml` - Fork GitHub Pages Deploy
+
+Preserves the original `gh-pages` behavior for forks that do not use Firebase:
+
+- **Triggers**: `workflow_call` (reusable), `workflow_dispatch` (manual), and `schedule` (weekly). The scheduled run is skipped on the upstream repo so it does not double-publish.
+- **Deploys**: full mirror site to the `gh-pages` branch at `https://<username>.github.io/devto-mirror/` via `peaceiris/actions-gh-pages`, including the timestamp-only no-op path.
 
 > [!NOTE]
 > Root GitHub Pages deployment (username.github.io) is not currently available. If you need crawler access at the root domain, you can manually copy `robots.txt` and `llms.txt` to your root repository.
@@ -188,10 +198,9 @@ Each workflow uses **least-privilege permissions**:
 
 ```yaml
 permissions:
-  contents: read          # Read repository code
-  pages: write           # Deploy to GitHub Pages (publish only)
-  id-token: write        # OIDC authentication (publish only)
-  security-events: write # CodeQL results (codeql only)
+  contents: write         # Push incremental state to gh-pages (publish only)
+  id-token: write         # OIDC for Workload Identity Federation (publish only)
+  security-events: write  # CodeQL results (codeql only)
 ```
 
 ### Secret Management
@@ -258,12 +267,12 @@ This eliminates secret management complexity and reduces attack surface.
 
 ### Weekly Scheduling Choice
 
-**Decision**: Wednesday 9:38 AM EDT scheduling
+**Decision**: Wednesday 14:40 UTC scheduling (cron `40 14 * * 3`)
 **Rationale**:
 
 - Mid-week timing avoids weekend/Monday issues
-- EDT timing serves primary user base
-- Unusual minute (38) reduces GitHub Actions load balancing conflicts
+- Lands mid-morning ET for the primary user base (09:40 ET winter / 10:40 ET during DST)
+- Off-the-hour minute reduces GitHub Actions load-balancing conflicts
 
 ### Incremental vs Full Regeneration
 
@@ -279,9 +288,9 @@ This eliminates secret management complexity and reduces attack surface.
 
 ### Deployment Strategy
 
-**GitHub Pages**: Simple, reliable, integrated with repository
-**Alternative considered**: External hosting (rejected for complexity)
-**Trade-off**: Simplicity vs advanced hosting features
+**Firebase Hosting (primary)**: CDN-backed static hosting; keyless deploys via Workload Identity Federation
+**GitHub Pages (forks)**: Retained as a callable workflow so forks publish without Firebase
+**Trade-off**: Two deploy paths, kept in sync by a shared generation composite action
 
 ## Common CI Issues and Solutions
 

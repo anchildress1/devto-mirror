@@ -1,24 +1,34 @@
 name: Generate and Publish Dev.to Mirror Site
 
+# Primary deploy: generates the mirror site and publishes it to Firebase
+# Hosting. Incremental state (last_run.txt, posts_data.json) is read from and
+# written back to the dedicated `mirror-state` branch (no site, just state).
+# The gh-pages *site* deploy lives in deploy-gh-pages.yml for forks, which keep
+# their state on gh-pages alongside the deployed site.
+#
 # Required repository variables:
 # - DEVTO_USERNAME: Your Dev.to username (required)
 # - GH_USERNAME: Your GitHub username (required if SITE_DOMAIN not set)
-#   - Used for constructing GitHub Pages URLs
 # - SITE_DOMAIN: Custom domain for the site (optional)
-#   - Example: crawly.checkmarkdevtools.dev
-#   - If set, overrides GitHub Pages URL construction
+# - GCP_WORKLOAD_IDENTITY_PROVIDER: Full WIF provider resource name
+#     (projects/<num>/locations/global/workloadIdentityPools/<pool>/providers/<provider>)
+# - GCP_DEPLOY_SERVICE_ACCOUNT: Email of the deploy service account
+#     (must hold roles/firebasehosting.admin on the project)
+# - FIREBASE_PROJECT_ID: Firebase project id (optional; defaults to anchildress1)
 #
 # Optional repository secrets:
-# - DEVTO_KEY: Dev.to API key (optional for public content, required for private/draft posts)
+# - DEVTO_KEY: Dev.to API key (required for private/draft posts)
 
 on:
-#  schedule:
-#    - cron: "40 14 * * 3"  # At 9:40 AM EST every Wednesday
+  # Weekly schedule disabled (#72). Re-enable to auto-publish to Firebase.
+  # schedule:
+  #   - cron: "40 14 * * 3"  # 14:40 UTC every Wednesday (09:40 ET winter / 10:40 ET during DST)
   push:
     branches:
       - main
     paths:
       - '.github/workflows/publish.yaml'
+      - '.github/actions/generate-site/action.yml'
   workflow_dispatch:
     inputs:
       force_full_regen:
@@ -30,178 +40,86 @@ on:
           - 'false'
           - 'true'
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   generate-and-deploy:
+    # Firebase deploy is upstream-only; forks publish via deploy-gh-pages.yml and
+    # have no WIF/Firebase config, so guard rather than fail their weekly run.
+    if: github.repository_owner == 'anchildress1'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write   # push incremental state back to gh-pages
+      id-token: write    # OIDC token for Workload Identity Federation
     environment:
       name: deploy
-      url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+      url: https://${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}.web.app
     env:
-      DEVTO_USERNAME: ${{ vars.DEVTO_USERNAME }}
-      GH_USERNAME: ${{ vars.GH_USERNAME }}
-      SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
-      DEVTO_KEY: ${{ secrets.DEVTO_KEY }}
+      FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - name: Restore last run timestamp
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          if git ls-remote --exit-code origin gh-pages >/dev/null 2>&1; then
-            git fetch origin gh-pages --depth=1
-            if git show origin/gh-pages:last_run.txt >/dev/null 2>&1; then
-              TIMESTAMP=$(git show origin/gh-pages:last_run.txt)
-              echo "$TIMESTAMP" > last_run.txt
-              echo "🔄 Restored last_run.txt from gh-pages: \`$TIMESTAMP\`" >> "$GITHUB_STEP_SUMMARY"
-            else
-              echo "⚠️ last_run.txt not found on gh-pages branch" >> "$GITHUB_STEP_SUMMARY"
-            fi
-
-            if git show origin/gh-pages:posts_data.json >/dev/null 2>&1; then
-              git show origin/gh-pages:posts_data.json > posts_data.json
-              echo "🔄 Restored posts_data.json from gh-pages" >> "$GITHUB_STEP_SUMMARY"
-            else
-              echo "⚠️ posts_data.json not found on gh-pages branch" >> "$GITHUB_STEP_SUMMARY"
-            fi
-          else
-            echo "🆕 gh-pages branch does not exist yet; skipping last_run restore" >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8
-        with:
-          version: "latest"
-          python-version: "3.12"
-
-      - name: Cache uv dependencies
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-uv-
-
-      - name: Install dependencies
-        run: uv sync --locked --group dev
-
-      - name: Run post-install setup
-        run: make install
-
       - name: Generate site
-        id: generate
-        env:
-          PAGES_REPO: ${{ github.repository }}
-          FORCE_FULL_REGEN: ${{ github.event.inputs.force_full_regen || 'false' }}
-        run: |
-          {
-            echo "## 🏗️ Site Generation"
-            echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`"
-            echo "- 📦 Repo: \`${{ github.repository }}\`"
-          } >> "$GITHUB_STEP_SUMMARY"
-          uv run python -m devto_mirror.site_generation.generator
+        id: site
+        uses: ./.github/actions/generate-site
+        with:
+          devto_username: ${{ vars.DEVTO_USERNAME }}
+          gh_username: ${{ vars.GH_USERNAME }}
+          site_domain: ${{ vars.SITE_DOMAIN }}
+          devto_key: ${{ secrets.DEVTO_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pages_repo: ${{ github.repository }}
+          force_full_regen: ${{ github.event.inputs.force_full_regen || 'false' }}
+          state_branch: mirror-state
+          fallback_site_url: https://${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}.web.app/
 
-      - name: Always process robots.txt
-        run: |
-          mkdir -p _deploy
-          if [ -n "$SITE_DOMAIN" ]; then
-            SITE_HOME="https://${SITE_DOMAIN}/"
-          else
-            SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
-          fi
-          sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
+      - name: Authenticate to Google Cloud
+        if: steps.site.outputs.no_new_posts != 'true'
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+          create_credentials_file: true
+          export_environment_variables: true
 
-      - name: Note site generation success
-        if: steps.generate.outputs.no_new_posts != 'true'
-        run: echo "✅ Generated" >> "$GITHUB_STEP_SUMMARY"
+      - name: Set up Node.js
+        if: steps.site.outputs.no_new_posts != 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
 
-      - name: Prepare timestamp-only deployment
-        if: steps.generate.outputs.no_new_posts == 'true'
-        run: |
-          mkdir -p _deploy
-          [ -f .nojekyll ] && cp .nojekyll _deploy/
-          [ -f last_run.txt ] && cp last_run.txt _deploy/
-
-      - name: Deploy timestamp-only update
-        if: steps.generate.outputs.no_new_posts == 'true'
+      - name: Deploy to Firebase Hosting
+        if: steps.site.outputs.no_new_posts != 'true'
         timeout-minutes: 5
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        run: |
+          echo "## 🚀 Firebase Deploy" >> "$GITHUB_STEP_SUMMARY"
+          npx --yes firebase-tools@15.22.1 deploy \
+            --only hosting \
+            --project "$FIREBASE_PROJECT_ID" \
+            --non-interactive
+          echo "✅ Deployed to https://${FIREBASE_PROJECT_ID}.web.app" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Stage incremental state
+        timeout-minutes: 5
+        run: |
+          mkdir -p _state
+          [ -f last_run.txt ] && cp last_run.txt _state/
+          [ -f posts_data.json ] && cp posts_data.json _state/
+
+      - name: Push state to mirror-state branch
+        timeout-minutes: 5
+        uses: peaceiris/actions-gh-pages@1ef5a1b1df4c63fe21a2242edbee6cac921ece01 # v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_deploy
-          publish_branch: gh-pages
+          publish_dir: ./_state
+          publish_branch: mirror-state
           keep_files: true
           force_orphan: false
           user_name: ci-bot
           user_email: actions@users.noreply.github.com
-          commit_message: 'chore: deploy dev.to mirror (timestamp only)'
-
-      - name: Validate generated site
-        if: steps.generate.outputs.no_new_posts != 'true'
-        run: |
-          echo "## ✅ Site Validation" >> "$GITHUB_STEP_SUMMARY"
-          uv run python scripts/validate_site_generation.py
-          echo "✅ Validation passed" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Generate sitemap and index
-        if: steps.generate.outputs.no_new_posts != 'true'
-        run: |
-          echo "## 📄 Generating Sitemap" >> "$GITHUB_STEP_SUMMARY"
-          uv run python -m devto_mirror.site_generation.renderer
-          echo "✅ Sitemap generated" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Prepare deployment directory
-        if: steps.generate.outputs.no_new_posts != 'true'
-        env:
-          GH_USERNAME: ${{ vars.GH_USERNAME }}
-          SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
-        run: |
-          mkdir -p _deploy
-          cp .nojekyll _deploy/
-          cp index.html _deploy/
-          cp posts_data.json _deploy/
-          cp -R posts _deploy/
-          [ -d comments ] && cp -R comments _deploy/
-          [ -f last_run.txt ] && cp last_run.txt _deploy/
-          [ -f comments.txt ] && cp comments.txt _deploy/
-
-          # Add static config files
-          [ -f sitemap.xml ] && cp sitemap.xml _deploy/
-          [ -f google6b80426bb396f31f.html ] && cp google6b80426bb396f31f.html _deploy/
-          [ -f algolia_verification.html ] && cp algolia_verification.html _deploy/
-
-          # Process template files with domain resolution
-          if [ -n "$SITE_DOMAIN" ]; then
-            SITE_HOME="https://${SITE_DOMAIN}/"
-          else
-            SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
-          fi
-          sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
-          sed "s|{root_home}|$SITE_HOME|g" assets/llms.txt > _deploy/llms.txt
-
-      - name: Deploy to gh-pages
-        if: steps.generate.outputs.no_new_posts != 'true'
-        timeout-minutes: 5
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_deploy
-          publish_branch: gh-pages
-          keep_files: true
-          force_orphan: false
-          user_name: ci-bot
-          user_email: actions@users.noreply.github.com
-          commit_message: 'chore: deploy dev.to mirror'
+          commit_message: 'chore: update dev.to mirror state'

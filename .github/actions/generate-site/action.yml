@@ -1,0 +1,190 @@
+name: Generate Dev.to Mirror Site
+description: >-
+  Restore incremental state from gh-pages, generate the mirror site, validate,
+  and assemble the deployable `_deploy` directory. Shared by the Firebase and
+  gh-pages deploy workflows so both produce identical output.
+
+inputs:
+  devto_username:
+    description: Dev.to username to mirror
+    required: true
+  gh_username:
+    description: GitHub username used to build the Pages fallback URL
+    required: false
+    default: ""
+  site_domain:
+    description: Custom domain; overrides the Pages URL when set
+    required: false
+    default: ""
+  devto_key:
+    description: Dev.to API key (required only for private/draft posts)
+    required: false
+    default: ""
+  github_token:
+    description: Token used to read incremental state from the gh-pages branch
+    required: true
+  pages_repo:
+    description: owner/repo passed to the generator (github.repository)
+    required: true
+  force_full_regen:
+    description: Force a full regeneration instead of incremental
+    required: false
+    default: "false"
+  state_branch:
+    description: Branch holding incremental state (last_run.txt, posts_data.json)
+    required: false
+    default: gh-pages
+  fallback_site_url:
+    description: >-
+      Base URL (with trailing slash) for robots.txt/sitemap when site_domain is
+      unset — should be the deploy target's own URL (e.g. the Firebase URL).
+    required: false
+    default: ""
+
+outputs:
+  no_new_posts:
+    description: "true when the generator found no new posts since the last run"
+    value: ${{ steps.generate.outputs.no_new_posts }}
+
+runs:
+  using: composite
+  steps:
+    - name: Restore last run timestamp
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        STATE_BRANCH: ${{ inputs.state_branch }}
+      run: |
+        set -euo pipefail
+        if git ls-remote --exit-code origin "$STATE_BRANCH" >/dev/null 2>&1; then
+          git fetch origin "$STATE_BRANCH" --depth=1
+          if git show "origin/${STATE_BRANCH}:last_run.txt" >/dev/null 2>&1; then
+            TIMESTAMP=$(git show "origin/${STATE_BRANCH}:last_run.txt")
+            echo "$TIMESTAMP" > last_run.txt
+            echo "🔄 Restored last_run.txt from ${STATE_BRANCH}: \`$TIMESTAMP\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "⚠️ last_run.txt not found on ${STATE_BRANCH} branch" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if git show "origin/${STATE_BRANCH}:posts_data.json" >/dev/null 2>&1; then
+            git show "origin/${STATE_BRANCH}:posts_data.json" > posts_data.json
+            echo "🔄 Restored posts_data.json from ${STATE_BRANCH}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "⚠️ posts_data.json not found on ${STATE_BRANCH} branch" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        else
+          echo "🆕 ${STATE_BRANCH} branch does not exist yet; skipping last_run restore" >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+    - name: Set up uv
+      uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+      with:
+        version: "latest"
+        python-version: "3.12"
+
+    - name: Cache uv dependencies
+      uses: actions/cache@v5
+      with:
+        path: ~/.cache/uv
+        key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-uv-
+
+    - name: Install dependencies
+      shell: bash
+      run: uv sync --locked --group dev
+
+    - name: Run post-install setup
+      shell: bash
+      run: make install
+
+    - name: Generate site
+      id: generate
+      shell: bash
+      env:
+        DEVTO_USERNAME: ${{ inputs.devto_username }}
+        GH_USERNAME: ${{ inputs.gh_username }}
+        SITE_DOMAIN: ${{ inputs.site_domain }}
+        DEVTO_KEY: ${{ inputs.devto_key }}
+        PAGES_REPO: ${{ inputs.pages_repo }}
+        FORCE_FULL_REGEN: ${{ inputs.force_full_regen }}
+      run: |
+        {
+          echo "## 🏗️ Site Generation"
+          echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`"
+          echo "- 📦 Repo: \`${PAGES_REPO}\`"
+        } >> "$GITHUB_STEP_SUMMARY"
+        uv run python -m devto_mirror.site_generation.generator
+
+    - name: Always process robots.txt
+      shell: bash
+      env:
+        GH_USERNAME: ${{ inputs.gh_username }}
+        SITE_DOMAIN: ${{ inputs.site_domain }}
+        FALLBACK_SITE_URL: ${{ inputs.fallback_site_url }}
+      run: |
+        mkdir -p _deploy
+        # Resolve the canonical site root once; later steps reuse $SITE_HOME.
+        if [ -n "$SITE_DOMAIN" ]; then
+          SITE_HOME="https://${SITE_DOMAIN}/"
+        elif [ -n "$FALLBACK_SITE_URL" ]; then
+          SITE_HOME="$FALLBACK_SITE_URL"
+        elif [ -n "$GH_USERNAME" ]; then
+          SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
+        else
+          echo "::error::No site URL — set SITE_DOMAIN, pass fallback_site_url, or set GH_USERNAME so robots.txt/sitemap point somewhere valid." >&2
+          exit 1
+        fi
+        echo "SITE_HOME=$SITE_HOME" >> "$GITHUB_ENV"
+        sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
+
+    - name: Note site generation success
+      if: steps.generate.outputs.no_new_posts != 'true'
+      shell: bash
+      run: echo "✅ Generated" >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Prepare timestamp-only deployment
+      if: steps.generate.outputs.no_new_posts == 'true'
+      shell: bash
+      run: |
+        mkdir -p _deploy
+        [ -f .nojekyll ] && cp .nojekyll _deploy/
+        [ -f last_run.txt ] && cp last_run.txt _deploy/
+
+    - name: Validate generated site
+      if: steps.generate.outputs.no_new_posts != 'true'
+      shell: bash
+      run: |
+        echo "## ✅ Site Validation" >> "$GITHUB_STEP_SUMMARY"
+        uv run python scripts/validate_site_generation.py
+        echo "✅ Validation passed" >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Generate sitemap and index
+      if: steps.generate.outputs.no_new_posts != 'true'
+      shell: bash
+      run: |
+        echo "## 📄 Generating Sitemap" >> "$GITHUB_STEP_SUMMARY"
+        uv run python -m devto_mirror.site_generation.renderer
+        echo "✅ Sitemap generated" >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Prepare deployment directory
+      if: steps.generate.outputs.no_new_posts != 'true'
+      shell: bash
+      run: |
+        mkdir -p _deploy
+        cp .nojekyll _deploy/
+        cp index.html _deploy/
+        cp posts_data.json _deploy/
+        cp -R posts _deploy/
+        [ -d comments ] && cp -R comments _deploy/
+        [ -f last_run.txt ] && cp last_run.txt _deploy/
+        [ -f comments.txt ] && cp comments.txt _deploy/
+
+        # Add static config files
+        [ -f sitemap.xml ] && cp sitemap.xml _deploy/
+        [ -f google6b80426bb396f31f.html ] && cp google6b80426bb396f31f.html _deploy/
+        [ -f algolia_verification.html ] && cp algolia_verification.html _deploy/
+
+        # Process template files; $SITE_HOME was resolved in the robots.txt step.
+        sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
+        sed "s|{root_home}|$SITE_HOME|g" assets/llms.txt > _deploy/llms.txt

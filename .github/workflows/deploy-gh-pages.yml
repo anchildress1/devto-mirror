@@ -1,0 +1,97 @@
+name: Deploy Dev.to Mirror to GitHub Pages
+
+# Fork-friendly GitHub Pages deploy. The upstream repo (anchildress1) publishes
+# to Firebase (see publish.yaml); this workflow keeps the original gh-pages
+# deploy alive so forks without Firebase can still publish. Callable
+# (workflow_call), manual (workflow_dispatch), or weekly on forks. The scheduled
+# run is skipped on the upstream repo so it does not double-publish.
+#
+# Required repository variables:
+# - DEVTO_USERNAME: Your Dev.to username (required)
+# - GH_USERNAME: Your GitHub username (required if SITE_DOMAIN not set)
+# - SITE_DOMAIN: Custom domain for the site (optional)
+#
+# Optional repository secrets:
+# - DEVTO_KEY: Dev.to API key (required for private/draft posts)
+
+on:
+  schedule:
+    - cron: "40 14 * * 3"  # 14:40 UTC every Wednesday (09:40 ET winter / 10:40 ET during DST)
+  workflow_dispatch:
+    inputs:
+      force_full_regen:
+        description: 'Force full regeneration'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+  workflow_call:
+    inputs:
+      force_full_regen:
+        description: 'Force full regeneration'
+        required: false
+        default: 'false'
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate-and-deploy:
+    # Skip the scheduled run upstream — upstream publishes via Firebase.
+    if: github.event_name != 'schedule' || github.repository_owner != 'anchildress1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    environment:
+      name: deploy
+      url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Generate site
+        id: site
+        uses: ./.github/actions/generate-site
+        with:
+          devto_username: ${{ vars.DEVTO_USERNAME }}
+          gh_username: ${{ vars.GH_USERNAME }}
+          site_domain: ${{ vars.SITE_DOMAIN }}
+          devto_key: ${{ secrets.DEVTO_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pages_repo: ${{ github.repository }}
+          force_full_regen: ${{ inputs.force_full_regen || 'false' }}
+          state_branch: gh-pages   # forks keep state alongside the deployed site
+
+      - name: Deploy timestamp-only update
+        if: steps.site.outputs.no_new_posts == 'true'
+        timeout-minutes: 5
+        uses: peaceiris/actions-gh-pages@1ef5a1b1df4c63fe21a2242edbee6cac921ece01 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_deploy
+          publish_branch: gh-pages
+          keep_files: true
+          force_orphan: false
+          user_name: ci-bot
+          user_email: actions@users.noreply.github.com
+          commit_message: 'chore: deploy dev.to mirror (timestamp only)'
+
+      - name: Deploy to gh-pages
+        if: steps.site.outputs.no_new_posts != 'true'
+        timeout-minutes: 5
+        uses: peaceiris/actions-gh-pages@1ef5a1b1df4c63fe21a2242edbee6cac921ece01 # v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_deploy
+          publish_branch: gh-pages
+          keep_files: true
+          force_orphan: false
+          user_name: ci-bot
+          user_email: actions@users.noreply.github.com
+          commit_message: 'chore: deploy dev.to mirror'
