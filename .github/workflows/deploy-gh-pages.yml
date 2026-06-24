@@ -16,7 +16,7 @@ name: Deploy Dev.to Mirror to GitHub Pages
 
 on:
   schedule:
-    - cron: "40 14 * * 3"  # At 9:40 AM EST every Wednesday
+    - cron: "40 14 * * 3"  # 14:40 UTC every Wednesday (09:40 ET winter / 10:40 ET during DST)
   workflow_dispatch:
     inputs:
       force_full_regen:

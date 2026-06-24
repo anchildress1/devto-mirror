@@ -21,7 +21,7 @@ name: Generate and Publish Dev.to Mirror Site
 
 on:
   schedule:
-    - cron: "40 14 * * 3"  # At 9:40 AM EST every Wednesday
+    - cron: "40 14 * * 3"  # 14:40 UTC every Wednesday (09:40 ET winter / 10:40 ET during DST)
   push:
     branches:
       - main
@@ -45,6 +45,9 @@ concurrency:
 
 jobs:
   generate-and-deploy:
+    # Firebase deploy is upstream-only; forks publish via deploy-gh-pages.yml and
+    # have no WIF/Firebase config, so guard rather than fail their weekly run.
+    if: github.repository_owner == 'anchildress1'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -72,6 +75,7 @@ jobs:
           pages_repo: ${{ github.repository }}
           force_full_regen: ${{ github.event.inputs.force_full_regen || 'false' }}
           state_branch: mirror-state
+          fallback_site_url: https://${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}.web.app/
 
       - name: Authenticate to Google Cloud
         if: steps.site.outputs.no_new_posts != 'true'

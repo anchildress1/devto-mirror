@@ -21,7 +21,7 @@ This separation allows for independent execution, targeted permissions, and easi
 **Technical Implementation**:
 
 ```yaml
-# Scheduled: Weekly Wednesday 9:40 AM EST (cron: '40 14 * * 3')
+# Scheduled: Weekly, 14:40 UTC Wednesday — 09:40 ET in winter, 10:40 ET during DST (cron: '40 14 * * 3')
 # Manual: workflow_dispatch with optional inputs (force_full_regen)
 # Auth: Workload Identity Federation (OIDC) — no service-account key in the repo
 ```
@@ -267,12 +267,12 @@ This eliminates secret management complexity and reduces attack surface.
 
 ### Weekly Scheduling Choice
 
-**Decision**: Wednesday 9:38 AM EDT scheduling
+**Decision**: Wednesday 14:40 UTC scheduling (cron `40 14 * * 3`)
 **Rationale**:
 
 - Mid-week timing avoids weekend/Monday issues
-- EDT timing serves primary user base
-- Unusual minute (38) reduces GitHub Actions load balancing conflicts
+- Lands mid-morning ET for the primary user base (09:40 ET winter / 10:40 ET during DST)
+- Off-the-hour minute reduces GitHub Actions load-balancing conflicts
 
 ### Incremental vs Full Regeneration
 

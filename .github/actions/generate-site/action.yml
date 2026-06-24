@@ -34,6 +34,12 @@ inputs:
     description: Branch holding incremental state (last_run.txt, posts_data.json)
     required: false
     default: gh-pages
+  fallback_site_url:
+    description: >-
+      Base URL (with trailing slash) for robots.txt/sitemap when site_domain is
+      unset — should be the deploy target's own URL (e.g. the Firebase URL).
+    required: false
+    default: ""
 
 outputs:
   no_new_posts:
@@ -115,13 +121,21 @@ runs:
       env:
         GH_USERNAME: ${{ inputs.gh_username }}
         SITE_DOMAIN: ${{ inputs.site_domain }}
+        FALLBACK_SITE_URL: ${{ inputs.fallback_site_url }}
       run: |
         mkdir -p _deploy
+        # Resolve the canonical site root once; later steps reuse $SITE_HOME.
         if [ -n "$SITE_DOMAIN" ]; then
           SITE_HOME="https://${SITE_DOMAIN}/"
-        else
+        elif [ -n "$FALLBACK_SITE_URL" ]; then
+          SITE_HOME="$FALLBACK_SITE_URL"
+        elif [ -n "$GH_USERNAME" ]; then
           SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
+        else
+          echo "::error::No site URL — set SITE_DOMAIN, pass fallback_site_url, or set GH_USERNAME so robots.txt/sitemap point somewhere valid." >&2
+          exit 1
         fi
+        echo "SITE_HOME=$SITE_HOME" >> "$GITHUB_ENV"
         sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
 
     - name: Note site generation success
@@ -156,9 +170,6 @@ runs:
     - name: Prepare deployment directory
       if: steps.generate.outputs.no_new_posts != 'true'
       shell: bash
-      env:
-        GH_USERNAME: ${{ inputs.gh_username }}
-        SITE_DOMAIN: ${{ inputs.site_domain }}
       run: |
         mkdir -p _deploy
         cp .nojekyll _deploy/
@@ -174,11 +185,6 @@ runs:
         [ -f google6b80426bb396f31f.html ] && cp google6b80426bb396f31f.html _deploy/
         [ -f algolia_verification.html ] && cp algolia_verification.html _deploy/
 
-        # Process template files with domain resolution
-        if [ -n "$SITE_DOMAIN" ]; then
-          SITE_HOME="https://${SITE_DOMAIN}/"
-        else
-          SITE_HOME="https://${GH_USERNAME}.github.io/devto-mirror/"
-        fi
+        # Process template files; $SITE_HOME was resolved in the robots.txt step.
         sed "s|{root_home}|$SITE_HOME|g" assets/robots.txt > _deploy/robots.txt
         sed "s|{root_home}|$SITE_HOME|g" assets/llms.txt > _deploy/llms.txt
