@@ -130,8 +130,8 @@ def add_source_attribution(post: Any, _site_config: Optional[Dict[str, str]] = N
 
         logger.debug(f"Generated source attribution for post: {getattr(post, 'slug', 'unknown')}")
 
-    except Exception as e:
-        logger.error(f"Error generating source attribution: {e}")
+    except Exception:
+        logger.exception("Error generating source attribution")
         # Provide minimal fallback attribution
         attribution_data = {
             "source_platform": DEVTO_PLATFORM,
@@ -201,8 +201,8 @@ def generate_related_links(post: Any, all_posts: List[Any], max_related: int = 5
         if related_posts:
             logger.debug(f"Found {len(related_posts)} related posts for: {getattr(post, 'slug', 'unknown')}")
 
-    except Exception as e:
-        logger.error(f"Error generating related links: {e}")
+    except Exception:
+        logger.exception("Error generating related links")
 
     return related_posts
 
@@ -261,8 +261,8 @@ def create_dev_to_backlinks(post: Any) -> Dict[str, Any]:
 
         logger.debug(f"Generated Dev.to backlinks for post: {getattr(post, 'slug', 'unknown')}")
 
-    except Exception as e:
-        logger.error(f"Error creating Dev.to backlinks: {e}")
+    except Exception:
+        logger.exception("Error creating Dev.to backlinks")
 
     return backlink_data
 
@@ -305,8 +305,8 @@ def _generate_attribution_html(canonical_url: str, author: str, date: str) -> st
 
         return attribution_html.strip()
 
-    except Exception as e:
-        logger.error(f"Error generating attribution HTML: {e}")
+    except Exception:
+        logger.exception("Error generating attribution HTML")
         return f'<p><em>Originally published on <a href="{canonical_url}">Dev.to</a></em></p>'
 
 
@@ -367,8 +367,8 @@ def _generate_backlink_html(canonical_url: str, post: Any) -> str:
 
         return backlink_html.strip()
 
-    except Exception as e:
-        logger.error(f"Error generating backlink HTML: {e}")
+    except Exception:
+        logger.exception("Error generating backlink HTML")
         return f'<p><a href="{canonical_url}">View on Dev.to</a></p>'
 
 
@@ -402,8 +402,8 @@ def enhance_post_with_cross_references(
 
         return cross_ref_data
 
-    except Exception as e:
-        logger.error(f"Error enhancing post with cross-references: {e}")
+    except Exception:
+        logger.exception("Error enhancing post with cross-references")
         return {
             "attribution": {},
             "related_posts": [],

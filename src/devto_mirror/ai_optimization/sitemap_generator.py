@@ -75,8 +75,8 @@ class DevToAISitemapGenerator:
             xml_content = self._generate_sitemap_xml(sitemap_entries)
             return xml_content
 
-        except Exception as e:
-            logger.error(f"Failed to generate main sitemap: {e}")
+        except Exception:
+            logger.exception("Failed to generate main sitemap")
             # Fallback to basic sitemap format
             return self._generate_basic_sitemap(posts, comments)
 
@@ -122,8 +122,8 @@ class DevToAISitemapGenerator:
 
             return self._generate_sitemap_xml(sitemap_entries)
 
-        except Exception as e:
-            logger.error(f"Failed to generate content sitemap: {e}")
+        except Exception:
+            logger.exception("Failed to generate content sitemap")
             return ""
 
     def generate_discovery_feed(self, posts: List[Any]) -> str:
@@ -153,8 +153,8 @@ class DevToAISitemapGenerator:
 
             return self._generate_discovery_xml(feed_entries)
 
-        except Exception as e:
-            logger.error(f"Failed to generate discovery feed: {e}")
+        except Exception:
+            logger.exception("Failed to generate discovery feed")
             return ""
 
     def _create_url_entry(
