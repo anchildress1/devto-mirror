@@ -167,6 +167,10 @@ runs:
     - name: Generate sitemap and index
       if: steps.generate.outputs.no_new_posts != 'true'
       shell: bash
+      # renderer.py is the last writer of index.html, so it needs the analytics
+      # config too — otherwise the homepage ships without the snippet.
+      env:
+        FIREBASE_WEB_CONFIG: ${{ inputs.firebase_web_config }}
       run: |
         echo "## 📄 Generating Sitemap" >> "$GITHUB_STEP_SUMMARY"
         uv run python -m devto_mirror.site_generation.renderer
