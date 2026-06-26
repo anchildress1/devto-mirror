@@ -1,5 +1,8 @@
 # AI Optimization Module Migration Plan
 
+> [!NOTE]
+> **Historical artifact — superseded.** This plan tracked an earlier migration to `src/ai_optimization/`. That package was later moved under the project package and now lives at `src/devto_mirror/ai_optimization/`. The `src/ai_optimization/` paths and `from src.ai_optimization import ...` snippets below are out of date — see [DEV_GUIDE.md](./DEV_GUIDE.md) for the current structure. Kept as-is for history.
+
 ## Overview
 
 This document tracks the migration of the monolithic `scripts/ai_optimization.py` file into a proper package structure under `src/ai_optimization/`.

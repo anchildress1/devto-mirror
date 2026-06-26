@@ -62,7 +62,7 @@ Preserves the original `gh-pages` behavior for forks that do not use Firebase:
 5. **Static Asset Generation**:
    - `index.html` with post listings
    - Individual post pages
-6. **Sitemap Generation**: Runs `render_index_sitemap.py` to create `sitemap.xml`
+6. **Sitemap Generation**: Runs `python -m devto_mirror.site_generation.renderer` to create `index.html` and `sitemap.xml`
 7. **Deployment Preparation**: Assembles all files into `_deploy` directory including:
    - Generated HTML pages
    - robots.txt and llms.txt (processed from templates)
@@ -87,7 +87,7 @@ Preserves the original `gh-pages` behavior for forks that do not use Firebase:
 **Environment Variables**:
 
 - `DEVTO_USERNAME`: Repository variable (required) - Your Dev.to username
-- `SITE_DOMAIN`: Repository variable (optional) - Custom domain (e.g., `crawly.checkmarkdevtools.dev`)
+- `SITE_DOMAIN`: Repository variable (optional) - Custom domain (e.g., `crawly.anchildress1.dev`)
   - If set, overrides GitHub Pages URL construction
   - Falls back to `GH_USERNAME`-based URL if not provided
 - `GH_USERNAME`: Repository variable (required if `SITE_DOMAIN` not set) - Your GitHub username for Pages URLs
@@ -198,7 +198,7 @@ Each workflow uses **least-privilege permissions**:
 
 ```yaml
 permissions:
-  contents: write         # Push incremental state to gh-pages (publish only)
+  contents: write         # Push incremental state to the state branch (mirror-state upstream, gh-pages on forks)
   id-token: write         # OIDC for Workload Identity Federation (publish only)
   security-events: write  # CodeQL results (codeql only)
 ```
@@ -379,7 +379,7 @@ Double-wrapping with `uv run make` breaks the execution context.
 ```yaml
 # ✅ CORRECT - Use uv run for scripts
 - name: Generate site
-  run: uv run python scripts/generate_site.py
+  run: uv run python -m devto_mirror.site_generation.generator
 
 # ✅ CORRECT - Or use make targets that wrap them
 - name: Generate site

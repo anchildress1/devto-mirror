@@ -3,7 +3,7 @@
 > 🦄 “It’s not a bug, it’s an impromptu feature demo.”
 >—A developer, probably. Hopefully not me.
 
-Hey. I'm Ashley—the one and only human behind this repo (and all the others here or with the CheckMarK name on them). If you’ve stumbled across something security-related—a leak, a loophole, a weird edge case with evil vibes—thank you. I want to hear about it.
+Hey. I'm Ashley—the one and only human behind this repo (and most of the others around here). If you’ve stumbled across something security-related—a leak, a loophole, a weird edge case with evil vibes—thank you. I want to hear about it.
 
 ## 🚨 What Counts as a Security Issue?
 
@@ -26,7 +26,7 @@ Things that *don’t* count (but I admire your curiosity):
 
 Instead, email me directly at:
 
-**✉️ [human@checkmarkdevtools.dev](mailto:human@checkmarkdevtools.dev)**
+**✉️ [anchildress1@gmail.com](mailto:anchildress1@gmail.com)**
 
 Include:
 - What you found
@@ -47,5 +47,5 @@ I’ll read it. I’ll fix it. I might even send back a thank-you gif (no promis
 Thanks for keeping the chaos constructive. 🫶
 
 — Ashley
-[CheckMarK DevTools](https://checkmarkdevtools.dev)
-[human@checkmarkdevtools.dev](mailto:human@checkmarkdevtools.dev)
+[github.com/anchildress1](https://github.com/anchildress1)
+[anchildress1@gmail.com](mailto:anchildress1@gmail.com)
