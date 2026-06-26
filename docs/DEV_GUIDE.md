@@ -42,7 +42,7 @@ This guide covers setting up the Dev.to Mirror project for local development. Th
 5. **Generate your site locally**:
 
    ```bash
-   uv run python scripts/generate_site.py   # Creates HTML files in posts/ directory
+   uv run python -m devto_mirror.site_generation.generator   # Creates HTML files in posts/ and index.html
    ```
 
 ## Environment Variables
@@ -55,7 +55,7 @@ The project uses a `.env` file for local development configuration. This keeps s
 
 **Site URL configuration (one required):**
 
-- `SITE_DOMAIN`: Custom domain (e.g., "crawly.checkmarkdevtools.dev")
+- `SITE_DOMAIN`: Custom domain (e.g., "crawly.anchildress1.dev")
 - `GH_USERNAME`: GitHub username (e.g., "anchildress1") - used if `SITE_DOMAIN` not set
 
 **Optional variables:**
@@ -67,7 +67,7 @@ The project uses a `.env` file for local development configuration. This keeps s
 
 ```bash
 DEVTO_USERNAME=your-username
-SITE_DOMAIN=crawly.checkmarkdevtools.dev
+SITE_DOMAIN=crawly.anchildress1.dev
 FORCE_FULL_REGEN=false
 VALIDATION_MODE=false
 ```
@@ -126,15 +126,16 @@ If any hook fails, the commit is blocked until you fix the issues.
 
 ```plaintext
 devto-mirror/
-├── scripts/                 # Main site generation and utility scripts
-│   ├── generate_site.py    # Core site generation logic
-│   ├── validate_site_generation.py  # Lefthook validation
-│   └── utils.py            # Shared script utilities
-├── src/                    # Python package (AI optimization modules)
-│   └── ai_optimization/    # Content analysis and cross-references
-├── tests/                  # Unit tests
+├── src/devto_mirror/        # Python package (all application code)
+│   ├── core/               # Dev.to API client, sanitization, URL building, run-state, shared templates
+│   ├── ai_optimization/    # JSON-LD schemas, metadata, cross-references, AI sitemap
+│   ├── site_generation/    # generator.py (main pipeline) + renderer.py (index/sitemap)
+│   ├── templates/          # post_template.html
+│   └── tools/              # one-off maintenance helpers
+├── scripts/                # CI helpers (validate_site_generation.py, check_detect_secrets.py, run_pip_audit.py)
+├── tests/                  # Unit tests (unittest, 85% coverage gate)
 ├── docs/                   # Documentation
-└── .env.example           # Environment variable template
+└── .env.example            # Environment variable template
 ```
 
 ## Testing
@@ -171,7 +172,12 @@ make ai-checks              # Complete validation pipeline
 
 ## GitHub Actions Setup
 
-### Repository Configuration
+There are two deploy paths, and which one you use depends on who you are:
+
+- **Upstream (owner `anchildress1`) → Firebase Hosting** (`publish.yaml`). This is the **primary** deploy: keyless auth via Workload Identity Federation, served at `crawly.anchildress1.dev`. It only runs for the repo owner and needs the Firebase/GCP variables (see [CI_GUIDE.md](./CI_GUIDE.md)).
+- **Forks → GitHub Pages** (`deploy-gh-pages.yml`). The fork-friendly fallback that preserves the original `gh-pages` behavior. **This is the path the setup below covers.**
+
+### Repository Configuration (fork → GitHub Pages)
 
 After forking the repository, configure it for automatic deployment:
 
@@ -186,9 +192,15 @@ After forking the repository, configure it for automatic deployment:
    - Choose `gh-pages` branch (created automatically by first workflow run)
    - Your site will be available at `https://yourusername.github.io/devto-mirror`
 
-3. **Run initial workflow**:
-   - Go to Actions → "Generate and Publish Dev.to Mirror Site" → Run workflow
-   - This creates the `gh-pages` branch and deploys your first site
+3. **Delete any inherited `gh-pages` branch first**:
+   - Forks copy upstream's branches, so a leftover `gh-pages` carries upstream's `last_run.txt`/`posts_data.json`
+   - Left in place, the first run restores that state, skips your older posts, and republishes stale upstream content (`keep_files: true`)
+   - Delete it so your first run starts clean
+
+4. **Run initial workflow**:
+   - Go to Actions → "Deploy Dev.to Mirror to GitHub Pages" → Run workflow
+   - This recreates the `gh-pages` branch and deploys your first site
+   - (The "Generate and Publish Dev.to Mirror Site" workflow is the upstream Firebase deploy and only runs for the repo owner)
 
 ### Manual Workflow Triggers
 
@@ -205,6 +217,6 @@ Trigger workflows manually for testing or immediate updates:
 - Testing changes before they go live
 - Immediate updates after publishing new posts
 - Troubleshooting workflow issues
-- Full site regeneration (via `publish.yaml` with `force_full_regen=true`)
+- Full site regeneration (run your deploy workflow with `force_full_regen=true`)
 
 For detailed explanations of the CI/CD workflows and their technical implementation, see [`CI_GUIDE.md`](CI_GUIDE.md).
