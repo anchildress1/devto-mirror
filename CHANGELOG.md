@@ -11,6 +11,18 @@ have to reverse-engineer intent from commit archaeology and caffeine stains.
 
 ---
 
+## [1.2.0](https://github.com/anchildress1/devto-mirror/compare/v1.1.0...v1.2.0) (2026-06-26)
+
+
+### Features
+
+* **analytics:** opt-in Firebase Analytics on generated pages ([#93](https://github.com/anchildress1/devto-mirror/issues/93)) ([f79789d](https://github.com/anchildress1/devto-mirror/commit/f79789dab299ca57f188f151dfc2f59cb78eba64))
+
+
+### Documentation
+
+* align all documentation with current code and deploy topology ([#95](https://github.com/anchildress1/devto-mirror/issues/95)) ([74fc1f6](https://github.com/anchildress1/devto-mirror/commit/74fc1f695dbd72558485b62e3eb1af818125326f))
+
 ## [1.1.0](https://github.com/anchildress1/devto-mirror/compare/v1.0.1...v1.1.0) (2026-06-24)
 
 
