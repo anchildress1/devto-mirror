@@ -23,12 +23,15 @@ pre-commit:
       run: actionlint {staged_files}
 
 pre-push:
-  parallel: false
+  parallel: true
   commands:
-    # Identical gate to `make ai-checks` so nothing is pushed unverified.
-    # Covers format, lint (incl. validate-site), security (incl. detect-secrets),
-    # complexity, and tests. actionlint is the only piece ai-checks omits.
-    ai-checks:
-      run: make ai-checks
+    # The long checks not run at commit time. format/lint/security already
+    # ran in pre-commit, so don't redo them here.
+    tests:
+      run: make test
+    check-complexity:
+      run: make check-complexity
+    validate-site:
+      run: uv run python scripts/validate_site_generation.py
     actionlint:
       run: actionlint
