@@ -172,7 +172,12 @@ make ai-checks              # Complete validation pipeline
 
 ## GitHub Actions Setup
 
-### Repository Configuration
+There are two deploy paths, and which one you use depends on who you are:
+
+- **Upstream (owner `anchildress1`) → Firebase Hosting** (`publish.yaml`). This is the **primary** deploy: keyless auth via Workload Identity Federation, served at `crawly.anchildress1.dev`. It only runs for the repo owner and needs the Firebase/GCP variables (see [CI_GUIDE.md](./CI_GUIDE.md)).
+- **Forks → GitHub Pages** (`deploy-gh-pages.yml`). The fork-friendly fallback that preserves the original `gh-pages` behavior. **This is the path the setup below covers.**
+
+### Repository Configuration (fork → GitHub Pages)
 
 After forking the repository, configure it for automatic deployment:
 
