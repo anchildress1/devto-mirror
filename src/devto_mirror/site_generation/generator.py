@@ -18,7 +18,13 @@ from devto_mirror.core.html_sanitization import sanitize_html_content
 from devto_mirror.core.path_utils import sanitize_filename, sanitize_slug, validate_safe_path
 from devto_mirror.core.run_state import get_last_run_timestamp, mark_no_new_posts, set_last_run_timestamp
 from devto_mirror.core.url_utils import build_site_urls
-from devto_mirror.core.utils import INDEX_TMPL, SITEMAP_TMPL, dedupe_posts_by_link, get_post_template
+from devto_mirror.core.utils import (
+    INDEX_TMPL,
+    SITEMAP_TMPL,
+    dedupe_posts_by_link,
+    firebase_analytics_snippet,
+    get_post_template,
+)
 
 # Import AI optimization components
 try:
@@ -79,6 +85,7 @@ if AI_OPTIMIZATION_AVAILABLE:
 # Templates (posts + index)
 # ----------------------------
 env = Environment(autoescape=select_autoescape(["html", "xml"]))
+env.globals["firebase_analytics"] = firebase_analytics_snippet
 
 # Get the post template (from file or inline fallback)
 PAGE_TMPL = get_post_template()
@@ -129,6 +136,7 @@ COMMENT_NOTE_TMPL = env.from_string("""<!doctype html><html lang="en"><head>
 </script>
 {% endfor %}
 {% endif %}
+{{ firebase_analytics() }}
 </head><body>
 <main>
   <h1>{{ title }}</h1>

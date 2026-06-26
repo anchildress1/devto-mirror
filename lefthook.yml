@@ -25,10 +25,12 @@ pre-commit:
 pre-push:
   parallel: true
   commands:
+    # The long checks not run at commit time. format/lint/security already
+    # ran in pre-commit, so don't redo them here.
     tests:
       run: make test
-    detect-secrets:
-      run: uv run python scripts/check_detect_secrets.py
+    check-complexity:
+      run: make check-complexity
     validate-site:
       run: uv run python scripts/validate_site_generation.py
     actionlint:

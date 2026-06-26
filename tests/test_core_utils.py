@@ -309,5 +309,38 @@ class TestDedupePostsByLink(unittest.TestCase):
         self.assertGreaterEqual(activity_0, activity_1)
 
 
+class TestFirebaseAnalyticsSnippet(unittest.TestCase):
+    VALID_CONFIG = '{"apiKey": "abc", "projectId": "demo", "measurementId": "G-TEST123"}'
+
+    def test_empty_when_env_unset(self):
+        with patch.dict("os.environ", {}, clear=False):
+            import os
+
+            os.environ.pop("FIREBASE_WEB_CONFIG", None)
+            self.assertEqual(str(utils_module.firebase_analytics_snippet()), "")
+
+    def test_empty_on_invalid_json(self):
+        with patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": "not json"}):
+            self.assertEqual(str(utils_module.firebase_analytics_snippet()), "")
+
+    def test_empty_without_measurement_id(self):
+        with patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": '{"apiKey": "abc"}'}):
+            self.assertEqual(str(utils_module.firebase_analytics_snippet()), "")
+
+    def test_renders_snippet_when_configured(self):
+        with patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": self.VALID_CONFIG}):
+            snippet = str(utils_module.firebase_analytics_snippet())
+        self.assertIn("getAnalytics", snippet)
+        self.assertIn("G-TEST123", snippet)
+        self.assertIn(utils_module.FIREBASE_SDK_VERSION, snippet)
+
+    def test_injected_into_index_template(self):
+        with patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": self.VALID_CONFIG}):
+            html = utils_module.INDEX_TMPL.render(
+                username="u", posts=[], comments=[], canonical="https://x", home="https://x", site_description=""
+            )
+        self.assertIn("G-TEST123", html)
+
+
 if __name__ == "__main__":
     unittest.main()
