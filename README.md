@@ -65,7 +65,7 @@ It runs on a schedule, fetches only what changed since last time, and deploys it
 
 ## Architecture
 
-One generation pipeline, two deploy targets. The upstream repo (owner `anchildress1`) ships to Firebase; **forks ship to GitHub Pages**. A shared composite action guarantees both produce identical output, and incremental state lives on a separate branch from the deployed site.
+One generation pipeline, two deploy targets. The upstream repo (owner `anchildress1`) ships to Firebase; **forks ship to GitHub Pages**. A shared composite action guarantees both produce identical output. Incremental state lives on a dedicated branch — kept apart from the deploy upstream (the `mirror-state` branch), and alongside the site on `gh-pages` for forks.
 
 ```mermaid
 flowchart TD
@@ -73,7 +73,7 @@ flowchart TD
     accDescr: Posts are fetched incrementally from the Dev.to API, rendered to static HTML by the generator and renderer modules, assembled by a shared composite action, then deployed to Firebase Hosting on the upstream repo or to GitHub Pages on forks, with incremental state stored on separate branches.
 
     devto([Dev.to API]) -->|incremental fetch via last_run.txt| gen[generator module]
-    gen -->|AI optimization: JSON-LD, cross-refs, metadata| art[/posts/*.html, index.html, sitemap.xml, posts_data.json/]
+    gen -->|AI optimization: JSON-LD, cross-refs, metadata| art[/"posts/*.html, index.html, sitemap.xml, posts_data.json"/]
     ren[renderer module] -->|re-render index + sitemap| art
     art --> action[generate-site composite action]
     action --> pub[publish.yaml — upstream only]
@@ -97,9 +97,10 @@ These steps cover the **fork path** (GitHub Pages)—what almost everyone wants.
    - `SITE_DOMAIN` – _(optional)_ custom domain like `crawly.anchildress1.dev`
 3. **(Optional) Set a secret** (same page → Secrets):
    - `DEVTO_KEY` – only needed for private/draft posts
-4. **Update** `comments.txt` to pick which comments become standalone pages (or delete it).
-5. **Run the workflow**: Actions → **Deploy Dev.to Mirror to GitHub Pages** → Run workflow. This creates the `gh-pages` branch.
-6. **Enable Pages**: Settings → Pages → Deploy from a branch → `gh-pages`.
+4. **Delete the inherited `gh-pages` branch** if your fork copied one from upstream. Forks inherit upstream's branches, so a leftover `gh-pages` carries upstream's `last_run.txt`/`posts_data.json` — the first run would restore that state, skip your older posts, and keep publishing stale upstream content (the deploy uses `keep_files: true`). Start clean.
+5. **Update** `comments.txt` to pick which comments become standalone pages (or delete it).
+6. **Run the workflow**: Actions → **Deploy Dev.to Mirror to GitHub Pages** → Run workflow. This recreates the `gh-pages` branch.
+7. **Enable Pages**: Settings → Pages → Deploy from a branch → `gh-pages`.
 
 After that it pulls new content automatically every **Wednesday at 14:40 UTC** (≈09:40 ET in winter, 10:40 ET during DST).
 

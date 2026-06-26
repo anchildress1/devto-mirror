@@ -192,9 +192,14 @@ After forking the repository, configure it for automatic deployment:
    - Choose `gh-pages` branch (created automatically by first workflow run)
    - Your site will be available at `https://yourusername.github.io/devto-mirror`
 
-3. **Run initial workflow**:
+3. **Delete any inherited `gh-pages` branch first**:
+   - Forks copy upstream's branches, so a leftover `gh-pages` carries upstream's `last_run.txt`/`posts_data.json`
+   - Left in place, the first run restores that state, skips your older posts, and republishes stale upstream content (`keep_files: true`)
+   - Delete it so your first run starts clean
+
+4. **Run initial workflow**:
    - Go to Actions → "Deploy Dev.to Mirror to GitHub Pages" → Run workflow
-   - This creates the `gh-pages` branch and deploys your first site
+   - This recreates the `gh-pages` branch and deploys your first site
    - (The "Generate and Publish Dev.to Mirror Site" workflow is the upstream Firebase deploy and only runs for the repo owner)
 
 ### Manual Workflow Triggers
