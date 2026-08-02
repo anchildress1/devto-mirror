@@ -37,6 +37,7 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 
 <!-- prettier-ignore-start -->
 <!--START_SECTION:rai-badge-->
+![AI attribution](https://img.shields.io/badge/AI%20attribution-55%25%20since%202025--08-7C3AED?style=flat)
 <!--END_SECTION:rai-badge-->
 <!-- prettier-ignore-end -->
 
