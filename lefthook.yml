@@ -22,6 +22,11 @@ pre-commit:
       glob: ".github/workflows/*.y*ml"
       run: actionlint {staged_files}
 
+commit-msg:
+  commands:
+    gitlint:
+      run: uv run gitlint-rai --msg-filename {1}
+
 pre-push:
   parallel: true
   commands:
