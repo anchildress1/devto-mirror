@@ -306,7 +306,7 @@ wheels = [
 
 [[package]]
 name = "devto-mirror"
-version = "1.2.0"
+version = "1.2.1"
 source = { editable = "." }
 dependencies = [
     { name = "bleach" },
