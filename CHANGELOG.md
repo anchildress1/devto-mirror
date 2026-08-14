@@ -11,6 +11,13 @@ have to reverse-engineer intent from commit archaeology and caffeine stains.
 
 ---
 
+## [1.2.1](https://github.com/anchildress1/devto-mirror/compare/v1.2.0...v1.2.1) (2026-08-14)
+
+
+### Documentation
+
+* update AI attribution badge to 55% ([#101](https://github.com/anchildress1/devto-mirror/issues/101)) ([25e27ab](https://github.com/anchildress1/devto-mirror/commit/25e27abd6caced0b414fd3a893992172ce770119))
+
 ## [1.2.0](https://github.com/anchildress1/devto-mirror/compare/v1.1.0...v1.2.0) (2026-06-26)
 
 
