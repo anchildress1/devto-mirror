@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import contextlib
 import shutil
-import subprocess  # nosec B404
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -17,9 +17,7 @@ def main() -> int:
         print(f"detect-secrets baseline file is missing: {BASELINE}", file=sys.stderr)
         return 2
 
-    files = subprocess.run(  # nosec B603 B607
-        ["git", "ls-files", "-z"], capture_output=True, text=True, check=True
-    ).stdout.split("\0")
+    files = subprocess.run(["git", "ls-files", "-z"], capture_output=True, text=True, check=True).stdout.split("\0")
     # The baseline stores secret hashes, which would flag themselves.
     files = [f for f in files if f and f != str(BASELINE)]
 
@@ -30,7 +28,7 @@ def main() -> int:
     shutil.copyfile(BASELINE, tmp_baseline)
     try:
         # Exit codes: 0 clean, 1 new secrets (printed to stdout), 3 baseline is stale.
-        proc = subprocess.run(["detect-secrets-hook", "--baseline", tmp_baseline, *files])  # nosec B603 B607
+        proc = subprocess.run(["detect-secrets-hook", "--baseline", tmp_baseline, *files])
     finally:
         with contextlib.suppress(OSError):
             Path(tmp_baseline).unlink()
