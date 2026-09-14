@@ -83,7 +83,7 @@ jobs:
 
       - name: Authenticate to Google Cloud
         if: steps.site.outputs.no_new_posts != 'true'
-        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
@@ -101,7 +101,7 @@ jobs:
         timeout-minutes: 5
         run: |
           echo "## 🚀 Firebase Deploy" >> "$GITHUB_STEP_SUMMARY"
-          npx --yes --ignore-scripts firebase-tools@15.22.1 deploy \
+          npx --yes --ignore-scripts firebase-tools@15.30.0 deploy \
             --only hosting \
             --project "$FIREBASE_PROJECT_ID" \
             --non-interactive

@@ -83,14 +83,14 @@ runs:
         fi
 
     - name: Set up uv
-      uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+      uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
       with:
         # Pinned: --no-build exempts the editable first-party project only on uv >= 0.12.
         version: "0.12.13"
         python-version: "3.12"
 
     - name: Cache uv dependencies
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: ~/.cache/uv
         key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
