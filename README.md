@@ -47,9 +47,9 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 
 ## What is this?
 
-Auto-generates a static mirror of your Dev.to blog with a generous `robots.txt` for AI crawlers. Plain HTML, sitemap, canonical links back to Dev.to—zero maintenance. Every page is enriched with JSON-LD structured data and cross-reference metadata so search engines and LLMs can actually parse it.
+Auto-generates a static mirror of your Dev.to blog with a generous `robots.txt` for AI crawlers. Plain HTML, sitemap, canonical links back to Dev.to—zero maintenance. Post pages carry schema.org `BlogPosting` JSON-LD and links to related posts so search engines and LLMs can actually parse it.
 
-It runs on a schedule, fetches only what changed since last time, and deploys itself. You set two repo variables and walk away.
+It runs weekly on your fork, fetches only new or edited articles, and deploys itself. You set two repo variables and walk away.
 
 ---
 
@@ -71,23 +71,26 @@ It runs on a schedule, fetches only what changed since last time, and deploys it
 
 ## Architecture
 
-One generation pipeline, two deploy targets. The upstream repo (owner `anchildress1`) ships to Firebase; **forks ship to GitHub Pages**. A shared composite action guarantees both produce identical output. Incremental state lives on a dedicated branch — kept apart from the deploy upstream (the `mirror-state` branch), and alongside the site on `gh-pages` for forks.
+One generator, two deploy targets. The upstream repo (owner `anchildress1`) ships to Firebase; **forks ship to GitHub Pages**. A shared composite action guarantees both produce identical output. The only state is the article store, `posts_data.json`: upstream keeps it on a dedicated `mirror-state` branch, forks keep it on `gh-pages` next to the site.
 
 ```mermaid
+%%{init: {"theme": "default"}}%%
 flowchart TD
     accTitle: Dev.to Mirror build and deploy pipeline
-    accDescr: Posts are fetched incrementally from the Dev.to API, rendered to static HTML by the generator and renderer modules, assembled by a shared composite action, then deployed to Firebase Hosting on the upstream repo or to GitHub Pages on forks, with incremental state stored on separate branches.
+    accDescr: The shared generate-site action restores posts_data.json from the state branch, the generator syncs it against the Dev.to API and renders the whole site into _deploy, then publish.yaml deploys to Firebase Hosting and saves the store to mirror-state upstream, while deploy-gh-pages.yml publishes site and store together to gh-pages on forks. The next run restores the store from that branch.
 
-    devto([Dev.to API]) -->|incremental fetch via last_run.txt| gen[generator module]
-    gen -->|AI optimization: JSON-LD, cross-refs, metadata| art[/"posts/*.html, index.html, sitemap.xml, posts_data.json"/]
-    ren[renderer module] -->|re-render index + sitemap| art
-    art --> action[generate-site composite action]
-    action --> pub[publish.yaml — upstream only]
-    action --> ghp[deploy-gh-pages.yml — forks]
+    devto([Dev.to API]) -->|list every article, fetch new or edited| gen
+    subgraph action [generate-site composite action]
+        restore[restore posts_data.json from state branch] --> gen[generator]
+        gen -->|Jinja templates| out[/"_deploy/"/]
+    end
+    out --> pub[publish.yaml — upstream only]
+    out --> ghp[deploy-gh-pages.yml — forks]
     pub -->|WIF / OIDC keyless auth| fb[Firebase Hosting<br/>crawly.anchildress1.dev]
-    ghp --> pages[GitHub Pages<br/>username.github.io/devto-mirror]
-    pub -.incremental state.-> ms[(mirror-state branch)]
-    ghp -.incremental state.-> gp[(gh-pages branch)]
+    pub -->|posts_data.json| ms[(mirror-state branch)]
+    ghp -->|site + posts_data.json| gp[(gh-pages branch)]
+    ms -.next run.-> restore
+    gp -.next run.-> restore
 ```
 
 ---
@@ -100,18 +103,17 @@ These steps cover the **fork path** (GitHub Pages)—what almost everyone wants.
 2. **Set repository variables** (Settings → Secrets and variables → Actions → Variables):
    - `DEVTO_USERNAME` – your Dev.to username
    - `GH_USERNAME` – your GitHub username (required unless you set a custom domain)
-   - `SITE_DOMAIN` – _(optional)_ custom domain like `crawly.anchildress1.dev`
+   - `SITE_DOMAIN` – _(optional)_ custom domain like `crawly.anchildress1.dev` (bare domain—it becomes the Pages `CNAME`)
 3. **(Optional) Set a secret** (same page → Secrets):
-   - `DEVTO_KEY` – only needed for private/draft posts
-4. **Delete the inherited `gh-pages` branch** if your fork copied one from upstream. Forks inherit upstream's branches, so a leftover `gh-pages` carries upstream's `last_run.txt`/`posts_data.json` — the first run would restore that state, skip your older posts, and keep publishing stale upstream content (the deploy uses `keep_files: true`). Start clean.
-5. **Update** `comments.txt` to pick which comments become standalone pages (or delete it).
-6. **Run the workflow**: Actions → **Deploy Dev.to Mirror to GitHub Pages** → Run workflow. This recreates the `gh-pages` branch.
-7. **Enable Pages**: Settings → Pages → Deploy from a branch → `gh-pages`.
+   - `DEVTO_KEY` – Dev.to API key; only raises API rate limits
+4. **Update** `comments.txt` to pick which comments become standalone pages—one `URL | optional context` per line (or delete it).
+5. **Run the workflow**: Actions → **Deploy Dev.to Mirror to GitHub Pages** → Run workflow. This creates the `gh-pages` branch, or replaces the contents of one inherited from upstream.
+6. **Enable Pages**: Settings → Pages → Deploy from a branch → `gh-pages`.
 
 After that it pulls new content automatically every **Wednesday at 14:40 UTC** (≈09:40 ET in winter, 10:40 ET during DST).
 
 > [!IMPORTANT]
-> Forks publish to GitHub Pages via `deploy-gh-pages.yml`, with incremental state riding along on the `gh-pages` branch. The upstream repo deploys to **Firebase Hosting** (`publish.yaml`) and keeps its state on a separate `mirror-state` branch. To force a complete refresh, trigger the workflow with the `force_full_regen` option.
+> Forks publish to GitHub Pages via `deploy-gh-pages.yml`, with the article store (`posts_data.json`) riding along on the `gh-pages` branch. The upstream repo deploys to **Firebase Hosting** (`publish.yaml`) and keeps its store on a separate `mirror-state` branch. To refetch every article, trigger the workflow with the `force_full_regen` option.
 
 ---
 
@@ -126,7 +128,7 @@ Everything is driven by repository variables and secrets—no config files to ed
 | `DEVTO_USERNAME` | Variable | ✅ | Dev.to profile to mirror |
 | `GH_USERNAME` | Variable | ✅ (unless `SITE_DOMAIN` set) | Builds the GitHub Pages URL |
 | `SITE_DOMAIN` | Variable | optional | Custom domain; overrides the Pages/Firebase URL |
-| `DEVTO_KEY` | Secret | optional | Dev.to API key—only for private/draft posts |
+| `DEVTO_KEY` | Secret | optional | Dev.to API key—only raises API rate limits (just public endpoints are called) |
 
 ### Upstream-only (Firebase deploy)
 
@@ -134,7 +136,7 @@ Everything is driven by repository variables and secrets—no config files to ed
 | --- | --- | --- | --- |
 | `GCP_WORKLOAD_IDENTITY_PROVIDER` | Variable | ✅ for Firebase | Full WIF provider resource name (keyless auth) |
 | `GCP_DEPLOY_SERVICE_ACCOUNT` | Variable | ✅ for Firebase | Deploy SA email (needs `roles/firebasehosting.admin`) |
-| `FIREBASE_PROJECT_ID` | Variable | optional | Firebase project id (defaults to `anchildress1`) |
+| `FIREBASE_PROJECT_ID` | Variable | optional | Firebase project id (defaults to `anchildress1`); without `SITE_DOMAIN`, the site URL is `<id>.web.app` |
 | `FIREBASE_WEB_CONFIG` | Variable | optional | Firebase web config JSON; enables **opt-in** GA4 Analytics when set |
 
 > [!NOTE]
@@ -144,12 +146,19 @@ Everything is driven by repository variables and secrets—no config files to ed
 
 ## How it works
 
-Fetches posts via the Dev.to API (incremental updates tracked in `last_run.txt`), then generates **plain HTML** with canonical links back to Dev.to, AI-specific structured data, plus `sitemap.xml` and `robots.txt`. Optionally renders selected comments as standalone pages via `comments.txt`.
+One command does everything: `python -m devto_mirror.site_generation.generator`.
 
-- **`generator`** (`python -m devto_mirror.site_generation.generator`) — the main pipeline: fetch → merge → dedupe → write `posts/*.html`, `index.html`, `sitemap.xml`, `posts_data.json`, plus AI cross-references and JSON-LD.
-- **`renderer`** (`python -m devto_mirror.site_generation.renderer`) — re-renders `index.html` and `sitemap.xml` from the cached `posts_data.json`.
+1. **Sync.** It lists every article on your Dev.to profile and compares each one's latest activity (published or edited) with the stored copy in `posts_data.json`. Only new or edited articles are fetched in full; articles Dev.to no longer lists are dropped from the store.
+2. **Render.** It rebuilds the whole site into `_deploy/` from the Jinja templates in `src/devto_mirror/templates/`:
+   - `posts/<slug>.html` — one page per article, with `BlogPosting` JSON-LD and up to five related posts ranked by shared tags
+   - `comments/<id>.html` — one page per line of `comments.txt`
+   - `index.html`, `sitemap.xml` (absolute URLs), `robots.txt`, `llms.txt`
 
-**Force full regeneration:** trigger either deploy workflow with `force_full_regen: true`.
+Every page's canonical URL points at Dev.to: the article's own canonical (falling back to its Dev.to URL), your Dev.to profile for the index, and the comment itself for comment pages.
+
+Timeouts, rate limits (429), and 5xx responses are retried with backoff, honoring `Retry-After`. Anything still failing after that fails the run, so a partial site never deploys and the store is never overwritten with half a fetch. If Dev.to lists zero articles, or a sync would drop more than half the stored ones, the generator refuses to publish rather than gut the site.
+
+**Force full regeneration:** trigger either deploy workflow with `force_full_regen: true` to ignore the store and refetch every article. It's also the way past the drop-half guard after a genuine mass deletion.
 
 > [!WARNING]
 > Root-level `robots.txt` / `llms.txt` (served from `username.github.io` rather than the project path) isn't wired up yet. [Google Search Console](https://search.google.com/search-console) can have trouble finding them at the project path. If you need root-level crawler files, copy `robots.txt` and `llms.txt` into your root user/org Pages repo manually.
@@ -161,19 +170,18 @@ Fetches posts via the Dev.to API (incremental updates tracked in `last_run.txt`)
 ```plaintext
 devto-mirror/
 ├── src/devto_mirror/
-│   ├── core/              # Dev.to API client, HTML sanitization, URL building,
-│   │                      #   run-state, shared Jinja templates + Firebase Analytics
-│   ├── ai_optimization/   # JSON-LD schemas, metadata enhancement, cross-references,
-│   │                      #   AI-friendly sitemap generation
-│   ├── site_generation/   # generator.py (main pipeline) + renderer.py (index/sitemap)
-│   ├── templates/         # post_template.html
-│   └── tools/             # one-off maintenance helpers (clean_posts, fix_slugs, ...)
-├── scripts/               # CI helpers (validate_site_generation, check_detect_secrets, run_pip_audit)
+│   ├── core/              # Dev.to API client, HTML sanitization, path/URL helpers,
+│   │                      #   Jinja environment + optional Firebase Analytics
+│   ├── site_generation/   # generator.py (entry point), post.py (Post model),
+│   │                      #   seo.py (JSON-LD + related posts)
+│   └── templates/         # base, post, index, comment pages; sitemap.xml, robots.txt, llms.txt
+├── scripts/               # security helpers (check_detect_secrets, run_pip_audit)
 ├── tests/                 # unittest suite (85% coverage gate)
-├── assets/                # banner, robots.txt, llms.txt
+├── assets/                # banner + social image
+├── comments.txt           # comments to publish as standalone pages
 ├── .github/
 │   ├── workflows/         # publish.yaml (Firebase), deploy-gh-pages.yml (forks),
-│   │                      #   codeql.yml, security-ci.yml, release-please.yml
+│   │                      #   security-ci.yml, codeql.yml, release-please.yml, rai-attribution.yml
 │   └── actions/generate-site/   # composite action shared by both deploy workflows
 ├── docs/                  # deep-dive guides (start at docs/README.md)
 ├── Makefile               # make install / ai-checks / test / ...
@@ -199,14 +207,14 @@ make install
 cp .env.example .env
 # Edit .env with your DEVTO_USERNAME and GH_USERNAME
 
-# Generate the site locally
+# Generate the site into _deploy/ (also writes posts_data.json)
 uv run python -m devto_mirror.site_generation.generator
 
 # Run the full validation suite (format, lint, security, complexity, tests)
 make ai-checks
 ```
 
-`make install` wires up Lefthook so `pre-commit` (format, lint, security) and `pre-push` (tests, complexity, site validation) run automatically. Full details in the [Development Guide](./docs/DEV_GUIDE.md).
+`make install` wires up Lefthook so `pre-commit` (format, lint, security) and `pre-push` (tests, complexity, actionlint) run automatically. Full details in the [Development Guide](./docs/DEV_GUIDE.md).
 
 ---
 

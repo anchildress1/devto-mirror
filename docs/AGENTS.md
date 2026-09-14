@@ -1,41 +1,22 @@
-# Docs rules (AI-only)
+- Applies to `docs/**` except this file.
+- Write `docs/*.md` for humans catching up: short prose with context. Instructions stay here; docs never address an AI reader.
+- Update an existing doc before creating a new one. Cut anything that does not answer a reader's question.
+- Do NOT rewrite ADRs or history docs (`docs/implementations/*`). If a change is needed, add a new doc and link to the historical one.
 
-## 🎯 Scope
+## Structure
 
-- Applies only to `./docs/**`.
-- Do NOT rewrite ADRs/history docs.
-	- If a change is needed, add a new doc and link to the historical doc.
+- Line 1 is the only H1: `# <Title>`.
+  - Missing H1 → use the first `##` heading text minus its emoji; else the file stem (`SECURITY_ANALYSIS.md` → `Security analysis`).
+  - A change that would add a second H1 → STOP and ask the user (renderers treat H1 as the page title).
+- Headings after the H1 are `##`–`####`.
+- Every `##` heading starts with an emoji (`## 🔧 Title`).
 
-## ✅ Required structure
+## Diagrams
 
-- Every docs Markdown file MUST begin with exactly one H1 title on line 1:
-	- `# <Title>`
-	- H1 MUST appear at most once.
-	- If editing an existing doc that lacks an H1, add one.
-		- Deterministic title derivation:
-			1) Use the first `##` heading text, stripping any leading emoji.
-			2) Else use file stem (e.g., `SECURITY_ANALYSIS.md` → `Security analysis`).
+- Mermaid only, with `accTitle`/`accDescr` and `%%{init: {"theme": "default"}}%%`.
+- Validate every added or modified diagram with a Mermaid validation tool.
+- No validation tool available → do not add or modify the diagram; tell the user validation could not be performed.
 
-- All headings after the H1 MUST be `##`–`####`.
+## New docs
 
-- Every `##` heading MUST start with a short emoji prefix (e.g., `## 🔧 Title`).
-	- If a change would introduce a second H1, STOP and ask the user to confirm.
-		- Reason to cite: most Markdown renderers treat H1 as the single page title.
-
-## 🧩 Diagrams
-
-- If no Mermaid rendering/validation capability is available:
-	- MUST NOT add or modify Mermaid diagrams.
-	- MUST tell the user that validation could not be performed.
-	- MAY leave a TODO note describing what needs validation.
-
-## 🧬 Consistency rule
-
-- Before creating a new doc, read exactly 2 existing docs:
-	1) `docs/README.md` (if present)
-	2) one doc in the same `docs/<subfolder>/` as the target (if any)
-
-## 🧠 Optimization target
-
-- Optimize for AI execution, not human reading.
-- Prefer checklists and invariants over prose.
+- Before creating one, read `docs/README.md` and one doc in the target `docs/<subfolder>/` (if any).
