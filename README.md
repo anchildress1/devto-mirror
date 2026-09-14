@@ -4,7 +4,7 @@
 
 ![anchildress1/devto-mirror social card: A colorful crawler](./assets/new-devto-mirror-crawlies-banner.jpg)
 
-This Copilot generated utility helps make your Dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with generous `robots.txt` rules. Avoiding Dante's DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.txt—_that's it_ (although I'm slowly working through enhancements). If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
+This Copilot generated utility helps make your Dev.to blogs more discoverable by search engines by automatically generating and hosting a mirror site with `robots.txt` rules that welcome search engines and AI answer engines—but not AI training. Avoiding Dante's DevOps and the maintenance headache. This is a simple html, no frills approach with a sitemap and robots.txt—_that's it_ (although I'm slowly working through enhancements). If you're like me and treat some comments as mini-posts, you can selectively pull in the ones that deserve their own page.
 
 > [!NOTE]
 >
@@ -47,7 +47,7 @@ This Copilot generated utility helps make your Dev.to blogs more discoverable by
 
 ## What is this?
 
-Auto-generates a static mirror of your Dev.to blog with a generous `robots.txt` for AI crawlers. Plain HTML, sitemap, canonical links back to Dev.to—zero maintenance. Post pages carry schema.org `BlogPosting` JSON-LD and links to related posts so search engines and LLMs can actually parse it.
+Auto-generates a static mirror of your Dev.to blog that search engines and AI assistants can read freely, while opting out of AI training. Plain HTML, sitemap, canonical links back to Dev.to—zero maintenance. Post pages carry schema.org `BlogPosting` JSON-LD and links to related posts so search engines and LLMs can actually parse it.
 
 It runs weekly on your fork, fetches only new or edited articles, and deploys itself. You set two repo variables and walk away.
 
@@ -162,6 +162,17 @@ Timeouts, rate limits (429), and 5xx responses are retried with backoff, honorin
 
 > [!WARNING]
 > Root-level `robots.txt` / `llms.txt` (served from `username.github.io` rather than the project path) isn't wired up yet. [Google Search Console](https://search.google.com/search-console) can have trouble finding them at the project path. If you need root-level crawler files, copy `robots.txt` and `llms.txt` into your root user/org Pages repo manually.
+
+### Crawler policy
+
+The mirror is for being *found*, not for being scraped into a training set:
+
+- **Search engines** (Googlebot, Bingbot, …) and **AI answer engines** fetching pages live—OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot—may crawl everything.
+- **AI training crawlers** (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, meta-externalagent, CCBot, Bytespider, and a few dataset scrapers) are disallowed in `robots.txt`.
+- `robots.txt` also declares `Content-Signal: search=yes, ai-input=yes, ai-train=no`. Every page carries `noai, noimageai` in its robots meta and `<meta name="tdm-reservation" content="1">`, the W3C TDMRep flag that reserves text-and-data-mining rights (the EU DSM opt-out); it covers mining broadly, so `robots.txt` is where live retrieval is explicitly welcomed.
+- `llms.txt` lists every mirrored page with its Dev.to canonical and states the same terms.
+
+Two caveats worth knowing. These are signals, not locks: well-behaved crawlers honor them, others don't. And some vendors bundle training with other AI uses: Google files Gemini *grounding* under the same `Google-Extended` token, and Meta's `meta-externalagent` also feeds its AI products, so blocking training keeps pages out of those too. Google Search, including AI Overviews, runs on Googlebot and is unaffected.
 
 ---
 
