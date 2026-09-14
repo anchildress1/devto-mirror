@@ -38,19 +38,21 @@ security:  ## Run security checks
 	fi
 	uv run python scripts/check_detect_secrets.py
 
-check-complexity:  ## Check cognitive complexity (max 15)
-	@echo "🔍 Checking cognitive complexity (max 15)..."
-	@uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\(((1[6-9])|([2-9][0-9])|([1-9][0-9]{2,}))\)" && \
-		echo "❌ Functions with complexity >15 found. See docs/COMPLEXITY_REFACTORING.md" && exit 1 || \
-		echo "✅ All functions within complexity limits"
+check-complexity:  ## Check cyclomatic complexity (max 15)
+	@echo "🔍 Checking cyclomatic complexity (max 15)..."
+	@report=$$(uv run radon cc scripts/ src/ -s) || { echo "❌ radon failed"; exit 1; }; \
+	if echo "$$report" | grep -E "\(((1[6-9])|([2-9][0-9])|([1-9][0-9]{2,}))\)"; then \
+		echo "❌ Functions with complexity >15 found; split them up."; exit 1; \
+	fi; \
+	echo "✅ All functions within complexity limits"
 
-ai-checks:  ## Single command: format → lint → security → complexity → test + site (POC ready)
+ai-checks:  ## Single command: format → lint → security → complexity → test
 	@set -e; \
 	echo "🔍 format → lint → security → complexity → test"; \
 	$(MAKE) format && echo "  ✓ format" || (echo "  ✗ format"; exit 1); \
 	$(MAKE) lint && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
 	$(MAKE) security && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
-	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ✗ complexity (see docs/COMPLEXITY_REFACTORING.md)"; exit 1); \
+	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ✗ complexity"; exit 1); \
 	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
 	echo "✅ Ready to commit."
 
