@@ -44,3 +44,7 @@ jobs:
           echo "## 🔍 Validation Results" >> "$GITHUB_STEP_SUMMARY"
           make ai-checks
           echo "✅ All checks passed" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if checks rewrote tracked files
+        # ai-checks formats in place, so unformatted code would otherwise pass.
+        run: git diff --exit-code
