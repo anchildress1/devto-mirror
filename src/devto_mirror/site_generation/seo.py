@@ -4,19 +4,21 @@ from __future__ import annotations
 
 from devto_mirror.site_generation.post import Post
 
+TYPE = "@type"
+
 
 def article_schema(post: Post) -> dict:
     """Return schema.org BlogPosting JSON-LD attributing the post to its Dev.to original."""
     schema = {
         "@context": "https://schema.org",
-        "@type": "BlogPosting",
+        TYPE: "BlogPosting",
         "headline": post.title,
         "url": post.canonical,
         "mainEntityOfPage": post.canonical,
         "datePublished": post.published,
         "dateModified": post.modified,
-        "author": {"@type": "Person", "name": post.author, "url": f"https://dev.to/{post.username}"},
-        "publisher": {"@type": "Organization", "name": "DEV Community", "url": "https://dev.to"},
+        "author": {TYPE: "Person", "name": post.author, "url": f"https://dev.to/{post.username}"},
+        "publisher": {TYPE: "Organization", "name": "DEV Community", "url": "https://dev.to"},
     }
     optional = {
         "description": post.description,

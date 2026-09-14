@@ -194,9 +194,10 @@ class TestSyncArticles(unittest.TestCase):
 
     def test_refuses_when_more_than_half_of_the_store_vanishes(self):
         self.listing = [make_summary(1)]
+        stored = [make_article(1), make_article(2), make_article(3)]
 
         with self.assertLogs(api_client.logger, "WARNING"), self.assertRaisesRegex(RuntimeError, "2 of 3 stored"):
-            api_client.sync_articles("ash", [make_article(1), make_article(2), make_article(3)])
+            api_client.sync_articles("ash", stored)
 
     def test_skips_articles_listed_twice_across_pages(self):
         self.listing = [make_summary(1), make_summary(2), make_summary(1)]
@@ -226,9 +227,10 @@ class TestSyncArticles(unittest.TestCase):
 
     def test_propagates_listing_failure(self):
         self.session.get.side_effect = requests.ConnectionError("down")
+        stored = [make_article(1)]
 
         with self.assertRaises(requests.ConnectionError):
-            api_client.sync_articles("ash", [make_article(1)])
+            api_client.sync_articles("ash", stored)
 
 
 if __name__ == "__main__":

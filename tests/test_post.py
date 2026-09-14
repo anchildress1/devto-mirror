@@ -64,8 +64,10 @@ class TestPostFromArticle(unittest.TestCase):
         self.assertEqual(post.slug, "---etc-passwd")
 
     def test_rejects_article_with_empty_slug(self):
+        article = make_article(1, slug="")
+
         with self.assertRaisesRegex(ValueError, "no usable slug"):
-            Post.from_article(make_article(1, slug=""))
+            Post.from_article(article)
 
     def test_rejects_article_missing_a_required_field(self):
         for keys in (("slug",), ("title",), ("published_at",), ("url", "canonical_url")):
