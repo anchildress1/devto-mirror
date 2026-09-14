@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: write   # push incremental state back to gh-pages
+      contents: write   # push incremental state to mirror-state
       id-token: write    # OIDC token for Workload Identity Federation
     environment:
       name: deploy
@@ -63,9 +63,8 @@ jobs:
     env:
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}
     steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v7
 
       - name: Generate site
         id: site
@@ -102,7 +101,7 @@ jobs:
         timeout-minutes: 5
         run: |
           echo "## 🚀 Firebase Deploy" >> "$GITHUB_STEP_SUMMARY"
-          npx --yes firebase-tools@15.22.1 deploy \
+          npx --yes --ignore-scripts firebase-tools@15.22.1 deploy \
             --only hosting \
             --project "$FIREBASE_PROJECT_ID" \
             --non-interactive
