@@ -16,6 +16,30 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, noai, noimageai">
 <meta name="tdm-reservation" content="1">
+<style>
+:root{color-scheme:light dark;--fg:#1b1b1f;--muted:#5c5f66;--bg:#fdfdfc;--line:#e3e3e0;--link:#1d4ed8;--code:#f3f3f1}
+@media (prefers-color-scheme:dark){:root{--fg:#e8e8ea;--muted:#a2a5ad;--bg:#141416;--line:#2c2c31;--link:#8ab4ff;--code:#1f1f23}}
+*{box-sizing:border-box}
+body{margin:0;padding:2rem 1rem;background:var(--bg);color:var(--fg);font:1.0625rem/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:44rem;margin:0 auto}
+a{color:var(--link);text-underline-offset:.15em}
+h1,h2,h3{line-height:1.25;text-wrap:balance}
+img,video{max-width:100%;height:auto}
+pre,code{font:.9em/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--code);border-radius:4px}
+code{padding:.1em .3em}
+pre{padding:1rem;overflow-x:auto}
+pre code{padding:0;background:none;font-size:inherit}
+blockquote{margin:1.5rem 0;padding-left:1rem;border-left:3px solid var(--line);color:var(--muted)}
+table{border-collapse:collapse;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:.4rem .6rem}
+.meta{color:var(--muted);font-size:.9rem}
+time{white-space:nowrap}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;padding:0;list-style:none}
+.tags li{border:1px solid var(--line);border-radius:999px;padding:0 .6rem;font-size:.85rem}
+.related{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line)}
+.posts{list-style:none;padding:0}
+.posts li{margin-bottom:1.25rem}
+</style>
 {% block head %}{% endblock %}
 {{ firebase_analytics() }}
 </head>

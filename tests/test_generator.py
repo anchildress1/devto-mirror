@@ -102,7 +102,7 @@ class TestBuildSite(TempDirTestCase):
 
         self.assertEqual(_canonicals(html), ["https://dev.to/ash/original"])
         self.assertIn('<h1><a href="https://dev.to/ash/post-1">', html)
-        self.assertIn('<a href="https://dev.to/ash/post-1">Read on Dev.to →</a>', html)
+        self.assertIn('<a href="https://dev.to/ash/post-1">Read and discuss on Dev.to →</a>', html)
 
     def test_sitemap_dates_every_post_and_the_home_page(self):
         root = ET.fromstring(self._read("sitemap.xml"))
