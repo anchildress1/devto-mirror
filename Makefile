@@ -29,12 +29,6 @@ lint:  ## Run linting checks (formatting, linting, security)
 format:  ## Format code with Black
 	uv run black src/ tests/ scripts/ --line-length 120
 
-prechecks:  ## Run prechecks on staged files (applies formatting to staged files only)
-	@./scripts/prechecks.sh $$(git diff --name-only --cached)
-
-prechecks-full:  ## Run full prechecks across the repo (force full run)
-	@./scripts/prechecks.sh $$(git ls-files)
-
 security:  ## Run security checks
 	uv run bandit -r scripts src/ -ll -iii
 	@if [ "$$CI" = "true" ] || [ "$$GITHUB_ACTIONS" = "true" ] || [ "$$PIP_AUDIT" = "1" ]; then \
