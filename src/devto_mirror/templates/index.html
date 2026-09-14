@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% set title = site_name %}
+{% set canonical = "https://dev.to/" ~ username %}
+{% set description = "Mirror of " ~ username ~ "'s Dev.to blog posts. Canonical lives on Dev.to. This is just a crawler-friendly mirror." %}
+{% set author = username %}
+{% set image = default_image %}
+{% set og_type = "website" %}
+{% block main %}
+<h1>{{ site_name }}</h1>
+<ul>
+{% for post in posts %}
+  <li><a href="posts/{{ post.slug }}.html">{{ post.title }}</a>{% if post.description %} — {{ post.description }}{% endif %} <small><time datetime="{{ post.published }}">{{ post.published[:10] }}</time></small></li>
+{% endfor %}
+</ul>
+{% if comments %}
+<h2>Comment notes</h2>
+<ul>
+{% for note in comments %}
+  <li><a href="{{ note.path }}">{{ note.label }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+<p>Canonical lives on Dev.to. This is just a crawler-friendly mirror.</p>
+{% endblock %}

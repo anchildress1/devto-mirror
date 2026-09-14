@@ -1,19 +1,3 @@
-"""
-Top-level package for devto-mirror application.
-
-This module provides access to AI optimization functionality.
-The package is organized with application code in the `src/` directory
-following standard Python packaging conventions.
-"""
+"""Static mirror of a Dev.to blog, published for search-engine discoverability."""
 
 __version__ = "1.2.0"
-__author__ = "Ashley Childress"
-
-# Make ai_optimization available at package level
-try:
-    from . import ai_optimization
-
-    __all__ = ["ai_optimization"]
-except ImportError:
-    ai_optimization = None
-    __all__ = []

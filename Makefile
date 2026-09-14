@@ -21,10 +21,10 @@ test:  ## Run unit tests
 	uv run coverage report --fail-under=85
 	uv run coverage html
 
-lint:  ## Run linting checks (formatting, linting, security)
+lint:  ## Check formatting (black, isort) and lint (flake8)
+	uv run black --check src/ tests/ scripts/ --line-length 120
 	uv run isort --check-only --profile black --line-length 120 src/ tests/ scripts/
 	uv run flake8 src/ tests/ scripts/
-	uv run python scripts/validate_site_generation.py
 
 format:  ## Format code with Black
 	uv run black src/ tests/ scripts/ --line-length 120

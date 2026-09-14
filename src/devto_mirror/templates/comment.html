@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% set title = "Comment note" %}
+{% set canonical = note.url %}
+{% set description = (note.context or "Comment note")[:300] %}
+{% set author = username %}
+{% set image = default_image %}
+{% set og_type = "article" %}
+{% block main %}
+<h1>{{ title }}</h1>
+{% if note.context %}
+<p>{{ note.context }}</p>
+{% endif %}
+<p><a href="{{ note.url }}">Open on Dev.to →</a></p>
+{% endblock %}

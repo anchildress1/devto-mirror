@@ -37,10 +37,6 @@ Thumbs.db
 *.tmp
 !ttd.tmp
 
-# Generated site artifacts (ignored by default)
-posts/
-posts_data.*
-index.html
-sitemap.xml
-comments/
-last_run.txt
+# Generated site and article store
+_deploy/
+posts_data.json

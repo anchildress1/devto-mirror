@@ -1,8 +1,6 @@
 """Path and filename sanitization utilities."""
 
-import os
 import string
-from pathlib import Path
 
 SAFE_CHARS = set(string.ascii_letters + string.digits + "_-")
 
@@ -34,27 +32,3 @@ def sanitize_slug(slug: str, max_length: int = 120) -> str:
     """
     sanitized = sanitize_filename(slug)
     return sanitized[:max_length] if max_length > 0 else sanitized
-
-
-def validate_safe_path(base_dir: Path, target_path: str) -> Path:
-    """
-    Validate that a path is safe and within the base directory.
-
-    Args:
-        base_dir: Base directory that should contain the target
-        target_path: Path to validate
-
-    Returns:
-        Resolved safe path
-
-    Raises:
-        ValueError: If path traversal is detected
-    """
-    base = base_dir.resolve()
-    target = (base / target_path).resolve()
-
-    # Ensure target is within base, accounting for exact match or subdirectory
-    if target != base and not str(target).startswith(str(base) + os.sep):
-        raise ValueError(f"Path traversal detected: {target_path}")
-
-    return target

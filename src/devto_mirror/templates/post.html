@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% set title = post.title %}
+{% set canonical = post.canonical %}
+{% set description = post.description %}
+{% set author = post.author %}
+{% set image = post.cover_image or default_image %}
+{% set og_type = "article" %}
+{% block head %}
+<script type="application/ld+json">{{ schema | tojson }}</script>
+{% endblock %}
+{% block main %}
+<article>
+  <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+  {% if post.cover_image %}
+  <img src="{{ post.cover_image }}" width="1000" height="420" alt="Banner for {{ post.title }}">
+  {% endif %}
+  <p><em>Published: <time datetime="{{ post.published }}">{{ post.published[:10] }}</time></em></p>
+  {% if post.tags %}
+  <p><strong>Tags:</strong> {% for tag in post.tags %}#{{ tag }}{% if not loop.last %} {% endif %}{% endfor %}</p>
+  {% endif %}
+  {% if post.description %}
+  <p><em>{{ post.description }}</em></p>
+  {% endif %}
+  {{ post.content_html | safe }}
+</article>
+{% if related %}
+<section>
+  <h2>Related articles</h2>
+  <ul>
+  {% for other in related %}
+    <li><a href="{{ other.slug }}.html">{{ other.title }}</a>{% if other.description %} — {{ other.description }}{% endif %}</li>
+  {% endfor %}
+  </ul>
+</section>
+{% endif %}
+<p><a href="{{ post.url }}">Read on Dev.to →</a></p>
+{% endblock %}
