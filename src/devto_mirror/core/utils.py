@@ -32,19 +32,17 @@ _FIREBASE_ANALYTICS_TMPL = """<!-- Firebase Analytics -->
 def firebase_analytics_snippet():
     """Build the Firebase Analytics script tag from FIREBASE_WEB_CONFIG.
 
-    Returns safe markup for the snippet, or empty markup when the env var is
-    unset/invalid or carries no measurementId. Forks without their own
-    configured project therefore ship no analytics.
+    Returns empty markup when the variable is unset, so forks ship no analytics.
+
+    Raises:
+        ValueError: if the variable is set but is not a JSON object with a measurementId.
     """
     raw = os.getenv("FIREBASE_WEB_CONFIG", "").strip()
     if not raw:
         return Markup("")
-    try:
-        config = json.loads(raw)
-    except (ValueError, TypeError):
-        return Markup("")
+    config = json.loads(raw)
     if not isinstance(config, dict) or not config.get("measurementId"):
-        return Markup("")
+        raise ValueError("FIREBASE_WEB_CONFIG must be a JSON object with a measurementId")
     # Owner-controlled repo variable, not user input; escaping "<" neutralizes
     # any </script> breakout so the embedded JSON is inert regardless of source.
     config_json = json.dumps(config).replace("<", "\\u003c")

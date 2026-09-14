@@ -13,13 +13,12 @@ class TestFirebaseAnalyticsSnippet(unittest.TestCase):
         with patch.dict("os.environ", {}, clear=True):
             self.assertEqual(str(utils_module.firebase_analytics_snippet()), "")
 
-    def test_empty_on_invalid_json(self):
-        with patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": "not json"}):
-            self.assertEqual(str(utils_module.firebase_analytics_snippet()), "")
-
-    def test_empty_without_measurement_id(self):
-        with patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": '{"apiKey": "abc"}'}):
-            self.assertEqual(str(utils_module.firebase_analytics_snippet()), "")
+    def test_raises_when_set_but_unusable(self):
+        cases = {"not json": "Expecting value", '{"apiKey": "abc"}': "measurementId", '["G-1"]': "measurementId"}
+        for raw, message in cases.items():
+            with self.subTest(config=raw), patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": raw}):
+                with self.assertRaisesRegex(ValueError, message):
+                    utils_module.firebase_analytics_snippet()
 
     def test_renders_snippet_when_configured(self):
         with patch.dict("os.environ", {"FIREBASE_WEB_CONFIG": self.VALID_CONFIG}):
