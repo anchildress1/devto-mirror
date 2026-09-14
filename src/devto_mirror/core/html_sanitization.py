@@ -24,6 +24,8 @@ def sanitize_html_content(content: str) -> str:
     # Remove script/style blocks entirely (tag + content) so their payload doesn't
     # end up as visible text after sanitization.
     content = re.sub(r"(?is)<(script|style)\b[^>]*>.*?</\1>", "", content)
+    # Dev.to heading anchors are empty self-links: keep them as fragment targets, not unnamed links.
+    content = re.sub(r'<a name="([^"]+)" href="#\1">\s*</a>', r'<a id="\1"></a>', content)
 
     allowed_tags = [
         *("p", "br", "hr", "div", "span", "blockquote", "pre", "code", "kbd"),
@@ -34,7 +36,7 @@ def sanitize_html_content(content: str) -> str:
 
     allowed_attributes = {
         # Keep links readable and allow embed/card markup to style anchors.
-        "a": ["href", "title", "rel", "target", "class"],
+        "a": ["href", "title", "rel", "target", "class", "id"],
         # Dev.to "ltag" embeds use wrapper div/span with class hooks.
         "div": ["class"],
         "span": ["class"],
