@@ -16,8 +16,9 @@ concurrency:
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
+    if: github.event.pull_request.draft == false || github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 20
     permissions:
       security-events: write
       contents: read
