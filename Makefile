@@ -1,20 +1,24 @@
 # Dev.to Mirror Development Commands
 
-# Prefer the project's venv python if present, otherwise fall back to system `python`.
-PYTHON := $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python)
-
-.PHONY: help install test lint format clean check ai-checks security
-.PHONY: check-complexity
+.PHONY: help install dev test lint format security check-complexity ai-checks clean
 
 help:  ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
+# Hooks are skipped in CI (CI / GITHUB_ACTIONS set).
 install:  ## Install development dependencies
 	uv sync --locked --group dev
-	# Ensure lefthook is executed via uv so we use the pinned dev toolchain
-	# Skip lefthook installation in CI environments (GITHUB_ACTIONS, CI)
 	@if [ -z "$$CI$$GITHUB_ACTIONS" ]; then uv run lefthook install; fi
+
+# Mirrors the generate-site composite action. Needs DEVTO_USERNAME plus SITE_DOMAIN or GH_USERNAME
+# (via .env) and network access to the Dev.to API; the article store is cached in posts_data.json.
+dev:  ## Build the full site into _deploy/ as a local test run (reads .env)
+	uv run python -m devto_mirror.site_generation.generator
+	mkdir -p _deploy/assets
+	cp .nojekyll google6b80426bb396f31f.html algolia_verification.html _deploy/
+	cp assets/devto-mirror.jpg _deploy/assets/
+	@echo "✅ Built _deploy/ — preview: uv run python -m http.server --directory _deploy 8000"
 
 test:  ## Run unit tests
 	uv run coverage run --source src -m unittest discover -s tests -p 'test_*.py'
@@ -56,7 +60,8 @@ ai-checks:  ## Single command: format → lint → security → complexity → t
 	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
 	echo "✅ Ready to commit."
 
-clean:  ## Clean up generated files
+clean:  ## Clean up generated files, including the local site build and article store
+	rm -rf _deploy/ posts_data.json
 	rm -rf htmlcov/
 	rm -rf .coverage
 	rm -rf __pycache__/

@@ -207,8 +207,8 @@ make install
 cp .env.example .env
 # Edit .env with your DEVTO_USERNAME and GH_USERNAME
 
-# Generate the site into _deploy/ (also writes posts_data.json)
-uv run python -m devto_mirror.site_generation.generator
+# Build the site locally into _deploy/ (also writes posts_data.json; both gitignored)
+make dev
 
 # Run the full validation suite (format, lint, security, complexity, tests)
 make ai-checks

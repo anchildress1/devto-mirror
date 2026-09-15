@@ -13,10 +13,10 @@ make install        # dev dependencies + Lefthook hooks
 cp .env.example .env
 # edit .env (see Environment Variables below)
 make ai-checks      # confirm everything passes before you change anything
-uv run python -m devto_mirror.site_generation.generator
+make dev            # build the whole site locally, exactly as CI assembles it
 ```
 
-The generator writes the site into `_deploy/` and the article store into `posts_data.json`, both in the repo root and both gitignored. Open `_deploy/index.html` to browse the result. The next run reuses `posts_data.json` and only fetches articles that are new or edited since.
+`make dev` runs the generator and copies in the same static files the deploy uses, so `_deploy/` is a faithful local test build. The article store goes to `posts_data.json`. Both live in the repo root and are gitignored. Preview with `uv run python -m http.server --directory _deploy 8000`. The next run reuses `posts_data.json` and only fetches articles that are new or edited since; `make clean` removes both.
 
 ## ⚙️ Environment Variables
 
@@ -52,13 +52,14 @@ GH_USERNAME=your-github-username
 | Command | What it runs |
 | --- | --- |
 | `make install` | `uv sync --locked --group dev`, then installs Lefthook hooks (skipped in CI) |
+| `make dev` | local test build of the full site into `_deploy/` (needs `.env` and network access) |
 | `make format` | Black, 120-character lines |
 | `make lint` | `black --check`, `isort --check-only`, flake8 |
 | `make security` | bandit; pip-audit (CI only, or locally with `PIP_AUDIT=1`); a detect-secrets gate against `.secrets.baseline` |
 | `make check-complexity` | radon cyclomatic complexity; fails on any function over 15 |
 | `make test` | unittest suite with coverage |
 | `make ai-checks` | format → lint → security → complexity → test |
-| `make clean` | removes coverage output, caches, and build artifacts |
+| `make clean` | removes coverage output, caches, build artifacts, `_deploy/` and `posts_data.json` |
 
 `make ai-checks` formats in place, and CI fails if it changes any tracked file—so run it (or `make format`) before you push.
 

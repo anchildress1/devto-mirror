@@ -13,9 +13,9 @@ venv/
 dist/
 build/
 
-# Test files
-test_incremental_temp/
+# Test and coverage output
 .coverage
+htmlcov/
 
 # Dependencies
 node_modules/

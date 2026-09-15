@@ -29,6 +29,7 @@
 ## Commands
 
 - `make install` — deps + Lefthook hooks.
+- `make dev` — local test build into `_deploy/` (hits the Dev.to API; needs `.env`). Use it to check rendered output; never commit its outputs.
 - `make ai-checks` — format → lint → security → complexity → test. Run before every commit.
 - `make test` — coverage gate is 85%; do not lower it.
 - No Makefile target for the task → `uv run <tool>`.
