@@ -559,6 +559,22 @@ class TestGeneratorExtra(unittest.TestCase):
                 post = gen.Post({"title": "No URL"})
         self.assertEqual(post.link, gen.HOME)
 
+    def test_post_slug_falls_back_to_slugify_of_title(self):
+        # Pins python-slugify's legacy-algorithm output for the title-fallback
+        # branch (url has fewer than 3 path parts, and no explicit slug is
+        # given). Guards against a transliteration/separator change on a
+        # future slugify upgrade silently renaming generated post paths.
+        with tempfile.TemporaryDirectory() as td:
+            with _chdir(Path(td)):
+                gen = self._import_generator()
+                post = gen.Post(
+                    {
+                        "title": "Café: 100% Ünïcödé Guide!",
+                        "url": "https://dev.to/only-two-parts",
+                    }
+                )
+        self.assertEqual(post.slug, "cafe-100-unicode-guide")
+
     def test_post_slug_from_url_extraction(self):
         with tempfile.TemporaryDirectory() as td:
             with _chdir(Path(td)):
