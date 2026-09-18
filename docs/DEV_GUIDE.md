@@ -1,222 +1,123 @@
 # Development Guide
 
-This guide covers setting up the Dev.to Mirror project for local development. The project generates a static mirror of your Dev.to blog posts with AI-enhanced metadata and cross-references.
+How to run devto-mirror locally, what the checks do, and how to set up a fork's deploy.
 
-## Local Development Setup
+## 🚀 Local Setup
 
-### Prerequisites
+You need Python 3.12+, [`uv`](https://docs.astral.sh/uv/), Git, and a Dev.to account with published posts. The Git hooks also call [`actionlint`](https://github.com/rhysd/actionlint), which isn't a Python package—install it yourself (e.g. `brew install actionlint`).
 
-- Python 3.12+ (the project uses modern Python features)
-- Git
-- A Dev.to account with published posts
+```bash
+git clone https://github.com/anchildress1/devto-mirror.git
+cd devto-mirror
+make install        # dev dependencies + Lefthook hooks
+cp .env.example .env
+# edit .env (see Environment Variables below)
+make ai-checks      # confirm everything passes before you change anything
+make dev            # build the whole site locally, exactly as CI assembles it
+```
 
-### Quick Start
+`make dev` runs the generator and copies in the same static files the deploy uses, so `_deploy/` is a faithful local test build. The article store goes to `posts_data.json`. Both live in the repo root and are gitignored. Preview with `uv run python -m http.server --directory _deploy 8000`. The next run reuses `posts_data.json` and only fetches articles that are new or edited since; `make clean` removes both.
 
-1. **Clone and setup**:
+## ⚙️ Environment Variables
 
-   ```bash
-   git clone https://github.com/anchildress1/devto-mirror.git
-   cd devto-mirror
-   make install   # Installs dev dependencies and lefthook hooks
-   ```
+The generator loads `.env` automatically.
 
-2. **Configure environment variables**:
+| Variable | Required | What it does |
+| --- | --- | --- |
+| `DEVTO_USERNAME` | yes | Dev.to profile to mirror |
+| `SITE_DOMAIN` | one of these two | Custom domain; wins over `GH_USERNAME` |
+| `GH_USERNAME` | one of these two | Builds `https://<user>.github.io/devto-mirror/` |
+| `DEVTO_KEY` | no | Dev.to API key; only raises rate limits, since the mirror calls public endpoints |
+| `FORCE_FULL_REGEN` | no | `true` ignores `posts_data.json` and refetches every article |
+| `FIREBASE_WEB_CONFIG` | no | Firebase web config JSON with a `measurementId`; adds Firebase Analytics to every page. A set-but-invalid value fails the build |
 
-   ```bash
-   cp .env.example .env
-   # Edit .env with your actual values - see Environment Variables section below
-   ```
+`SITE_DOMAIN` accepts `example.com`, `example.com/`, or a full URL like `https://example.com/blog/`. A bare domain with a path (`example.com/blog`) is rejected as ambiguous. For GitHub Pages, use a bare domain—the deploy writes it to `CNAME`.
 
-3. **Install lefthook hooks** (recommended):
-
-   ```bash
-   make install   # Installs dev deps and lefthook hooks
-   ```
-
-4. **Run validation to ensure everything works**:
-
-   ```bash
-   make ai-checks  # Comprehensive check: format, lint, test, security, site generation
-   ```
-
-5. **Generate your site locally**:
-
-   ```bash
-   uv run python -m devto_mirror.site_generation.generator   # Creates HTML files in posts/ and index.html
-   ```
-
-## Environment Variables
-
-The project uses a `.env` file for local development configuration. This keeps sensitive data out of version control and makes local testing easier.
-
-**Required variables:**
-
-- `DEVTO_USERNAME`: Your Dev.to username (e.g., "anchildress1")
-
-**Site URL configuration (one required):**
-
-- `SITE_DOMAIN`: Custom domain (e.g., "crawly.anchildress1.dev")
-- `GH_USERNAME`: GitHub username (e.g., "anchildress1") - used if `SITE_DOMAIN` not set
-
-**Optional variables:**
-
-- `FORCE_FULL_REGEN`: Set to "true" to regenerate all posts instead of incremental updates
-- `VALIDATION_MODE`: Set to "true" to use mock data instead of API calls (for testing)
-
-**Example .env file (with custom domain):**
+Custom domain:
 
 ```bash
 DEVTO_USERNAME=your-username
 SITE_DOMAIN=crawly.anchildress1.dev
-FORCE_FULL_REGEN=false
-VALIDATION_MODE=false
 ```
 
-**Example .env file (with GitHub Pages):**
+GitHub Pages:
 
 ```bash
 DEVTO_USERNAME=your-username
 GH_USERNAME=your-github-username
-FORCE_FULL_REGEN=false
-VALIDATION_MODE=false
 ```
 
-## Development Workflow
+## 🔁 Development Workflow
 
-The project includes a comprehensive development workflow with automated quality checks:
+| Command | What it runs |
+| --- | --- |
+| `make install` | `uv sync --locked --group dev`, then installs Lefthook hooks (skipped in CI) |
+| `make dev` | local test build of the full site into `_deploy/` (needs `.env` and network access) |
+| `make format` | Black, 120-character lines |
+| `make lint` | `black --check`, `isort --check-only`, flake8 |
+| `make security` | bandit; pip-audit (CI only, or locally with `PIP_AUDIT=1`); a detect-secrets gate against `.secrets.baseline` |
+| `make check-complexity` | radon cyclomatic complexity; fails on any function over 15 |
+| `make test` | unittest suite with coverage |
+| `make ai-checks` | format → lint → security → complexity → test |
+| `make clean` | removes coverage output, caches, build artifacts, `_deploy/` and `posts_data.json` |
 
-**Daily development commands:**
+`make ai-checks` formats in place, and CI fails if it changes any tracked file—so run it (or `make format`) before you push.
+
+## 🪝 Git Hooks
+
+`make install` wires up Lefthook:
+
+- **pre-commit**: `uv lock`, Black, flake8, isort, `make security`, and actionlint on staged workflow files
+- **commit-msg**: `gitlint-rai` checks the message format
+- **pre-push**: `make test`, `make check-complexity`, actionlint
+
+A failing hook blocks the commit or push. Run `make format`, then `make lint`, to see what's wrong.
+
+## 🧭 Code Tour
+
+- `site_generation/generator.py` — the entry point: loads the store, syncs with Dev.to, renders every page
+- `site_generation/post.py` — the `Post` model built from a Dev.to article (sanitized HTML, canonical URL, dates)
+- `site_generation/seo.py` — `BlogPosting` JSON-LD and related posts by shared tags
+- `core/api_client.py` — lists articles, fetches new or edited ones, retries transient failures
+- `core/html_sanitization.py` — bleach allowlist for post bodies, including tables
+- `core/url_utils.py` — turns `SITE_DOMAIN`/`GH_USERNAME` into the site's root URL
+- `core/utils.py` — the Jinja environment and the optional Firebase Analytics snippet
+- `templates/` — `base.html` holds the shared `<head>`; `post.html`, `index.html`, and `comment.html` extend it
+
+## 🧪 Testing
 
 ```bash
-make format         # Auto-format code with Black (120 char line length)
-make lint           # Run all lefthook checks (linting, security, secrets)
-make test           # Run unit tests for AI optimization modules
-make ai-checks       # Run everything: format + lint + test + security + site validation
+make test                                     # full suite + coverage report
+uv run python -m unittest tests.test_seo      # one module
 ```
 
-**Understanding the validation pipeline:**
+Tests use `unittest` and never touch the network—API calls and sleeps are mocked, and `tests/factories.py` builds Dev.to article payloads. Coverage must stay at or above 85% (it's currently 100%); an HTML report lands in `htmlcov/`.
 
-- **Format**: Uses Black to ensure consistent code style
-- **Lint**: Runs lefthook checks (formatting, linting, security)
-- **Test**: Unit tests for content analysis and cross-reference features
-- **Site validation**: Dry-run of site generation to catch build errors early
-- **Security**: Scans for vulnerabilities and security issues
+## 🩺 Troubleshooting
 
-## Git Hooks
+| Error | Fix |
+| --- | --- |
+| `Missing DEVTO_USERNAME` | Create `.env` from `.env.example` and set the variable |
+| `Missing SITE_DOMAIN or GH_USERNAME` | Set one of them |
+| `SITE_DOMAIN must be a domain, not a path` | Use a bare domain or a full `https://` URL |
+| `Dev.to lists no published articles ... refusing to publish an empty site` | Check the username; the account needs at least one published post |
+| `... stored articles vanished from the listing; refusing to sync` | Usually a Dev.to glitch—rerun later. After a real mass deletion, run with `FORCE_FULL_REGEN=true` |
+| `FIREBASE_WEB_CONFIG must be a JSON object with a measurementId` | Fix the variable's JSON, or unset it to disable Analytics |
+| HTTP errors after retries | Dev.to is down or rate-limiting you; rerun later, or set `DEVTO_KEY` for higher limits |
+| `actionlint: command not found` in hooks | Install actionlint (see Local Setup) |
+| Import errors | Run `make install` so the package is installed into `.venv` |
 
-Lefthook hooks run automatically when you commit, catching issues before they reach CI:
+## 🚢 GitHub Actions Setup
 
-```bash
-lefthook install                    # One-time setup
-lefthook run pre-commit            # Manual run on all files
-git commit -m "your message"       # Hooks run automatically
-```
+There are two deploy paths:
 
-**What the hooks check:**
+- **Upstream (owner `anchildress1`) → Firebase Hosting** via `publish.yaml`. Keyless auth through Workload Identity Federation; only runs for the repo owner. See [CI_GUIDE.md](./CI_GUIDE.md).
+- **Forks → GitHub Pages** via `deploy-gh-pages.yml`. This is the path below.
 
-- Code formatting (Black)
-- Linting and style checks
-- Security issues (bandit)
-- Secret detection
-- Site generation validation
+To set up a fork:
 
-If any hook fails, the commit is blocked until you fix the issues.
+1. Add the repository variables (Settings → Secrets and variables → Actions → Variables): `DEVTO_USERNAME`, plus `GH_USERNAME` or `SITE_DOMAIN`. Optionally add a `DEVTO_KEY` secret.
+2. Run Actions → **Deploy Dev.to Mirror to GitHub Pages** → Run workflow. It creates the `gh-pages` branch. If your fork inherited upstream's `gh-pages`, the run replaces its contents—upstream's articles aren't in your Dev.to listing, so they drop out of the store.
+3. Enable Pages: Settings → Pages → Deploy from a branch → `gh-pages`. The site appears at `https://<username>.github.io/devto-mirror/` (or your custom domain).
 
-## Project Structure
-
-```plaintext
-devto-mirror/
-├── src/devto_mirror/        # Python package (all application code)
-│   ├── core/               # Dev.to API client, sanitization, URL building, run-state, shared templates
-│   ├── ai_optimization/    # JSON-LD schemas, metadata, cross-references, AI sitemap
-│   ├── site_generation/    # generator.py (main pipeline) + renderer.py (index/sitemap)
-│   ├── templates/          # post_template.html
-│   └── tools/              # one-off maintenance helpers
-├── scripts/                # CI helpers (validate_site_generation.py, check_detect_secrets.py, run_pip_audit.py)
-├── tests/                  # Unit tests (unittest, 85% coverage gate)
-├── docs/                   # Documentation
-└── .env.example            # Environment variable template
-```
-
-## Testing
-
-The project includes multiple levels of testing:
-
-**Unit tests** (for AI optimization features):
-
-```bash
-make test                   # Run all unit tests with coverage
-```
-
-**Site generation validation** (catches build errors):
-
-```bash
-uv run python scripts/validate_site_generation.py # Test site generation with mock data
-```
-
-**Integration testing** (full pipeline):
-
-```bash
-make ai-checks              # Complete validation pipeline
-```
-
-## Troubleshooting
-
-| Error | Solution |
-|-------|----------|
-| **ModuleNotFoundError: No module named 'src'** | Ensure you're in the correct virtual environment and the package is installed (`make install` will run the recommended install steps). |
-| **Missing DEVTO_USERNAME** | Check your `.env` file exists and has the correct variable names |
-| **Lefthook hooks failing** | Run `make format` then `make lint` to see specific issues |
-| **Site generation fails locally** | Check that your Dev.to username is correct and you have published posts |
-| **Import errors** | Make sure you ran `make install` (or the equivalent `uv` commands) and activated your virtual environment |
-
-## GitHub Actions Setup
-
-There are two deploy paths, and which one you use depends on who you are:
-
-- **Upstream (owner `anchildress1`) → Firebase Hosting** (`publish.yaml`). This is the **primary** deploy: keyless auth via Workload Identity Federation, served at `crawly.anchildress1.dev`. It only runs for the repo owner and needs the Firebase/GCP variables (see [CI_GUIDE.md](./CI_GUIDE.md)).
-- **Forks → GitHub Pages** (`deploy-gh-pages.yml`). The fork-friendly fallback that preserves the original `gh-pages` behavior. **This is the path the setup below covers.**
-
-### Repository Configuration (fork → GitHub Pages)
-
-After forking the repository, configure it for automatic deployment:
-
-1. **Set repository variables**:
-   - Navigate to Settings → Actions → Variables → Repository variables
-   - Add `DEVTO_USERNAME` with your Dev.to username
-   - This tells the workflows which Dev.to profile to mirror
-
-2. **Enable GitHub Pages**:
-   - Go to Settings → Pages
-   - Under "Source", select "Deploy from a branch"
-   - Choose `gh-pages` branch (created automatically by first workflow run)
-   - Your site will be available at `https://yourusername.github.io/devto-mirror`
-
-3. **Delete any inherited `gh-pages` branch first**:
-   - Forks copy upstream's branches, so a leftover `gh-pages` carries upstream's `last_run.txt`/`posts_data.json`
-   - Left in place, the first run restores that state, skips your older posts, and republishes stale upstream content (`keep_files: true`)
-   - Delete it so your first run starts clean
-
-4. **Run initial workflow**:
-   - Go to Actions → "Deploy Dev.to Mirror to GitHub Pages" → Run workflow
-   - This recreates the `gh-pages` branch and deploys your first site
-   - (The "Generate and Publish Dev.to Mirror Site" workflow is the upstream Firebase deploy and only runs for the repo owner)
-
-### Manual Workflow Triggers
-
-Trigger workflows manually for testing or immediate updates:
-
-1. Go to repository's **Actions** tab
-2. Select the workflow you want to run
-3. Click **"Run workflow"** button
-4. Choose branch (usually `main`) and any options
-5. Click **"Run workflow"** to start
-
-**When to use manual triggers**:
-
-- Testing changes before they go live
-- Immediate updates after publishing new posts
-- Troubleshooting workflow issues
-- Full site regeneration (run your deploy workflow with `force_full_regen=true`)
-
-For detailed explanations of the CI/CD workflows and their technical implementation, see [`CI_GUIDE.md`](CI_GUIDE.md).
+After that, the workflow runs every Wednesday at 14:40 UTC. Run it manually any time from the Actions tab—for example right after publishing a post, or with `force_full_regen=true` to refetch every article.

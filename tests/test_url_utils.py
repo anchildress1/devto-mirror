@@ -1,85 +1,39 @@
+"""Tests for devto_mirror.core.url_utils."""
+
 import unittest
-from types import SimpleNamespace
 
-from devto_mirror.ai_optimization.cross_reference import generate_related_links
-from devto_mirror.core.url_utils import (
-    build_post_url,
-    build_site_urls,
-    normalize_site_domain_input,
-    post_page_href,
-)
+from devto_mirror.core.url_utils import normalize_site_domain_input, resolve_home
 
 
-class TestSiteUrlUtils(unittest.TestCase):
-    def test_normalize_site_domain_bare_domain(self):
-        self.assertEqual(normalize_site_domain_input("example.com"), "https://example.com/")
+class TestNormalizeSiteDomainInput(unittest.TestCase):
+    def test_normalizes_accepted_forms_to_an_origin_with_trailing_slash(self):
+        cases = {
+            "example.com": "https://example.com/",
+            " example.com/ ": "https://example.com/",
+            "https://example.com": "https://example.com/",
+            "http://example.com/blog": "http://example.com/blog/",
+        }
+        for raw, expected in cases.items():
+            with self.subTest(raw=raw):
+                self.assertEqual(normalize_site_domain_input(raw), expected)
 
-    def test_normalize_site_domain_keeps_scheme(self):
-        self.assertEqual(normalize_site_domain_input("https://example.com"), "https://example.com/")
-        self.assertEqual(normalize_site_domain_input("https://example.com/"), "https://example.com/")
-
-    def test_normalize_site_domain_allows_path_when_scheme_present(self):
-        self.assertEqual(normalize_site_domain_input("https://example.com/blog"), "https://example.com/blog/")
-
-    def test_normalize_site_domain_rejects_path_without_scheme(self):
-        with self.assertRaises(ValueError):
-            normalize_site_domain_input("example.com/blog")
-
-    def test_build_site_urls_prefers_site_domain(self):
-        urls = build_site_urls(site_domain="example.com", gh_username="ignored")
-        self.assertEqual(urls.home, "https://example.com/")
-        self.assertEqual(urls.root_home, "https://example.com/")
-
-    def test_build_site_urls_gh_pages(self):
-        urls = build_site_urls(gh_username="octocat")
-        self.assertEqual(urls.home, "https://octocat.github.io/devto-mirror/")
-        self.assertEqual(urls.root_home, "https://octocat.github.io/")
-
-    def test_build_site_urls_validation_fallback_user(self):
-        urls = build_site_urls(fallback_gh_username="user")
-        self.assertEqual(urls.home, "https://user.github.io/devto-mirror/")
-        self.assertEqual(urls.root_home, "https://user.github.io/")
-
-    def test_build_site_urls_missing_raises(self):
-        with self.assertRaises(ValueError):
-            build_site_urls()
-
-    def test_post_page_href_basic(self):
-        self.assertEqual(post_page_href("hello"), "hello.html")
-
-    def test_post_page_href_strips_posts_prefix_and_html_ext(self):
-        self.assertEqual(post_page_href("posts/hello"), "hello.html")
-        self.assertEqual(post_page_href("posts/hello.html"), "hello.html")
-
-    def test_post_page_href_rejects_empty(self):
-        with self.assertRaises(ValueError):
-            post_page_href("")
-
-    def test_post_page_href_rejects_path_traversal(self):
-        with self.assertRaises(ValueError):
-            post_page_href("posts/../pwn")
-
-    def test_build_post_url_works_with_or_without_trailing_slash(self):
-        self.assertEqual(
-            build_post_url("https://octocat.github.io/devto-mirror", "hello"),
-            "https://octocat.github.io/devto-mirror/posts/hello.html",
-        )
-        self.assertEqual(
-            build_post_url("https://octocat.github.io/devto-mirror/", "posts/hello.html"),
-            "https://octocat.github.io/devto-mirror/posts/hello.html",
-        )
+    def test_rejects_unusable_input(self):
+        cases = {"": "empty", "   ": "empty", "example.com/blog": "not a path", "https://": "Invalid"}
+        for raw, message in cases.items():
+            with self.subTest(raw=raw), self.assertRaisesRegex(ValueError, message):
+                normalize_site_domain_input(raw)
 
 
-class TestRelatedLinksHref(unittest.TestCase):
-    def test_generate_related_links_does_not_duplicate_posts_segment(self):
-        current = SimpleNamespace(slug="current", tags=["python"], title="Current")
-        other = SimpleNamespace(slug="other-1", tags=["python"], title="Other", link="https://dev.to/u/other-1")
+class TestResolveHome(unittest.TestCase):
+    def test_prefers_site_domain_over_github_pages(self):
+        self.assertEqual(resolve_home(site_domain="x.dev", gh_username="octo"), "https://x.dev/")
 
-        related = generate_related_links(current, [current, other], max_related=5)
-        self.assertEqual(len(related), 1)
+    def test_builds_github_pages_project_url(self):
+        self.assertEqual(resolve_home(gh_username=" octo "), "https://octo.github.io/devto-mirror/")
 
-        # This is the regression: from a /posts/*.html page, href="posts/x.html" becomes /posts/posts/x.html.
-        self.assertEqual(related[0]["local_link"], "other-1.html")
+    def test_raises_when_neither_is_set(self):
+        with self.assertRaisesRegex(ValueError, "Missing SITE_DOMAIN or GH_USERNAME"):
+            resolve_home(site_domain=" ", gh_username="")
 
 
 if __name__ == "__main__":

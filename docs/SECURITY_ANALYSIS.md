@@ -1,68 +1,58 @@
-# Security Analysis Setup
+# Security Analysis
 
-This repository now includes comprehensive security analysis through GitHub's built-in security features.
+What scans this repository, when they run, and how to run the same checks locally.
 
-## Enabled Security Features
-
-### 1. CodeQL Analysis
+## 🔍 CodeQL
 
 - **File**: `.github/workflows/codeql.yml`
-- **Frequency**: Weekly (Mondays at 2:15 AM UTC) + on pushes/PRs to main
-- **Coverage**: Python code security scanning with extended security and quality queries
-- **Manual Trigger**: Available via GitHub Actions
+- **Runs**: non-draft PRs to `main`, weekly (Mondays 02:23 UTC), and manually
+- **Coverage**: Python, with the `security-extended` and `security-and-quality` query suites
+- **Gate**: the `main` ruleset requires the CodeQL check and blocks merging on any code-scanning alert
 
-### 2. Dependabot
+## 📦 Dependabot
 
 - **File**: `.github/dependabot.yml`
-- **Frequency**: Weekly (Mondays at 4:00 AM UTC)
-- **Coverage**:
-  - Python package dependencies (`pip`)
-  - GitHub Actions versions
-- **Auto-assignment**: PRs are auto-assigned to repository owner
+- **Runs**: weekly (Mondays 04:00 UTC), at most one open PR per ecosystem
+- **Coverage**: Python dependencies (the `uv` ecosystem, from `pyproject.toml` and `uv.lock`) and GitHub Actions versions
+- **Assignment**: PRs are assigned to the repository owner
 
-### 3. Dependencies
+## 🧰 Local and CI Checks
 
-- **File**: `requirements.txt`
-- **Purpose**: Explicit dependency tracking for security scanning
-- **Contents**: Core dependencies used in GitHub Actions workflows
+`make security` runs three tools, and `make ai-checks` includes it. CI runs `make ai-checks` on every non-draft PR through `.github/workflows/security-ci.yml`.
 
-## Additional Recommended Security Settings
+- **bandit** scans `src/` and `scripts/`, reporting medium-or-higher severity issues at high confidence
+- **pip-audit** checks installed packages for known vulnerabilities. It always runs in CI; locally it's skipped unless you set `PIP_AUDIT=1`. In CI a failure or timeout fails the build; locally it only warns
+- **detect-secrets** scans every git-tracked file and fails on any secret not already recorded in `.secrets.baseline`
 
-To fully enable GitHub's security features, consider enabling these in repository settings:
+flake8 runs separately under `make lint`.
 
-1. **Security updates** and automated scanning (Settings → Security & analysis)
-2. **Security alerts** (Settings → Security & analysis)
-3. **Secret scanning** (Settings → Security & analysis)
-4. **Private vulnerability reporting** (Settings → Security & analysis)
+To run them locally:
 
-## Local & CI security checks
+```bash
+make install
+make security              # bandit + detect-secrets (+ pip-audit with PIP_AUDIT=1)
+make ai-checks             # everything CI runs
+```
 
-This repository now includes an extra CI workflow (`.github/workflows/security-ci.yml`) that runs a few lightweight, fast checks on pushes and PRs:
+These checks are lightweight—they won't find everything, but they catch the common mistakes that lead to security flags.
 
-- Bandit—looks for common Python security anti-patterns in `scripts/`
-- pip-audit—checks installed packages for known vulnerabilities
-- flake8—a linter to catch a range of potential issues, including style problems that can hide bugs
+## 🛡️ Built-in Safeguards
 
-To run these locally during development:
+- **Untrusted HTML**: post bodies from Dev.to pass through a bleach allowlist; `<script>` and `<style>` blocks are removed outright
+- **Templates**: Jinja autoescaping is on for every HTML and XML template
+- **Deploy credentials**: the Firebase deploy authenticates through Workload Identity Federation, so no service-account key is stored in the repo
+- **Supply chain**: third-party actions are pinned to commit SHAs, and `firebase-tools` runs with `--ignore-scripts`
 
-1. Install development dependencies: `make install`
-2. Run security checks: `make security`
-3. Or run the full validation pipeline: `make ai-checks`
+## ⚙️ Recommended Repository Settings
 
-These checks are intentionally lightweight—they won't find everything, but they reduce noise in automated scans and catch common mistakes that lead to security flags.
+To get the most from GitHub's security features, enable these under Settings → Security & analysis:
 
-## How It Works
+1. Dependabot security updates
+2. Dependabot alerts
+3. Secret scanning
+4. Private vulnerability reporting
 
-- **CodeQL** scans all Python code for security vulnerabilities and code quality issues
-- The repository uses CI and manual review to monitor dependencies for known vulnerabilities and to create PRs or advisories for updates when needed
-- **Security alerts** notify maintainers of potential issues
-- **Regular scanning** ensures ongoing security posture
+## 👀 Viewing Results
 
-## Viewing Results
-
-- **CodeQL results**: Go to Security → Code scanning alerts
-- **Dependency alerts & updates**: Check Security → Dependabot alerts or your configured dependency monitoring tools in repository settings
-
----
-
-Generated as part of automated security setup.
+- **CodeQL**: Security → Code scanning alerts
+- **Dependencies**: Security → Dependabot alerts

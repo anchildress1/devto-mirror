@@ -1,171 +1,131 @@
-"""
-Dev.to API client utilities.
+"""Dev.to (Forem) API client: list a user's articles and sync their full bodies."""
 
-Provides session management, retry logic, and article filtering
-for interacting with the Dev.to API.
-"""
+from __future__ import annotations
 
 import logging
 import os
 import time
 from datetime import datetime, timezone
-from typing import List, Optional
+from email.utils import parsedate_to_datetime
 
 import requests
+
+API_URL = "https://dev.to/api/articles"
+PER_PAGE = 100
+RETRYABLE_STATUS = frozenset({429, 500, 502, 503, 504})
+MAX_RETRY_WAIT = 60.0
 
 logger = logging.getLogger(__name__)
 
 
-def create_devto_session() -> requests.Session:
-    """
-    Create a configured requests session for Dev.to API calls.
-
-    Configures appropriate headers for the Dev.to V1 API including
-    User-Agent and Accept headers. Automatically detects CI environments
-    and uses GitHub Actions-specific User-Agent string.
-
-    Environment Variables:
-        CI: Set to "true" to indicate CI environment
-        GITHUB_ACTIONS: Set to "true" to indicate GitHub Actions
-        DEVTO_KEY: Optional API key for higher rate limits
-
-    Returns:
-        Configured requests.Session with appropriate headers
-    """
-    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
-    if is_ci:
-        print("🤖 Running in CI environment - using conservative timeouts and delays")
-
+def create_session() -> requests.Session:
+    """Return a session with the Forem v1 Accept header and DEVTO_KEY (if set) applied."""
     session = requests.Session()
-    headers = {
-        "User-Agent": "DevTo-Mirror-Bot/1.0 (GitHub-Actions)" if is_ci else "DevTo-Mirror-Bot/1.0",
-        "Accept": "application/vnd.forem.api-v1+json",
-    }
-
-    api_key = os.getenv("DEVTO_KEY")
-    if api_key:
-        headers["api-key"] = api_key
-
-    session.headers.update(headers)
+    session.headers.update({"User-Agent": "DevTo-Mirror-Bot/1.0", "Accept": "application/vnd.forem.api-v1+json"})
+    if api_key := os.getenv("DEVTO_KEY"):
+        session.headers["api-key"] = api_key
     return session
 
 
-def fetch_page_with_retry(
-    session: requests.Session,
-    url: str,
-    params: dict,
-    page: int,
-    max_retries: int = 3,
-    timeout: int = 30,
-) -> Optional[List[dict]]:
-    """
-    Fetch a page of articles with automatic retry on transient failures.
-
-    Implements exponential backoff for ReadTimeout and ConnectionError only.
-    Other RequestException types (e.g., HTTPError for 4xx/5xx) fail immediately.
-    Returns None on persistent failures to allow graceful degradation.
-
-    Args:
-        session: Configured requests session
-        url: API endpoint URL
-        params: Query parameters for the request
-        page: Page number (used for logging)
-        max_retries: Maximum retry attempts (default: 3)
-        timeout: Request timeout in seconds (default: 30)
-
-    Returns:
-        List of article dictionaries on success, None on failure
-    """
-    retry_delay = 1
-
-    for attempt in range(max_retries):
+def _retry_after(response: requests.Response, default: float) -> float:
+    value = response.headers.get("Retry-After")
+    wait = default
+    if value is not None:
         try:
-            response = session.get(url, params=params, timeout=timeout)
-            response.raise_for_status()
-            return response.json()
-
-        except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
-            if attempt < max_retries - 1:
-                print(f"  ⚠️  Timeout on page {page}, attempt {attempt + 1}, retrying in {retry_delay}s...")
-                time.sleep(retry_delay)
-                retry_delay *= 2
-            else:
-                print(f"  ❌ Failed to fetch page {page} after {max_retries} attempts: {e}")
-                return None
-
-        except requests.exceptions.RequestException as e:
-            print(f"  ❌ Request error for page {page}: {e}")
-            return None
-
-    return None
+            wait = float(value)
+        except ValueError:
+            try:  # HTTP-date form
+                target = parsedate_to_datetime(value)
+                if target.tzinfo is None:
+                    target = target.replace(tzinfo=timezone.utc)
+                wait = (target - datetime.now(timezone.utc)).total_seconds()
+            except (TypeError, ValueError):
+                logger.warning("Unparseable Retry-After header %r; using default backoff", value)
+                wait = default
+    # A huge Retry-After would outlive the job timeout and hide the real 429.
+    return min(max(wait, 0.0), MAX_RETRY_WAIT)
 
 
-def _parse_api_timestamp(value: object) -> datetime | None:
-    """Parse a Dev.to API timestamp string to a timezone-aware datetime."""
-    if not value:
-        return None
-    try:
-        dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-    except (ValueError, TypeError):
-        return None
-    if dt.tzinfo is None:
-        return dt.replace(tzinfo=timezone.utc)
-    return dt
+def get_json(session: requests.Session, url: str, params: dict | None = None, *, attempts: int = 4):
+    """GET and decode JSON, retrying timeouts, connection errors, 429 and 5xx with backoff.
 
-
-def filter_new_articles(data: List[dict], last_run_iso: Optional[str]) -> List[dict]:
+    Raises the last ``requests.RequestException`` once attempts are exhausted, or immediately
+    for non-retryable HTTP errors.
     """
-    Filter articles to only include those published after last run.
+    delay = 1.0
+    for attempt in range(1, attempts + 1):
+        try:
+            response = session.get(url, params=params, timeout=30)
+        except (requests.Timeout, requests.ConnectionError, requests.exceptions.ChunkedEncodingError) as exc:
+            error, wait = exc, delay
+        else:
+            if response.status_code not in RETRYABLE_STATUS:
+                response.raise_for_status()
+                return response.json()
+            error = requests.HTTPError(f"{response.status_code} from {response.url}", response=response)
+            wait = _retry_after(response, delay)
+        if attempt == attempts:
+            raise error
+        logger.warning("Attempt %d/%d for %s failed (%s); retrying in %.1fs", attempt, attempts, url, error, wait)
+        time.sleep(wait)
+        delay *= 2
+    raise AssertionError("unreachable")
 
-    Args:
-        data: List of article dictionaries from API
-        last_run_iso: ISO 8601 timestamp with timezone offset (e.g., "2024-01-15T10:30:00+00:00").
-                      The "Z" suffix is NOT supported; use "+00:00" for UTC.
-                      Pass None to return all articles without filtering.
 
-    Returns:
-        Filtered list containing only articles newer than last_run_iso,
-        or all articles if last_run_iso is None.
+def list_articles(session: requests.Session, username: str) -> list[dict]:
+    """Return summaries of every published article for ``username``, across all pages."""
+    articles: list[dict] = []
+    page = 1
+    while True:
+        batch = get_json(session, API_URL, {"username": username, "page": page, "per_page": PER_PAGE})
+        if not isinstance(batch, list):
+            raise ValueError(f"Unexpected listing payload for page {page}: {batch!r:.200}")
+        articles.extend(batch)
+        if len(batch) < PER_PAGE:
+            return articles
+        page += 1
+        time.sleep(0.5)
+
+
+def _last_activity(article: dict) -> str:
+    # The API emits uniform ISO-8601 UTC strings, so text comparison orders them correctly.
+    return max(article.get("published_at") or "", article.get("edited_at") or "")
+
+
+def sync_articles(username: str, stored: list[dict]) -> list[dict]:
+    """Return the full article for every published post, in listing order.
+
+    Stored articles are reused unless the listing shows a newer edit; posts no longer listed
+    are dropped. Any API failure raises, so a partial fetch can never replace the store.
 
     Raises:
-        ValueError: If last_run_iso is not a valid ISO 8601 format string.
-
-    Note:
-        Article timestamps from Dev.to API use "Z" suffix which is converted
-        internally to "+00:00" for proper comparison. Articles with missing
-        or malformed published_at fields are silently skipped.
+        RuntimeError: if more than half of the stored articles disappear from the listing,
+            which is likelier an API glitch than a mass deletion. Pass an empty store to override.
     """
-    if not last_run_iso:
-        return data
+    stored_by_id = {a["id"]: a for a in stored if "id" in a}
+    # Only full articles carry body_html; anything else in the store is refetched.
+    cache = {aid: a for aid, a in stored_by_id.items() if "body_html" in a}
+    articles: dict[int, dict] = {}
+    with create_session() as session:
+        for summary in list_articles(session, username):
+            # A post published mid-pagination shifts the pages and can be listed twice.
+            if summary["id"] in articles:
+                continue
+            cached = cache.get(summary["id"])
+            if cached and _last_activity(cached) == _last_activity(summary):
+                articles[summary["id"]] = cached
+                continue
+            full = get_json(session, f"{API_URL}/{summary['id']}")
+            full.pop("body_markdown", None)
+            articles[summary["id"]] = full
+            time.sleep(0.5)
 
-    try:
-        last_run_dt = datetime.fromisoformat(last_run_iso)
-    except ValueError as e:
-        logger.error(f"Invalid ISO format for last_run_iso: {last_run_iso}")
-        raise ValueError(f"last_run_iso must be valid ISO 8601 format: {e}") from e
-
-    # Normalize naive datetimes to UTC for safe comparison.
-    if last_run_dt.tzinfo is None:
-        last_run_dt = last_run_dt.replace(tzinfo=timezone.utc)
-
-    def _activity_timestamp(article: dict) -> datetime | None:
-        # Dev.to commonly provides: created_at, published_at, edited_at.
-        # We treat a post as "new since last run" if it was *published or edited* since last run.
-        candidates = [
-            article.get("edited_at"),
-            article.get("updated_at"),
-            article.get("published_at"),
-        ]
-        dts = [dt for dt in (_parse_api_timestamp(v) for v in candidates) if dt is not None]
-        return max(dts) if dts else None
-
-    result: list[dict] = []
-    for article in data:
-        activity_dt = _activity_timestamp(article)
-        if activity_dt is None:
-            logger.debug(f"Skipping article without parseable activity timestamp: {article.get('id', 'unknown')}")
-            continue
-        if activity_dt > last_run_dt:
-            result.append(article)
-
-    return result
+    dropped = stored_by_id.keys() - articles.keys()
+    for article_id in sorted(dropped):
+        url = stored_by_id[article_id].get("url")
+        logger.warning("Dropping article %s (%s): no longer listed on Dev.to", article_id, url)
+    if len(dropped) * 2 > len(stored_by_id):
+        raise RuntimeError(
+            f"{len(dropped)} of {len(stored_by_id)} stored articles vanished from the listing; refusing to sync."
+        )
+    return list(articles.values())

@@ -41,6 +41,23 @@ class TestHtmlSanitization(unittest.TestCase):
         self.assertIn("hi", out)
         self.assertIn("bye", out)
 
+    def test_preserves_tables_and_inline_semantics(self):
+        html_in = (
+            '<table><thead><tr><th scope="col">k</th></tr></thead>'
+            '<tbody><tr><td colspan="2">v</td></tr></tbody></table>'
+            "<p>H<sub>2</sub>O <kbd>Ctrl</kbd> <del>old</del></p>"
+        )
+
+        self.assertEqual(sanitize_html_content(html_in), html_in)
+
+    def test_drops_inline_styles_from_images(self):
+        out = sanitize_html_content('<img src="a.png" style="position:fixed" width="1" height="1">')
+
+        self.assertEqual(out, '<img src="a.png" width="1" height="1">')
+
+    def test_returns_empty_string_for_empty_input(self):
+        self.assertEqual(sanitize_html_content(""), "")
+
 
 if __name__ == "__main__":
     unittest.main()
