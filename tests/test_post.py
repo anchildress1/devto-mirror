@@ -45,6 +45,10 @@ class TestPostFromArticle(unittest.TestCase):
         post = Post.from_article(make_article(1, canonical_url="https://example.com/original"))
         self.assertEqual(post.canonical, "https://dev.to/ash/post-1")
 
+    def test_honors_canonical_url_regardless_of_host_case(self):
+        post = Post.from_article(make_article(1, canonical_url="https://DEV.TO/ash/original"))
+        self.assertEqual(post.canonical, "https://DEV.TO/ash/original")
+
     def test_normalizes_comma_separated_tags_string(self):
         article = make_article(1)
         del article["tags"]
@@ -54,7 +58,7 @@ class TestPostFromArticle(unittest.TestCase):
 
         self.assertEqual(post.tags, ("ai", "python", "webdev"))
 
-    def test_prefers_tag_list_array_over_tags_string(self):
+    def test_prefers_tag_list_over_tags(self):
         article = make_article(1, tags="ai,python")
         article["tag_list"] = ["rust", "cli"]
 

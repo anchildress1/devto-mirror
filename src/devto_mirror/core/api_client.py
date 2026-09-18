@@ -40,6 +40,7 @@ def _retry_after(response: requests.Response, default: float) -> float:
                     target = target.replace(tzinfo=timezone.utc)
                 wait = (target - datetime.now(timezone.utc)).total_seconds()
             except (TypeError, ValueError):
+                logger.warning("Unparseable Retry-After header %r; using default backoff", value)
                 wait = default
     # A huge Retry-After would outlive the job timeout and hide the real 429.
     return min(max(wait, 0.0), MAX_RETRY_WAIT)

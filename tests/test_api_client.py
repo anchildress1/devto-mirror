@@ -111,9 +111,11 @@ class TestGetJson(unittest.TestCase):
         headers = {"Retry-After": "not-a-date"}
         self.session.get.side_effect = [_response(503, headers=headers), _response(payload=[])]
 
-        api_client.get_json(self.session, "u")
+        with self.assertLogs(api_client.logger, "WARNING") as logs:
+            api_client.get_json(self.session, "u")
 
         self.sleep.assert_called_once_with(1.0)
+        self.assertIn("Unparseable Retry-After header", logs.output[0])
 
     def test_raises_last_error_after_exhausting_attempts(self):
         self.session.get.side_effect = [_response(502)] * 3

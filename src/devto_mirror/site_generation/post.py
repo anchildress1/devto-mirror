@@ -28,14 +28,15 @@ def _devto_canonical(article: dict) -> str:
     # AGENTS.md requires every canonical to point at Dev.to; a repost's own canonical
     # still qualifies since Dev.to hosts the original too, but an external URL does not.
     declared = article.get("canonical_url") or ""
-    if declared and urlparse(declared).netloc == "dev.to":
+    if declared and urlparse(declared).netloc.lower() == "dev.to":
         return declared
     return article["url"]
 
 
 def _tags(article: dict) -> tuple[str, ...]:
-    # The API returns tag_list as an array but tags as a comma-separated string;
-    # either form can also arrive comma-separated, so normalize both the same way.
+    # Dev.to intentionally swaps which of tag_list/tags is the array vs. the
+    # comma-separated string between the listing and single-article endpoints
+    # (forem/forem#4206), so normalize either shape from either key.
     raw = article.get("tag_list") or article.get("tags") or ()
     if isinstance(raw, str):
         raw = raw.split(",")
