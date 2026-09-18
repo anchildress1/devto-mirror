@@ -41,6 +41,36 @@ class TestPostFromArticle(unittest.TestCase):
                 post = Post.from_article(make_article(1, canonical_url=canonical))
                 self.assertEqual(post.canonical, "https://dev.to/ash/post-1")
 
+    def test_falls_back_to_url_when_canonical_url_is_off_dev_to(self):
+        post = Post.from_article(make_article(1, canonical_url="https://example.com/original"))
+        self.assertEqual(post.canonical, "https://dev.to/ash/post-1")
+
+    def test_normalizes_comma_separated_tags_string(self):
+        article = make_article(1)
+        del article["tags"]
+        article["tags"] = "ai, python,webdev"
+
+        post = Post.from_article(article)
+
+        self.assertEqual(post.tags, ("ai", "python", "webdev"))
+
+    def test_prefers_tag_list_array_over_tags_string(self):
+        article = make_article(1, tags="ai,python")
+        article["tag_list"] = ["rust", "cli"]
+
+        post = Post.from_article(article)
+
+        self.assertEqual(post.tags, ("rust", "cli"))
+
+    def test_normalizes_comma_separated_tag_list_string(self):
+        article = make_article(1)
+        del article["tags"]
+        article["tag_list"] = "ai,python"
+
+        post = Post.from_article(article)
+
+        self.assertEqual(post.tags, ("ai", "python"))
+
     def test_uses_published_as_modified_when_never_edited(self):
         post = Post.from_article(make_article(1, edited_at=None))
         self.assertEqual(post.modified, post.published)

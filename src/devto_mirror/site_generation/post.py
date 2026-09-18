@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from urllib.parse import urlparse
 
 from devto_mirror.core.html_sanitization import sanitize_html_content
 from devto_mirror.core.path_utils import sanitize_slug
@@ -21,6 +22,24 @@ def _sized(match: re.Match[str]) -> str:
 def ensure_img_dimensions(html: str) -> str:
     """Give ``<img>`` tags without explicit sizes a default width/height so browsers reserve space (CLS)."""
     return _IMG_TAG.sub(_sized, html)
+
+
+def _devto_canonical(article: dict) -> str:
+    # AGENTS.md requires every canonical to point at Dev.to; a repost's own canonical
+    # still qualifies since Dev.to hosts the original too, but an external URL does not.
+    declared = article.get("canonical_url") or ""
+    if declared and urlparse(declared).netloc == "dev.to":
+        return declared
+    return article["url"]
+
+
+def _tags(article: dict) -> tuple[str, ...]:
+    # The API returns tag_list as an array but tags as a comma-separated string;
+    # either form can also arrive comma-separated, so normalize both the same way.
+    raw = article.get("tag_list") or article.get("tags") or ()
+    if isinstance(raw, str):
+        raw = raw.split(",")
+    return tuple(tag.strip() for tag in raw if tag and tag.strip())
 
 
 @dataclass(frozen=True, slots=True)
@@ -51,13 +70,11 @@ class Post:
             slug=slug,
             title=article["title"],
             url=article["url"],
-            # Honor the canonical Dev.to itself declares (e.g. a repost defers to its original);
-            # pointing past it would build a canonical chain that search engines handle badly.
-            canonical=article.get("canonical_url") or article["url"],
+            canonical=_devto_canonical(article),
             description=(article.get("description") or "").strip(),
             content_html=sanitize_html_content(ensure_img_dimensions(article.get("body_html") or "")),
             cover_image=article.get("cover_image") or "",
-            tags=tuple(article.get("tags") or ()),
+            tags=_tags(article),
             author=user.get("name") or user.get("username") or "",
             username=user.get("username") or "",
             published=published,
