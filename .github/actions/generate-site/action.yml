@@ -61,7 +61,9 @@ runs:
       run: |
         set -euo pipefail
         if git ls-remote --exit-code origin "$STATE_BRANCH" >/dev/null 2>&1; then
-          git fetch origin "$STATE_BRANCH" --depth=1
+          # actions/checkout narrows the fetch refspec to the checked-out ref, so a
+          # bare branch name here would only populate FETCH_HEAD, not origin/$STATE_BRANCH.
+          git fetch origin "$STATE_BRANCH":"refs/remotes/origin/$STATE_BRANCH" --depth=1
           if git show "origin/${STATE_BRANCH}:last_run.txt" >/dev/null 2>&1; then
             TIMESTAMP=$(git show "origin/${STATE_BRANCH}:last_run.txt")
             echo "$TIMESTAMP" > last_run.txt
@@ -83,7 +85,8 @@ runs:
     - name: Set up uv
       uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
       with:
-        version: "latest"
+        # Pinned: --no-build exempts the editable first-party project only on uv >= 0.12.
+        version: "0.12.13"
         python-version: "3.12"
 
     - name: Cache uv dependencies
@@ -96,11 +99,7 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: uv sync --locked --group dev
-
-    - name: Run post-install setup
-      shell: bash
-      run: make install
+      run: uv sync --locked --no-build --group dev
 
     - name: Generate site
       id: generate
@@ -119,7 +118,7 @@ runs:
           echo "- 👤 Dev.to: \`${DEVTO_USERNAME}\`"
           echo "- 📦 Repo: \`${PAGES_REPO}\`"
         } >> "$GITHUB_STEP_SUMMARY"
-        uv run python -m devto_mirror.site_generation.generator
+        uv run --locked --no-build python -m devto_mirror.site_generation.generator
 
     - name: Always process robots.txt
       shell: bash
@@ -161,7 +160,7 @@ runs:
       shell: bash
       run: |
         echo "## ✅ Site Validation" >> "$GITHUB_STEP_SUMMARY"
-        uv run python scripts/validate_site_generation.py
+        uv run --locked --no-build python scripts/validate_site_generation.py
         echo "✅ Validation passed" >> "$GITHUB_STEP_SUMMARY"
 
     - name: Generate sitemap and index
@@ -173,7 +172,7 @@ runs:
         FIREBASE_WEB_CONFIG: ${{ inputs.firebase_web_config }}
       run: |
         echo "## 📄 Generating Sitemap" >> "$GITHUB_STEP_SUMMARY"
-        uv run python -m devto_mirror.site_generation.renderer
+        uv run --locked --no-build python -m devto_mirror.site_generation.renderer
         echo "✅ Sitemap generated" >> "$GITHUB_STEP_SUMMARY"
 
     - name: Prepare deployment directory
