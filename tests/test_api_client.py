@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
 import requests
@@ -74,8 +75,40 @@ class TestGetJson(unittest.TestCase):
 
                 self.sleep.assert_called_once_with(expected)
 
-    def test_falls_back_to_backoff_when_retry_after_is_http_date(self):
+    def test_parses_http_date_retry_after(self):
+        fixed_now = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        target = fixed_now + timedelta(seconds=15)
+        headers = {"Retry-After": target.strftime("%a, %d %b %Y %H:%M:%S GMT")}
+        self.session.get.side_effect = [_response(503, headers=headers), _response(payload=[])]
+
+        with patch.object(api_client, "datetime", wraps=datetime) as mock_dt:
+            mock_dt.now.return_value = fixed_now
+            api_client.get_json(self.session, "u")
+
+        self.sleep.assert_called_once_with(15.0)
+
+    def test_treats_a_timezone_less_http_date_as_utc(self):
+        fixed_now = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        target = fixed_now + timedelta(seconds=10)
+        headers = {"Retry-After": target.strftime("%a, %d %b %Y %H:%M:%S")}
+        self.session.get.side_effect = [_response(503, headers=headers), _response(payload=[])]
+
+        with patch.object(api_client, "datetime", wraps=datetime) as mock_dt:
+            mock_dt.now.return_value = fixed_now
+            api_client.get_json(self.session, "u")
+
+        self.sleep.assert_called_once_with(10.0)
+
+    def test_clamps_far_future_http_date_retry_after(self):
         headers = {"Retry-After": "Wed, 21 Oct 2026 07:28:00 GMT"}
+        self.session.get.side_effect = [_response(503, headers=headers), _response(payload=[])]
+
+        api_client.get_json(self.session, "u")
+
+        self.sleep.assert_called_once_with(api_client.MAX_RETRY_WAIT)
+
+    def test_falls_back_to_default_wait_on_unparseable_retry_after(self):
+        headers = {"Retry-After": "not-a-date"}
         self.session.get.side_effect = [_response(503, headers=headers), _response(payload=[])]
 
         api_client.get_json(self.session, "u")
@@ -198,6 +231,13 @@ class TestSyncArticles(unittest.TestCase):
 
         with self.assertLogs(api_client.logger, "WARNING"), self.assertRaisesRegex(RuntimeError, "2 of 3 stored"):
             api_client.sync_articles("ash", stored)
+
+    def test_refuses_when_more_than_half_of_a_legacy_store_vanishes(self):
+        self.listing = []
+        legacy = [{"id": 1, "title": "Post 1"}, {"id": 2, "title": "Post 2"}]
+
+        with self.assertLogs(api_client.logger, "WARNING"), self.assertRaisesRegex(RuntimeError, "2 of 2 stored"):
+            api_client.sync_articles("ash", legacy)
 
     def test_skips_articles_listed_twice_across_pages(self):
         self.listing = [make_summary(1), make_summary(2), make_summary(1)]

@@ -5,6 +5,8 @@ from __future__ import annotations
 import logging
 import os
 import time
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 
 import requests
 
@@ -26,10 +28,19 @@ def create_session() -> requests.Session:
 
 
 def _retry_after(response: requests.Response, default: float) -> float:
-    try:
-        wait = float(response.headers.get("Retry-After", default))
-    except ValueError:  # HTTP-date form
-        wait = default
+    value = response.headers.get("Retry-After")
+    wait = default
+    if value is not None:
+        try:
+            wait = float(value)
+        except ValueError:
+            try:  # HTTP-date form
+                target = parsedate_to_datetime(value)
+                if target.tzinfo is None:
+                    target = target.replace(tzinfo=timezone.utc)
+                wait = (target - datetime.now(timezone.utc)).total_seconds()
+            except (TypeError, ValueError):
+                wait = default
     # A huge Retry-After would outlive the job timeout and hide the real 429.
     return min(max(wait, 0.0), MAX_RETRY_WAIT)
 
@@ -90,15 +101,16 @@ def sync_articles(username: str, stored: list[dict]) -> list[dict]:
         RuntimeError: if more than half of the stored articles disappear from the listing,
             which is likelier an API glitch than a mass deletion. Pass an empty store to override.
     """
+    stored_by_id = {a["id"]: a for a in stored if "id" in a}
     # Only full articles carry body_html; anything else in the store is refetched.
-    known = {a["id"]: a for a in stored if "id" in a and "body_html" in a}
+    cache = {aid: a for aid, a in stored_by_id.items() if "body_html" in a}
     articles: dict[int, dict] = {}
     with create_session() as session:
         for summary in list_articles(session, username):
             # A post published mid-pagination shifts the pages and can be listed twice.
             if summary["id"] in articles:
                 continue
-            cached = known.get(summary["id"])
+            cached = cache.get(summary["id"])
             if cached and _last_activity(cached) == _last_activity(summary):
                 articles[summary["id"]] = cached
                 continue
@@ -107,11 +119,12 @@ def sync_articles(username: str, stored: list[dict]) -> list[dict]:
             articles[summary["id"]] = full
             time.sleep(0.5)
 
-    dropped = known.keys() - articles.keys()
+    dropped = stored_by_id.keys() - articles.keys()
     for article_id in sorted(dropped):
-        logger.warning("Dropping article %s (%s): no longer listed on Dev.to", article_id, known[article_id].get("url"))
-    if len(dropped) * 2 > len(known):
+        url = stored_by_id[article_id].get("url")
+        logger.warning("Dropping article %s (%s): no longer listed on Dev.to", article_id, url)
+    if len(dropped) * 2 > len(stored_by_id):
         raise RuntimeError(
-            f"{len(dropped)} of {len(known)} stored articles vanished from the listing; refusing to sync."
+            f"{len(dropped)} of {len(stored_by_id)} stored articles vanished from the listing; refusing to sync."
         )
     return list(articles.values())
