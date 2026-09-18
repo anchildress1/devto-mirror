@@ -1,8 +1,4 @@
-"""HTML sanitization helpers.
-
-These live in the application package (src/) so unit tests can import them without
-triggering script side-effects.
-"""
+"""Allowlist sanitizer for Dev.to post bodies."""
 
 from __future__ import annotations
 
@@ -28,39 +24,26 @@ def sanitize_html_content(content: str) -> str:
     # Remove script/style blocks entirely (tag + content) so their payload doesn't
     # end up as visible text after sanitization.
     content = re.sub(r"(?is)<(script|style)\b[^>]*>.*?</\1>", "", content)
+    # Dev.to heading anchors are empty self-links: keep them as fragment targets, not unnamed links.
+    content = re.sub(r'<a name="([^"]+)" href="#\1">\s*</a>', r'<a id="\1"></a>', content)
 
     allowed_tags = [
-        "p",
-        "br",
-        "strong",
-        "em",
-        "a",
-        "div",
-        "span",
-        "code",
-        "pre",
-        "blockquote",
-        "ul",
-        "ol",
-        "li",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "img",
-        "hr",
+        *("p", "br", "hr", "div", "span", "blockquote", "pre", "code", "kbd"),
+        *("strong", "em", "b", "i", "del", "s", "sub", "sup", "a", "img", "figure", "figcaption"),
+        *("h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "dl", "dt", "dd"),
+        *("table", "thead", "tbody", "tfoot", "tr", "th", "td", "details", "summary"),
     ]
 
     allowed_attributes = {
         # Keep links readable and allow embed/card markup to style anchors.
-        "a": ["href", "title", "rel", "target", "class"],
+        "a": ["href", "title", "rel", "target", "class", "id"],
         # Dev.to "ltag" embeds use wrapper div/span with class hooks.
         "div": ["class"],
         "span": ["class"],
-        # allow width/height/loading so we can avoid CLS and improve Lighthouse scores
-        "img": ["src", "alt", "width", "height", "style", "class", "title", "loading"],
+        # width/height let browsers reserve space (CLS). No style: bleach can't sanitize CSS.
+        "img": ["src", "alt", "width", "height", "class", "title", "loading"],
+        "th": ["colspan", "rowspan", "scope"],
+        "td": ["colspan", "rowspan"],
     }
 
     # IMPORTANT: strip disallowed tags rather than escaping them into visible text.

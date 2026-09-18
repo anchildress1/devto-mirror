@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% set title = site_name %}
+{% set canonical = "https://dev.to/" ~ username %}
+{% set description = "Mirror of " ~ username ~ "'s Dev.to blog posts. Canonical lives on Dev.to. This is just a crawler-friendly mirror." %}
+{% set author = username %}
+{% set image = default_image %}
+{% set og_type = "website" %}
+{% block main %}
+<h1>{{ site_name }}</h1>
+<ul class="posts">
+{% for post in posts %}
+  <li><a href="posts/{{ post.slug }}.html">{{ post.title }}</a> <span class="meta">· <time datetime="{{ post.published }}">{{ post.published[:10] }}</time></span>{% if post.description %}<br>{{ post.description }}{% endif %}</li>
+{% endfor %}
+</ul>
+{% if comments %}
+<h2>Comment notes</h2>
+<ul>
+{% for note in comments %}
+  <li><a href="{{ note.path }}">{{ note.label }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+<p class="meta">Every article's canonical copy lives on <a href="https://dev.to/{{ username }}">Dev.to</a>. This is a crawler-friendly mirror.</p>
+{% endblock %}

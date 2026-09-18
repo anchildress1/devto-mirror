@@ -1,15 +1,15 @@
 name: Generate and Publish Dev.to Mirror Site
 
 # Primary deploy: generates the mirror site and publishes it to Firebase
-# Hosting. Incremental state (last_run.txt, posts_data.json) is read from and
-# written back to the dedicated `mirror-state` branch (no site, just state).
+# Hosting. The article store (posts_data.json) is read from and written back to
+# the dedicated `mirror-state` branch (no site, just state).
 # The gh-pages *site* deploy lives in deploy-gh-pages.yml for forks, which keep
 # their state on gh-pages alongside the deployed site.
 #
 # Required repository variables:
 # - DEVTO_USERNAME: Your Dev.to username (required)
 # - GH_USERNAME: Your GitHub username (required if SITE_DOMAIN not set)
-# - SITE_DOMAIN: Custom domain for the site (optional)
+# - SITE_DOMAIN: Custom domain for the site (optional; defaults to the Firebase host)
 # - FIREBASE_WEB_CONFIG: Firebase web app config JSON (optional). When set,
 #     the generated pages include the Firebase Analytics snippet. Forks leave
 #     this unset and ship no analytics. This is public web config, not a secret.
@@ -20,10 +20,10 @@ name: Generate and Publish Dev.to Mirror Site
 # - FIREBASE_PROJECT_ID: Firebase project id (optional; defaults to anchildress1)
 #
 # Optional repository secrets:
-# - DEVTO_KEY: Dev.to API key (required for private/draft posts)
+# - DEVTO_KEY: Dev.to API key (optional; raises API rate limits)
 
 on:
-  # Weekly schedule disabled (#72). Re-enable to auto-publish to Firebase.
+  # Weekly schedule disabled; re-enable to auto-publish to Firebase.
   # schedule:
   #   - cron: "40 14 * * 3"  # 14:40 UTC every Wednesday (09:40 ET winter / 10:40 ET during DST)
   push:
@@ -45,17 +45,18 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Never kill a deploy halfway: the state push must follow the site it describes.
+  cancel-in-progress: false
 
 jobs:
   generate-and-deploy:
     # Firebase deploy is upstream-only; forks publish via deploy-gh-pages.yml and
-    # have no WIF/Firebase config, so guard rather than fail their weekly run.
+    # have no WIF/Firebase config, so skip rather than fail on their pushes.
     if: github.repository_owner == 'anchildress1'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: write   # push incremental state back to gh-pages
+      contents: write   # push the article store to mirror-state
       id-token: write    # OIDC token for Workload Identity Federation
     environment:
       name: deploy
@@ -63,28 +64,22 @@ jobs:
     env:
       FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}
     steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v7
 
       - name: Generate site
-        id: site
         uses: ./.github/actions/generate-site
         with:
           devto_username: ${{ vars.DEVTO_USERNAME }}
           gh_username: ${{ vars.GH_USERNAME }}
-          site_domain: ${{ vars.SITE_DOMAIN }}
+          site_domain: ${{ vars.SITE_DOMAIN || format('{0}.web.app', env.FIREBASE_PROJECT_ID) }}
           devto_key: ${{ secrets.DEVTO_KEY }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pages_repo: ${{ github.repository }}
           force_full_regen: ${{ github.event.inputs.force_full_regen || 'false' }}
           state_branch: mirror-state
-          fallback_site_url: https://${{ vars.FIREBASE_PROJECT_ID || 'anchildress1' }}.web.app/
           firebase_web_config: ${{ vars.FIREBASE_WEB_CONFIG }}
 
       - name: Authenticate to Google Cloud
-        if: steps.site.outputs.no_new_posts != 'true'
-        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
@@ -92,28 +87,24 @@ jobs:
           export_environment_variables: true
 
       - name: Set up Node.js
-        if: steps.site.outputs.no_new_posts != 'true'
         uses: actions/setup-node@v7
         with:
           node-version: '24'
 
       - name: Deploy to Firebase Hosting
-        if: steps.site.outputs.no_new_posts != 'true'
         timeout-minutes: 5
         run: |
           echo "## 🚀 Firebase Deploy" >> "$GITHUB_STEP_SUMMARY"
-          npx --yes firebase-tools@15.22.1 deploy \
+          npx --yes --ignore-scripts firebase-tools@15.30.0 deploy \
             --only hosting \
             --project "$FIREBASE_PROJECT_ID" \
             --non-interactive
           echo "✅ Deployed to https://${FIREBASE_PROJECT_ID}.web.app" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Stage incremental state
-        timeout-minutes: 5
+      - name: Stage article store
         run: |
           mkdir -p _state
-          [ -f last_run.txt ] && cp last_run.txt _state/
-          [ -f posts_data.json ] && cp posts_data.json _state/
+          cp posts_data.json _state/
 
       - name: Push state to mirror-state branch
         timeout-minutes: 5
@@ -122,7 +113,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_state
           publish_branch: mirror-state
-          keep_files: true
+          keep_files: false
           force_orphan: false
           user_name: ci-bot
           user_email: actions@users.noreply.github.com

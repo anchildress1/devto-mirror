@@ -1,23 +1,21 @@
 # Documentation
 
-This directory contains comprehensive documentation for the devto-mirror project.
+Guides for working on devto-mirror. Start with the main [README](../README.md) for what the project does and how to set up a fork.
 
-## Available Guides
+## 📚 Guides
 
-- [DEV_GUIDE.md](./DEV_GUIDE.md) - Local development setup, environment configuration, and development workflow
-- [CI_GUIDE.md](./CI_GUIDE.md) - GitHub Actions workflows, CI/CD architecture, and deployment details
-- [SECURITY_ANALYSIS.md](./SECURITY_ANALYSIS.md) - Security recommendations and analysis
-- [MIGRATION_PLAN.md](./MIGRATION_PLAN.md) - AI optimization refactoring progress and migration tracking
+- [DEV_GUIDE.md](./DEV_GUIDE.md) - Local setup, environment variables, and the validation workflow
+- [CI_GUIDE.md](./CI_GUIDE.md) - GitHub Actions workflows and the Firebase and GitHub Pages deploy paths
+- [SECURITY_ANALYSIS.md](./SECURITY_ANALYSIS.md) - Security scanning and how to run the checks locally
 
-## Implementation Logs
+## 🗂️ Implementation Logs
 
-The `implementations/` directory contains detailed logs of specific features and changes:
+The `implementations/` directory holds historical logs of specific changes:
 
 - [20250925_BANNER_IMAGES.md](./implementations/20250925_BANNER_IMAGES.md) - Banner image implementation
 - [20251026_CRAWLER_TESTING.md](./implementations/20251026_CRAWLER_TESTING.md) - Crawler accessibility testing
 
-## Quick Links
+## 🔗 Quick Links
 
 - Main project README: [../README.md](../README.md)
-- Agent instructions: [../AGENTS.md](../AGENTS.md)
 - Security policy: [../SECURITY.md](../SECURITY.md)

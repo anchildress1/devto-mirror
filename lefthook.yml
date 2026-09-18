@@ -36,7 +36,5 @@ pre-push:
       run: make test
     check-complexity:
       run: make check-complexity
-    validate-site:
-      run: uv run python scripts/validate_site_generation.py
     actionlint:
       run: actionlint

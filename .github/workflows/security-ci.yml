@@ -5,35 +5,38 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch: {}
 
-permissions:
-  contents: read
-  pull-requests: write
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   security-quality:
+    if: github.event.pull_request.draft == false || github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      # make ai-checks shells out to plain `uv run`; these cover every one of those
+      # calls too, not just the explicit --locked --no-build sync below.
+      UV_LOCKED: "1"
+      UV_NO_BUILD: "1"
     steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
+      - name: Checkout repository
+        uses: actions/checkout@v7
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
-          version: "latest"
+          # Pinned: --no-build exempts the editable first-party project only on uv >= 0.12.
+          version: "0.12.13"
           python-version: "3.12"
           enable-cache: true
 
       - name: Install dependencies
         run: |
           echo "## 🔧 Installing dependencies" >> "$GITHUB_STEP_SUMMARY"
-          uv lock
-          make install
+          uv sync --locked --no-build --group dev
           echo "✅ Dependencies installed" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Run validation
@@ -42,8 +45,6 @@ jobs:
           make ai-checks
           echo "✅ All checks passed" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Generate coverage and reports
-        run: |
-          make test
-          uv run bandit -r scripts src/ -ll -iii -f json -o bandit-report.json || true
-          uv run flake8 scripts src/ --max-line-length=120 > flake8-report.txt || true
+      - name: Fail if checks rewrote tracked files
+        # ai-checks formats in place, so unformatted code would otherwise pass.
+        run: git diff --exit-code

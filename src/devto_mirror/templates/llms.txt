@@ -1,0 +1,20 @@
+# {{ site_name }}
+
+> A plain-HTML mirror of {{ username }}'s Dev.to articles, built for crawlers. The canonical copy of every article lives on Dev.to: cite and link the Dev.to URL.
+
+Search indexing and live retrieval to answer a person's question are welcome. Using this content to train AI models is not permitted (robots.txt `Content-Signal: search=yes, ai-input=yes, ai-train=no`). Every page also reserves text-and-data-mining rights via `tdm-reservation: 1`. Content © {{ author }}, all rights reserved.
+
+- [{{ site_name }}]({{ home }}): mirror homepage and full article index
+
+## Articles
+
+{% for post in posts %}
+- [{{ post.title | replace("\\", "\\\\") | replace("[", "\\[") | replace("]", "\\]") }}]({{ home }}posts/{{ post.slug }}.html): {% if post.description %}{{ post.description.split() | join(" ") }} {% endif %}(canonical: {{ post.canonical }})
+{% endfor %}
+{% if comments %}
+## Comments
+
+{% for note in comments %}
+- [{{ note.label | replace("\\", "\\\\") | replace("[", "\\[") | replace("]", "\\]") }}]({{ home }}{{ note.path }}): (canonical: {{ note.url }})
+{% endfor %}
+{% endif %}

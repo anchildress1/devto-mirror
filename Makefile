@@ -1,39 +1,37 @@
 # Dev.to Mirror Development Commands
 
-# Prefer the project's venv python if present, otherwise fall back to system `python`.
-PYTHON := $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python)
-
-.PHONY: help install test lint format clean check ai-checks security
-.PHONY: check-complexity
+.PHONY: help install dev test lint format security check-complexity ai-checks clean
 
 help:  ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
+# Hooks are skipped in CI (CI / GITHUB_ACTIONS set).
 install:  ## Install development dependencies
 	uv sync --locked --group dev
-	# Ensure lefthook is executed via uv so we use the pinned dev toolchain
-	# Skip lefthook installation in CI environments (GITHUB_ACTIONS, CI)
 	@if [ -z "$$CI$$GITHUB_ACTIONS" ]; then uv run lefthook install; fi
+
+# Mirrors the generate-site composite action. Needs DEVTO_USERNAME plus SITE_DOMAIN or GH_USERNAME
+# (via .env) and network access to the Dev.to API; the article store is cached in posts_data.json.
+dev:  ## Build the full site into _deploy/ as a local test run (reads .env)
+	uv run python -m devto_mirror.site_generation.generator
+	mkdir -p _deploy/assets
+	cp .nojekyll google6b80426bb396f31f.html algolia_verification.html _deploy/
+	cp assets/devto-mirror.jpg _deploy/assets/
+	@echo "✅ Built _deploy/ — preview: uv run python -m http.server --directory _deploy 8000"
 
 test:  ## Run unit tests
 	uv run coverage run --source src -m unittest discover -s tests -p 'test_*.py'
 	uv run coverage report --fail-under=85
 	uv run coverage html
 
-lint:  ## Run linting checks (formatting, linting, security)
+lint:  ## Check formatting (black, isort) and lint (flake8)
+	uv run black --check src/ tests/ scripts/ --line-length 120
 	uv run isort --check-only --profile black --line-length 120 src/ tests/ scripts/
 	uv run flake8 src/ tests/ scripts/
-	uv run python scripts/validate_site_generation.py
 
 format:  ## Format code with Black
 	uv run black src/ tests/ scripts/ --line-length 120
-
-prechecks:  ## Run prechecks on staged files (applies formatting to staged files only)
-	@./scripts/prechecks.sh $$(git diff --name-only --cached)
-
-prechecks-full:  ## Run full prechecks across the repo (force full run)
-	@./scripts/prechecks.sh $$(git ls-files)
 
 security:  ## Run security checks
 	uv run bandit -r scripts src/ -ll -iii
@@ -44,23 +42,26 @@ security:  ## Run security checks
 	fi
 	uv run python scripts/check_detect_secrets.py
 
-check-complexity:  ## Check cognitive complexity (max 15)
-	@echo "🔍 Checking cognitive complexity (max 15)..."
-	@uv run radon cc scripts/ src/ -s 2>/dev/null | grep -E "\(((1[6-9])|([2-9][0-9])|([1-9][0-9]{2,}))\)" && \
-		echo "❌ Functions with complexity >15 found. See docs/COMPLEXITY_REFACTORING.md" && exit 1 || \
-		echo "✅ All functions within complexity limits"
+check-complexity:  ## Check cyclomatic complexity (max 15)
+	@echo "🔍 Checking cyclomatic complexity (max 15)..."
+	@report=$$(uv run radon cc scripts/ src/ -s) || { echo "❌ radon failed"; exit 1; }; \
+	if echo "$$report" | grep -E "\(((1[6-9])|([2-9][0-9])|([1-9][0-9]{2,}))\)"; then \
+		echo "❌ Functions with complexity >15 found; split them up."; exit 1; \
+	fi; \
+	echo "✅ All functions within complexity limits"
 
-ai-checks:  ## Single command: format → lint → security → complexity → test + site (POC ready)
+ai-checks:  ## Single command: format → lint → security → complexity → test
 	@set -e; \
 	echo "🔍 format → lint → security → complexity → test"; \
 	$(MAKE) format && echo "  ✓ format" || (echo "  ✗ format"; exit 1); \
 	$(MAKE) lint && echo "  ✓ lint" || (echo "  ✗ lint"; exit 1); \
 	$(MAKE) security && echo "  ✓ security" || (echo "  ✗ security"; exit 1); \
-	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ✗ complexity (see docs/COMPLEXITY_REFACTORING.md)"; exit 1); \
+	$(MAKE) check-complexity && echo "  ✓ complexity" || (echo "  ✗ complexity"; exit 1); \
 	$(MAKE) test && echo "  ✓ test" || (echo "  ✗ test"; exit 1); \
 	echo "✅ Ready to commit."
 
-clean:  ## Clean up generated files
+clean:  ## Clean up generated files, including the local site build and article store
+	rm -rf _deploy/ posts_data.json
 	rm -rf htmlcov/
 	rm -rf .coverage
 	rm -rf __pycache__/
