@@ -55,6 +55,13 @@ class TestHtmlSanitization(unittest.TestCase):
 
         self.assertEqual(out, '<img src="a.png" width="1" height="1">')
 
+    def test_turns_empty_heading_self_links_into_fragment_targets(self):
+        html_in = '<h2>\n  <a name="step-1" href="#step-1">\n  </a>\n  Step 1\n</h2><a href="#step-1">jump</a>'
+
+        out = sanitize_html_content(html_in)
+
+        self.assertEqual(out, '<h2>\n  <a id="step-1"></a>\n  Step 1\n</h2><a href="#step-1">jump</a>')
+
     def test_returns_empty_string_for_empty_input(self):
         self.assertEqual(sanitize_html_content(""), "")
 

@@ -68,7 +68,9 @@ def _to_post(article: dict) -> Post:
 
 
 def build_site(posts: list[Post], comments: list[CommentNote], *, home: str, username: str, out: pathlib.Path) -> None:
-    """Render every page of the mirror into ``out``. Raises ValueError if two posts share a slug."""
+    """Render every page of the mirror into ``out``. Raises ValueError for no posts or a shared slug."""
+    if not posts:
+        raise ValueError("Refusing to render a mirror with no posts")
     slugs = [post.slug for post in posts]
     if duplicates := sorted({slug for slug in slugs if slugs.count(slug) > 1}):
         raise ValueError(f"Posts share a slug and would overwrite each other: {duplicates}")
@@ -77,6 +79,7 @@ def build_site(posts: list[Post], comments: list[CommentNote], *, home: str, use
         "username": username,
         "site_name": f"{username}—Dev.to Mirror",
         "default_image": f"{home}assets/devto-mirror.jpg",
+        "author": posts[0].author or username,
     }
 
     def write(relative: str, template: str, **values) -> None:
@@ -97,7 +100,7 @@ def build_site(posts: list[Post], comments: list[CommentNote], *, home: str, use
     write("index.html", "index.html", posts=posts, comments=comments)
     write("sitemap.xml", "sitemap.xml", posts=posts, comments=comments)
     write("robots.txt", "robots.txt")
-    write("llms.txt", "llms.txt")
+    write("llms.txt", "llms.txt", posts=posts, comments=comments)
 
 
 def main() -> None:

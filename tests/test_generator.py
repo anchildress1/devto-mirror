@@ -6,6 +6,7 @@ import pathlib
 import re
 import tempfile
 import unittest
+import urllib.robotparser
 import xml.etree.ElementTree as ET
 from unittest.mock import patch
 
@@ -101,7 +102,18 @@ class TestBuildSite(TempDirTestCase):
 
         self.assertEqual(_canonicals(html), ["https://dev.to/ash/original"])
         self.assertIn('<h1><a href="https://dev.to/ash/post-1">', html)
-        self.assertIn('<a href="https://dev.to/ash/post-1">Read on Dev.to →</a>', html)
+        self.assertIn('<a href="https://dev.to/ash/post-1">Read and discuss on Dev.to →</a>', html)
+
+    def test_sitemap_dates_every_post_and_the_home_page(self):
+        root = ET.fromstring(self._read("sitemap.xml"))
+
+        lastmods = {
+            u.findtext("sm:loc", namespaces=SITEMAP_NS): u.findtext("sm:lastmod", namespaces=SITEMAP_NS) for u in root
+        }
+
+        self.assertEqual(lastmods[HOME], "2026-01-02T00:00:00Z")
+        self.assertEqual(lastmods[f"{HOME}posts/post-1.html"], "2026-01-01T00:00:00Z")
+        self.assertIsNone(lastmods[f"{HOME}comments/9.html"])
 
     def test_sitemap_lists_absolute_same_host_urls_for_every_page(self):
         root = ET.fromstring(self._read("sitemap.xml"))
@@ -132,15 +144,108 @@ class TestBuildSite(TempDirTestCase):
         for href in ("posts/post-2.html", "posts/post-1.html", "comments/9.html"):
             self.assertIn(f'href="{href}"', html)
 
+    def test_refuses_to_render_without_posts(self):
+        with self.assertRaisesRegex(ValueError, "no posts"):
+            build_site([], [], home=HOME, username="ash", out=self.tmp / "empty")
+
+    def test_llms_txt_keeps_markdown_links_intact_for_awkward_titles(self):
+        post = Post.from_article(make_article(4, title="[WIP] Map[K]", description="line one\n\n## not a heading"))
+        build_site([post], [], home=HOME, username="ash", out=self.tmp / "md")
+
+        llms = (self.tmp / "md/llms.txt").read_text(encoding="utf-8")
+
+        self.assertIn(f"- [\\[WIP\\] Map\\[K\\]]({HOME}posts/post-4.html): line one ## not a heading (canonical:", llms)
+
     def test_refuses_to_render_posts_that_share_a_slug(self):
         clash = [Post.from_article(make_article(1)), Post.from_article(make_article(2, slug="post-1"))]
 
         with self.assertRaisesRegex(ValueError, r"share a slug.*\['post-1'\]"):
             build_site(clash, [], home=HOME, username="ash", out=self.tmp / "clash")
 
-    def test_robots_and_llms_are_rendered_with_the_site_home(self):
-        self.assertIn(f"Sitemap: {HOME}sitemap.xml", self._read("robots.txt"))
-        self.assertTrue((self.tmp / "llms.txt").read_text(encoding="utf-8").strip())
+    def test_every_page_reserves_training_rights(self):
+        for page in ("index.html", "posts/post-1.html", self.note.path):
+            with self.subTest(page=page):
+                html = self._read(page)
+                self.assertIn('<meta name="tdm-reservation" content="1">', html)
+                self.assertIn("max-snippet:-1, noai, noimageai", html)
+
+    def test_post_page_carries_open_graph_article_properties(self):
+        html = self._read("posts/post-2.html")
+
+        for prop, value in (
+            ("article:published_time", "2026-01-02T00:00:00Z"),
+            ("article:modified_time", "2026-01-02T00:00:00Z"),
+            ("article:author", "https://dev.to/ash"),
+            ("article:tag", "ai"),
+        ):
+            self.assertIn(f'<meta property="{prop}" content="{value}">', html)
+
+    def test_cover_image_is_prioritized_as_the_likely_lcp_element(self):
+        post = Post.from_article(make_article(3, cover_image="https://img/c.png"))
+        build_site([post], [], home=HOME, username="ash", out=self.tmp / "cover")
+
+        html = (self.tmp / "cover/posts/post-3.html").read_text(encoding="utf-8")
+
+        self.assertIn(
+            'src="https://img/c.png" width="1000" height="420" alt="Banner for Post 3" fetchpriority="high"', html
+        )
+        self.assertIn('<meta property="og:image" content="https://img/c.png">', html)
+
+    def test_comment_pages_get_distinct_titles_from_their_context(self):
+        self.assertIn("<title>Comment: ctx</title>", self._read(self.note.path))
+
+    def test_robots_blocks_training_crawlers_but_admits_search_and_live_retrieval(self):
+        robots = self._read("robots.txt")
+        parser = urllib.robotparser.RobotFileParser()
+        parser.parse(robots.splitlines())
+        url = f"{HOME}posts/post-1.html"
+
+        for agent in (
+            "GPTBot",
+            "ClaudeBot",
+            "anthropic-ai",
+            "Google-Extended",
+            "Applebot-Extended",
+            "CCBot",
+            "Bytespider",
+        ):
+            with self.subTest(blocked=agent):
+                self.assertFalse(parser.can_fetch(agent, url))
+        for agent in (
+            "Googlebot",
+            "Bingbot",
+            "OAI-SearchBot",
+            "ChatGPT-User",
+            "Claude-SearchBot",
+            "Claude-User",
+            "PerplexityBot",
+        ):
+            with self.subTest(allowed=agent):
+                self.assertTrue(parser.can_fetch(agent, url))
+        self.assertIn("Content-Signal: search=yes, ai-input=yes, ai-train=no", robots)
+        self.assertIn(f"Sitemap: {HOME}sitemap.xml", robots)
+
+    def test_llms_txt_indexes_mirror_pages_with_their_devto_canonicals(self):
+        llms = self._read("llms.txt")
+
+        self.assertTrue(llms.startswith("# ash—Dev.to Mirror\n"))
+        self.assertIn("ai-train=no", llms)
+        self.assertIn(f"- [ash—Dev.to Mirror]({HOME}): mirror homepage and full article index", llms)
+        self.assertIn(
+            f"- [Post 1]({HOME}posts/post-1.html): About post 1 (canonical: https://dev.to/ash/original)", llms
+        )
+        self.assertIn(f"- [ctx]({HOME}comments/9.html): (canonical: https://dev.to/ash/comment/9)", llms)
+        self.assertIn("Content © Ash, all rights reserved.", llms)
+
+    def test_llms_txt_escapes_backslashes_before_bracket_escapes(self):
+        # A trailing/embedded backslash must be doubled first, or it can escape
+        # the template's own closing bracket instead of the title's character.
+        post = Post.from_article(make_article(4, title="Async\\", description="d"))
+        build_site([post], [], home=HOME, username="ash", out=self.tmp / "bs")
+
+        llms = (self.tmp / "bs/llms.txt").read_text(encoding="utf-8")
+
+        self.assertIn(f"- [Async\\\\]({HOME}posts/post-4.html): d (canonical:", llms)
 
 
 class TestMain(TempDirTestCase):
