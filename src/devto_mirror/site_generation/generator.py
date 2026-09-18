@@ -40,10 +40,14 @@ class CommentNote:
 
 
 def load_comment_notes(path: pathlib.Path) -> list[CommentNote]:
-    """Parse ``URL | optional context`` lines; blank lines and ``#`` comments are skipped."""
+    """Parse ``URL | optional context`` lines; blank lines and ``#`` comments are skipped.
+
+    Later lines that resolve to the same output path replace earlier ones, matching which
+    note's content actually ends up on disk.
+    """
     if not path.exists():
         return []
-    notes = []
+    notes: dict[str, CommentNote] = {}
     for raw in path.read_text(encoding="utf-8").splitlines():
         line = raw.strip()
         if not line or line.startswith("#"):
@@ -51,8 +55,9 @@ def load_comment_notes(path: pathlib.Path) -> list[CommentNote]:
         url, _, context = (part.strip() for part in line.partition("|"))
         match = _COMMENT_ID.search(url)
         comment_id = (match[1] or match[2]) if match else slugify(url)[:48]
-        notes.append(CommentNote(url=url, context=context, path=f"comments/{sanitize_filename(comment_id)}.html"))
-    return notes
+        note = CommentNote(url=url, context=context, path=f"comments/{sanitize_filename(comment_id)}.html")
+        notes[note.path] = note
+    return list(notes.values())
 
 
 def _to_post(article: dict) -> Post:
@@ -107,15 +112,18 @@ def main() -> None:
 
     # Forcing ignores the store entirely, which is also the way out of a corrupt one.
     stored = json.loads(STORE_FILE.read_text(encoding="utf-8")) if STORE_FILE.exists() and not force else []
+    if not isinstance(stored, list) or not all(isinstance(item, dict) for item in stored):
+        raise SystemExit(f"{STORE_FILE} is not a list of article objects; corrupt store, aborting.")
     articles = sync_articles(username, stored)
     if not articles:
         raise SystemExit(f"Dev.to lists no published articles for {username!r}; refusing to publish an empty site.")
-    STORE_FILE.write_text(json.dumps(articles, indent=2, ensure_ascii=False), encoding="utf-8")
 
     posts = sorted((_to_post(a) for a in articles), key=lambda p: p.published, reverse=True)
     # Start clean so posts deleted or renamed on Dev.to never linger in a local build.
     shutil.rmtree(OUTPUT_DIR, ignore_errors=True)
     build_site(posts, load_comment_notes(COMMENTS_FILE), home=home, username=username, out=OUTPUT_DIR)
+    # Only commit the store once validation and rendering have both succeeded.
+    STORE_FILE.write_text(json.dumps(articles, indent=2, ensure_ascii=False), encoding="utf-8")
     logging.info("Rendered %d posts into %s", len(posts), OUTPUT_DIR)
 
 

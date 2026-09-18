@@ -52,6 +52,17 @@ class TestLoadCommentNotes(TempDirTestCase):
             ],
         )
 
+    def test_dedupes_notes_that_resolve_to_the_same_path(self):
+        manifest = self.tmp / "comments.txt"
+        manifest.write_text(
+            "https://dev.to/ash/comment/306a2 | first\nhttps://dev.to/ash/comment/306a2 | second\n",
+            encoding="utf-8",
+        )
+
+        notes = load_comment_notes(manifest)
+
+        self.assertEqual(notes, [CommentNote("https://dev.to/ash/comment/306a2", "second", "comments/306a2.html")])
+
     def test_label_prefers_context_and_truncates_to_80_chars(self):
         cases = {
             CommentNote("https://u", "", "p"): "https://u",
@@ -232,6 +243,22 @@ class TestMain(TempDirTestCase):
         with self.assertRaises(json.JSONDecodeError):
             self._run()
         self.sync.assert_not_called()
+
+    def test_fails_loudly_on_a_structurally_invalid_store(self):
+        for payload in ("{}", '["not-a-dict"]', '"just a string"'):
+            with self.subTest(payload=payload):
+                self.store.write_text(payload, encoding="utf-8")
+                with self.assertRaisesRegex(SystemExit, "not a list of article objects"):
+                    self._run()
+                self.sync.assert_not_called()
+
+    def test_defers_writing_the_store_until_the_site_renders(self):
+        self.sync.return_value = [make_article(1)]
+        self.build.side_effect = RuntimeError("boom")
+
+        with self.assertRaisesRegex(RuntimeError, "boom"):
+            self._run()
+        self.assertFalse(self.store.exists())
 
 
 if __name__ == "__main__":
