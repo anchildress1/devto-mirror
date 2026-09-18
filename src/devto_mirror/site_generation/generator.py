@@ -100,7 +100,7 @@ def build_site(posts: list[Post], comments: list[CommentNote], *, home: str, use
     write("index.html", "index.html", posts=posts, comments=comments)
     write("sitemap.xml", "sitemap.xml", posts=posts, comments=comments)
     write("robots.txt", "robots.txt")
-    write("llms.txt", "llms.txt", posts=posts)
+    write("llms.txt", "llms.txt", posts=posts, comments=comments)
 
 
 def main() -> None:

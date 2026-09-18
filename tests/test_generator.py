@@ -230,10 +230,22 @@ class TestBuildSite(TempDirTestCase):
 
         self.assertTrue(llms.startswith("# ash—Dev.to Mirror\n"))
         self.assertIn("ai-train=no", llms)
+        self.assertIn(f"- [ash—Dev.to Mirror]({HOME}): mirror homepage and full article index", llms)
         self.assertIn(
             f"- [Post 1]({HOME}posts/post-1.html): About post 1 (canonical: https://dev.to/ash/original)", llms
         )
+        self.assertIn(f"- [ctx]({HOME}comments/9.html): (canonical: https://dev.to/ash/comment/9)", llms)
         self.assertIn("Content © Ash, all rights reserved.", llms)
+
+    def test_llms_txt_escapes_backslashes_before_bracket_escapes(self):
+        # A trailing/embedded backslash must be doubled first, or it can escape
+        # the template's own closing bracket instead of the title's character.
+        post = Post.from_article(make_article(4, title="Async\\", description="d"))
+        build_site([post], [], home=HOME, username="ash", out=self.tmp / "bs")
+
+        llms = (self.tmp / "bs/llms.txt").read_text(encoding="utf-8")
+
+        self.assertIn(f"- [Async\\\\]({HOME}posts/post-4.html): d (canonical:", llms)
 
 
 class TestMain(TempDirTestCase):
