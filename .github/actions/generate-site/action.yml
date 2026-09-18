@@ -61,7 +61,9 @@ runs:
       run: |
         set -euo pipefail
         if git ls-remote --exit-code origin "$STATE_BRANCH" >/dev/null 2>&1; then
-          git fetch origin "$STATE_BRANCH" --depth=1
+          # actions/checkout narrows the fetch refspec to the checked-out ref, so a
+          # bare branch name here would only populate FETCH_HEAD, not origin/$STATE_BRANCH.
+          git fetch origin "$STATE_BRANCH":"refs/remotes/origin/$STATE_BRANCH" --depth=1
           if git show "origin/${STATE_BRANCH}:last_run.txt" >/dev/null 2>&1; then
             TIMESTAMP=$(git show "origin/${STATE_BRANCH}:last_run.txt")
             echo "$TIMESTAMP" > last_run.txt
