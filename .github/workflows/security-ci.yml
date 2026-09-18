@@ -16,6 +16,11 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
+    env:
+      # make ai-checks shells out to plain `uv run`; these cover every one of those
+      # calls too, not just the explicit --locked --no-build sync below.
+      UV_LOCKED: "1"
+      UV_NO_BUILD: "1"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
