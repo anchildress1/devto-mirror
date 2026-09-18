@@ -227,6 +227,23 @@ class TestLoadCommentManifest(unittest.TestCase):
                 items = renderer.load_comment_manifest()
         self.assertEqual(len(items), 1)
 
+    def test_comment_id_falls_back_to_slugify_when_unmatched(self):
+        # Pins python-slugify's legacy-algorithm output for a URL that matches
+        # neither the /comment/ nor #comment- pattern, so the slugify(url)[:48]
+        # fallback runs. Guards against a transliteration/separator change on
+        # a future slugify upgrade renaming existing comment-note paths.
+        from devto_mirror.site_generation import renderer
+
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            (root / "comments.txt").write_text(
+                "https://example.com/some-post|Unicode: café déjà vu\n",
+                encoding="utf-8",
+            )
+            with _chdir(root):
+                items = renderer.load_comment_manifest()
+        self.assertEqual(items[0]["local"], "comments/https-example-com-some-post.html")
+
     def test_label_truncated_at_80_chars(self):
         from devto_mirror.site_generation import renderer
 
