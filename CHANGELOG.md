@@ -11,6 +11,24 @@ have to reverse-engineer intent from commit archaeology and caffeine stains.
 
 ---
 
+## [1.3.0](https://github.com/anchildress1/devto-mirror/compare/v1.2.0...v1.3.0) (2026-09-18)
+
+
+### Features
+
+* **seo:** welcome search and live AI retrieval, block AI training, style pages ([#114](https://github.com/anchildress1/devto-mirror/issues/114)) ([985d7ab](https://github.com/anchildress1/devto-mirror/commit/985d7ab48005a21b9be9de4303ba75ed36f43dee))
+
+
+### Bug Fixes
+
+* **ci:** resolve Sonar supply-chain vulnerabilities and a detect-secrets gate that never failed ([#111](https://github.com/anchildress1/devto-mirror/issues/111)) ([9aa604c](https://github.com/anchildress1/devto-mirror/commit/9aa604c4d0869dc801f252137e4aebcb948ef3e0))
+
+
+### Documentation
+
+* update AI attribution badge to 55% ([#101](https://github.com/anchildress1/devto-mirror/issues/101)) ([25e27ab](https://github.com/anchildress1/devto-mirror/commit/25e27abd6caced0b414fd3a893992172ce770119))
+* update AI attribution badge to 66% ([#117](https://github.com/anchildress1/devto-mirror/issues/117)) ([1256369](https://github.com/anchildress1/devto-mirror/commit/1256369bcff324e072d41a78cd3bf39e89c5ed9c))
+
 ## [1.2.0](https://github.com/anchildress1/devto-mirror/compare/v1.1.0...v1.2.0) (2026-06-26)
 
 

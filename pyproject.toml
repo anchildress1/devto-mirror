@@ -1,6 +1,6 @@
 [project]
 name = "devto-mirror"
-version = "1.2.0"
+version = "1.3.0"
 description = "Static HTML mirror of Dev.to blog posts for better search engine discoverability"
 authors = [
     {name = "Ashley Childress", email = "anchildress1@gmail.com"}
