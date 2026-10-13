@@ -79,7 +79,7 @@ A failing hook blocks the commit or push. Run `make format`, then `make lint`, t
 - `site_generation/post.py` — the `Post` model built from a Dev.to article (sanitized HTML, canonical URL, dates)
 - `site_generation/seo.py` — `BlogPosting` JSON-LD and related posts by shared tags
 - `core/api_client.py` — lists articles, fetches new or edited ones, retries transient failures
-- `core/html_sanitization.py` — bleach allowlist for post bodies, including tables
+- `core/html_sanitization.py` — nh3 allowlist for post bodies, including tables
 - `core/url_utils.py` — turns `SITE_DOMAIN`/`GH_USERNAME` into the site's root URL
 - `core/utils.py` — the Jinja environment and the optional Firebase Analytics snippet
 - `templates/` — `base.html` holds the shared `<head>`; `post.html`, `index.html`, and `comment.html` extend it

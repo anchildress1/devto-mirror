@@ -6,7 +6,7 @@
 | Path | Holds |
 | --- | --- |
 | `src/devto_mirror/core/api_client.py` | Dev.to listing + `sync_articles` (retry/backoff) |
-| `src/devto_mirror/core/html_sanitization.py` | bleach allowlist for post bodies |
+| `src/devto_mirror/core/html_sanitization.py` | nh3 allowlist for post bodies |
 | `src/devto_mirror/core/path_utils.py` | filename/slug sanitizing |
 | `src/devto_mirror/core/url_utils.py` | `resolve_home` (site root URL) |
 | `src/devto_mirror/core/utils.py` | Jinja `env` + `firebase_analytics` template global |
