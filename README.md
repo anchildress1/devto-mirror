@@ -60,7 +60,7 @@ It runs weekly on your fork, fetches only new or edited articles, and deploys it
 | Language | Python **3.12+** |
 | Package manager | [`uv`](https://docs.astral.sh/uv/) (locked, reproducible) |
 | Templating | Jinja2 → static HTML |
-| Content safety | `bleach` HTML sanitization |
+| Content safety | `nh3` HTML sanitization |
 | Upstream deploy | **Firebase Hosting** (keyless, via Workload Identity Federation) |
 | Fork deploy | **GitHub Pages** (`gh-pages` branch) |
 | CI/CD | GitHub Actions (composite action shared by both deploy paths) |

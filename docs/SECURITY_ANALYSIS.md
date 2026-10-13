@@ -38,7 +38,7 @@ These checks are lightweight—they won't find everything, but they catch the co
 
 ## 🛡️ Built-in Safeguards
 
-- **Untrusted HTML**: post bodies from Dev.to pass through a bleach allowlist; `<script>` and `<style>` blocks are removed outright
+- **Untrusted HTML**: post bodies from Dev.to pass through an nh3 (ammonia) allowlist; `<script>` and `<style>` blocks are removed outright
 - **Templates**: Jinja autoescaping is on for every HTML and XML template
 - **Deploy credentials**: the Firebase deploy authenticates through Workload Identity Federation, so no service-account key is stored in the repo
 - **Supply chain**: third-party actions are pinned to commit SHAs, and `firebase-tools` runs with `--ignore-scripts`
