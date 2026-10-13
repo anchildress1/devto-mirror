@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-import bleach
+import nh3
 
 
 def sanitize_html_content(content: str) -> str:
@@ -12,10 +12,9 @@ def sanitize_html_content(content: str) -> str:
 
     Notes:
     - Dev.to "ltag" embeds (e.g. GitHub README cards) use wrapper div/span tags with
-      class hooks. If we don't allow those wrappers, bleach will escape them into
-      visible text ("&lt;div ...&gt;") unless strip=True.
-    - With strip=True, bleach removes the tag but keeps its body as text. That is
-      *not* acceptable for <script>/<style> blocks, so we remove those blocks first.
+      class hooks. The allowlist keeps those wrappers so the embed styling survives.
+    - nh3 strips disallowed tags but keeps their body as text. That is *not*
+      acceptable for <script>/<style> blocks, so we remove those blocks first.
     """
 
     if not content:
@@ -27,30 +26,31 @@ def sanitize_html_content(content: str) -> str:
     # Dev.to heading anchors are empty self-links: keep them as fragment targets, not unnamed links.
     content = re.sub(r'<a name="([^"]+)" href="#\1">\s*</a>', r'<a id="\1"></a>', content)
 
-    allowed_tags = [
+    allowed_tags = {
         *("p", "br", "hr", "div", "span", "blockquote", "pre", "code", "kbd"),
         *("strong", "em", "b", "i", "del", "s", "sub", "sup", "a", "img", "figure", "figcaption"),
         *("h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li", "dl", "dt", "dd"),
         *("table", "thead", "tbody", "tfoot", "tr", "th", "td", "details", "summary"),
-    ]
+    }
 
     allowed_attributes = {
         # Keep links readable and allow embed/card markup to style anchors.
-        "a": ["href", "title", "rel", "target", "class", "id"],
+        "a": {"href", "title", "rel", "target", "class", "id"},
         # Dev.to "ltag" embeds use wrapper div/span with class hooks.
-        "div": ["class"],
-        "span": ["class"],
-        # width/height let browsers reserve space (CLS). No style: bleach can't sanitize CSS.
-        "img": ["src", "alt", "width", "height", "class", "title", "loading"],
-        "th": ["colspan", "rowspan", "scope"],
-        "td": ["colspan", "rowspan"],
+        "div": {"class"},
+        "span": {"class"},
+        # width/height let browsers reserve space (CLS). No style: CSS sanitization isn't enabled.
+        "img": {"src", "alt", "width", "height", "class", "title", "loading"},
+        "th": {"colspan", "rowspan", "scope"},
+        "td": {"colspan", "rowspan"},
     }
 
-    # IMPORTANT: strip disallowed tags rather than escaping them into visible text.
-    return bleach.clean(
+    # link_rel=None: "rel" is allowlisted on <a>, which nh3 treats as a conflict, and
+    # bleach never injected rel either. url_schemes matches bleach's former default.
+    return nh3.clean(
         content,
         tags=allowed_tags,
         attributes=allowed_attributes,
-        strip=True,
-        strip_comments=True,
+        url_schemes={"http", "https", "mailto"},
+        link_rel=None,
     )
