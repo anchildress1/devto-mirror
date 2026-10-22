@@ -18,7 +18,7 @@ env = Environment(
     keep_trailing_newline=True,
 )
 
-FIREBASE_SDK_VERSION = "12.19.0"
+FIREBASE_SDK_VERSION = "13.1.0"
 
 _FIREBASE_ANALYTICS_TMPL = """<!-- Firebase Analytics -->
 <script type="module">
