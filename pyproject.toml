@@ -9,11 +9,11 @@ requires-python = ">=3.12"
 dependencies = [
     "requests>=2.34.2",
     "jinja2>=3.1.6",
-    "python-slugify>=9.0.0",
+    "python-slugify>=9.1.3",
     "nh3>=0.3.7",
-    "python-dotenv>=1.2.3",
-    "urllib3>=2.7.0",
-    "idna>=3.19",
+    "python-dotenv>=1.2.4",
+    "urllib3>=2.8.0",
+    "idna>=3.20",
 ]
 
 [dependency-groups]
@@ -21,15 +21,15 @@ dev = [
     "bandit>=1.9.4",
     "pip-audit>=2.10.1",
     "click>=8.5.0",
-    "flake8>=7.3.0",
+    "flake8>=7.4.1",
     "gitlint-rai>=1.0.3",
     "detect-secrets>=1.5.0",
-    "black>=26.5.1",
-    "isort>=9.0.1",
-    "coverage>=7.16.1",
+    "black>=26.10.1",
+    "isort>=9.0.2",
+    "coverage>=7.16.2",
     "radon>=6.0.1",
     "pygments>=2.21.0",
-    "pip>=26.2.1",
+    "pip>=26.2.2",
 ]
 
 [tool.uv]
@@ -38,7 +38,7 @@ dev = [
 # resolves without carrying the vulnerable versions.
 override-dependencies = [
     "click>=8.5.0",
-    "sh>=2.2.4",
+    "sh>=2.4.0",
 ]
 
 [tool.setuptools]
@@ -85,5 +85,5 @@ precision = 2
 directory = "htmlcov"
 
 [build-system]
-requires = ["setuptools>=84.0.0"]
+requires = ["setuptools>=84.2.1"]
 build-backend = "setuptools.build_meta"

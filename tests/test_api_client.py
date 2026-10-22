@@ -100,10 +100,13 @@ class TestGetJson(unittest.TestCase):
         self.sleep.assert_called_once_with(10.0)
 
     def test_clamps_far_future_http_date_retry_after(self):
+        fixed_now = datetime(2026, 1, 1, tzinfo=timezone.utc)
         headers = {"Retry-After": "Wed, 21 Oct 2026 07:28:00 GMT"}
         self.session.get.side_effect = [_response(503, headers=headers), _response(payload=[])]
 
-        api_client.get_json(self.session, "u")
+        with patch.object(api_client, "datetime", wraps=datetime) as mock_dt:
+            mock_dt.now.return_value = fixed_now
+            self.assertEqual(api_client.get_json(self.session, "u"), [])
 
         self.sleep.assert_called_once_with(api_client.MAX_RETRY_WAIT)
 
