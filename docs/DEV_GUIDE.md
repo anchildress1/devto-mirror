@@ -31,6 +31,8 @@ The generator loads `.env` automatically.
 | `FORCE_FULL_REGEN` | no | `true` ignores `posts_data.json` and refetches every article |
 | `FIREBASE_WEB_CONFIG` | no | Firebase web config JSON with a `measurementId`; adds Firebase Analytics to every page. A set-but-invalid value fails the build |
 
+Firebase Analytics uses the modular browser SDK directly from Google's CDN. Both module URLs share the exact `FIREBASE_SDK_VERSION` pin in `core/utils.py` (currently 13.1.0). The generated site has no JavaScript build step, so an npm or Python Firebase package would not control this runtime dependency. Update that pin when upgrading the browser SDK; `make test` verifies the module URLs, initialization, and config escaping without sending analytics events.
+
 `SITE_DOMAIN` accepts `example.com`, `example.com/`, or a full URL like `https://example.com/blog/`. A bare domain with a path (`example.com/blog`) is rejected as ambiguous. For GitHub Pages, use a bare domain—the deploy writes it to `CNAME`.
 
 Custom domain:

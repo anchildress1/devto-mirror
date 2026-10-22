@@ -20,7 +20,7 @@ Every job sets its own permissions and a timeout, and every workflow has a concu
 Both deploy workflows call the composite action `.github/actions/generate-site`, so they produce identical output. It:
 
 1. Restores `posts_data.json` from the state branch. A missing branch or missing file means an empty store, and every article gets fetched.
-2. Installs uv (pinned to 0.12.13) and runs `uv sync --locked --no-build`.
+2. Installs uv (pinned to 0.13.5) and runs `uv sync --locked --no-build --no-dev`.
 3. Runs `python -m devto_mirror.site_generation.generator`, which renders the site into `_deploy/`.
 4. Copies static files into `_deploy/`: `.nojekyll`, the Google and Algolia verification pages, and `assets/devto-mirror.jpg`. When the state branch is `gh-pages`, it copies `posts_data.json` too, so the store ships with the site.
 
