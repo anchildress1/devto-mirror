@@ -46,7 +46,8 @@ def firebase_analytics_snippet():
     # Owner-controlled repo variable, not user input; escaping "<" neutralizes
     # any </script> breakout so the embedded JSON is inert regardless of source.
     config_json = json.dumps(config).replace("<", "\\u003c")
-    return Markup(_FIREBASE_ANALYTICS_TMPL.format(version=FIREBASE_SDK_VERSION, config=config_json))  # nosec B704
+    snippet = _FIREBASE_ANALYTICS_TMPL.format(version=FIREBASE_SDK_VERSION, config=config_json)
+    return Markup(snippet)  # nosec B704
 
 
 # Expose to all templates rendered through this env; evaluated at render time.
